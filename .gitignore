@@ -38,7 +38,6 @@ dist-ssr
 build
 
 #* Tooling
-reports
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 **/.svelte-kit/*
@@ -46,3 +45,5 @@ vite.config.ts.timestamp-*
 
 #* Misc
 ignore
+reports
+tmp
