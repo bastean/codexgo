@@ -3,6 +3,8 @@ package public
 import (
 	"net/http"
 
+	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/context/pkg/user/application/register"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +23,8 @@ func UserPut() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		container.UserRegisterHandler.Handle(register.Command(user))
 
 		c.JSON(http.StatusOK, user)
 	}

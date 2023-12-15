@@ -1,4 +1,4 @@
-module github.com/bastean/codexgo
+module github.com/bastean/codexgo/backend
 
 go 1.21.5
 

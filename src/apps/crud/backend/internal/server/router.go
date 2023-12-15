@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/bastean/codexgo/internal/api/v1/controllers/auth"
-	"github.com/bastean/codexgo/internal/api/v1/controllers/public"
+	"github.com/bastean/codexgo/backend/internal/api/v1/controllers/auth"
+	"github.com/bastean/codexgo/backend/internal/api/v1/controllers/public"
 	"github.com/gin-gonic/gin"
 )
 
