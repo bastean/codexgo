@@ -3,6 +3,8 @@ package public
 import (
 	"net/http"
 
+	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/context/pkg/user/application/login"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +21,8 @@ func UserPost() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		container.UserLoginHandler.Handle(login.Query(user))
 
 		c.JSON(http.StatusOK, user)
 	}

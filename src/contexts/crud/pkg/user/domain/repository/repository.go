@@ -8,6 +8,6 @@ import (
 type Repository interface {
 	Save(user *aggregate.User)
 	Update(user *aggregate.User)
-	Delete(id *sharedVO.Id)
-	Search(id *sharedVO.Id) (*aggregate.User, error)
+	Delete(email *sharedVO.Email)
+	Search(email *sharedVO.Email) (*aggregate.User, error)
 }

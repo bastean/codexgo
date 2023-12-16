@@ -20,13 +20,13 @@ func (mongo Mongo) Update(user *aggregate.User) {
 	spew.Dump(user)
 }
 
-func (mongo Mongo) Delete(id *sharedVO.Id) {
+func (mongo Mongo) Delete(email *sharedVO.Email) {
 	fmt.Println("DELETE")
-	spew.Dump(id)
+	spew.Dump(email)
 }
 
-func (mongo Mongo) Search(id *sharedVO.Id) (*aggregate.User, error) {
+func (mongo Mongo) Search(email *sharedVO.Email) (*aggregate.User, error) {
 	fmt.Println("SEARCH")
-	spew.Dump(id)
+	spew.Dump(email)
 	return &aggregate.User{}, nil
 }
