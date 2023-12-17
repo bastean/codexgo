@@ -3,12 +3,15 @@ package valueObjects
 import (
 	"strings"
 
+	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
 	"github.com/go-playground/validator/v10"
 )
 
 type Email struct {
 	Value string `validate:"email"`
 }
+
+var InvalidEmailValue = errors.InvalidValue{Message: "Email value is invalid"}
 
 func ensureIsValidEmail(email *Email) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())
@@ -18,15 +21,15 @@ func ensureIsValidEmail(email *Email) (err error) {
 	return
 }
 
-func NewEmail(email string) (*Email, error) {
+func NewEmail(email string) *Email {
 	email = strings.TrimSpace(email)
 	emailVo := &Email{email}
 
 	err := ensureIsValidEmail(emailVo)
 
 	if err != nil {
-		return new(Email), err
+		panic(InvalidEmailValue)
 	}
 
-	return emailVo, nil
+	return emailVo
 }

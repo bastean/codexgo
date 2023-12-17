@@ -10,17 +10,8 @@ type CommandHandler struct {
 }
 
 func (commandHandler *CommandHandler) Handle(command Command) error {
-	email, err := sharedVO.NewEmail(command.Email)
-
-	if err != nil {
-		return err
-	}
-
-	password, err := userVO.NewPassword(command.Password)
-
-	if err != nil {
-		return err
-	}
+	email := sharedVO.NewEmail(command.Email)
+	password := userVO.NewPassword(command.Password)
 
 	commandHandler.Delete.Run(email, password)
 

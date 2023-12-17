@@ -10,17 +10,8 @@ type QueryHandler struct {
 }
 
 func (commandHandler *QueryHandler) Handle(query Query) error {
-	email, err := sharedVO.NewEmail(query.Email)
-
-	if err != nil {
-		return err
-	}
-
-	password, err := userVO.NewPassword(query.Password)
-
-	if err != nil {
-		return err
-	}
+	email := sharedVO.NewEmail(query.Email)
+	password := userVO.NewPassword(query.Password)
 
 	commandHandler.Login.Run(email, password)
 

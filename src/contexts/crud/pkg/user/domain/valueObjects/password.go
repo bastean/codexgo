@@ -1,10 +1,18 @@
 package valueObjects
 
-import "github.com/go-playground/validator/v10"
+import (
+	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
+	"github.com/go-playground/validator/v10"
+)
 
 type Password struct {
 	Value string `validate:"gte=8,lte=64"`
 }
+
+const PasswordMinCharactersLength = "8"
+const PasswordMaxCharactersLength = "64"
+
+var InvalidPasswordValue = errors.InvalidValue{Message: "Password must be between" + PasswordMinCharactersLength + "to" + PasswordMaxCharactersLength + "characters"}
 
 func ensureIsValidPassword(password *Password) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())
@@ -14,14 +22,14 @@ func ensureIsValidPassword(password *Password) (err error) {
 	return
 }
 
-func NewPassword(password string) (*Password, error) {
+func NewPassword(password string) *Password {
 	passwordVO := &Password{password}
 
 	err := ensureIsValidPassword(passwordVO)
 
 	if err != nil {
-		return new(Password), err
+		panic(InvalidPasswordValue)
 	}
 
-	return passwordVO, nil
+	return passwordVO
 }

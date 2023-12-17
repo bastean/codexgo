@@ -3,12 +3,15 @@ package valueObjects
 import (
 	"strings"
 
+	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
 	"github.com/go-playground/validator/v10"
 )
 
 type Id struct {
 	Value string `validate:"uuid"`
 }
+
+var InvalidIdValue = errors.InvalidValue{Message: "Id value is invalid"}
 
 func ensureIsValidId(id *Id) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())
@@ -18,15 +21,15 @@ func ensureIsValidId(id *Id) (err error) {
 	return
 }
 
-func NewId(id string) (*Id, error) {
+func NewId(id string) *Id {
 	id = strings.TrimSpace(id)
 	idVO := &Id{id}
 
 	err := ensureIsValidId(idVO)
 
 	if err != nil {
-		return new(Id), err
+		panic(InvalidIdValue)
 	}
 
-	return idVO, nil
+	return idVO
 }

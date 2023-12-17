@@ -9,7 +9,7 @@ func (logger *Logger) Debug(message string) {
 }
 
 func (logger *Logger) Error(message string) {
-	log.Fatal(message)
+	log.Print(message)
 }
 
 func (logger *Logger) Info(message string) {

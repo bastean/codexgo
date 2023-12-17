@@ -21,30 +21,10 @@ type UserPrimitive struct {
 
 func newUser(id, email, username, password string) (*User, error) {
 
-	idVO, err := sharedVO.NewId(id)
-
-	if err != nil {
-		return new(User), err
-	}
-
-	emailVO, err := sharedVO.NewEmail(email)
-
-	if err != nil {
-
-		return new(User), err
-	}
-
-	usernameVO, err := userVO.NewUsername(username)
-
-	if err != nil {
-		return new(User), err
-	}
-
-	passwordVO, err := userVO.NewPassword(password)
-
-	if err != nil {
-		return new(User), err
-	}
+	idVO := sharedVO.NewId(id)
+	emailVO := sharedVO.NewEmail(email)
+	usernameVO := userVO.NewUsername(username)
+	passwordVO := userVO.NewPassword(password)
 
 	return &User{
 		idVO,
