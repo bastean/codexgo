@@ -4,6 +4,7 @@ import (
 	"github.com/bastean/codexgo/backend/internal/api/v1/controllers/auth"
 	"github.com/bastean/codexgo/backend/internal/api/v1/controllers/public"
 	"github.com/bastean/codexgo/backend/internal/api/v1/middleware"
+	"github.com/bastean/codexgo/backend/internal/container"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,8 +30,12 @@ func loadEndpoints() {
 }
 
 func Run() {
+	container.Logger.Info("starting server")
+
 	loadMiddlewares()
 	loadEndpoints()
+
+	container.Logger.Info("server started!")
 
 	router.Run()
 }

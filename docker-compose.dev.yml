@@ -1,0 +1,16 @@
+services:
+  db-dev:
+    container_name: codexgo-db-dev
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: codexgo
+      MONGO_INITDB_ROOT_PASSWORD: codexgo
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - "27017:27017"
+    volumes:
+      - codexgo-db-dev:/data/db
+    restart: on-failure
+
+volumes:
+  codexgo-db-dev:

@@ -1,9 +1,7 @@
 package main
 
-import (
-	"github.com/bastean/codexgo/backend/internal/server"
-)
+import app "github.com/bastean/codexgo/backend/internal"
 
 func main() {
-	server.Run()
+	app.Run()
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/bastean/codexgo/context/pkg/user/infrastructure/persistence"
 )
 
-var repository = persistence.Mongo{}
+var repository = persistence.NewMongo()
 
 var userRegister = register.NewRegister(repository)
 var UserRegisterHandler = register.NewCommandHandler(*userRegister)
