@@ -26,6 +26,6 @@ func UserPut() gin.HandlerFunc {
 
 		container.UserRegisterHandler.Handle(register.Command(user))
 
-		c.JSON(http.StatusOK, user)
+		c.Status(http.StatusCreated)
 	}
 }

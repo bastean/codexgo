@@ -5,7 +5,6 @@ import (
 
 	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
 	"github.com/bastean/codexgo/context/pkg/user/domain/aggregate"
-	"github.com/davecgh/go-spew/spew"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -67,9 +66,13 @@ func (mongo Mongo) Search(email *sharedVO.Email) (*aggregate.User, error) {
 
 	result := mongo.collection.FindOne(context.Background(), searchFilter)
 
-	spew.Dump(result.Raw())
+	var userPrimitive aggregate.UserPrimitive
 
-	return &aggregate.User{}, nil
+	result.Decode(&userPrimitive)
+
+	user, _ := aggregate.FromPrimitives(&userPrimitive)
+
+	return user, nil
 }
 
 func NewMongo() *Mongo {

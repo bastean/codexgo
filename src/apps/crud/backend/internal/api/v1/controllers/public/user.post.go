@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/authentication"
 	"github.com/bastean/codexgo/context/pkg/user/application/login"
 	"github.com/gin-gonic/gin"
 )
@@ -22,8 +23,12 @@ func UserPost() gin.HandlerFunc {
 			return
 		}
 
-		container.UserLoginHandler.Handle(login.Query(user))
+		response := container.UserLoginHandler.Handle(login.Query(user))
 
-		c.JSON(http.StatusOK, user)
+		token := authentication.GenerateJWT(response.Id)
+
+		c.Header("Authorization", "Bearer "+token)
+
+		c.JSON(http.StatusOK, response)
 	}
 }

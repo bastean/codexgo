@@ -9,13 +9,15 @@ type QueryHandler struct {
 	Login Login
 }
 
-func (commandHandler *QueryHandler) Handle(query Query) error {
+func (commandHandler *QueryHandler) Handle(query Query) *Response {
 	email := sharedVO.NewEmail(query.Email)
 	password := userVO.NewPassword(query.Password)
 
-	commandHandler.Login.Run(email, password)
+	user := commandHandler.Login.Run(email, password)
 
-	return nil
+	response := Response(*user.ToPrimitives())
+
+	return &response
 }
 
 func NewQueryHandler(login Login) *QueryHandler {

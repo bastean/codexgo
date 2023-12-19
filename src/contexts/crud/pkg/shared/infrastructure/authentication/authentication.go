@@ -1,7 +1,6 @@
 package authentication
 
 import (
-	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -9,33 +8,27 @@ import (
 
 var secretKey = []byte("codexgo") //! .env
 
-func GenerateJWT(id string) (string, error) {
+func GenerateJWT(id string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"exp": time.Now().Add((24 * time.Hour) * 7),
+		"exp": time.Now().Add((24 * time.Hour) * 7).Unix(),
 		"id":  id,
 	})
 
 	tokenString, err := token.SignedString(secretKey)
 
 	if err != nil {
-		return "", err
+		panic(err.Error())
 	}
 
-	return tokenString, nil
+	return tokenString
 }
 
-func ValidateJWT(tokenString string) error {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+func ValidateJWT(tokenString string) {
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return secretKey, nil
 	})
 
-	if err != nil {
-		return err
-	}
-
 	if !token.Valid {
-		return errors.New("invalid JWT")
+		panic("invalid JWT")
 	}
-
-	return nil
 }

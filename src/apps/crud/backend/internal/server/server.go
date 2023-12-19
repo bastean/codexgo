@@ -24,8 +24,10 @@ func loadEndpoints() {
 	user.PUT("/", public.UserPut())
 	user.POST("/", public.UserPost())
 
-	user.PATCH("/", auth.UserPatch())
-	user.DELETE("/", auth.UserDelete())
+	userAuth := user.Group("/auth", middleware.VerifyAuthentication())
+
+	userAuth.PATCH("/", auth.UserPatch())
+	userAuth.DELETE("/", auth.UserDelete())
 
 }
 
