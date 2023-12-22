@@ -15,9 +15,16 @@ func VerifyAuthentication() gin.HandlerFunc {
 		if token != "" {
 			value := strings.Split(token, " ")[1]
 
-			authentication.ValidateJWT(value)
+			claims := authentication.ValidateJWT(value)
 
-			c.Next()
+			if value, ok := claims["id"]; ok {
+				c.Set("id", value)
+				c.Next()
+				return
+			}
+
+			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": "missing id"})
+			return
 		}
 
 		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": "missing token"})

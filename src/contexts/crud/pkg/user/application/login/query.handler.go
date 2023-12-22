@@ -9,11 +9,11 @@ type QueryHandler struct {
 	Login Login
 }
 
-func (commandHandler *QueryHandler) Handle(query Query) *Response {
+func (queryHandler *QueryHandler) Handle(query Query) *Response {
 	email := sharedVO.NewEmail(query.Email)
 	password := userVO.NewPassword(query.Password)
 
-	user := commandHandler.Login.Run(email, password)
+	user := queryHandler.Login.Run(email, password)
 
 	response := Response(*user.ToPrimitives())
 

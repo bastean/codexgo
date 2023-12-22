@@ -4,6 +4,6 @@ type Command struct {
 	Id              string
 	Email           string
 	Username        string
-	CurrentPassword string
+	Password        string
 	UpdatedPassword string
 }

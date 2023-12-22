@@ -3,8 +3,11 @@ package authentication
 import (
 	"time"
 
+	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
 	"github.com/golang-jwt/jwt"
 )
+
+var InvalidJWT = errors.InvalidValue{Message: "invalid JWT"}
 
 var secretKey = []byte("codexgo") //! .env
 
@@ -23,12 +26,14 @@ func GenerateJWT(id string) string {
 	return tokenString
 }
 
-func ValidateJWT(tokenString string) {
+func ValidateJWT(tokenString string) jwt.MapClaims {
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		return secretKey, nil
 	})
 
-	if !token.Valid {
-		panic("invalid JWT")
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims
 	}
+
+	panic(InvalidJWT)
 }

@@ -2,5 +2,5 @@ package models
 
 type Hashing interface {
 	Hash(plain string) string
-	IsNotEqual(plain, hashed string) bool
+	IsNotEqual(hashed, plain string) bool
 }

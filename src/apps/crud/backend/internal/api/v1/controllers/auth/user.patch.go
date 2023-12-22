@@ -9,10 +9,10 @@ import (
 )
 
 type Patch struct {
-	Id              string `json:"id" binding:"required"`
+	Id              string `json:"id"`
 	Email           string `json:"email"`
 	Username        string `json:"username"`
-	CurrentPassword string `json:"currentPassword"`
+	Password        string `json:"password"`
 	UpdatedPassword string `json:"updatedPassword"`
 }
 
@@ -25,8 +25,12 @@ func UserPatch() gin.HandlerFunc {
 			return
 		}
 
+		id, _ := c.Get("id")
+
+		user.Id = id.(string)
+
 		container.UserUpdateHandler.Handle(update.Command(user))
 
-		c.JSON(http.StatusOK, user)
+		c.Status(http.StatusOK)
 	}
 }

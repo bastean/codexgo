@@ -1,6 +1,6 @@
 package delete
 
 type Command struct {
-	Email    string
+	Id       string
 	Password string
 }

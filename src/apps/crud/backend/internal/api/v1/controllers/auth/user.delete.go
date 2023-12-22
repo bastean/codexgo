@@ -9,7 +9,7 @@ import (
 )
 
 type Delete struct {
-	Email    string `json:"email" binding:"required"`
+	Id       string `json:"id"`
 	Password string `json:"password" binding:"required"`
 }
 
@@ -22,8 +22,12 @@ func UserDelete() gin.HandlerFunc {
 			return
 		}
 
+		id, _ := c.Get("id")
+
+		user.Id = id.(string)
+
 		container.UserDeleteHandler.Handle(delete.Command(user))
 
-		c.JSON(http.StatusOK, user)
+		c.Status(http.StatusOK)
 	}
 }

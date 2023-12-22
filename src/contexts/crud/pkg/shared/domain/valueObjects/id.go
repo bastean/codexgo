@@ -8,7 +8,7 @@ import (
 )
 
 type Id struct {
-	Value string `validate:"uuid"`
+	Value string `validate:"uuid4"`
 }
 
 var InvalidIdValue = errors.InvalidValue{Message: "Id value is invalid"}
