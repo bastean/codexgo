@@ -119,5 +119,20 @@ func NewMongo(hashing models.Hashing) *Mongo {
 	database := client.Database(databaseName)
 	collection := database.Collection(collectionName)
 
+	collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
+		{
+			Keys:    bson.D{{Key: "id", Value: 1}},
+			Options: options.Index().SetUnique(true),
+		},
+		{
+			Keys:    bson.D{{Key: "email", Value: 1}},
+			Options: options.Index().SetUnique(true),
+		},
+		{
+			Keys:    bson.D{{Key: "username", Value: 1}},
+			Options: options.Index().SetUnique(true),
+		},
+	})
+
 	return &Mongo{collection: collection, hashing: hashing}
 }
