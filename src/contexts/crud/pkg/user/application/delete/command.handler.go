@@ -9,13 +9,11 @@ type CommandHandler struct {
 	Delete Delete
 }
 
-func (commandHandler *CommandHandler) Handle(command Command) error {
+func (commandHandler *CommandHandler) Handle(command Command) {
 	id := sharedVO.NewId(command.Id)
 	password := userVO.NewPassword(command.Password)
 
 	commandHandler.Delete.Run(id, password)
-
-	return nil
 }
 
 func NewCommandHandler(delete Delete) *CommandHandler {

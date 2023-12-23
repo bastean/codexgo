@@ -8,16 +8,10 @@ type CommandHandler struct {
 	Register Register
 }
 
-func (commandHandler *CommandHandler) Handle(command Command) error {
-	user, err := aggregate.Create(command.Id, command.Email, command.Username, command.Password)
-
-	if err != nil {
-		return err
-	}
+func (commandHandler *CommandHandler) Handle(command Command) {
+	user := aggregate.Create(command.Id, command.Email, command.Username, command.Password)
 
 	commandHandler.Register.Run(user)
-
-	return nil
 }
 
 func NewCommandHandler(register Register) *CommandHandler {

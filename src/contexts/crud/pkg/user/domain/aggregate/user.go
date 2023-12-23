@@ -19,8 +19,7 @@ type UserPrimitive struct {
 	Password string
 }
 
-func newUser(id, email, username, password string) (*User, error) {
-
+func newUser(id, email, username, password string) *User {
 	idVO := sharedVO.NewId(id)
 	emailVO := sharedVO.NewEmail(email)
 	usernameVO := userVO.NewUsername(username)
@@ -31,7 +30,7 @@ func newUser(id, email, username, password string) (*User, error) {
 		emailVO,
 		usernameVO,
 		passwordVO,
-	}, nil
+	}
 }
 
 func (user *User) ToPrimitives() *UserPrimitive {
@@ -43,24 +42,20 @@ func (user *User) ToPrimitives() *UserPrimitive {
 	}
 }
 
-func FromPrimitives(userPrimitive *UserPrimitive) (user *User, err error) {
-	user, err = newUser(
+func FromPrimitives(userPrimitive *UserPrimitive) *User {
+	return newUser(
 		userPrimitive.Id,
 		userPrimitive.Email,
 		userPrimitive.Username,
 		userPrimitive.Password,
 	)
-
-	return
 }
 
-func Create(id, email, username, password string) (user *User, err error) {
-	user, err = newUser(
+func Create(id, email, username, password string) *User {
+	return newUser(
 		id,
 		email,
 		username,
 		password,
 	)
-
-	return
 }

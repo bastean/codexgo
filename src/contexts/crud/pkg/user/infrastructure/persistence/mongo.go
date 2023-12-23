@@ -95,7 +95,7 @@ func (mongo Mongo) Search(filter repository.Filter) *aggregate.User {
 
 	result.Decode(&userPrimitive)
 
-	user, _ := aggregate.FromPrimitives(&userPrimitive)
+	user := aggregate.FromPrimitives(&userPrimitive)
 
 	return user
 }
