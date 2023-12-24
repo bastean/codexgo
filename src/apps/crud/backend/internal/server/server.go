@@ -28,7 +28,6 @@ func loadEndpoints() {
 
 	userAuth.PATCH("/", auth.UserPatch())
 	userAuth.DELETE("/", auth.UserDelete())
-
 }
 
 func Run() {

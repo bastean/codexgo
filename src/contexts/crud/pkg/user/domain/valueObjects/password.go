@@ -12,7 +12,7 @@ type Password struct {
 const PasswordMinCharactersLength = "8"
 const PasswordMaxCharactersLength = "64"
 
-var InvalidPasswordValue = errors.InvalidValue{Message: "Password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters"}
+var InvalidPasswordValue = errors.InvalidValue{Dump: []errors.Error{{Field: "Password", Message: "Must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters"}}}
 
 func ensureIsValidPassword(password *Password) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())

@@ -28,19 +28,19 @@ type Mongo struct {
 	hashing    models.Hashing
 }
 
-func (mongo Mongo) Save(user *aggregate.User) {
+func (mg Mongo) Save(user *aggregate.User) {
 	newUser := userDocument(*user.ToPrimitives())
 
-	newUser.Password = mongo.hashing.Hash(newUser.Password)
+	newUser.Password = mg.hashing.Hash(newUser.Password)
 
-	_, err := mongo.collection.InsertOne(context.Background(), newUser)
+	_, err := mg.collection.InsertOne(context.Background(), newUser)
 
-	if err != nil {
-		panic(err)
+	if mongo.IsDuplicateKeyError(err) {
+		handleDuplicateKeyError(err)
 	}
 }
 
-func (mongo Mongo) Update(user *aggregate.User) {
+func (mg Mongo) Update(user *aggregate.User) {
 	updateFilter := bson.M{"id": user.Id.Value}
 
 	updateUser := bson.M{}
@@ -54,41 +54,44 @@ func (mongo Mongo) Update(user *aggregate.User) {
 	}
 
 	if user.Password != nil {
-		updateUser["password"] = mongo.hashing.Hash(user.Password.Value)
+		updateUser["password"] = mg.hashing.Hash(user.Password.Value)
 	}
 
-	_, err := mongo.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
+	_, err := mg.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
 
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (mongo Mongo) Delete(id *sharedVO.Id) {
+func (mg Mongo) Delete(id *sharedVO.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
-	_, err := mongo.collection.DeleteOne(context.Background(), deleteFilter)
+	_, err := mg.collection.DeleteOne(context.Background(), deleteFilter)
 
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (mongo Mongo) Search(filter repository.Filter) *aggregate.User {
+func (mg Mongo) Search(filter repository.Filter) *aggregate.User {
 	var searchFilter bson.M
+	var index string
 
 	if filter.Email != nil {
 		searchFilter = bson.M{"email": filter.Email.Value}
+		index = filter.Email.Value
 	}
 
 	if filter.Id != nil {
 		searchFilter = bson.M{"id": filter.Id.Value}
+		index = filter.Id.Value
 	}
 
-	result := mongo.collection.FindOne(context.Background(), searchFilter)
+	result := mg.collection.FindOne(context.Background(), searchFilter)
 
 	if err := result.Err(); err != nil {
-		panic("not found")
+		handleDocumentNotFound(index)
 	}
 
 	var userPrimitive aggregate.UserPrimitive

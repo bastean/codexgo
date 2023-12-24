@@ -11,7 +11,7 @@ type Id struct {
 	Value string `validate:"uuid4"`
 }
 
-var InvalidIdValue = errors.InvalidValue{Message: "Id value is invalid"}
+var InvalidIdValue = errors.InvalidValue{Dump: []errors.Error{{Field: "Id", Message: "Invalid"}}}
 
 func ensureIsValidId(id *Id) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())
@@ -23,6 +23,7 @@ func ensureIsValidId(id *Id) (err error) {
 
 func NewId(id string) *Id {
 	id = strings.TrimSpace(id)
+
 	idVO := &Id{id}
 
 	err := ensureIsValidId(idVO)

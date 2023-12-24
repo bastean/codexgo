@@ -10,12 +10,12 @@ import (
 func ErrorHandler(c *gin.Context, err any) {
 	switch error := err.(type) {
 	case errors.InvalidValue:
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": error.Message})
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": error.Dump})
 	case errors.NotExist:
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": error.Message})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": error.Dump})
 	case errors.AlreadyExist:
-		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": error.Message})
+		c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": error.Dump})
 	default:
-		c.AbortWithStatusJSON(500, gin.H{"error": error})
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": error})
 	}
 }

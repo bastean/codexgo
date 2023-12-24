@@ -12,7 +12,7 @@ type Username struct {
 const UsernameMinCharactersLength = "2"
 const UsernameMaxCharactersLength = "20"
 
-var InvalidUsernameValue = errors.InvalidValue{Message: "Username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only"}
+var InvalidUsernameValue = errors.InvalidValue{Dump: []errors.Error{{Field: "Username", Message: "Must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only"}}}
 
 func ensureIsValidUsername(username *Username) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())

@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var InvalidJWT = errors.InvalidValue{Message: "invalid JWT"}
+var InvalidJWT = errors.InvalidValue{Dump: []errors.Error{{Field: "JWT", Message: "Invalid"}}}
 
 var secretKey = []byte("codexgo") //! .env
 

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/backend/internal/util/error"
 	"github.com/bastean/codexgo/context/pkg/user/application/register"
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +21,7 @@ func UserPut() gin.HandlerFunc {
 		var user Put
 
 		if err := c.ShouldBindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusBadRequest, gin.H{"error": error.Bind(err.Error())})
 			return
 		}
 

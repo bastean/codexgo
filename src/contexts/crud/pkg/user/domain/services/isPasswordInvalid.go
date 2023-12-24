@@ -5,7 +5,7 @@ import (
 	"github.com/bastean/codexgo/context/pkg/user/domain/models"
 )
 
-var IncorrectPassword = errors.InvalidValue{Message: "incorrect password"}
+var IncorrectPassword = errors.InvalidValue{Dump: []errors.Error{{Field: "Password", Message: "Incorrect"}}}
 
 func IsPasswordInvalid(hashing models.Hashing, hashed, plain string) {
 	if hashing.IsNotEqual(hashed, plain) {
