@@ -1,0 +1,31 @@
+{
+  "name": "codexgo",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/go:1": {}
+  },
+  "postCreateCommand": "go install github.com/cosmtrek/air@latest",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "aaron-bond.better-comments",
+        "github.vscode-github-actions",
+        "golang.go",
+        "Gruntfuggly.todo-tree",
+        "ms-azuretools.vscode-docker",
+        "rangav.vscode-thunder-client",
+        "redhat.vscode-yaml",
+        "streetsidesoftware.code-spell-checker"
+      ],
+      "settings": {
+        "[go]": {
+          "editor.defaultFormatter": "golang.go"
+        },
+        "cSpell.language": "en,lorem",
+        "go.toolsManagement.autoUpdate": true,
+        "gopls": { "ui.semanticTokens": true }
+      }
+    }
+  }
+}
