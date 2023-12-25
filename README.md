@@ -10,7 +10,7 @@
 
 <div align="center">
 
-> ...
+> Example CRUD project applying Hexagonal Architecture, Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), Behavior-Driven Development (BDD), Continuous Integration (CI), and more... in Go
 
 </div>
 
@@ -30,7 +30,10 @@
 
 ## Run
 
-...
+Install required
+
+- [Docker](https://docs.docker.com/get-docker)
+  - [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### Locally
 
@@ -38,7 +41,23 @@
 
 ### Dev Container
 
-...
+- HTTPS
+
+  ```bash
+  git clone https://github.com/bastean/codexgo.git && cd codexgo && code .
+  ```
+
+- SSH
+
+  ```bash
+  git clone git@github.com:bastean/codexgo.git && cd codexgo && code .
+  ```
+
+**Reopen in Container**
+
+```bash
+make run-dev
+```
 
 ## Screenshots
 
