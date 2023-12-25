@@ -15,6 +15,7 @@
         "golang.go",
         "Gruntfuggly.todo-tree",
         "ms-azuretools.vscode-docker",
+        "ms-vscode.makefile-tools",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker"
       ],

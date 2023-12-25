@@ -28,8 +28,8 @@ services:
       - .:/app
     healthcheck:
       test: wget --no-verbose --tries=1 --spider codexgo-backend-dev:8080
-      interval: 5s
-      timeout: 5s
+      interval: 6s
+      timeout: 6s
       retries: 30
       start_period: 0s
     restart: on-failure

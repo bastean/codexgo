@@ -15,9 +15,9 @@ func loadMiddlewares() {
 }
 
 func loadEndpoints() {
-	v1 := router.Group("/v1")
+	router.GET("/", public.Status())
 
-	v1.GET("/status", public.Status())
+	v1 := router.Group("/v1")
 
 	user := v1.Group("/user")
 
