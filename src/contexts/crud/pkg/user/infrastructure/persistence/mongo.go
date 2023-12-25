@@ -2,6 +2,7 @@ package persistence
 
 import (
 	"context"
+	"os"
 
 	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
 	"github.com/bastean/codexgo/context/pkg/user/domain/aggregate"
@@ -12,9 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var uri = "mongodb://codexgo:codexgo@localhost:27017" //! .env
-var databaseName = "codexgo"                          //! .env
-var collectionName = "users"                          //! .env
+var uri = os.Getenv("DATABASE_URI")
+var databaseName = os.Getenv("DATABASE_NAME")
+var collectionName = os.Getenv("DATABASE_COLLECTION")
 
 type userDocument struct {
 	Id       string `bson:"id"`

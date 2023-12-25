@@ -1,16 +1,39 @@
 services:
-  db-dev:
-    container_name: codexgo-db-dev
+
+  codexgo-database-dev:
     image: mongo:4.4
     environment:
-      MONGO_INITDB_ROOT_USERNAME: codexgo
-      MONGO_INITDB_ROOT_PASSWORD: codexgo
+      MONGO_INITDB_ROOT_USERNAME: codexgo-dev
+      MONGO_INITDB_ROOT_PASSWORD: codexgo-dev
     command: mongod --quiet --logpath /dev/null
     ports:
       - "27017:27017"
     volumes:
-      - codexgo-db-dev:/data/db
+      - codexgo-database-dev:/data/db
+    restart: on-failure
+
+  codexgo-backend-dev:
+    build:
+      context: src/apps/crud/backend
+      dockerfile: Dockerfile.dev
+    environment:
+      GIN_MODE: debug
+      PORT: 8080
+      DATABASE_URI: 'mongodb://codexgo-dev:codexgo-dev@codexgo-database-dev:27017'
+      DATABASE_NAME: 'codexgo-dev'
+      DATABASE_COLLECTION: 'users'
+      JWT_PRIVATE_KEY: codexgo-dev
+    ports:
+      - '8080:8080'
+    volumes:
+      - .:/app
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider codexgo-backend-dev:8080
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 0s
     restart: on-failure
 
 volumes:
-  codexgo-db-dev:
+  codexgo-database-dev:

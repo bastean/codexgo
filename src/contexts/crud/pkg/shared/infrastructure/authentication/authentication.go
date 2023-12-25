@@ -1,6 +1,7 @@
 package authentication
 
 import (
+	"os"
 	"time"
 
 	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
@@ -9,7 +10,7 @@ import (
 
 var InvalidJWT = errors.InvalidValue{Dump: []errors.Error{{Field: "JWT", Message: "Invalid"}}}
 
-var secretKey = []byte("codexgo") //! .env
+var secretKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
 
 func GenerateJWT(id string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
