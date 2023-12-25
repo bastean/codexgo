@@ -1,5 +1,4 @@
 services:
-
   codexgo-database-dev:
     image: mongo:4.4
     environment:
@@ -19,12 +18,12 @@ services:
     environment:
       GIN_MODE: debug
       PORT: 8080
-      DATABASE_URI: 'mongodb://codexgo-dev:codexgo-dev@codexgo-database-dev:27017'
-      DATABASE_NAME: 'codexgo-dev'
-      DATABASE_COLLECTION: 'users'
+      DATABASE_URI: "mongodb://codexgo-dev:codexgo-dev@codexgo-database-dev:27017"
+      DATABASE_NAME: "codexgo-dev"
+      DATABASE_COLLECTION: "users"
       JWT_PRIVATE_KEY: codexgo-dev
     ports:
-      - '8080:8080'
+      - "8080:8080"
     volumes:
       - .:/app
     healthcheck:

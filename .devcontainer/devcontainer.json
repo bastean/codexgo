@@ -5,16 +5,16 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/go:1": {}
   },
-  "postCreateCommand": "go install github.com/cosmtrek/air@latest",
+  "postCreateCommand": "",
   "customizations": {
     "vscode": {
       "extensions": [
         "aaron-bond.better-comments",
+        "esbenp.prettier-vscode",
         "github.vscode-github-actions",
         "golang.go",
         "Gruntfuggly.todo-tree",
         "ms-azuretools.vscode-docker",
-        "rangav.vscode-thunder-client",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker"
       ],
@@ -23,6 +23,7 @@
           "editor.defaultFormatter": "golang.go"
         },
         "cSpell.language": "en,lorem",
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
         "go.toolsManagement.autoUpdate": true,
         "gopls": { "ui.semanticTokens": true }
       }
