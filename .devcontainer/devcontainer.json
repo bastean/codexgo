@@ -3,19 +3,22 @@
   "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/go:1": {}
+    "ghcr.io/devcontainers/features/go:1": {},
+    "ghcr.io/devcontainers/features/node:1": {}
   },
-  "postCreateCommand": "",
+  "postCreateCommand": "make init",
   "customizations": {
     "vscode": {
       "extensions": [
         "aaron-bond.better-comments",
+        "bradlc.vscode-tailwindcss",
         "esbenp.prettier-vscode",
         "github.vscode-github-actions",
         "golang.go",
         "Gruntfuggly.todo-tree",
         "ms-azuretools.vscode-docker",
         "ms-vscode.makefile-tools",
+        "otovo-oss.htmx-tags",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker"
       ],

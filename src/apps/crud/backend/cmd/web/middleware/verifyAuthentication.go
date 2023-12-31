@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/bastean/codexgo/backend/internal/util/error"
+	"github.com/bastean/codexgo/backend/internal/server/util/error"
 	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/authentication"
 	"github.com/gin-gonic/gin"
 )

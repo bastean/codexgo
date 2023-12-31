@@ -1,0 +1,35 @@
+<form
+  class="flex h-full w-full flex-col items-center justify-center gap-5"
+  hx-post="/"
+  hx-target-*="#alert"
+>
+  <input
+    name="id"
+    type="text"
+    placeholder="Id"
+    class="input input-bordered w-full max-w-xs"
+  />
+
+  <input
+    name="username"
+    type="text"
+    placeholder="Username"
+    class="input input-bordered w-full max-w-xs"
+  />
+
+  <input
+    name="email"
+    type="email"
+    placeholder="Email"
+    class="input input-bordered w-full max-w-xs"
+  />
+
+  <input
+    name="password"
+    type="password"
+    placeholder="Password"
+    class="input input-bordered w-full max-w-xs"
+  />
+
+  <button class="btn btn-primary">Register</button>
+</form>
