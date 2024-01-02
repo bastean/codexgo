@@ -14,11 +14,15 @@ var server = gin.Default()
 func Init(files *embed.FS) *gin.Engine {
 	container.Logger.Info("starting server")
 
-	templ := template.Must(template.ParseFS(files, "templates/*.html"))
+	templates := template.Must(template.ParseFS(files, "templates/*.html"))
 
-	server.SetHTMLTemplate(templ)
+	server.SetHTMLTemplate(templates)
 
-	server.StaticFS("/public", http.FS(files))
+	fs := http.FS(files)
+
+	server.StaticFS("/public", fs)
+
+	server.StaticFileFS("/robots.txt", "static/robots.txt", fs)
 
 	LoadRoutes()
 

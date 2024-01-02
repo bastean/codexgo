@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/backend/cmd/web/server"
 )
 
-//go:embed templates
+//go:embed static templates
 var files embed.FS
 
 func main() {

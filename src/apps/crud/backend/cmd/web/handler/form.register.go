@@ -9,9 +9,9 @@ import (
 )
 
 type Put struct {
-	Id       string `form:"username" binding:"required"`
+	Id       string `form:"id" binding:"required"`
 	Email    string `form:"email" binding:"required"`
-	Username string `form:"id" binding:"required"`
+	Username string `form:"username" binding:"required"`
 	Password string `form:"password" binding:"required"`
 }
 

@@ -1,27 +1,25 @@
-package public
+package handler
 
 import (
 	"net/http"
 
 	"github.com/bastean/codexgo/backend/internal/container"
-	"github.com/bastean/codexgo/backend/internal/server/util/error"
 	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/authentication"
 	"github.com/bastean/codexgo/context/pkg/user/application/login"
 	"github.com/gin-gonic/gin"
 )
 
 type Post struct {
-	Email    string `json:"email" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Email    string `form:"email" binding:"required"`
+	Password string `form:"password" binding:"required"`
 }
 
-func UserPost() gin.HandlerFunc {
+func FormLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user Post
 
-		if err := c.ShouldBindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": error.Bind(err.Error())})
-			return
+		if err := c.ShouldBind(&user); err != nil {
+			c.HTML(http.StatusBadRequest, "alert-error.html", "Missing values")
 		}
 
 		response := container.UserLoginHandler.Handle(login.Query(user))

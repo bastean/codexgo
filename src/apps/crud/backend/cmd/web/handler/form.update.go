@@ -1,10 +1,9 @@
-package auth
+package handler
 
 import (
 	"net/http"
 
 	"github.com/bastean/codexgo/backend/internal/container"
-	"github.com/bastean/codexgo/backend/internal/server/util/error"
 	"github.com/bastean/codexgo/context/pkg/user/application/update"
 	"github.com/gin-gonic/gin"
 )
@@ -17,13 +16,12 @@ type Patch struct {
 	UpdatedPassword string `json:"updatedPassword"`
 }
 
-func UserPatch() gin.HandlerFunc {
+func FormUpdate() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user Patch
 
-		if err := c.ShouldBindJSON(&user); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": error.Bind(err.Error())})
-			return
+		if err := c.ShouldBind(&user); err != nil {
+			c.HTML(http.StatusBadRequest, "alert-error.html", "Missing values")
 		}
 
 		id, _ := c.Get("id")
