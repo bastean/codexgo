@@ -1,5 +1,9 @@
 package errors
 
 type AlreadyExist struct {
-	Dump []Error
+	Message string
+}
+
+func (error AlreadyExist) Error() string {
+	return error.Message
 }

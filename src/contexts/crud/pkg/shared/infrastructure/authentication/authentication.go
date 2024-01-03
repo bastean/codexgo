@@ -8,9 +8,9 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var InvalidJWT = errors.InvalidValue{Dump: []errors.Error{{Field: "JWT", Message: "Invalid"}}}
+var InvalidJWT = errors.InvalidValue{Message: "JWT Invalid"}
 
-var secretKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
+var secretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 func GenerateJWT(id string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

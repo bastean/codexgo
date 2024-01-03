@@ -14,9 +14,9 @@ func handleDuplicateKeyError(error error) {
 
 	field := strings.Title(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
-	panic(errors.AlreadyExist{Dump: []errors.Error{{Field: field, Message: "Duplicate"}}})
+	panic(errors.AlreadyExist{Message: "Duplicate " + field})
 }
 
 func handleDocumentNotFound(index string) {
-	panic(errors.NotExist{Dump: []errors.Error{{Field: index, Message: "Not Found"}}})
+	panic(errors.NotExist{Message: "Not Found " + index})
 }

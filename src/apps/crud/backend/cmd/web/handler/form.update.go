@@ -9,20 +9,18 @@ import (
 )
 
 type Patch struct {
-	Id              string `json:"id"`
-	Email           string `json:"email"`
-	Username        string `json:"username"`
-	Password        string `json:"password"`
-	UpdatedPassword string `json:"updatedPassword"`
+	Id              string `form:"id"`
+	Email           string `form:"email"`
+	Username        string `form:"username"`
+	Password        string `form:"password"`
+	UpdatedPassword string `form:"updatedPassword"`
 }
 
 func FormUpdate() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user Patch
 
-		if err := c.ShouldBind(&user); err != nil {
-			c.HTML(http.StatusBadRequest, "alert-error.html", "Missing values")
-		}
+		c.ShouldBind(&user)
 
 		id, _ := c.Get("id")
 

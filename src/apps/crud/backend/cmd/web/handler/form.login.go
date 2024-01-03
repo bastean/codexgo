@@ -6,28 +6,31 @@ import (
 	"github.com/bastean/codexgo/backend/internal/container"
 	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/authentication"
 	"github.com/bastean/codexgo/context/pkg/user/application/login"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 type Post struct {
-	Email    string `form:"email" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	Email    string `form:"email"`
+	Password string `form:"password"`
 }
 
 func FormLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user Post
 
-		if err := c.ShouldBind(&user); err != nil {
-			c.HTML(http.StatusBadRequest, "alert-error.html", "Missing values")
-		}
+		c.ShouldBind(&user)
 
 		response := container.UserLoginHandler.Handle(login.Query(user))
 
 		token := authentication.GenerateJWT(response.Id)
 
-		c.Header("Authorization", "Bearer "+token)
+		session := sessions.Default(c)
 
-		c.JSON(http.StatusOK, response)
+		session.Set("Authorization", "Bearer "+token)
+
+		session.Save()
+
+		c.HTML(http.StatusOK, "alert.success.html", "Login success")
 	}
 }

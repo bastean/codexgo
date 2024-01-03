@@ -7,8 +7,8 @@ import (
 )
 
 //go:embed static templates
-var files embed.FS
+var Files embed.FS
 
 func main() {
-	server.Init(&files).Run()
+	server.Init(&Files).Run()
 }

@@ -4,17 +4,18 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/bastean/codexgo/backend/internal/util/error"
 	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/authentication"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 func VerifyAuthentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
+		session := sessions.Default(c)
+		token := session.Get("Authorization").(string)
 
 		if token == "" {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": error.AuthenticationMissing("Token")})
+			c.Redirect(http.StatusUnprocessableEntity, "/")
 			return
 		}
 
@@ -26,7 +27,7 @@ func VerifyAuthentication() gin.HandlerFunc {
 			c.Set("id", value)
 			c.Next()
 		} else {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{"error": error.AuthenticationMissing("Id")})
+			c.Redirect(http.StatusUnprocessableEntity, "/")
 		}
 	}
 }

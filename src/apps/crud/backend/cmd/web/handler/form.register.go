@@ -6,25 +6,26 @@ import (
 	"github.com/bastean/codexgo/backend/internal/container"
 	"github.com/bastean/codexgo/context/pkg/user/application/register"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type Put struct {
-	Id       string `form:"id" binding:"required"`
-	Email    string `form:"email" binding:"required"`
-	Username string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
+	Id       string `form:"id"`
+	Email    string `form:"email"`
+	Username string `form:"username"`
+	Password string `form:"password"`
 }
 
 func FormRegister() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user Put
 
-		if err := c.ShouldBind(&user); err != nil {
-			c.HTML(http.StatusBadRequest, "alert-error.html", "Missing values")
-		}
+		c.ShouldBind(&user)
+
+		user.Id = uuid.NewString()
 
 		container.UserRegisterHandler.Handle(register.Command(user))
 
-		c.Status(http.StatusCreated)
+		c.HTML(http.StatusCreated, "alert.success.html", "Created")
 	}
 }

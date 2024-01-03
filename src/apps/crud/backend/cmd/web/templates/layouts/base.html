@@ -1,3 +1,4 @@
+{{define "base"}}
 <!doctype html>
 <html lang="en">
   <head>
@@ -46,13 +47,12 @@
 
     <title>codexgo</title>
   </head>
-  <body
-    class="h-screen w-full"
-    hx-ext="response-targets, class-tools, remove-me"
-  >
-    <div class="fixed mx-auto mt-10 flex w-full items-center justify-center">
-      <div id="alert"></div>
+  <body hx-ext="response-targets, class-tools, remove-me">
+    {{template "alert"}}
+
+    <div id="main" class="flex h-screen w-full items-center justify-center">
+      {{template "content"}}
     </div>
-    {{ template "register.html" .}}
   </body>
 </html>
+{{end}}

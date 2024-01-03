@@ -21,7 +21,9 @@ services:
       DATABASE_URI: "mongodb://codexgo-dev:codexgo-dev@codexgo-database-dev:27017"
       DATABASE_NAME: "codexgo-dev"
       DATABASE_COLLECTION: "users"
-      JWT_PRIVATE_KEY: codexgo-dev
+      JWT_SECRET_KEY: codexgo-dev
+      COOKIE_SECRET_KEY: codexgo-dev
+      COOKIE_SESSION_NAME: codexgo-dev
     ports:
       - "8080:8080"
     volumes:

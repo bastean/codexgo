@@ -8,6 +8,6 @@ import (
 
 func IndexDashboard() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.HTML(http.StatusOK, "dashboard.html", nil)
+		c.HTML(http.StatusOK, "page.index.html", struct{ Auth bool }{true})
 	}
 }

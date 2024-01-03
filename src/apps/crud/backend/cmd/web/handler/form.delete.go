@@ -9,17 +9,15 @@ import (
 )
 
 type Delete struct {
-	Id       string `json:"id"`
-	Password string `json:"password" binding:"required"`
+	Id       string `form:"id"`
+	Password string `form:"password"`
 }
 
 func FormDelete() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user Delete
 
-		if err := c.ShouldBind(&user); err != nil {
-			c.HTML(http.StatusBadRequest, "alert-error.html", "Missing values")
-		}
+		c.ShouldBind(&user)
 
 		id, _ := c.Get("id")
 

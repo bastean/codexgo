@@ -11,7 +11,7 @@ type Email struct {
 	Value string `validate:"email"`
 }
 
-var InvalidEmailValue = errors.InvalidValue{Dump: []errors.Error{{Field: "Email", Message: "Invalid"}}}
+var InvalidEmailValue = errors.InvalidValue{Message: "Email Invalid"}
 
 func ensureIsValidEmail(email *Email) (err error) {
 	validate := validator.New(validator.WithRequiredStructEnabled())

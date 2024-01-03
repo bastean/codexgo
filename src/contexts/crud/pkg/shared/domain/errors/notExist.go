@@ -1,5 +1,9 @@
 package errors
 
 type NotExist struct {
-	Dump []Error
+	Message string
+}
+
+func (error NotExist) Error() string {
+	return error.Message
 }

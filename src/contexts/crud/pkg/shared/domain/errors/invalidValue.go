@@ -1,5 +1,9 @@
 package errors
 
 type InvalidValue struct {
-	Dump []Error
+	Message string
+}
+
+func (error InvalidValue) Error() string {
+	return error.Message
 }
