@@ -1,10 +1,17 @@
 init:
 	@npm ci
 
-run-dev:
+prepare: 
+	@git init
+	@husky install
+
+commit:
+	@npx cz
+
+dev:
 	@docker compose -f docker-compose.dev.yml up
 
-down-dev:
+dev-down:
 	@docker compose -f docker-compose.dev.yml down
 
 docker-prune:
