@@ -1,13 +1,17 @@
 {
+  "private": true,
   "devDependencies": {
     "@commitlint/cli": "18.4.4",
     "@commitlint/config-conventional": "18.4.4",
+    "@release-it/bumper": "6.0.1",
+    "@release-it/conventional-changelog": "8.0.1",
     "commitizen": "4.3.0",
     "cz-conventional-changelog": "3.3.0",
     "husky": "8.0.3",
     "lint-staged": "15.2.0",
     "prettier": "3.1.1",
-    "prettier-plugin-tailwindcss": "0.5.10"
+    "prettier-plugin-tailwindcss": "0.5.10",
+    "release-it": "17.0.1"
   },
   "lint-staged": {
     "**/*.go": [
@@ -26,5 +30,36 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "release-it": {
+    "git": {
+      "requireBranch": "main",
+      "commitMessage": "chore(release): v${version}",
+      "tagAnnotation": "codexgo ${version}",
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "releaseName": "v${version}"
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": "conventionalcommits",
+        "infile": "CHANGELOG.md",
+        "header": "# Changelog"
+      },
+      "@release-it/bumper": {
+        "out": [
+          "manifest.json"
+        ]
+      }
+    },
+    "hooks": {
+      "before:init": [
+        "make lint-check",
+        "make test"
+      ],
+      "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}"
+    }
   }
 }
