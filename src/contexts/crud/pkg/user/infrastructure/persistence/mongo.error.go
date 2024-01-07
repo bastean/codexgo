@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func handleDuplicateKeyError(error error) {
@@ -12,7 +14,9 @@ func handleDuplicateKeyError(error error) {
 
 	rawField := re.FindString(error.Error())
 
-	field := strings.Title(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
+	toTitle := cases.Title(language.English)
+
+	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
 	panic(errors.AlreadyExist{Message: "Duplicate " + field})
 }

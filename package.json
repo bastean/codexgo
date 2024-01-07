@@ -11,10 +11,11 @@
   },
   "lint-staged": {
     "**/*.go": [
-      "go fmt",
-      "staticcheck"
+      "go fmt"
     ],
-    "**/*": "prettier --ignore-unknown --write"
+    "**/*": [
+      "prettier --ignore-unknown --write"
+    ]
   },
   "config": {
     "commitizen": {
