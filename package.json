@@ -1,5 +1,22 @@
 {
   "private": true,
+  "name": "codexgo",
+  "version": "0.0.0",
+  "description": "codexgo",
+  "author": "Bastean <bastean@pm.me>",
+  "license": "MIT",
+  "homepage": "https://github.com/bastean/codexgo#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bastean/codexgo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bastean/codexgo/issues"
+  },
+  "engines": {
+    "node": ">=20",
+    "npm": ">=10"
+  },
   "devDependencies": {
     "@commitlint/cli": "18.4.4",
     "@commitlint/config-conventional": "18.4.4",

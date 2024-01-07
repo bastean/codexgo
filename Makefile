@@ -36,7 +36,7 @@ release-beta:
 	@${release-it} --preRelease=beta
 
 release-ci:
-	@${release-it} --ci
+	@${release-it} --ci $(OPTIONS)
 
 release-dry:
 	@${release-it-dry}

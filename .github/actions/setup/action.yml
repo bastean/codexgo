@@ -1,0 +1,23 @@
+name: Setup
+
+description: Setup & Caching Dependencies
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v4
+      with:
+        go-version-file: "go.work"
+        cache-dependency-path: "**/*.sum"
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: "package.json"
+        cache: npm
+
+    - name: Install Dependencies
+      shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
+      run: make init
