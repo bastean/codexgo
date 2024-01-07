@@ -67,7 +67,7 @@
       },
       "@release-it/bumper": {
         "out": [
-          "manifest.json"
+          "src/apps/**/manifest.json"
         ]
       }
     },
