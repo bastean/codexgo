@@ -19,11 +19,15 @@
 <div align="center">
 
 [![license MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/commitizen/cz-cli)
+[![release it](https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80-release--it-orange.svg)](https://github.com/release-it/release-it)
 
 </div>
 
 <div align="center">
 
+[![ci workflow](https://github.com/bastean/codexgo/actions/workflows/ci.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/ci.yml)
+[![release workflow](https://github.com/bastean/codexgo/actions/workflows/release.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/release.yml)
 [![github release](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
 
 </div>
@@ -56,7 +60,7 @@ Install required
 **Reopen in Container**
 
 ```bash
-make run-dev
+make dev
 ```
 
 ## Screenshots
