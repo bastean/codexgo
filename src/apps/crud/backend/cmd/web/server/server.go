@@ -2,6 +2,7 @@ package server
 
 import (
 	"embed"
+	"html/template"
 	"net/http"
 	"os"
 
@@ -17,9 +18,9 @@ var server = gin.Default()
 func Init(files *embed.FS) *gin.Engine {
 	container.Logger.Info("starting server")
 
-	// templates := template.Must(template.ParseFS(files, "templates/**/*"))
+	templates := template.Must(template.ParseFS(files, "templates/**/*.html"))
 
-	// server.SetHTMLTemplate(templates)
+	server.SetHTMLTemplate(templates)
 
 	fs := http.FS(files)
 
@@ -35,7 +36,7 @@ func Init(files *embed.FS) *gin.Engine {
 
 	server.Use(sessions.Sessions(os.Getenv("COOKIE_SESSION_NAME"), store))
 
-	server.Use(middleware.EmbedFiles(*files))
+	server.Use(middleware.EmbedFS(files))
 
 	LoadRoutes()
 

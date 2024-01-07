@@ -15,20 +15,21 @@
     >
       <form
         class="flex h-full w-full flex-col items-center justify-center gap-5"
-        hx-patch="/auth"
-        hx-target-*="#alert"
+        hx-patch="/dashboard"
+        hx-target="#alert"
+        hx-target-error="#alert"
       >
-        <input
-          name="username"
-          type="text"
-          placeholder="Username"
-          class="input input-bordered w-full max-w-xs"
-        />
-
         <input
           name="email"
           type="email"
           placeholder="Email"
+          class="input input-bordered w-full max-w-xs"
+        />
+
+        <input
+          name="username"
+          type="text"
+          placeholder="Username"
           class="input input-bordered w-full max-w-xs"
         />
 
@@ -43,13 +44,6 @@
           name="updatedPassword"
           type="password"
           placeholder="New Password"
-          class="input input-bordered w-full max-w-xs"
-        />
-
-        <input
-          name="confirmPassword"
-          type="password"
-          placeholder="Confirm Password"
           class="input input-bordered w-full max-w-xs"
         />
         <button class="btn btn-primary">Update</button>
@@ -69,15 +63,11 @@
     >
       <form
         class="flex h-full w-full flex-col items-center justify-center gap-5"
-        hx-delete="/auth"
-        hx-target-*="#alert"
+        hx-delete="/dashboard"
+        hx-target="#main"
+        hx-target-error="#alert"
+        hx-confirm="Delete account?"
       >
-        <input
-          name="password"
-          type="password"
-          placeholder="Current Password"
-          class="input input-bordered w-full max-w-xs"
-        />
         <button class="btn btn-error">Delete</button>
       </form>
     </div>

@@ -12,13 +12,13 @@
   "theme_color": "#232627",
   "icons": [
     {
-      "src": "pwa-any.png",
+      "src": "assets/pwa-any.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "pwa-maskable.png",
+      "src": "assets/pwa-maskable.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"

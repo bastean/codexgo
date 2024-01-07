@@ -1,4 +1,4 @@
-{{define "base"}}
+{{define "base"}} {{if .isNotHxRequest}}
 <!doctype html>
 <html lang="en">
   <head>
@@ -41,9 +41,12 @@
       type="text/css"
     />
 
-    <link rel="manifest" href="public/static/manifest.json" />
-    <link rel="apple-touch-icon" href="public/static/apple-touch-icon.png" />
-    <link rel="icon" href="public/static/favicon.png" />
+    <link rel="manifest" href="/public/static/manifest.json" />
+    <link
+      rel="apple-touch-icon"
+      href="/public/static/assets/apple-touch-icon.png"
+    />
+    <link rel="icon" href="/public/static/assets/favicon.png" />
 
     <title>codexgo</title>
   </head>
@@ -51,8 +54,8 @@
     {{template "alert"}}
 
     <div id="main" class="flex h-screen w-full items-center justify-center">
-      {{template "content"}}
+      {{end}} {{template "content"}} {{if .isNotHxRequest}}
     </div>
   </body>
 </html>
-{{end}}
+{{end}} {{end}}

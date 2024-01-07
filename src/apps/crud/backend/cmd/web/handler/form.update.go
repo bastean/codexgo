@@ -28,6 +28,6 @@ func FormUpdate() gin.HandlerFunc {
 
 		container.UserUpdateHandler.Handle(update.Command(user))
 
-		c.Status(http.StatusOK)
+		c.HTML(http.StatusOK, "alert.msg.html", gin.H{"Type": "success", "Message": "Successfully Updated"})
 	}
 }

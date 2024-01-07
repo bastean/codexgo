@@ -31,6 +31,6 @@ func FormLogin() gin.HandlerFunc {
 
 		session.Save()
 
-		c.HTML(http.StatusOK, "alert.success.html", "Login success")
+		c.Redirect(http.StatusFound, "/dashboard")
 	}
 }

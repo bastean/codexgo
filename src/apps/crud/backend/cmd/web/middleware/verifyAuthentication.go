@@ -12,14 +12,15 @@ import (
 func VerifyAuthentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		token := session.Get("Authorization").(string)
+		token := session.Get("Authorization")
 
-		if token == "" {
-			c.Redirect(http.StatusUnprocessableEntity, "/")
+		if token == nil || token == "" {
+			c.Redirect(http.StatusFound, "/")
+			c.Abort()
 			return
 		}
 
-		value := strings.Split(token, " ")[1]
+		value := strings.Split(token.(string), " ")[1]
 
 		claims := authentication.ValidateJWT(value)
 
@@ -27,7 +28,8 @@ func VerifyAuthentication() gin.HandlerFunc {
 			c.Set("id", value)
 			c.Next()
 		} else {
-			c.Redirect(http.StatusUnprocessableEntity, "/")
+			c.Redirect(http.StatusFound, "/")
+			c.Abort()
 		}
 	}
 }

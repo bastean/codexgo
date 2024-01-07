@@ -37,13 +37,6 @@
           placeholder="Password"
           class="input input-bordered w-full max-w-xs"
         />
-
-        <input
-          name="confirmPassword"
-          type="password"
-          placeholder="Confirm Password"
-          class="input input-bordered w-full max-w-xs"
-        />
         <button class="btn btn-primary">Register</button>
       </form>
     </div>
@@ -63,7 +56,8 @@
       <form
         class="flex h-full w-full flex-col items-center justify-center gap-5"
         hx-post="/"
-        hx-target-*="#alert"
+        hx-target="#main"
+        hx-target-error="#alert"
       >
         <input
           name="email"

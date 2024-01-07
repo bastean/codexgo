@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/bastean/codexgo/backend/internal/container"
 	"github.com/bastean/codexgo/context/pkg/user/application/delete"
@@ -9,8 +10,7 @@ import (
 )
 
 type Delete struct {
-	Id       string `form:"id"`
-	Password string `form:"password"`
+	Id string `form:"id"`
 }
 
 func FormDelete() gin.HandlerFunc {
@@ -24,6 +24,10 @@ func FormDelete() gin.HandlerFunc {
 		user.Id = id.(string)
 
 		container.UserDeleteHandler.Handle(delete.Command(user))
+
+		c.SetCookie(os.Getenv("COOKIE_SESSION_NAME"), "", -1, "/", "localhost", false, true)
+
+		c.Header("HX-Refresh", "true")
 
 		c.Status(http.StatusOK)
 	}

@@ -26,6 +26,6 @@ func FormRegister() gin.HandlerFunc {
 
 		container.UserRegisterHandler.Handle(register.Command(user))
 
-		c.HTML(http.StatusCreated, "alert.success.html", "Created")
+		c.HTML(http.StatusCreated, "alert.msg.html", gin.H{"Type": "success", "Message": "Successfully Registered"})
 	}
 }

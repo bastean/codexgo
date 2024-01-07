@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"embed"
-	"html/template"
 	"net/http"
 
 	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
@@ -10,22 +8,20 @@ import (
 )
 
 func ErrorHandler(c *gin.Context, err any) {
-	files, _ := c.Get("embedFiles")
-
-	templates := template.Must(template.ParseFS(files.(embed.FS), "templates/partials/alert.msg.html"))
+	var code int
 
 	switch err.(type) {
 	case errors.InvalidValue:
-		c.Status(http.StatusUnprocessableEntity)
+		code = http.StatusUnprocessableEntity
 	case errors.NotExist:
-		c.Status(http.StatusNotFound)
+		code = http.StatusNotFound
 	case errors.AlreadyExist:
-		c.Status(http.StatusConflict)
+		code = http.StatusConflict
 	default:
-		c.Status(http.StatusInternalServerError)
+		code = http.StatusInternalServerError
 	}
 
-	templates.ExecuteTemplate(c.Writer, "alert.msg", err.(error).Error())
+	c.HTML(code, "alert.msg.html", gin.H{"Type": "error", "Message": err.(error).Error()})
 
 	c.Abort()
 }
