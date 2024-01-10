@@ -32,7 +32,7 @@
   },
   "lint-staged": {
     "**/*.go": [
-      "go fmt"
+      "gofmt -l -s -w"
     ],
     "**/*": [
       "prettier --ignore-unknown --write"

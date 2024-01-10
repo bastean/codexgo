@@ -54,7 +54,7 @@ dev-down:
 	@docker compose -f docker-compose.dev.yml down
 
 test:
-	@echo "Test"
+	@cd tests/ && go clean -testcache && go test -cover ./...
 
 docker-prune:
 	@docker system prune --volumes -fa
