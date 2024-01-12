@@ -47,14 +47,26 @@ release-dry-version:
 release-dry-changelog:
 	@${release-it-dry} --changelog
 
-dev:
-	@docker compose -f docker-compose.dev.yml up
+compose-dev:
+	@docker compose --env-file .env.example.dev up
 
-dev-down:
-	@docker compose -f docker-compose.dev.yml down
+compose-dev-down:
+	@docker compose --env-file .env.example.dev down
+
+compose-test:
+	@docker compose --env-file .env.example.test up --exit-code-from backend
+
+compose-test-down:
+	@docker compose --env-file .env.example.test down
+
+compose-production:
+	@docker compose up
+
+compose-production-down:
+	@docker compose down
 
 test:
-	@cd tests/ && go clean -testcache && go test -cover ./...
+	@cd tests/ && go clean -testcache && go test -v -cover ./...
 
-docker-prune:
+WARNING-docker-prune:
 	@docker system prune --volumes -fa

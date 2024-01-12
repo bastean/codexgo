@@ -1,0 +1,48 @@
+services:
+  database:
+    container_name: ${MONGO_CONTAINER_NAME}
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - ${MONGO_INITDB_PORT}:${MONGO_INITDB_PORT}
+    volumes:
+      - codexgo-database:/data/db
+    restart: ${MONGO_RESTART}
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet | grep 1
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  backend:
+    container_name: ${BACKEND_CONTAINER_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: ${BACKEND_BUILD_TARGET}
+    environment:
+      GIN_MODE: ${BACKEND_MODE}
+      PORT: ${BACKEND_PORT}
+      DATABASE_URI: "mongodb://${BACKEND_DATABASE_USERNAME}:${BACKEND_DATABASE_PASSWORD}@database:${MONGO_INITDB_PORT}"
+      DATABASE_NAME: ${BACKEND_DATABASE_NAME}
+      DATABASE_COLLECTION: ${BACKEND_DATABASE_COLLECTION}
+      JWT_SECRET_KEY: ${BACKEND_JWT_SECRET_KEY}
+      COOKIE_SECRET_KEY: ${BACKEND_COOKIE_SECRET_KEY}
+      COOKIE_SESSION_NAME: ${BACKEND_COOKIE_SESSION_NAME}
+    command: ${BACKEND_COMMAND}
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    volumes:
+      - ${BACKEND_VOLUME}
+    restart: ${BACKEND_RESTART}
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  codexgo-database:
+    name: ${DATABASE_VOLUME}
