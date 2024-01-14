@@ -12,6 +12,7 @@
       "extensions": [
         "aaron-bond.better-comments",
         "bradlc.vscode-tailwindcss",
+        "CucumberOpen.cucumber-official",
         "esbenp.prettier-vscode",
         "github.vscode-github-actions",
         "golang.go",
@@ -23,6 +24,9 @@
         "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
+        "[cucumber]": {
+          "editor.defaultFormatter": "cucumberopen.cucumber-official"
+        },
         "[go]": {
           "editor.defaultFormatter": "golang.go"
         },
