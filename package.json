@@ -31,11 +31,12 @@
     "release-it": "17.0.1"
   },
   "lint-staged": {
+    "**/*": [
+      "trufflehog filesystem --no-update",
+      "prettier --ignore-unknown --write"
+    ],
     "**/*.go": [
       "gofmt -l -s -w"
-    ],
-    "**/*": [
-      "prettier --ignore-unknown --write"
     ]
   },
   "config": {
