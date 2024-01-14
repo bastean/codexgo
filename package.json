@@ -75,7 +75,7 @@
     "hooks": {
       "before:init": [
         "make lint-check",
-        "make test"
+        "make compose-test"
       ],
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}"
     }

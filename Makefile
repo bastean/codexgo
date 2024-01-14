@@ -26,7 +26,7 @@ init:
 	@npm ci --legacy-peer-deps
 
 lint:
-	@gofmt -l -w src/apps/crud/backend src/contexts/crud
+	@gofmt -l -s -w src/apps/crud/backend src/contexts/crud
 	@${npx} prettier --ignore-unknown --write .
 
 lint-check:
@@ -78,7 +78,8 @@ compose-production-down:
 	@${compose} down
 
 test:
-	@cd tests/ && go clean -testcache && go test -v -cover ./...
+	@go clean -testcache
+	@cd tests/ && mkdir -p reports && go test -v -cover ./... > reports/report.txt
 
 WARNING-docker-prune:
 	@docker system prune --volumes -fa
