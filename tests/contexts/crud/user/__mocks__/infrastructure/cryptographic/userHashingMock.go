@@ -7,7 +7,7 @@ type UserHashingMock struct {
 }
 
 func (m *UserHashingMock) Hash(plain string) string {
-	return ""
+	return plain
 }
 
 func (m *UserHashingMock) IsNotEqual(hashed, plain string) bool {

@@ -52,12 +52,14 @@ compose-dev:
 
 compose-dev-down:
 	@docker compose --env-file .env.example.dev down
+	@docker volume rm codexgo-database-dev -f
 
 compose-test:
 	@docker compose --env-file .env.example.test up --exit-code-from backend
 
 compose-test-down:
 	@docker compose --env-file .env.example.test down
+	@docker volume rm codexgo-database-test -f
 
 compose-production:
 	@docker compose up
