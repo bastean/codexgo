@@ -40,5 +40,7 @@ func Init(files *embed.FS) *gin.Engine {
 
 	LoadRoutes()
 
+	container.Logger.Info("listening and serving HTTP on :" + os.Getenv("PORT"))
+
 	return server
 }

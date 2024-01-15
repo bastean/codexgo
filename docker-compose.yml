@@ -46,3 +46,4 @@ services:
 volumes:
   codexgo-database:
     name: ${DATABASE_VOLUME}
+  codexgo-backend:

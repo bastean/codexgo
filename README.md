@@ -60,7 +60,7 @@ Install required
 **Reopen in Container**
 
 ```bash
-make dev
+make compose-prod
 ```
 
 ## Screenshots

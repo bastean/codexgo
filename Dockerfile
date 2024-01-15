@@ -15,3 +15,17 @@ RUN go run github.com/playwright-community/playwright-go/cmd/playwright@latest i
 RUN apt install -y nodejs npm
 
 RUN npm i -g concurrently wait-on
+
+FROM golang:bookworm AS build
+
+WORKDIR /app
+
+COPY . .
+
+RUN make build
+
+FROM golang:bookworm AS prod
+
+WORKDIR /app
+
+COPY --from=build app/dist/codexgo .

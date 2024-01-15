@@ -71,15 +71,25 @@ compose-test-down:
 	@${compose-env} .env.example.test down
 	@docker volume rm codexgo-database-test -f
 
-compose-production:
-	@${compose} up
+compose-prod:
+	@${compose-env} .env.example.prod up
 
-compose-production-down:
-	@${compose} down
+compose-prod-down:
+	@${compose-env} .env.example.prod down
 
 test:
 	@go clean -testcache
 	@cd tests/ && mkdir -p reports && go test -v -cover ./... > reports/report.txt
 
-WARNING-docker-prune:
-	@docker system prune --volumes -fa
+build:
+	@rm -rf dist/
+	@go build -o dist/codexgo ./src/apps/**/backend/cmd/web
+
+docker-usage:
+	@docker system df
+
+WARNING-docker-prune-soft:
+	@docker system prune
+
+WARNING-docker-prune-hard:
+	@docker system prune --volumes -a
