@@ -53,7 +53,10 @@
   <body hx-ext="response-targets, class-tools, remove-me">
     {{template "alert"}}
 
-    <div id="main" class="flex h-screen w-full items-center justify-center">
+    <div
+      id="main"
+      class="container mx-auto flex h-screen flex-col overflow-y-auto overflow-x-hidden"
+    >
       {{end}} {{template "content"}} {{if .isNotHxRequest}}
     </div>
   </body>
