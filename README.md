@@ -4,7 +4,7 @@
 
 <!-- [![logo readme](https://raw.githubusercontent.com/bastean/codexgo/main/docs/readme/logo-readme.png)](https://github.com/bastean) -->
 
-<!-- [![logo readme](docs/readme/logo-readme.png)](https://github.com/bastean) -->
+[![logo readme](docs/readme/logo-readme.png)](https://github.com/bastean/codexgo)
 
 </h1>
 
