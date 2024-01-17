@@ -190,6 +190,10 @@ make compose-prod
 - [go.mod](go.work) (from Workspaces)
 - [package.json](package.json)
 
+## Contributing
+
+- Contributions and Feedback are always welcome!
+
 ## License
 
 - [MIT](LICENSE)
