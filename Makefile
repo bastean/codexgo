@@ -17,8 +17,8 @@ genesis:
 
 from-zero: 
 	@git init
-	@husky install
 	@make init
+	@${npx} husky install
 
 init:
 	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin
