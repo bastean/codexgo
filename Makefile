@@ -22,7 +22,7 @@ from-zero:
 
 init:
 	@npm ci --legacy-peer-deps
-	@brew install trufflehog staticcheck
+	@brew install trufflehog staticcheck upx
 
 lint:
 	@gofmt -l -s -w src/apps/crud/backend src/contexts/crud
@@ -83,6 +83,9 @@ test:
 build:
 	@rm -rf dist/
 	@go build -o dist/codexgo ./src/apps/**/backend/cmd/web
+
+build-upx: build
+	@upx dist/codexgo
 
 docker-usage:
 	@docker system df
