@@ -78,6 +78,10 @@
         "make lint-check",
         "make compose-test"
       ],
+      "before:release": [
+        "make lint",
+        "git add . --update"
+      ],
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}"
     }
   }

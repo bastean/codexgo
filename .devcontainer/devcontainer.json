@@ -4,7 +4,8 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/go:1": {},
-    "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
   },
   "postCreateCommand": "make init",
   "customizations": {

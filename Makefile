@@ -21,9 +21,8 @@ from-zero:
 	@${npx} husky install
 
 init:
-	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin
-	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@npm ci --legacy-peer-deps
+	@brew install trufflehog staticcheck
 
 lint:
 	@gofmt -l -s -w src/apps/crud/backend src/contexts/crud

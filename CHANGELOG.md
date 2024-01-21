@@ -2,28 +2,25 @@
 
 ## [1.0.0](https://github.com/bastean/codexgo/compare/v0.1.1...v1.0.0) (2024-01-17)
 
-
 ### ⚠ BREAKING CHANGES
 
-* **readme:** Ready for v1
+- **readme:** Ready for v1
 
 ### Features
 
-* add codexgo logos ([7ff0641](https://github.com/bastean/codexgo/commit/7ff0641a5db2df5f180242e3d05d93c1ba0cfc92))
-* add trufflehog scan on lint-staged ([bdc473c](https://github.com/bastean/codexgo/commit/bdc473c56a446e0268c1ed02222af2a37185c244))
-* **ci:** add tests job to workflow ([c033f54](https://github.com/bastean/codexgo/commit/c033f5429ddbe07f55281a921b706e6820537ffa))
-* **devcontainer:** add cucumber extension ([fabb6d8](https://github.com/bastean/codexgo/commit/fabb6d8e990b87a71f0152cdeb43b6c28f3cd878))
-* **docker:** add production compose ([4963296](https://github.com/bastean/codexgo/commit/49632964e8a238fd676204cd4eb0bff03a959ac7))
-
+- add codexgo logos ([7ff0641](https://github.com/bastean/codexgo/commit/7ff0641a5db2df5f180242e3d05d93c1ba0cfc92))
+- add trufflehog scan on lint-staged ([bdc473c](https://github.com/bastean/codexgo/commit/bdc473c56a446e0268c1ed02222af2a37185c244))
+- **ci:** add tests job to workflow ([c033f54](https://github.com/bastean/codexgo/commit/c033f5429ddbe07f55281a921b706e6820537ffa))
+- **devcontainer:** add cucumber extension ([fabb6d8](https://github.com/bastean/codexgo/commit/fabb6d8e990b87a71f0152cdeb43b6c28f3cd878))
+- **docker:** add production compose ([4963296](https://github.com/bastean/codexgo/commit/49632964e8a238fd676204cd4eb0bff03a959ac7))
 
 ### Bug Fixes
 
-* **backend:** add responsive to alerts ([fc1e4c8](https://github.com/bastean/codexgo/commit/fc1e4c80ba071edc7bfaf39a43bae4aaad8f5b1d))
-
+- **backend:** add responsive to alerts ([fc1e4c8](https://github.com/bastean/codexgo/commit/fc1e4c80ba071edc7bfaf39a43bae4aaad8f5b1d))
 
 ### Documentation
 
-* **readme:** add contributing section ([54e95f6](https://github.com/bastean/codexgo/commit/54e95f65a5deddd73e1021ad520c848a75ca29cc))
+- **readme:** add contributing section ([54e95f6](https://github.com/bastean/codexgo/commit/54e95f65a5deddd73e1021ad520c848a75ca29cc))
 
 ## [0.1.1](https://github.com/bastean/codexgo/compare/v0.1.0...v0.1.1) (2024-01-07)
 
