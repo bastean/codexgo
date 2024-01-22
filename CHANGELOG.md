@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/bastean/codexgo/compare/v1.0.0...v1.1.0) (2024-01-22)
+
+### Features
+
+- **actions:** add brew setup ([ef7a00d](https://github.com/bastean/codexgo/commit/ef7a00de57e7cf524223f6e4ced5f7bf2ad71e55))
+- add go vet on lint-staged ([8c52de4](https://github.com/bastean/codexgo/commit/8c52de4ace6d34c2174fe8f03c35e84b6a4040a5))
+- add upx to compress binaries ([9d4e926](https://github.com/bastean/codexgo/commit/9d4e926a3b764f6fe2e49009fb69adc127acb7ea))
+- **devcontainer:** add brew to simplify installation of tools ([8c77ed4](https://github.com/bastean/codexgo/commit/8c77ed45692b6303fcb6235b4ddb612d4e175505))
+- **makefile:** add go mod tidy on lint rule ([d203639](https://github.com/bastean/codexgo/commit/d203639765560e1e375b77b9759bed581c2176ab))
+
+### Bug Fixes
+
+- **docker:** add optimization to compose ([0730183](https://github.com/bastean/codexgo/commit/0730183bfbc522f0c5278a733e63b346fbe41044))
+
 ## [1.0.0](https://github.com/bastean/codexgo/compare/v0.1.1...v1.0.0) (2024-01-17)
 
 ### ⚠ BREAKING CHANGES
