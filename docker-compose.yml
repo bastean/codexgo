@@ -20,6 +20,7 @@ services:
 
   backend:
     container_name: ${BACKEND_CONTAINER_NAME}
+    image: ${BACKEND_IMAGE_TAG}
     build:
       context: .
       dockerfile: Dockerfile
@@ -37,7 +38,8 @@ services:
     ports:
       - ${BACKEND_PORT}:${BACKEND_PORT}
     volumes:
-      - ${BACKEND_VOLUME}
+      - ${BACKEND_VOLUMES_APP}
+      - codexgo-modules:/go/pkg/mod
     restart: ${BACKEND_RESTART}
     depends_on:
       database:
@@ -47,3 +49,4 @@ volumes:
   codexgo-database:
     name: ${DATABASE_VOLUME}
   codexgo-backend:
+  codexgo-modules:

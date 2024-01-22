@@ -56,25 +56,27 @@ release-dry-version:
 release-dry-changelog:
 	@${release-it-dry} --changelog
 
-compose-dev:
-	@${compose-env} .env.example.dev up
-
 compose-dev-down:
 	@${compose-env} .env.example.dev down
 	@docker volume rm codexgo-database-dev -f
 
-compose-test:
-	@${compose-env} .env.example.test up --exit-code-from backend
+compose-dev: compose-dev-down
+	@${compose-env} .env.example.dev up
 
 compose-test-down:
 	@${compose-env} .env.example.test down
 	@docker volume rm codexgo-database-test -f
 
-compose-prod:
-	@${compose-env} .env.example.prod up
+compose-test: compose-test-down
+	@${compose-env} .env.example.test up --exit-code-from backend
 
 compose-prod-down:
 	@${compose-env} .env.example.prod down
+
+compose-prod: compose-prod-down
+	@${compose-env} .env.example.prod up
+
+compose-down: compose-dev-down compose-test-down compose-prod-down
 
 test:
 	@go clean -testcache
@@ -92,6 +94,10 @@ docker-usage:
 
 WARNING-docker-prune-soft:
 	@docker system prune
+	@make compose-down
+	@make docker-usage
 
 WARNING-docker-prune-hard:
 	@docker system prune --volumes -a
+	@make compose-down
+	@make docker-usage
