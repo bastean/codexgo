@@ -1,5 +1,7 @@
 #* ---------- VARS ----------
 
+go-tidy = go mod tidy -e
+
 npx = npx --no --
 
 release-it = ${npx} release-it -V
@@ -27,6 +29,9 @@ init:
 lint:
 	@gofmt -l -s -w src/apps/crud/backend src/contexts/crud
 	@${npx} prettier --ignore-unknown --write .
+	@cd src/contexts/crud && ${go-tidy}
+	@cd src/apps/crud/backend && ${go-tidy}
+	@cd tests/ && ${go-tidy}
 
 lint-check:
 	@staticcheck ./src/apps/crud/backend/... ./src/contexts/crud/...
