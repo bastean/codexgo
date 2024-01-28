@@ -14,8 +14,9 @@ import (
 )
 
 var uri = os.Getenv("DATABASE_URI")
-var databaseName = os.Getenv("DATABASE_NAME")
-var collectionName = os.Getenv("DATABASE_COLLECTION")
+
+const databaseName = "codexgo"
+const collectionName = "users"
 
 type userDocument struct {
 	Id       string `bson:"id"`
