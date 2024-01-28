@@ -1,7 +1,7 @@
 go 1.21.5
 
 use (
+    ./src/contexts/crud
 	./src/apps/crud/backend
-	./src/contexts/crud
     ./tests
 )

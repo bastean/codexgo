@@ -16,6 +16,7 @@ node_modules
 package
 pnpm-lock.yaml
 yarn.lock
+go.work.sum
 
 #* Logs
 logs

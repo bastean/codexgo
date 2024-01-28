@@ -29,6 +29,7 @@ init:
 lint:
 	@gofmt -l -s -w src/apps/crud/backend src/contexts/crud
 	@${npx} prettier --ignore-unknown --write .
+	@rm -f go.work.sum
 	@cd src/contexts/crud && ${go-tidy}
 	@cd src/apps/crud/backend && ${go-tidy}
 	@cd tests/ && ${go-tidy}
