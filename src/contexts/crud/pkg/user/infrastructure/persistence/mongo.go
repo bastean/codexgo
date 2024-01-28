@@ -39,7 +39,7 @@ func (db UserCollection) Save(user *aggregate.User) {
 	}
 }
 
-func (mg UserCollection) Update(user *aggregate.User) {
+func (db UserCollection) Update(user *aggregate.User) {
 	updateFilter := bson.M{"id": user.Id.Value}
 
 	updateUser := bson.M{}
@@ -53,27 +53,27 @@ func (mg UserCollection) Update(user *aggregate.User) {
 	}
 
 	if user.Password != nil {
-		updateUser["password"] = mg.hashing.Hash(user.Password.Value)
+		updateUser["password"] = db.hashing.Hash(user.Password.Value)
 	}
 
-	_, err := mg.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
+	_, err := db.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
 
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (mg UserCollection) Delete(id *sharedVO.Id) {
+func (db UserCollection) Delete(id *sharedVO.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
-	_, err := mg.collection.DeleteOne(context.Background(), deleteFilter)
+	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
 
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (mg UserCollection) Search(filter repository.Filter) *aggregate.User {
+func (db UserCollection) Search(filter repository.Filter) *aggregate.User {
 	var searchFilter bson.M
 	var index string
 
@@ -87,7 +87,7 @@ func (mg UserCollection) Search(filter repository.Filter) *aggregate.User {
 		index = filter.Id.Value
 	}
 
-	result := mg.collection.FindOne(context.Background(), searchFilter)
+	result := db.collection.FindOne(context.Background(), searchFilter)
 
 	if err := result.Err(); err != nil {
 		persistence.HandleDocumentNotFound(index)
