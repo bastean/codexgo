@@ -5,7 +5,7 @@ import (
 )
 
 type CommandHandler struct {
-	Register Register
+	Register
 }
 
 func (commandHandler *CommandHandler) Handle(command Command) {

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/context/pkg/user/infrastructure/cryptographic"
-	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObjects"
+	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObject"
 	"github.com/stretchr/testify/suite"
 )
 

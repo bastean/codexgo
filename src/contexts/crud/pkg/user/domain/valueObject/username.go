@@ -1,6 +1,8 @@
-package valueObjects
+package valueObject
 
 import (
+	"strings"
+
 	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
 	"github.com/go-playground/validator/v10"
 )
@@ -14,15 +16,15 @@ const UsernameMaxCharactersLength = "20"
 
 var InvalidUsernameValue = errors.InvalidValue{Message: "Username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only"}
 
-func ensureIsValidUsername(username *Username) (err error) {
+func ensureIsValidUsername(username *Username) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	err = validate.Struct(username)
-
-	return
+	return validate.Struct(username)
 }
 
 func NewUsername(username string) *Username {
+	username = strings.TrimSpace(username)
+
 	usernameVO := &Username{username}
 
 	err := ensureIsValidUsername(usernameVO)

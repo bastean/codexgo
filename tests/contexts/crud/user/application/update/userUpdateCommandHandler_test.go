@@ -9,7 +9,7 @@ import (
 	"github.com/bastean/codexgo/test/contexts/crud/user/__mocks__/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/test/contexts/crud/user/__mocks__/infrastructure/persistence"
 	command "github.com/bastean/codexgo/test/contexts/crud/user/application/update"
-	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObjects"
+	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObject"
 	"github.com/stretchr/testify/suite"
 )
 

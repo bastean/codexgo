@@ -1,12 +1,12 @@
 package login
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
-	userVO "github.com/bastean/codexgo/context/pkg/user/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
+	userVO "github.com/bastean/codexgo/context/pkg/user/domain/valueObject"
 )
 
 type QueryHandler struct {
-	Login Login
+	Login
 }
 
 func (queryHandler *QueryHandler) Handle(query Query) *Response {

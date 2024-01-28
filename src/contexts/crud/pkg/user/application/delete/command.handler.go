@@ -1,11 +1,11 @@
 package delete
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 )
 
 type CommandHandler struct {
-	Delete Delete
+	Delete
 }
 
 func (commandHandler *CommandHandler) Handle(command Command) {

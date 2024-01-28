@@ -1,4 +1,4 @@
-package valueObjects
+package valueObject
 
 import (
 	"strings"
@@ -13,16 +13,15 @@ type Email struct {
 
 var InvalidEmailValue = errors.InvalidValue{Message: "Email Invalid"}
 
-func ensureIsValidEmail(email *Email) (err error) {
+func ensureIsValidEmail(email *Email) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	err = validate.Struct(email)
-
-	return
+	return validate.Struct(email)
 }
 
 func NewEmail(email string) *Email {
 	email = strings.TrimSpace(email)
+
 	emailVo := &Email{email}
 
 	err := ensureIsValidEmail(emailVo)

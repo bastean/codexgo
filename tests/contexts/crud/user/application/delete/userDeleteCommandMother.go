@@ -1,9 +1,9 @@
 package delete
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 	"github.com/bastean/codexgo/context/pkg/user/application/delete"
-	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObjects"
+	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObject"
 )
 
 func Create(id *sharedVO.Id) *delete.Command {

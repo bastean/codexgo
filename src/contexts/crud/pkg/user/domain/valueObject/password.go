@@ -1,4 +1,4 @@
-package valueObjects
+package valueObject
 
 import (
 	"github.com/bastean/codexgo/context/pkg/shared/domain/errors"
@@ -14,12 +14,10 @@ const PasswordMaxCharactersLength = "64"
 
 var InvalidPasswordValue = errors.InvalidValue{Message: "Password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters"}
 
-func ensureIsValidPassword(password *Password) (err error) {
+func ensureIsValidPassword(password *Password) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	err = validate.Struct(password)
-
-	return
+	return validate.Struct(password)
 }
 
 func NewPassword(password string) *Password {

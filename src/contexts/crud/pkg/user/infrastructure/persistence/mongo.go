@@ -4,7 +4,7 @@ import (
 	"context"
 	"os"
 
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 	"github.com/bastean/codexgo/context/pkg/user/domain/aggregate"
 	"github.com/bastean/codexgo/context/pkg/user/domain/models"
 	"github.com/bastean/codexgo/context/pkg/user/domain/repository"

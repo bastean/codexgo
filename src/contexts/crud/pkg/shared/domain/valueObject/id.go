@@ -1,4 +1,4 @@
-package valueObjects
+package valueObject
 
 import (
 	"strings"
@@ -13,12 +13,10 @@ type Id struct {
 
 var InvalidIdValue = errors.InvalidValue{Message: "Id Invalid"}
 
-func ensureIsValidId(id *Id) (err error) {
+func ensureIsValidId(id *Id) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
-	err = validate.Struct(id)
-
-	return
+	return validate.Struct(id)
 }
 
 func NewId(id string) *Id {

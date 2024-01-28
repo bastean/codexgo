@@ -1,7 +1,7 @@
 package repository
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 	"github.com/bastean/codexgo/context/pkg/user/domain/aggregate"
 )
 

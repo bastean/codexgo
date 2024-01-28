@@ -1,10 +1,10 @@
 package register
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 	"github.com/bastean/codexgo/context/pkg/user/application/register"
-	userVO "github.com/bastean/codexgo/context/pkg/user/domain/valueObjects"
-	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObjects"
+	userVO "github.com/bastean/codexgo/context/pkg/user/domain/valueObject"
+	create "github.com/bastean/codexgo/test/contexts/crud/user/domain/valueObject"
 )
 
 func Create(id *sharedVO.Id, email *sharedVO.Email, username *userVO.Username, password *userVO.Password) *register.Command {

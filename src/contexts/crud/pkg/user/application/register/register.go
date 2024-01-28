@@ -6,7 +6,7 @@ import (
 )
 
 type Register struct {
-	Repository repository.Repository
+	repository.Repository
 }
 
 func (register *Register) Run(user *aggregate.User) {

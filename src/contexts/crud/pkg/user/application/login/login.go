@@ -1,17 +1,17 @@
 package login
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 	"github.com/bastean/codexgo/context/pkg/user/domain/aggregate"
 	"github.com/bastean/codexgo/context/pkg/user/domain/models"
 	"github.com/bastean/codexgo/context/pkg/user/domain/repository"
 	"github.com/bastean/codexgo/context/pkg/user/domain/services"
-	userVO "github.com/bastean/codexgo/context/pkg/user/domain/valueObjects"
+	userVO "github.com/bastean/codexgo/context/pkg/user/domain/valueObject"
 )
 
 type Login struct {
-	Repository repository.Repository
-	Hashing    models.Hashing
+	repository.Repository
+	models.Hashing
 }
 
 func (login *Login) Run(email *sharedVO.Email, password *userVO.Password) *aggregate.User {

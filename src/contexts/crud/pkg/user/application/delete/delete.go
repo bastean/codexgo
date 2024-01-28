@@ -1,14 +1,14 @@
 package delete
 
 import (
-	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObjects"
+	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
 	"github.com/bastean/codexgo/context/pkg/user/domain/models"
 	"github.com/bastean/codexgo/context/pkg/user/domain/repository"
 )
 
 type Delete struct {
-	Repository repository.Repository
-	Hashing    models.Hashing
+	repository.Repository
+	models.Hashing
 }
 
 func (delete *Delete) Run(id *sharedVO.Id) {

@@ -1,7 +1,7 @@
 package update
 
 type CommandHandler struct {
-	Update Update
+	Update
 }
 
 func (commandHandler *CommandHandler) Handle(command Command) {
