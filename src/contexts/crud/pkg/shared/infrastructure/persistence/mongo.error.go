@@ -9,7 +9,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func handleDuplicateKeyError(error error) {
+func HandleDuplicateKeyError(error error) {
 	re := regexp.MustCompile(`{ [A-Za-z0-9]+:`)
 
 	rawField := re.FindString(error.Error())
@@ -21,6 +21,6 @@ func handleDuplicateKeyError(error error) {
 	panic(errors.AlreadyExist{Message: field + " already registered"})
 }
 
-func handleDocumentNotFound(index string) {
+func HandleDocumentNotFound(index string) {
 	panic(errors.NotExist{Message: "Not Found " + index})
 }

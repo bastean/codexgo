@@ -2,9 +2,9 @@ package persistence
 
 import (
 	"context"
-	"os"
 
 	sharedVO "github.com/bastean/codexgo/context/pkg/shared/domain/valueObject"
+	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/persistence"
 	"github.com/bastean/codexgo/context/pkg/user/domain/aggregate"
 	"github.com/bastean/codexgo/context/pkg/user/domain/models"
 	"github.com/bastean/codexgo/context/pkg/user/domain/repository"
@@ -13,9 +13,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var uri = os.Getenv("DATABASE_URI")
-
-const databaseName = "codexgo"
 const collectionName = "users"
 
 type userDocument struct {
@@ -25,24 +22,24 @@ type userDocument struct {
 	Password string `bson:"password"`
 }
 
-type Mongo struct {
+type UserCollection struct {
 	collection *mongo.Collection
 	hashing    models.Hashing
 }
 
-func (mg Mongo) Save(user *aggregate.User) {
+func (db UserCollection) Save(user *aggregate.User) {
 	newUser := userDocument(*user.ToPrimitives())
 
-	newUser.Password = mg.hashing.Hash(newUser.Password)
+	newUser.Password = db.hashing.Hash(newUser.Password)
 
-	_, err := mg.collection.InsertOne(context.Background(), newUser)
+	_, err := db.collection.InsertOne(context.Background(), newUser)
 
 	if mongo.IsDuplicateKeyError(err) {
-		handleDuplicateKeyError(err)
+		persistence.HandleDuplicateKeyError(err)
 	}
 }
 
-func (mg Mongo) Update(user *aggregate.User) {
+func (mg UserCollection) Update(user *aggregate.User) {
 	updateFilter := bson.M{"id": user.Id.Value}
 
 	updateUser := bson.M{}
@@ -66,7 +63,7 @@ func (mg Mongo) Update(user *aggregate.User) {
 	}
 }
 
-func (mg Mongo) Delete(id *sharedVO.Id) {
+func (mg UserCollection) Delete(id *sharedVO.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
 	_, err := mg.collection.DeleteOne(context.Background(), deleteFilter)
@@ -76,7 +73,7 @@ func (mg Mongo) Delete(id *sharedVO.Id) {
 	}
 }
 
-func (mg Mongo) Search(filter repository.Filter) *aggregate.User {
+func (mg UserCollection) Search(filter repository.Filter) *aggregate.User {
 	var searchFilter bson.M
 	var index string
 
@@ -93,7 +90,7 @@ func (mg Mongo) Search(filter repository.Filter) *aggregate.User {
 	result := mg.collection.FindOne(context.Background(), searchFilter)
 
 	if err := result.Err(); err != nil {
-		handleDocumentNotFound(index)
+		persistence.HandleDocumentNotFound(index)
 	}
 
 	var userPrimitive aggregate.UserPrimitive
@@ -105,23 +102,7 @@ func (mg Mongo) Search(filter repository.Filter) *aggregate.User {
 	return user
 }
 
-func NewMongo(hashing models.Hashing) *Mongo {
-	var err error
-
-	clientOptions := options.Client().ApplyURI(uri)
-	client, err := mongo.Connect(context.Background(), clientOptions)
-
-	if err != nil {
-		panic(err)
-	}
-
-	err = client.Ping(context.Background(), nil)
-
-	if err != nil {
-		panic(err)
-	}
-
-	database := client.Database(databaseName)
+func NewUserCollection(database *mongo.Database, hashing models.Hashing) *UserCollection {
 	collection := database.Collection(collectionName)
 
 	collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
@@ -139,5 +120,5 @@ func NewMongo(hashing models.Hashing) *Mongo {
 		},
 	})
 
-	return &Mongo{collection: collection, hashing: hashing}
+	return &UserCollection{collection, hashing}
 }

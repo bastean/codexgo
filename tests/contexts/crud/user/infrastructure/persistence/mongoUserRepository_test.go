@@ -3,6 +3,7 @@ package persistence_test
 import (
 	"testing"
 
+	database "github.com/bastean/codexgo/context/pkg/shared/infrastructure/persistence"
 	"github.com/bastean/codexgo/context/pkg/user/domain/repository"
 	"github.com/bastean/codexgo/context/pkg/user/infrastructure/persistence"
 	"github.com/bastean/codexgo/test/contexts/crud/user/__mocks__/infrastructure/cryptographic"
@@ -12,51 +13,52 @@ import (
 
 type MongoUserRepositoryTestSuite struct {
 	suite.Suite
-	mongo   persistence.Mongo
-	hashing *cryptographic.UserHashingMock
+	userCollection persistence.UserCollection
+	hashing        *cryptographic.UserHashingMock
 }
 
 func (suite *MongoUserRepositoryTestSuite) SetupTest() {
-	suite.mongo = *persistence.NewMongo(suite.hashing)
+	database := database.NewMongoDatabase()
+	suite.userCollection = *persistence.NewUserCollection(database, suite.hashing)
 }
 
 func (suite *MongoUserRepositoryTestSuite) TestSave() {
 	user := create.Random()
-	suite.NotPanics(func() { suite.mongo.Save(user) })
+	suite.NotPanics(func() { suite.userCollection.Save(user) })
 }
 
 func (suite *MongoUserRepositoryTestSuite) TestSaveDuplicate() {
 	user := create.Random()
 
-	suite.NotPanics(func() { suite.mongo.Save(user) })
+	suite.NotPanics(func() { suite.userCollection.Save(user) })
 
-	suite.Panics(func() { suite.mongo.Save(user) })
+	suite.Panics(func() { suite.userCollection.Save(user) })
 }
 
 func (suite *MongoUserRepositoryTestSuite) TestUpdate() {
 	user := create.Random()
 
-	suite.NotPanics(func() { suite.mongo.Save(user) })
+	suite.NotPanics(func() { suite.userCollection.Save(user) })
 
-	suite.NotPanics(func() { suite.mongo.Update(user) })
+	suite.NotPanics(func() { suite.userCollection.Update(user) })
 }
 
 func (suite *MongoUserRepositoryTestSuite) TestDelete() {
 	user := create.Random()
 
-	suite.NotPanics(func() { suite.mongo.Save(user) })
+	suite.NotPanics(func() { suite.userCollection.Save(user) })
 
-	suite.NotPanics(func() { suite.mongo.Delete(user.Id) })
+	suite.NotPanics(func() { suite.userCollection.Delete(user.Id) })
 }
 
 func (suite *MongoUserRepositoryTestSuite) TestSearch() {
 	user := create.Random()
 
-	suite.NotPanics(func() { suite.mongo.Save(user) })
+	suite.NotPanics(func() { suite.userCollection.Save(user) })
 
 	filter := repository.Filter{Email: user.Email}
 
-	found := suite.mongo.Search(filter)
+	found := suite.userCollection.Search(filter)
 
 	suite.EqualValues(user, found)
 }
