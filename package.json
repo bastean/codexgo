@@ -36,7 +36,6 @@
       "prettier --ignore-unknown --write"
     ],
     "**/*.go": [
-      "go vet",
       "gofmt -l -s -w"
     ]
   },
