@@ -143,6 +143,32 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    make from-zero
    ```
 
+### Repository
+
+#### Settings
+
+- Actions
+
+  - General
+
+    - Workflow permissions
+
+      - [x] Read and write permissions
+
+- Secrets and variables
+
+  - Actions
+
+    - New repository secret
+
+      - BOT_GPG_PRIVATE_KEY
+
+        ```bash
+        gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
+        ```
+
+      - BOT_GPG_PASSPHRASE
+
 ### Run
 
 #### Development
@@ -167,13 +193,13 @@ make compose-prod
 
 <div align="center">
 
-<img src="docs/readme/codexgo-desktop-welcome.png" />
+<img src="docs/readme/desktop-welcome.png" />
 
-<img src="docs/readme/codexgo-desktop-dashboard.png" />
+<img src="docs/readme/desktop-dashboard.png" />
 
-<img width="49%" src="docs/readme/codexgo-mobile-welcome.png" />
+<img width="49%" src="docs/readme/mobile-welcome.png" />
 
-<img width="49%" src="docs/readme/codexgo-mobile-dashboard.png" />
+<img width="49%" src="docs/readme/mobile-dashboard.png" />
 
 </div>
 
