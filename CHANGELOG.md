@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.2.0](https://github.com/bastean/codexgo/compare/v1.1.0...v1.2.0) (2024-01-28)
+
+### Features
+
+- **backend:** add rate limiter middleware ([a6c1b2b](https://github.com/bastean/codexgo/commit/a6c1b2b2a484d0b4ac63364b76c1ba18f8c3e4b3))
+
+### Bug Fixes
+
+- **deps:** upgrade modules dependencies ([d9851aa](https://github.com/bastean/codexgo/commit/d9851aaeb9ff510148935043ab446bea52e3dc26))
+- remove go vet from lint-staged ([3869cbf](https://github.com/bastean/codexgo/commit/3869cbf84fb83bc105b16be0fb6f1a03ab830e9f))
+
 ## [1.1.0](https://github.com/bastean/codexgo/compare/v1.0.0...v1.1.0) (2024-01-22)
 
 ### Features

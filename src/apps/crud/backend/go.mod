@@ -3,13 +3,13 @@ module github.com/bastean/codexgo/backend
 go 1.21.5
 
 require (
+	github.com/JGLTechnologies/gin-rate-limit v1.5.4
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.9.1
 	github.com/google/uuid v1.6.0
 )
 
 require (
-	github.com/JGLTechnologies/gin-rate-limit v1.5.4 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
