@@ -23,7 +23,7 @@ func (update *Update) Run(userUpdate Command) {
 
 	user := &aggregate.User{}
 
-	user.Id = sharedVO.NewId(userUpdate.Id)
+	user.Id = idVO
 
 	if userUpdate.Email != "" {
 		user.Email = sharedVO.NewEmail(userUpdate.Email)

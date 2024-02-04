@@ -18,6 +18,8 @@ var server = gin.Default()
 func Init(files *embed.FS) *gin.Engine {
 	container.Logger.Info("starting server")
 
+	server.Use(middleware.SecurityConfig())
+
 	server.Use(middleware.RateLimiter())
 
 	templates := template.Must(template.ParseFS(files, "templates/**/*.html"))
