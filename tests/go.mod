@@ -4,8 +4,8 @@ go 1.21.5
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
-	github.com/cucumber/godog v0.13.0
-	github.com/playwright-community/playwright-go v0.4101.0
+	github.com/cucumber/godog v0.14.0
+	github.com/playwright-community/playwright-go v0.4101.1
 	github.com/stretchr/testify v1.8.4
 )
 
@@ -24,6 +24,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.5.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+	golang.org/x/exp v0.0.0-20240205201215-2c58cdc269a3 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
