@@ -3,6 +3,7 @@
 go-tidy = go mod tidy -e
 
 npx = npx --no --
+npm-ci = npm ci --legacy-peer-deps
 
 release-it = ${npx} release-it -V
 release-it-dry = ${npx} release-it -V -d --no-git.requireCleanWorkingDir
@@ -17,17 +18,34 @@ genesis:
 	@git reset --hard HEAD
 	@make init
 
-from-zero: 
+from-zero:
 	@git init
 	@make init
 	@${npx} husky install
 
-init:
-	@npm ci --legacy-peer-deps
-	@brew install trufflehog staticcheck upx
+upgrade-manager:
+	@npm upgrade -g
+	@brew update && brew upgrade
+
+upgrade-node:
+	@${npx} ncu -u
+	@rm -f package-lock.json
+	@npm i --legacy-peer-deps
+
+upgrade-reset:
+	@git reset --hard HEAD
+	@${npm-ci}
+
+upgrade:
+	@go run scripts/upgrade.go
+
+init: upgrade-manager
+	@${npm-ci}
+	@brew install staticcheck upx
+	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
 lint:
-	@gofmt -l -s -w src/apps/crud/backend src/contexts/crud
+	@gofmt -l -s -w src/contexts/crud src/apps/crud/backend tests/
 	@${npx} prettier --ignore-unknown --write .
 	@rm -f go.work.sum
 	@cd src/contexts/crud && ${go-tidy}
