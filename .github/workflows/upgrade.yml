@@ -28,7 +28,9 @@ jobs:
           git_tag_gpgsign: true
 
       - name: Upgrade Dependencies
-        run: make upgrade
+        run: |
+          make upgrade
+          git push origin main
         env:
           GIT_AUTHOR_NAME: ${{ steps.import-gpg.outputs.name }}
           GIT_AUTHOR_EMAIL: ${{ steps.import-gpg.outputs.email }}
