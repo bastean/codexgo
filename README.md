@@ -54,6 +54,7 @@
   - Actions & Workflows
     - Setup Languages and Dependencies
     - Secrets Scanning, Linting & Test Checks
+    - Upgrade Dependencies
     - Automate Release
   - Issue Templates (Defaults)
 
