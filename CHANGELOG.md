@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.3.0](https://github.com/bastean/codexgo/compare/v1.2.0...v1.3.0) (2024-02-06)
+
+### Features
+
+- **actions:** add upgrade workflow ([e2d62d4](https://github.com/bastean/codexgo/commit/e2d62d4d76e56e0dfaabe0cbd474ef23ee1e5687))
+- add script to upgrade dependencies ([a7cd088](https://github.com/bastean/codexgo/commit/a7cd088099d336526e00c6187a835f9938e48a55))
+- **backend:** add secure middleware ([370db08](https://github.com/bastean/codexgo/commit/370db087b6df9ce1aaa3fa2e5589abc9756ec9b2))
+
+### Bug Fixes
+
+- **actions:** add commit push to upgrade workflow ([9ea06db](https://github.com/bastean/codexgo/commit/9ea06dbfdb1f2af22f187734d757fe2ad8b0e88a))
+- **deps:** upgrade dependencies ([811345c](https://github.com/bastean/codexgo/commit/811345c603d2b07ed76f83620fc6386ea90d1861))
+- **deps:** upgrade dependencies ([c99be30](https://github.com/bastean/codexgo/commit/c99be30ae77f766ca09dece90a627f657f8458c3))
+
 ## [1.2.0](https://github.com/bastean/codexgo/compare/v1.1.0...v1.2.0) (2024-01-28)
 
 ### Features
