@@ -1,9 +1,8 @@
 package handler
 
 import (
-	"net/http"
-
-	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/backend/cmd/web/components/partials"
+	"github.com/bastean/codexgo/backend/internal/service"
 	"github.com/bastean/codexgo/context/pkg/user/application/update"
 	"github.com/gin-gonic/gin"
 )
@@ -26,8 +25,8 @@ func FormUpdate() gin.HandlerFunc {
 
 		user.Id = id.(string)
 
-		container.UserUpdateHandler.Handle(update.Command(user))
+		service.UserUpdateHandler.Handle(update.Command(user))
 
-		c.HTML(http.StatusOK, "alert.msg.html", gin.H{"Type": "success", "Message": "Successfully Updated"})
+		partials.AlertMsg("success", "Successfully Updated").Render(c.Request.Context(), c.Writer)
 	}
 }

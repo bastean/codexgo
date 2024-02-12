@@ -4,6 +4,8 @@ WORKDIR /app
 
 RUN go install github.com/cosmtrek/air@latest
 
+RUN go install github.com/a-h/templ/cmd/templ@latest
+
 FROM dev AS test
 
 WORKDIR /app

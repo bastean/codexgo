@@ -4,14 +4,14 @@ import (
 	"embed"
 
 	"github.com/bastean/codexgo/backend/cmd/web/server"
-	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/backend/internal/service"
 )
 
-//go:embed static templates
+//go:embed static
 var Files embed.FS
 
 func main() {
 	if err := server.Init(&Files).Run(); err != nil {
-		container.Logger.Fatal(err.Error())
+		service.Logger.Fatal(err.Error())
 	}
 }

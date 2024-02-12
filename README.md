@@ -125,7 +125,6 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    - [Go](https://go.dev/doc/install)
    - [Node](https://nodejs.org/en/download)
    - [Make](https://www.gnu.org/software/make)
-   - [Brew](https://brew.sh)
    - [Docker](https://docs.docker.com/get-docker)
 
 2. Run

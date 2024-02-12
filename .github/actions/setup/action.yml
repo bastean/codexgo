@@ -18,9 +18,6 @@ runs:
         node-version-file: "package.json"
         cache: npm
 
-    - name: Setup Brew
-      uses: Homebrew/actions/setup-homebrew@master
-
     - name: Install Dependencies
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
       run: make init

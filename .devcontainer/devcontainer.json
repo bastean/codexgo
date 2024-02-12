@@ -4,13 +4,13 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/go:1": {},
-    "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {}
+    "ghcr.io/devcontainers/features/node:1": {}
   },
   "postCreateCommand": "make init",
   "customizations": {
     "vscode": {
       "extensions": [
+        "a-h.templ",
         "aaron-bond.better-comments",
         "bradlc.vscode-tailwindcss",
         "CucumberOpen.cucumber-official",
@@ -26,15 +26,27 @@
       ],
       "settings": {
         "[cucumber]": {
-          "editor.defaultFormatter": "cucumberopen.cucumber-official"
+          "editor.defaultFormatter": "CucumberOpen.cucumber-official"
         },
         "[go]": {
           "editor.defaultFormatter": "golang.go"
         },
+        "[templ]": {
+          "editor.defaultFormatter": "a-h.templ"
+        },
         "cSpell.language": "en,lorem",
         "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "emmet.includeLanguages": {
+          "templ": "html"
+        },
         "go.toolsManagement.autoUpdate": true,
-        "gopls": { "ui.semanticTokens": true }
+        "gopls": { "ui.semanticTokens": true },
+        "tailwindCSS.emmetCompletions": true,
+        "tailwindCSS.includeLanguages": {
+          "templ": "html"
+        }
       }
     }
   }

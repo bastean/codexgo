@@ -1,4 +1,4 @@
-package container
+package service
 
 import (
 	"github.com/bastean/codexgo/context/pkg/user/application/delete"

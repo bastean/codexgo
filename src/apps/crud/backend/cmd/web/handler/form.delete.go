@@ -2,9 +2,8 @@ package handler
 
 import (
 	"net/http"
-	"os"
 
-	"github.com/bastean/codexgo/backend/internal/container"
+	"github.com/bastean/codexgo/backend/internal/service"
 	"github.com/bastean/codexgo/context/pkg/user/application/delete"
 	"github.com/gin-gonic/gin"
 )
@@ -23,9 +22,7 @@ func FormDelete() gin.HandlerFunc {
 
 		user.Id = id.(string)
 
-		container.UserDeleteHandler.Handle(delete.Command(user))
-
-		c.SetCookie(os.Getenv("COOKIE_SESSION_NAME"), "", -1, "/", "localhost", false, true)
+		service.UserDeleteHandler.Handle(delete.Command(user))
 
 		c.Header("HX-Refresh", "true")
 

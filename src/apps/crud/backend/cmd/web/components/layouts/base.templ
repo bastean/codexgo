@@ -1,0 +1,17 @@
+package layouts
+
+templ Base(content templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		@Head()
+		<body hx-ext="response-targets, class-tools, remove-me">
+			@Alert()
+			<div
+				id="main"
+				class="container mx-auto flex h-screen flex-col overflow-y-auto overflow-x-hidden"
+			>
+				@content
+			</div>
+		</body>
+	</html>
+}

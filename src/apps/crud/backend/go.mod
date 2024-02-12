@@ -4,6 +4,7 @@ go 1.21.5
 
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.4
+	github.com/a-h/templ v0.2.543
 	github.com/gin-contrib/secure v0.0.1
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.9.1

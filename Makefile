@@ -24,8 +24,8 @@ from-zero:
 	@${npx} husky install
 
 upgrade-manager:
+	@sudo apt update && sudo apt upgrade -y
 	@npm upgrade -g
-	@brew update && brew upgrade
 
 upgrade-node:
 	@${npx} ncu -u
@@ -41,12 +41,15 @@ upgrade:
 
 init: upgrade-manager
 	@${npm-ci}
-	@brew install staticcheck upx
+	#? @sudo apt-get install -y upx-ucl
+	@go install honnef.co/go/tools/cmd/staticcheck@latest
+	@go install github.com/a-h/templ/cmd/templ@latest
 	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
 lint:
 	@gofmt -l -s -w src/contexts/crud src/apps/crud/backend tests/
 	@${npx} prettier --ignore-unknown --write .
+	@templ fmt .
 	@rm -f go.work.sum
 	@cd src/contexts/crud && ${go-tidy}
 	@cd src/apps/crud/backend && ${go-tidy}
