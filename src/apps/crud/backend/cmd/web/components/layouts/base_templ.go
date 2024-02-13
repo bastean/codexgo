@@ -10,6 +10,13 @@ import "context"
 import "io"
 import "bytes"
 
+import (
+	"github.com/bastean/codexgo/backend/internal/event"
+)
+
+var PutAuthorization = event.Client.PutAuthorization
+var DeleteAuthorization = event.Client.DeleteAuthorization
+
 func Base(content templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -23,15 +30,7 @@ func Base(content templ.Component) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = Head().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"codexgo\"><meta name=\"keywords\" content=\"codexgo\"><meta name=\"theme-color\" content=\"#232627\"><meta name=\"apple-mobile-web-app-capable\" content=\"yes\"><meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\"><!-- Remove \"meta robots\" and \"robots.txt\" rules for SEO --><meta name=\"robots\" content=\"noindex, nofollow, noarchive, nositelinkssearchbox, nosnippet, notranslate, noimageindex\"><!-- Dependencies/Start --><!-- HTMX --><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC\" crossorigin=\"anonymous\"></script><!-- HTMX/Extensions --><script src=\"https://unpkg.com/htmx.org/dist/ext/response-targets.js\"></script><script src=\"https://unpkg.com/htmx.org/dist/ext/alpine-morph.js\"></script><script src=\"https://unpkg.com/htmx.org/dist/ext/multi-swap.js\"></script><script src=\"https://unpkg.com/htmx.org/dist/ext/remove-me.js\"></script><!-- Alpine/Extensions --><script src=\"https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js\"></script><script src=\"https://cdn.jsdelivr.net/npm/@alpinejs/morph@3.x.x/dist/cdn.min.js\"></script><!-- Alpine --><script defer src=\"https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js\"></script><!-- Tailwind/Extensions --><link href=\"https://cdn.jsdelivr.net/npm/daisyui@4.4.24/dist/full.min.css\" rel=\"stylesheet\" type=\"text/css\"><!-- Tailwind --><script src=\"https://cdn.tailwindcss.com\"></script><!-- Dependencies/End --><link rel=\"manifest\" href=\"/public/static/manifest.json\"><link rel=\"apple-touch-icon\" href=\"/public/static/assets/apple-touch-icon.png\"><link rel=\"icon\" href=\"/public/static/assets/favicon.png\"><title>codexgo</title></head><body hx-ext=\"response-targets, alpine-morph, multi-swap, remove-me\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -39,7 +38,7 @@ func Base(content templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"main\" class=\"container mx-auto flex h-screen flex-col overflow-y-auto overflow-x-hidden\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +46,15 @@ func Base(content templ.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = InitListeners(PutAuthorization, DeleteAuthorization).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

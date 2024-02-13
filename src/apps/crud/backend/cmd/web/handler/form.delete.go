@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/bastean/codexgo/backend/internal/event"
 	"github.com/bastean/codexgo/backend/internal/service"
 	"github.com/bastean/codexgo/context/pkg/user/application/delete"
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,8 @@ func FormDelete() gin.HandlerFunc {
 		user.Id = id.(string)
 
 		service.UserDeleteHandler.Handle(delete.Command(user))
+
+		c.Header("HX-Trigger", event.Client.DeleteAuthorization)
 
 		c.Header("HX-Refresh", "true")
 

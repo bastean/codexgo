@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/bastean/codexgo/backend/cmd/web/components/partials"
 	"github.com/bastean/codexgo/backend/internal/service"
 	"github.com/bastean/codexgo/context/pkg/user/application/register"
@@ -24,6 +26,8 @@ func FormRegister() gin.HandlerFunc {
 		user.Id = uuid.NewString()
 
 		service.UserRegisterHandler.Handle(register.Command(user))
+
+		c.Status(http.StatusCreated)
 
 		partials.AlertMsg("success", "Successfully Registered").Render(c.Request.Context(), c.Writer)
 	}

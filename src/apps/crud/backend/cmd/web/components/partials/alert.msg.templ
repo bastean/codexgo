@@ -1,7 +1,7 @@
 package partials
 
 templ AlertMsg(state, message string) {
-	<div role="alert" class={ "alert alert-" + state } remove-me="3s">
+	<div role="alert" class={ "alert alert-" + state } x-init="show = true; $dispatch('close-alert')">
 		switch state {
 			case "error":
 				<svg

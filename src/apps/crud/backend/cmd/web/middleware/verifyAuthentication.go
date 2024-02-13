@@ -5,22 +5,19 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/context/pkg/shared/infrastructure/authentication"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 func VerifyAuthentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		session := sessions.Default(c)
-		token := session.Get("Authorization")
+		token := c.GetHeader("Authorization")
 
-		if token == nil || token == "" {
-			c.Redirect(http.StatusFound, "/")
-			c.Abort()
+		if token == "" {
+			abort(c)
 			return
 		}
 
-		value := strings.Split(token.(string), " ")[1]
+		value := strings.Split(token, " ")[1]
 
 		claims := authentication.ValidateJWT(value)
 
@@ -28,8 +25,12 @@ func VerifyAuthentication() gin.HandlerFunc {
 			c.Set("id", value)
 			c.Next()
 		} else {
-			c.Redirect(http.StatusFound, "/")
-			c.Abort()
+			abort(c)
 		}
 	}
+}
+
+func abort(c *gin.Context) {
+	c.Redirect(http.StatusFound, "/")
+	c.Abort()
 }

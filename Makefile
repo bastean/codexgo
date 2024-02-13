@@ -41,7 +41,7 @@ upgrade:
 
 init: upgrade-manager
 	@${npm-ci}
-	#? @sudo apt-get install -y upx-ucl
+	#? @sudo apt install -y upx-ucl
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@go install github.com/a-h/templ/cmd/templ@latest
 	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
@@ -49,6 +49,7 @@ init: upgrade-manager
 lint:
 	@gofmt -l -s -w src/contexts/crud src/apps/crud/backend tests/
 	@${npx} prettier --ignore-unknown --write .
+	@templ generate
 	@templ fmt .
 	@rm -f go.work.sum
 	@cd src/contexts/crud && ${go-tidy}
@@ -111,6 +112,7 @@ test:
 
 build:
 	@rm -rf dist/
+	@templ generate
 	@go build -o dist/codexgo ./src/apps/**/backend/cmd/web
 
 build-upx: build
