@@ -16,7 +16,7 @@ RUN apt install -y nodejs npm
 
 RUN npm i -g concurrently wait-on
 
-FROM golang:bookworm AS build
+FROM dev AS build
 
 WORKDIR /app
 

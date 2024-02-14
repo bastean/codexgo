@@ -116,7 +116,7 @@ build:
 	@go build -o dist/codexgo ./src/apps/**/backend/cmd/web
 
 build-upx: build
-	@upx dist/codexgo
+	#? @upx dist/codexgo
 
 docker-usage:
 	@docker system df

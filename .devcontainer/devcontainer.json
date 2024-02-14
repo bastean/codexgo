@@ -22,7 +22,8 @@
         "ms-vscode.makefile-tools",
         "otovo-oss.htmx-tags",
         "redhat.vscode-yaml",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "tamasfe.even-better-toml"
       ],
       "settings": {
         "[cucumber]": {
