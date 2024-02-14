@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/bastean/codexgo/compare/v1.3.0...v1.3.1) (2024-02-14)
+
+### Bug Fixes
+
+- **actions:** upgrade go setup action ([da7bc21](https://github.com/bastean/codexgo/commit/da7bc213a052d088efaac6b20c5ec5ad92f4d037))
+- change live reload ([2f97bdb](https://github.com/bastean/codexgo/commit/2f97bdbe0675a747ac4eddcfe99632dcf0803b0f))
+
 ## [1.3.0](https://github.com/bastean/codexgo/compare/v1.2.0...v1.3.0) (2024-02-06)
 
 ### Features
