@@ -100,7 +100,11 @@ func runTests() {
 }
 
 func commit() {
-	if err := exec.Command("git", "commit", "-am", "fix(deps): upgrade dependencies").Run(); err != nil {
+	if err := exec.Command("git", "add", ".", "--update").Run(); err != nil {
+		panic(err)
+	}
+
+	if err := exec.Command("git", "commit", "-m", "fix(deps): upgrade dependencies").Run(); err != nil {
 		panic(err)
 	}
 }
