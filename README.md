@@ -19,19 +19,15 @@
 [![license MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/commitizen/cz-cli)
 [![release it](https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80-release--it-orange.svg)](https://github.com/release-it/release-it)
+[![github release](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
 
 </div>
 
 <div align="center">
 
+[![upgrade workflow](https://github.com/bastean/codexgo/actions/workflows/upgrade.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/upgrade.yml)
 [![ci workflow](https://github.com/bastean/codexgo/actions/workflows/ci.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/ci.yml)
 [![release workflow](https://github.com/bastean/codexgo/actions/workflows/release.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/release.yml)
-
-</div>
-
-<div align="center">
-
-[![github release](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
 
 </div>
 
@@ -208,9 +204,11 @@ make compose-prod
 #### Base
 
 - [Go](https://go.dev)
-- [HTMX](https://htmx.org)
-- [Tailwind CSS](https://tailwindcss.com)
-  - [daisyUI](https://daisyui.com)
+- [templ](https://templ.guide)
+  - [htmx](https://htmx.org)
+  - [Alpine.js](https://alpinejs.dev)
+  - [Tailwind CSS](https://tailwindcss.com)
+    - [daisyUI](https://daisyui.com)
 
 #### Please see
 
