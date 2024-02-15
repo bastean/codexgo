@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.0](https://github.com/bastean/codexgo/compare/v1.3.1...v1.4.0) (2024-02-15)
+
+### New Features
+
+- add commit message types to include in the changelog ([db06cf9](https://github.com/bastean/codexgo/commit/db06cf95d6d637f097a6745d04302b8f272a50a6))
+
+### Bug Fixes
+
+- **deps:** upgrade dependencies ([80c2256](https://github.com/bastean/codexgo/commit/80c22563516b5da15ea07475fbc94c4fcbffd5c6))
+
 ## [1.3.1](https://github.com/bastean/codexgo/compare/v1.3.0...v1.3.1) (2024-02-14)
 
 ### Bug Fixes
