@@ -63,7 +63,55 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
-        "preset": "conventionalcommits",
+        "preset": {
+          "name": "conventionalcommits",
+          "types": [
+            {
+              "type": "build",
+              "section": "Builds"
+            },
+            {
+              "type": "chore",
+              "section": "Chores"
+            },
+            {
+              "type": "ci",
+              "section": "Continuous Integration"
+            },
+            {
+              "type": "docs",
+              "section": "Documentation"
+            },
+            {
+              "type": "feat",
+              "section": "New Features"
+            },
+            {
+              "type": "fix",
+              "section": "Bug Fixes"
+            },
+            {
+              "type": "perf",
+              "section": "Performance Improvements"
+            },
+            {
+              "type": "refactor",
+              "section": "Refactors"
+            },
+            {
+              "type": "revert",
+              "section": "Reverts"
+            },
+            {
+              "type": "style",
+              "section": "Styles"
+            },
+            {
+              "type": "test",
+              "section": "Tests"
+            }
+          ]
+        },
         "infile": "CHANGELOG.md",
         "header": "# Changelog"
       },
