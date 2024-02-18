@@ -1,5 +1,7 @@
 #* ---------- VARS ----------
 
+git-reset-hard = git reset --hard HEAD
+
 go-tidy = go mod tidy -e
 
 npx = npx --no --
@@ -15,7 +17,7 @@ compose-env = ${compose} --env-file
 
 genesis:
 	@git clean -e .env* -fdx
-	@git reset --hard HEAD
+	@${git-reset-hard}
 	@make init
 
 from-zero:
@@ -33,7 +35,7 @@ upgrade-node:
 	@npm i --legacy-peer-deps
 
 upgrade-reset:
-	@git reset --hard HEAD
+	@${git-reset-hard}
 	@${npm-ci}
 
 upgrade:
@@ -117,6 +119,12 @@ build:
 
 build-upx: build
 	#? @upx dist/codexgo
+
+sync-env-reset:
+	@${git-reset-hard}
+
+sync-env:
+	@go run scripts/sync-env.go
 
 docker-usage:
 	@docker system df
