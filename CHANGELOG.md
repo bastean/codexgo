@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.0](https://github.com/bastean/codexgo/compare/v1.4.0...v1.5.0) (2024-02-18)
+
+### New Features
+
+- add script to sync .env\* files ([e7fcc0b](https://github.com/bastean/codexgo/commit/e7fcc0b6355e5abf00a97526e7becb111cdf2dda))
+
+### Bug Fixes
+
+- **deps:** upgrade dependencies ([fecaafa](https://github.com/bastean/codexgo/commit/fecaafa9bf35e6a5fa71ae0468845bd32bef26ea))
+
 ## [1.4.0](https://github.com/bastean/codexgo/compare/v1.3.1...v1.4.0) (2024-02-15)
 
 ### New Features
