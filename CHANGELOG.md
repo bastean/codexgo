@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.0.0](https://github.com/bastean/codexgo/compare/v1.5.0...v2.0.0) (2024-03-02)
+
+### ⚠ BREAKING CHANGES
+
+- add standard project layout
+
+### Bug Fixes
+
+- **deps:** upgrade dependencies ([f11b15f](https://github.com/bastean/codexgo/commit/f11b15f77899ab50ae0ac744dd84346cb71a7760))
+
+### Refactors
+
+- add standard project layout ([307089c](https://github.com/bastean/codexgo/commit/307089c56975716fb6788e6fafd06ffa8b42f620))
+
 ## [1.5.0](https://github.com/bastean/codexgo/compare/v1.4.0...v1.5.0) (2024-02-18)
 
 ### New Features
