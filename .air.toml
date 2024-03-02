@@ -5,16 +5,9 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  cmd = "templ generate && go build -buildvcs=false -o ./tmp/main ./src/apps/**/backend/cmd/web"
+  cmd = "templ generate && go build -buildvcs=false -o ./tmp/main ./cmd/codexgo"
   delay = 1000
-  exclude_dir = [
-    "assets",
-    "node_modules",
-    "reports",
-    "testdata",
-    "tmp",
-    "vendor"
-  ]
+  exclude_dir = []
   exclude_file = []
   exclude_regex = [
     "_test.go"
@@ -22,7 +15,9 @@ tmp_dir = "tmp"
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""
-  include_dir = []
+  include_dir = [
+    "pkg/cmd/server"
+  ]
   include_ext = [
     "go",
     "html",

@@ -1,0 +1,51 @@
+services:
+  database:
+    container_name: ${MONGO_CONTAINER_NAME}
+    image: mongo:4.4
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - ${MONGO_INITDB_PORT}:${MONGO_INITDB_PORT}
+    volumes:
+      - codexgo-database:/data/db
+    restart: ${MONGO_RESTART}
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet | grep 1
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  server:
+    container_name: ${SERVER_CONTAINER_NAME}
+    image: ${SERVER_IMAGE_TAG}
+    build:
+      context: ..
+      dockerfile: deployments/Dockerfile
+      target: ${SERVER_BUILD_TARGET}
+    environment:
+      DATABASE_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database:${MONGO_INITDB_PORT}"
+      JWT_SECRET_KEY: ${SERVER_JWT_SECRET_KEY}
+      ALLOWED_HOSTS: ${SERVER_ALLOWED_HOSTS}
+      GIN_MODE: ${SERVER_MODE}
+      PORT: ${SERVER_PORT}
+    command: ${SERVER_COMMAND}
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    volumes:
+      - ${SERVER_VOLUMES_APP}
+      - codexgo-modules:/go/pkg/mod
+    restart: ${SERVER_RESTART}
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  codexgo-database:
+    name: ${DATABASE_VOLUME}
+  codexgo-server:
+    name: codexgo-server
+  codexgo-modules:
+    name: codexgo-modules

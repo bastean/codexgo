@@ -1,8 +1,8 @@
 <h1 align="center">
 
-<!-- [![logo readme](https://raw.githubusercontent.com/bastean/codexgo/main/docs/readme/logo-readme.png)](https://github.com/bastean) -->
+<!-- [![logo readme](https://raw.githubusercontent.com/bastean/codexgo/main/assets/readme/logo-readme.png)](https://github.com/bastean) -->
 
-[![logo readme](docs/readme/logo-readme.png)](https://github.com/bastean/codexgo)
+[![logo readme](assets/readme/logo-readme.png)](https://github.com/bastean/codexgo)
 
 </h1>
 
@@ -17,9 +17,9 @@
 <div align="center">
 
 [![license MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![go report card](https://goreportcard.com/badge/github.com/bastean/codexgo)](https://goreportcard.com/report/github.com/bastean/codexgo)
 [![commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/commitizen/cz-cli)
 [![release it](https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80-release--it-orange.svg)](https://github.com/release-it/release-it)
-[![github release](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
 
 </div>
 
@@ -31,7 +31,18 @@
 
 </div>
 
+<div align="center">
+
+[![go reference](https://pkg.go.dev/badge/github.com/bastean/codexgo.svg)](https://pkg.go.dev/github.com/bastean/codexgo)
+[![github release](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
+
+</div>
+
 ## Features
+
+- Project Layout
+
+  - Based on [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
 
 - Devcontainer
 
@@ -189,13 +200,13 @@ make compose-prod
 
 <div align="center">
 
-<img src="docs/readme/desktop-welcome.png" />
+<img src="assets/readme/desktop-welcome.png" />
 
-<img src="docs/readme/desktop-dashboard.png" />
+<img src="assets/readme/desktop-dashboard.png" />
 
-<img width="49%" src="docs/readme/mobile-welcome.png" />
+<img width="49%" src="assets/readme/mobile-welcome.png" />
 
-<img width="49%" src="docs/readme/mobile-dashboard.png" />
+<img width="49%" src="assets/readme/mobile-dashboard.png" />
 
 </div>
 

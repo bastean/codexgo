@@ -10,7 +10,7 @@ npm-ci = npm ci --legacy-peer-deps
 release-it = ${npx} release-it -V
 release-it-dry = ${npx} release-it -V -d --no-git.requireCleanWorkingDir
 
-compose = docker compose
+compose = cd deployments/ && docker compose
 compose-env = ${compose} --env-file
 
 #* ---------- RULES ----------
@@ -29,6 +29,9 @@ upgrade-manager:
 	@sudo apt update && sudo apt upgrade -y
 	@npm upgrade -g
 
+upgrade-go:
+	@go get -t -u ./...
+
 upgrade-node:
 	@${npx} ncu -u
 	@rm -f package-lock.json
@@ -39,27 +42,24 @@ upgrade-reset:
 	@${npm-ci}
 
 upgrade:
-	@go run scripts/upgrade.go
+	@go run scripts/upgrade/**
 
 init: upgrade-manager
+	@go mod download
 	@${npm-ci}
-	#? @sudo apt install -y upx-ucl
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@go install github.com/a-h/templ/cmd/templ@latest
 	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
 lint:
-	@gofmt -l -s -w src/contexts/crud src/apps/crud/backend tests/
+	@go mod tidy
+	@gofmt -l -s -w .
 	@${npx} prettier --ignore-unknown --write .
 	@templ generate
 	@templ fmt .
-	@rm -f go.work.sum
-	@cd src/contexts/crud && ${go-tidy}
-	@cd src/apps/crud/backend && ${go-tidy}
-	@cd tests/ && ${go-tidy}
 
 lint-check:
-	@staticcheck ./src/apps/crud/backend/... ./src/contexts/crud/...
+	@staticcheck ./...
 	@${npx} prettier --check .
 
 commit:
@@ -98,7 +98,7 @@ compose-test-down:
 	@docker volume rm codexgo-database-test -f
 
 compose-test: compose-test-down
-	@${compose-env} .env.example.test up --exit-code-from backend
+	@${compose-env} .env.example.test up --exit-code-from server
 
 compose-prod-down:
 	@${compose-env} .env.example.prod down
@@ -108,14 +108,21 @@ compose-prod: compose-prod-down
 
 compose-down: compose-dev-down compose-test-down compose-prod-down
 
-test:
+test-server:
+	@air
+
+test-start:
 	@go clean -testcache
-	@cd tests/ && mkdir -p reports && go test -v -cover ./... > reports/report.txt
+	@cd test/ && mkdir -p report
+	@go test -v -cover ./... > test/report/report.txt
+
+test-run: upgrade-go
+	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make test-server' '${npx} wait-on -l http-get://localhost:8080 && BASE_URL='http://localhost:8080' make test-start'
 
 build:
 	@rm -rf dist/
 	@templ generate
-	@go build -o dist/codexgo ./src/apps/**/backend/cmd/web
+	@go build -o dist/codexgo ./cmd/codexgo
 
 build-upx: build
 	#? @upx dist/codexgo
@@ -124,7 +131,7 @@ sync-env-reset:
 	@${git-reset-hard}
 
 sync-env:
-	@go run scripts/sync-env.go
+	@cd deployments && go run ../scripts/sync-env/**
 
 docker-usage:
 	@docker system df

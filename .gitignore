@@ -46,6 +46,8 @@ vite.config.ts.timestamp-*
 *_templ.txt
 
 #* Misc
-ignore
-reports
-tmp
+ignore*
+report*
+tmp*
+
+#* Repository

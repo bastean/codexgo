@@ -1,0 +1,74 @@
+package page
+
+templ Dashboard() {
+	<div class="flex h-screen w-full items-center justify-center">
+		<div role="tablist" class="tabs tabs-lifted">
+			<input
+				type="radio"
+				name="tabs"
+				role="tab"
+				class="tab"
+				aria-label="Update"
+				checked
+			/>
+			<div
+				role="tabpanel"
+				class="tab-content bg-base-100 border-base-300 rounded-box p-6"
+			>
+				<form
+					class="flex h-full w-full flex-col items-center justify-center gap-5"
+					hx-patch="/dashboard"
+					hx-target="#alert"
+					hx-target-error="#alert"
+				>
+					<input
+						name="email"
+						type="email"
+						placeholder="Email"
+						class="input input-bordered w-full max-w-xs"
+					/>
+					<input
+						name="username"
+						type="text"
+						placeholder="Username"
+						class="input input-bordered w-full max-w-xs"
+					/>
+					<input
+						name="password"
+						type="password"
+						placeholder="Current Password"
+						class="input input-bordered w-full max-w-xs"
+					/>
+					<input
+						name="updatedPassword"
+						type="password"
+						placeholder="New Password"
+						class="input input-bordered w-full max-w-xs"
+					/>
+					<button class="btn btn-primary">Update</button>
+				</form>
+			</div>
+			<input
+				type="radio"
+				name="tabs"
+				role="tab"
+				class="tab"
+				aria-label="Delete"
+			/>
+			<div
+				role="tabpanel"
+				class="tab-content bg-base-100 border-base-300 rounded-box p-6"
+			>
+				<form
+					class="flex h-full w-full flex-col items-center justify-center gap-5"
+					hx-delete="/dashboard"
+					hx-target="#main"
+					hx-target-error="#alert"
+					hx-confirm="Delete account?"
+				>
+					<button class="btn btn-error">Delete</button>
+				</form>
+			</div>
+		</div>
+	</div>
+}

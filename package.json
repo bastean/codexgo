@@ -117,7 +117,7 @@
       },
       "@release-it/bumper": {
         "out": [
-          "src/apps/**/manifest.json"
+          "pkg/**/manifest.json"
         ]
       }
     },
