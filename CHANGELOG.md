@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.1](https://github.com/bastean/codexgo/compare/v2.0.0...v2.0.1) (2024-03-13)
+
+### Bug Fixes
+
+- **deps:** upgrade dependencies ([4e3f621](https://github.com/bastean/codexgo/commit/4e3f621bf8b3833ef2cd4d7bbe877cf5d38a81ac))
+
+### Refactors
+
+- change domain models ([f80911a](https://github.com/bastean/codexgo/commit/f80911acf48a9bfb115d3328a7834babfa123b02))
+
 ## [2.0.0](https://github.com/bastean/codexgo/compare/v1.5.0...v2.0.0) (2024-03-02)
 
 ### ⚠ BREAKING CHANGES
