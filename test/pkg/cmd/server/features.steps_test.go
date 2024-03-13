@@ -1,4 +1,4 @@
-package backend_test
+package features_test
 
 import (
 	"context"
@@ -12,9 +12,9 @@ import (
 	testify "github.com/stretchr/testify/assert"
 )
 
-// var baseURL = "http://localhost:8080"
+// var testURL = "http://localhost:8080"
 
-var baseURL = os.Getenv("BASE_URL")
+var testURL = os.Getenv("TEST_URL")
 
 var pw *playwright.Playwright
 var browser playwright.Browser
@@ -44,7 +44,7 @@ func InitializePlaywright() {
 		log.Fatalf("could not launch browser: %v", err)
 	}
 
-	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &baseURL})
+	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &testURL})
 
 	if err != nil {
 		log.Fatalf("could not create context: %v", err)
@@ -68,9 +68,9 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 		assert.NoError(err)
 	})
 
-	sc.Then(`^the page title should be (.+)$`, func(title string) {
-		expect, _ := page.Title()
-		assert.Equal(expect, title)
+	sc.Then(`^the page title should be (.+)$`, func(expected string) {
+		actual, _ := page.Title()
+		assert.Equal(expected, actual)
 	})
 
 	sc.Then(`^I click the (.+) tab$`, func(tab string) {
@@ -110,18 +110,18 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 		})
 	})
 
-	sc.Then(`^I see (.+) notification$`, func(notification string) {
+	sc.Then(`^I see (.+) notification$`, func(expected string) {
 		element := page.GetByRole("alert")
 
 		if ok, _ := element.IsVisible(); ok {
-			expect, _ := element.InnerText()
-			assert.Equal(expect, notification)
+			actual, _ := element.InnerText()
+			assert.Equal(expected, actual)
 		}
 	})
 
-	sc.Then(`^I am on (.+) page$`, func(route string) {
-		expect := page.URL()
-		assert.True(strings.Contains(expect, route))
+	sc.Then(`^I am on (.+) page$`, func(expected string) {
+		actual := page.URL()
+		assert.True(strings.Contains(expected, actual))
 	})
 }
 

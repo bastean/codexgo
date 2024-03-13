@@ -1,4 +1,4 @@
-package aggregate
+package aggregateMother
 
 import (
 	sharedVO "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"

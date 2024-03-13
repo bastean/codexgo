@@ -4,41 +4,49 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
-	query "github.com/bastean/codexgo/test/pkg/context/user/application/login"
-	"github.com/bastean/codexgo/test/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/persistence"
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	queryMother "github.com/bastean/codexgo/test/pkg/context/user/application/login"
+	aggregateMother "github.com/bastean/codexgo/test/pkg/context/user/domain/aggregate"
+	cryptographicMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
+	persistenceMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserLoginTestSuite struct {
 	suite.Suite
-	repository *persistence.RepositoryMock
-	hashing    *cryptographic.HashingMock
+	sut        *login.QueryHandler
 	login      *login.Login
-	handler    *login.QueryHandler
+	hashing    *cryptographicMock.HashingMock
+	repository *persistenceMock.RepositoryMock
+}
+
+func (suite *UserLoginTestSuite) SetupTest() {
+	suite.repository = persistenceMock.NewRepositoryMock()
+	suite.hashing = cryptographicMock.NewHashingMock()
+	suite.login = login.NewLogin(suite.repository, suite.hashing)
+	suite.sut = login.NewQueryHandler(suite.login)
 }
 
 func (suite *UserLoginTestSuite) TestLogin() {
-	user := aggregate.Random()
+	user := aggregateMother.Random()
 
-	suite.repository = new(persistence.RepositoryMock)
-	suite.hashing = new(cryptographic.HashingMock)
-	suite.login = &login.Login{Repository: suite.repository, Hashing: suite.hashing}
-	suite.handler = &login.QueryHandler{Login: *suite.login}
+	query := queryMother.Create(user.Email, user.Password)
 
-	query := query.Create(user.Email, user.Password)
-
-	filter := repository.Filter{Email: user.Email}
+	filter := model.RepositorySearchFilter{Email: user.Email}
 
 	suite.repository.On("Search", filter).Return(user)
 
-	response := suite.handler.Handle(*query)
+	suite.hashing.On("IsNotEqual", user.Password.Value, user.Password.Value).Return(false)
 
-	suite.repository.AssertCalled(suite.T(), "Search", filter)
+	expected := user.ToPrimitives()
 
-	suite.EqualValues(user.ToPrimitives(), response)
+	actual := suite.sut.Handle(query)
+
+	suite.repository.AssertExpectations(suite.T())
+
+	suite.hashing.AssertExpectations(suite.T())
+
+	suite.EqualValues(expected, actual)
 }
 
 func TestUserLoginSuite(t *testing.T) {

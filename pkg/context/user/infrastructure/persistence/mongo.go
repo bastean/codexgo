@@ -3,11 +3,10 @@ package persistence
 import (
 	"context"
 
-	sharedVO "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -35,7 +34,7 @@ func (db UserCollection) Save(user *aggregate.User) {
 	_, err := db.collection.InsertOne(context.Background(), newUser)
 
 	if mongo.IsDuplicateKeyError(err) {
-		persistence.HandleDuplicateKeyError(err)
+		database.HandleMongoDuplicateKeyError(err)
 	}
 }
 
@@ -63,7 +62,7 @@ func (db UserCollection) Update(user *aggregate.User) {
 	}
 }
 
-func (db UserCollection) Delete(id *sharedVO.Id) {
+func (db UserCollection) Delete(id *valueObject.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
@@ -73,7 +72,7 @@ func (db UserCollection) Delete(id *sharedVO.Id) {
 	}
 }
 
-func (db UserCollection) Search(filter repository.Filter) *aggregate.User {
+func (db UserCollection) Search(filter model.RepositorySearchFilter) *aggregate.User {
 	var searchFilter bson.M
 	var index string
 
@@ -90,7 +89,7 @@ func (db UserCollection) Search(filter repository.Filter) *aggregate.User {
 	result := db.collection.FindOne(context.Background(), searchFilter)
 
 	if err := result.Err(); err != nil {
-		persistence.HandleDocumentNotFound(index)
+		database.HandleMongoDocumentNotFound(index)
 	}
 
 	var userPrimitive aggregate.UserPrimitive
@@ -102,7 +101,7 @@ func (db UserCollection) Search(filter repository.Filter) *aggregate.User {
 	return user
 }
 
-func NewUserCollection(database *mongo.Database, hashing model.Hashing) *UserCollection {
+func NewUserMongoRepository(database *mongo.Database, hashing model.Hashing) model.Repository {
 	collection := database.Collection(collectionName)
 
 	collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{

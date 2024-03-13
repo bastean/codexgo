@@ -1,6 +1,10 @@
 package logger
 
-import "log"
+import (
+	"log"
+
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
+)
 
 type Logger struct{}
 
@@ -18,4 +22,8 @@ func (logger *Logger) Fatal(message string) {
 
 func (logger *Logger) Info(message string) {
 	log.Print(message)
+}
+
+func NewLogger() model.Logger {
+	return new(Logger)
 }

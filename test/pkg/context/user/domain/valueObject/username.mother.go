@@ -1,8 +1,8 @@
-package valueObject
+package valueObjectMother
 
 import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
-	"github.com/bastean/codexgo/test/pkg/context/shared/domain/mother"
+	"github.com/bastean/codexgo/test/pkg/context/shared/domain/service"
 )
 
 func NewUsername(username string) *valueObject.Username {
@@ -10,7 +10,7 @@ func NewUsername(username string) *valueObject.Username {
 }
 
 func RandomUsername() *valueObject.Username {
-	return NewUsername(mother.Creator.Regex(`[a-z0-9]{2,20}`))
+	return NewUsername(service.Mother.Regex(`[a-z0-9]{2,20}`))
 }
 
 func WithInvalidUsernameLength() *valueObject.Username {

@@ -27,7 +27,9 @@ func FormUpdate() gin.HandlerFunc {
 
 		user.Id = id.(string)
 
-		service.UserUpdateHandler.Handle(update.Command(user))
+		command := update.Command(user)
+
+		service.UserUpdateHandler.Handle(&command)
 
 		c.Status(http.StatusOK)
 

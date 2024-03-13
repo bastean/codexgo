@@ -6,10 +6,10 @@ import (
 )
 
 type QueryHandler struct {
-	Login
+	*Login
 }
 
-func (queryHandler *QueryHandler) Handle(query Query) *Response {
+func (queryHandler *QueryHandler) Handle(query *Query) *Response {
 	email := sharedVO.NewEmail(query.Email)
 	password := userVO.NewPassword(query.Password)
 
@@ -20,7 +20,7 @@ func (queryHandler *QueryHandler) Handle(query Query) *Response {
 	return &response
 }
 
-func NewQueryHandler(login Login) *QueryHandler {
+func NewQueryHandler(login *Login) *QueryHandler {
 	return &QueryHandler{
 		login,
 	}

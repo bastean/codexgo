@@ -4,37 +4,38 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
-	command "github.com/bastean/codexgo/test/pkg/context/user/application/delete"
-	create "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/persistence"
+	commandMother "github.com/bastean/codexgo/test/pkg/context/user/application/delete"
+	valueObjectMother "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
+	cryptographicMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
+	persistenceMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserDeleteTestSuite struct {
 	suite.Suite
-	repository *persistence.RepositoryMock
-	hashing    *cryptographic.HashingMock
+	sut        *delete.CommandHandler
 	delete     *delete.Delete
-	handler    *delete.CommandHandler
+	hashing    *cryptographicMock.HashingMock
+	repository *persistenceMock.RepositoryMock
 }
 
 func (suite *UserDeleteTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
-	suite.delete = &delete.Delete{Repository: suite.repository, Hashing: suite.hashing}
-	suite.handler = &delete.CommandHandler{Delete: *suite.delete}
+	suite.repository = persistenceMock.NewRepositoryMock()
+	suite.hashing = cryptographicMock.NewHashingMock()
+	suite.delete = delete.NewDelete(suite.repository, suite.hashing)
+	suite.sut = delete.NewCommandHandler(suite.delete)
 }
 
 func (suite *UserDeleteTestSuite) TestDelete() {
-	command := command.Random()
+	command := commandMother.Random()
 
-	userId := create.NewId(command.Id)
+	userId := valueObjectMother.NewId(command.Id)
 
 	suite.repository.On("Delete", userId)
 
-	suite.handler.Handle(*command)
+	suite.sut.Handle(command)
 
-	suite.repository.AssertCalled(suite.T(), "Delete", userId)
+	suite.repository.AssertExpectations(suite.T())
 }
 
 func TestUserDeleteSuite(t *testing.T) {

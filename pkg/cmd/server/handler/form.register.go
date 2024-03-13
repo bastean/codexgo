@@ -25,7 +25,9 @@ func FormRegister() gin.HandlerFunc {
 
 		user.Id = uuid.NewString()
 
-		service.UserRegisterHandler.Handle(register.Command(user))
+		command := register.Command(user)
+
+		service.UserRegisterHandler.Handle(&command)
 
 		c.Status(http.StatusCreated)
 

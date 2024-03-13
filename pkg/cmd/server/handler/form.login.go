@@ -22,7 +22,9 @@ func FormLogin() gin.HandlerFunc {
 
 		c.ShouldBind(&user)
 
-		response := service.UserLoginHandler.Handle(login.Query(user))
+		query := login.Query(user)
+
+		response := service.UserLoginHandler.Handle(&query)
 
 		token := authentication.GenerateJWT(response.Id)
 

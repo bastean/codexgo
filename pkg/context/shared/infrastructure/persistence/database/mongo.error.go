@@ -1,4 +1,4 @@
-package persistence
+package database
 
 import (
 	"regexp"
@@ -9,7 +9,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func HandleDuplicateKeyError(error error) {
+func HandleMongoDuplicateKeyError(error error) {
 	re := regexp.MustCompile(`{ [A-Za-z0-9]+:`)
 
 	rawField := re.FindString(error.Error())
@@ -21,6 +21,6 @@ func HandleDuplicateKeyError(error error) {
 	panic(errors.AlreadyExist{Message: field + " already registered"})
 }
 
-func HandleDocumentNotFound(index string) {
+func HandleMongoDocumentNotFound(index string) {
 	panic(errors.NotExist{Message: "Not Found " + index})
 }

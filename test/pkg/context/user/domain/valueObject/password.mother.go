@@ -1,8 +1,8 @@
-package valueObject
+package valueObjectMother
 
 import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
-	"github.com/bastean/codexgo/test/pkg/context/shared/domain/mother"
+	"github.com/bastean/codexgo/test/pkg/context/shared/domain/service"
 )
 
 func NewPassword(password string) *valueObject.Password {
@@ -10,7 +10,7 @@ func NewPassword(password string) *valueObject.Password {
 }
 
 func RandomPassword() *valueObject.Password {
-	return NewPassword(mother.Creator.Regex(`[\W\w]{8,64}`))
+	return NewPassword(service.Mother.Regex(`[\W\w]{8,64}`))
 }
 
 func WithInvalidPasswordLength() *valueObject.Password {

@@ -114,10 +114,10 @@ test-server:
 test-start:
 	@go clean -testcache
 	@cd test/ && mkdir -p report
-	@go test -v -cover ./... > test/report/report.txt
+	@TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt
 
 test-run: upgrade-go
-	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make test-server' '${npx} wait-on -l http-get://localhost:8080 && BASE_URL='http://localhost:8080' make test-start'
+	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make test-server' '${npx} wait-on -l http-get://localhost:8080 && make test-start'
 
 build:
 	@rm -rf dist/

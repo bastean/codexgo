@@ -2,18 +2,18 @@ package register
 
 import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 )
 
 type Register struct {
-	repository.Repository
+	model.Repository
 }
 
 func (register *Register) Run(user *aggregate.User) {
 	register.Repository.Save(user)
 }
 
-func NewRegister(repository repository.Repository) *Register {
+func NewRegister(repository model.Repository) *Register {
 	return &Register{
 		repository,
 	}

@@ -223,7 +223,7 @@ make compose-prod
 
 #### Please see
 
-- [go.mod](go.work) (from Workspaces)
+- [go.mod](go.mod)
 - [package.json](package.json)
 
 ## Contributing

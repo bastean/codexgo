@@ -9,17 +9,17 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 )
 
-var bcrypt = cryptographic.Bcrypt{}
-var userCollection = persistence.NewUserCollection(Database, bcrypt)
+var userBcryptHashing = cryptographic.NewUserBcryptHashing()
+var userMongoRepository = persistence.NewUserMongoRepository(Database, userBcryptHashing)
 
-var userRegister = register.NewRegister(userCollection)
-var UserRegisterHandler = register.NewCommandHandler(*userRegister)
+var userRegister = register.NewRegister(userMongoRepository)
+var UserRegisterHandler = register.NewCommandHandler(userRegister)
 
-var userLogin = login.NewLogin(userCollection, bcrypt)
-var UserLoginHandler = login.NewQueryHandler(*userLogin)
+var userLogin = login.NewLogin(userMongoRepository, userBcryptHashing)
+var UserLoginHandler = login.NewQueryHandler(userLogin)
 
-var userUpdate = update.NewUpdate(userCollection, bcrypt)
-var UserUpdateHandler = update.NewCommandHandler(*userUpdate)
+var userUpdate = update.NewUpdate(userMongoRepository, userBcryptHashing)
+var UserUpdateHandler = update.NewCommandHandler(userUpdate)
 
-var userDelete = delete.NewDelete(userCollection, bcrypt)
-var UserDeleteHandler = delete.NewCommandHandler(*userDelete)
+var userDelete = delete.NewDelete(userMongoRepository, userBcryptHashing)
+var UserDeleteHandler = delete.NewCommandHandler(userDelete)

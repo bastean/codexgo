@@ -3,36 +3,39 @@ package cryptographic_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
-	create "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
+	valueObjectMother "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
 	"github.com/stretchr/testify/suite"
 )
 
-type BcryptUserHashingTestSuite struct {
+type UserBcryptHashingTestSuite struct {
 	suite.Suite
-	bcrypt cryptographic.Bcrypt
+	sut model.Hashing
 }
 
-func (suite *BcryptUserHashingTestSuite) SetupTest() {}
+func (suite *UserBcryptHashingTestSuite) SetupTest() {
+	suite.sut = cryptographic.NewUserBcryptHashing()
+}
 
-func (suite *BcryptUserHashingTestSuite) TestHash() {
-	plain := create.RandomPassword().Value
+func (suite *UserBcryptHashingTestSuite) TestHash() {
+	plain := valueObjectMother.RandomPassword().Value
 
-	hashed := suite.bcrypt.Hash(plain)
+	hashed := suite.sut.Hash(plain)
 
 	suite.NotEqual(plain, hashed)
 }
 
-func (suite *BcryptUserHashingTestSuite) TestIsNotEqual() {
-	plain := create.RandomPassword().Value
+func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
+	plain := valueObjectMother.RandomPassword().Value
 
-	hashed := suite.bcrypt.Hash(plain)
+	hashed := suite.sut.Hash(plain)
 
-	isNotEqual := suite.bcrypt.IsNotEqual(hashed, plain)
+	isNotEqual := suite.sut.IsNotEqual(hashed, plain)
 
 	suite.False(isNotEqual)
 }
 
-func TestBcryptUserHashingSuite(t *testing.T) {
-	suite.Run(t, new(BcryptUserHashingTestSuite))
+func TestUserBcryptHashingSuite(t *testing.T) {
+	suite.Run(t, new(UserBcryptHashingTestSuite))
 }

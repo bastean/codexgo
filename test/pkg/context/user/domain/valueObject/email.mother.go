@@ -1,8 +1,8 @@
-package valueObject
+package valueObjectMother
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
-	"github.com/bastean/codexgo/test/pkg/context/shared/domain/mother"
+	"github.com/bastean/codexgo/test/pkg/context/shared/domain/service"
 )
 
 func NewEmail(email string) *valueObject.Email {
@@ -10,7 +10,7 @@ func NewEmail(email string) *valueObject.Email {
 }
 
 func RandomEmail() *valueObject.Email {
-	return NewEmail(mother.Creator.Email())
+	return NewEmail(service.Mother.Email())
 }
 
 func InvalidEmail() *valueObject.Email {

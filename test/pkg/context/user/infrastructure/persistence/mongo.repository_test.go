@@ -3,66 +3,87 @@ package persistence_test
 import (
 	"testing"
 
-	database "github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
-	create "github.com/bastean/codexgo/test/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
+	aggregateMother "github.com/bastean/codexgo/test/pkg/context/user/domain/aggregate"
+	valueObjectMother "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
+	cryptographicMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
 	"github.com/stretchr/testify/suite"
 )
 
-type MongoUserRepositoryTestSuite struct {
+type UserMongoRepositoryTestSuite struct {
 	suite.Suite
-	userCollection persistence.UserCollection
-	hashing        *cryptographic.HashingMock
+	sut     model.Repository
+	hashing *cryptographicMock.HashingMock
 }
 
-func (suite *MongoUserRepositoryTestSuite) SetupTest() {
+func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 	database := database.NewMongoDatabase()
-	suite.userCollection = *persistence.NewUserCollection(database, suite.hashing)
+	suite.hashing = cryptographicMock.NewHashingMock()
+	suite.sut = persistence.NewUserMongoRepository(database, suite.hashing)
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestSave() {
-	user := create.Random()
-	suite.NotPanics(func() { suite.userCollection.Save(user) })
+func (suite *UserMongoRepositoryTestSuite) TestSave() {
+	user := aggregateMother.Random()
+
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+
+	suite.NotPanics(func() { suite.sut.Save(user) })
+
+	suite.hashing.AssertExpectations(suite.T())
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestSaveDuplicate() {
-	user := create.Random()
+func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
+	user := aggregateMother.Random()
 
-	suite.NotPanics(func() { suite.userCollection.Save(user) })
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
 
-	suite.Panics(func() { suite.userCollection.Save(user) })
+	suite.NotPanics(func() { suite.sut.Save(user) })
+
+	suite.Panics(func() { suite.sut.Save(user) })
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestUpdate() {
-	user := create.Random()
+func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
+	user := aggregateMother.Random()
 
-	suite.NotPanics(func() { suite.userCollection.Save(user) })
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
 
-	suite.NotPanics(func() { suite.userCollection.Update(user) })
+	suite.NotPanics(func() { suite.sut.Save(user) })
+
+	user.Password = valueObjectMother.RandomPassword()
+
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+
+	suite.NotPanics(func() { suite.sut.Update(user) })
+
+	suite.hashing.AssertExpectations(suite.T())
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestDelete() {
-	user := create.Random()
+func (suite *UserMongoRepositoryTestSuite) TestDelete() {
+	user := aggregateMother.Random()
 
-	suite.NotPanics(func() { suite.userCollection.Save(user) })
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
 
-	suite.NotPanics(func() { suite.userCollection.Delete(user.Id) })
+	suite.NotPanics(func() { suite.sut.Save(user) })
+
+	suite.NotPanics(func() { suite.sut.Delete(user.Id) })
 }
 
-func (suite *MongoUserRepositoryTestSuite) TestSearch() {
-	user := create.Random()
+func (suite *UserMongoRepositoryTestSuite) TestSearch() {
+	expected := aggregateMother.Random()
 
-	suite.NotPanics(func() { suite.userCollection.Save(user) })
+	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
-	filter := repository.Filter{Email: user.Email}
+	suite.NotPanics(func() { suite.sut.Save(expected) })
 
-	found := suite.userCollection.Search(filter)
+	filter := model.RepositorySearchFilter{Email: expected.Email}
 
-	suite.EqualValues(user, found)
+	actual := suite.sut.Search(filter)
+
+	suite.EqualValues(expected, actual)
 }
 
-func TestMongoUserRepositorySuite(t *testing.T) {
-	suite.Run(t, new(MongoUserRepositoryTestSuite))
+func TestUserMongoRepositorySuite(t *testing.T) {
+	suite.Run(t, new(UserMongoRepositoryTestSuite))
 }

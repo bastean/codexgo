@@ -3,7 +3,7 @@ package delete
 import (
 	sharedVO "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
-	create "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
+	valueObjectMother "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
 )
 
 func Create(id *sharedVO.Id) *delete.Command {
@@ -11,9 +11,9 @@ func Create(id *sharedVO.Id) *delete.Command {
 }
 
 func Random() *delete.Command {
-	return Create(create.RandomId())
+	return Create(valueObjectMother.RandomId())
 }
 
 func Invalid() *delete.Command {
-	return Create(create.InvalidId())
+	return Create(valueObjectMother.InvalidId())
 }

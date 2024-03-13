@@ -23,7 +23,9 @@ func FormDelete() gin.HandlerFunc {
 
 		user.Id = id.(string)
 
-		service.UserDeleteHandler.Handle(delete.Command(user))
+		command := delete.Command(user)
+
+		service.UserDeleteHandler.Handle(&command)
 
 		c.Header("HX-Trigger", event.Client.DeleteAuthorization)
 

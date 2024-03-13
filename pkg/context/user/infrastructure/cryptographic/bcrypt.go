@@ -1,6 +1,9 @@
 package cryptographic
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"golang.org/x/crypto/bcrypt"
+)
 
 type Bcrypt struct{}
 
@@ -18,4 +21,8 @@ func (hashing Bcrypt) Hash(plain string) string {
 func (hashing Bcrypt) IsNotEqual(hashed, plain string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain))
 	return err != nil
+}
+
+func NewUserBcryptHashing() model.Hashing {
+	return new(Bcrypt)
 }

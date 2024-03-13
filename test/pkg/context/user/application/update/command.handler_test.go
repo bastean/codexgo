@@ -5,47 +5,49 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
-	command "github.com/bastean/codexgo/test/pkg/context/user/application/update"
-	create "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
-	"github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/persistence"
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	commandMother "github.com/bastean/codexgo/test/pkg/context/user/application/update"
+	valueObjectMother "github.com/bastean/codexgo/test/pkg/context/user/domain/valueObject"
+	cryptographicMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/cryptographic"
+	persistenceMock "github.com/bastean/codexgo/test/pkg/context/user/infrastructure/mock/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserUpdateTestSuite struct {
 	suite.Suite
-	repository *persistence.RepositoryMock
-	hashing    *cryptographic.HashingMock
+	sut        *update.CommandHandler
 	update     *update.Update
-	handler    *update.CommandHandler
+	hashing    *cryptographicMock.HashingMock
+	repository *persistenceMock.RepositoryMock
 }
 
 func (suite *UserUpdateTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
-	suite.hashing = new(cryptographic.HashingMock)
-	suite.update = &update.Update{Repository: suite.repository, Hashing: suite.hashing}
-	suite.handler = &update.CommandHandler{Update: *suite.update}
+	suite.repository = persistenceMock.NewRepositoryMock()
+	suite.hashing = cryptographicMock.NewHashingMock()
+	suite.update = update.NewUpdate(suite.repository, suite.hashing)
+	suite.sut = update.NewCommandHandler(suite.update)
 }
 
 func (suite *UserUpdateTestSuite) TestUpdate() {
-	command := command.Random()
+	command := commandMother.Random()
 
-	user := aggregate.Create(command.Id, command.Email, command.Username, command.UpdatedPassword)
+	user := aggregate.Create(command.Id, command.Email, command.Username, command.Password)
 
-	idVO := create.NewId(command.Id)
+	idVO := valueObjectMother.NewId(command.Id)
 
-	filter := repository.Filter{Id: idVO}
+	filter := model.RepositorySearchFilter{Id: idVO}
 
 	suite.repository.On("Search", filter).Return(user)
 
+	suite.hashing.On("IsNotEqual", user.Password.Value, command.Password).Return(false)
+
 	suite.repository.On("Update", user)
 
-	suite.handler.Handle(*command)
+	suite.sut.Handle(command)
 
-	suite.repository.AssertCalled(suite.T(), "Search", filter)
+	suite.repository.AssertExpectations(suite.T())
 
-	suite.repository.AssertCalled(suite.T(), "Update", user)
+	suite.hashing.AssertExpectations(suite.T())
 }
 
 func TestUserUpdateSuite(t *testing.T) {
