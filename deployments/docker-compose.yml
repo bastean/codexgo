@@ -1,4 +1,19 @@
 services:
+  broker:
+    container_name: ${RABBITMQ_CONTAINER_NAME}
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - ${RABBITMQ_AMQP_PORT}:${RABBITMQ_AMQP_PORT}
+      - ${RABBITMQ_ADMIN_PORT}:${RABBITMQ_ADMIN_PORT}
+    healthcheck:
+      test: rabbitmq-diagnostics -q status
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
   database:
     container_name: ${MONGO_CONTAINER_NAME}
     image: mongo:4.4
@@ -15,8 +30,7 @@ services:
       test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --quiet | grep 1
       interval: 5s
       timeout: 5s
-      retries: 10
-      start_period: 5s
+      retries: 12
 
   server:
     container_name: ${SERVER_CONTAINER_NAME}
@@ -26,6 +40,7 @@ services:
       dockerfile: deployments/Dockerfile
       target: ${SERVER_BUILD_TARGET}
     environment:
+      BROKER_URI: "amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@broker:${RABBITMQ_AMQP_PORT}"
       DATABASE_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@database:${MONGO_INITDB_PORT}"
       JWT_SECRET_KEY: ${SERVER_JWT_SECRET_KEY}
       ALLOWED_HOSTS: ${SERVER_ALLOWED_HOSTS}
@@ -39,6 +54,8 @@ services:
       - codexgo-modules:/go/pkg/mod
     restart: ${SERVER_RESTART}
     depends_on:
+      broker:
+        condition: service_healthy
       database:
         condition: service_healthy
 

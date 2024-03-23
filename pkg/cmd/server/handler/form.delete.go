@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/event"
-	"github.com/bastean/codexgo/pkg/cmd/server/service"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/gin-gonic/gin"
 )
@@ -15,17 +15,17 @@ type Delete struct {
 
 func FormDelete() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var user Delete
+		var userDelete Delete
 
-		c.ShouldBind(&user)
+		c.ShouldBind(&userDelete)
 
 		id, _ := c.Get("id")
 
-		user.Id = id.(string)
+		userDelete.Id = id.(string)
 
-		command := delete.Command(user)
+		command := delete.Command(userDelete)
 
-		service.UserDeleteHandler.Handle(&command)
+		user.UserDeleteHandler.Handle(&command)
 
 		c.Header("HX-Trigger", event.Client.DeleteAuthorization)
 

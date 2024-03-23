@@ -7,3 +7,13 @@ type Command struct {
 	Password        string
 	UpdatedPassword string
 }
+
+func NewCommand(id, email, username, password, updatedPassword string) *Command {
+	return &Command{
+		Id:              id,
+		Email:           email,
+		Username:        username,
+		Password:        password,
+		UpdatedPassword: updatedPassword,
+	}
+}

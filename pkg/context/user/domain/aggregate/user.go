@@ -1,15 +1,18 @@
 package aggregate
 
 import (
-	sharedVO "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
-	userVO "github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/aggregate"
+	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
+	"github.com/bastean/codexgo/pkg/context/user/domain/message"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 )
 
 type User struct {
-	*sharedVO.Id
-	*sharedVO.Email
-	*userVO.Username
-	*userVO.Password
+	*aggregate.AggregateRoot
+	*sharedValueObject.Id
+	*sharedValueObject.Email
+	*valueObject.Username
+	*valueObject.Password
 }
 
 type UserPrimitive struct {
@@ -19,13 +22,16 @@ type UserPrimitive struct {
 	Password string
 }
 
-func newUser(id, email, username, password string) *User {
-	idVO := sharedVO.NewId(id)
-	emailVO := sharedVO.NewEmail(email)
-	usernameVO := userVO.NewUsername(username)
-	passwordVO := userVO.NewPassword(password)
+func create(id, email, username, password string) *User {
+	aggregateRoot := aggregate.NewAggregateRoot()
+
+	idVO := sharedValueObject.NewId(id)
+	emailVO := sharedValueObject.NewEmail(email)
+	usernameVO := valueObject.NewUsername(username)
+	passwordVO := valueObject.NewPassword(password)
 
 	return &User{
+		aggregateRoot,
 		idVO,
 		emailVO,
 		usernameVO,
@@ -43,7 +49,7 @@ func (user *User) ToPrimitives() *UserPrimitive {
 }
 
 func FromPrimitives(userPrimitive *UserPrimitive) *User {
-	return newUser(
+	return create(
 		userPrimitive.Id,
 		userPrimitive.Email,
 		userPrimitive.Username,
@@ -51,11 +57,15 @@ func FromPrimitives(userPrimitive *UserPrimitive) *User {
 	)
 }
 
-func Create(id, email, username, password string) *User {
-	return newUser(
+func NewUser(id, email, username, password string) *User {
+	user := create(
 		id,
 		email,
 		username,
 		password,
 	)
+
+	user.RecordMessage(message.NewRegisteredSucceededEvent(&message.RegisteredSucceededEventAttributes{Id: user.Id.Value, Email: user.Email.Value, Username: user.Username.Value}))
+
+	return user
 }

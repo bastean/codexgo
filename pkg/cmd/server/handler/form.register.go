@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/component/partial"
-	"github.com/bastean/codexgo/pkg/cmd/server/service"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/context/user/application/register"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -19,15 +19,15 @@ type Put struct {
 
 func FormRegister() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var user Put
+		var userPut Put
 
-		c.ShouldBind(&user)
+		c.ShouldBind(&userPut)
 
-		user.Id = uuid.NewString()
+		userPut.Id = uuid.NewString()
 
-		command := register.Command(user)
+		command := register.Command(userPut)
 
-		service.UserRegisterHandler.Handle(&command)
+		user.UserRegisterHandler.Handle(&command)
 
 		c.Status(http.StatusCreated)
 

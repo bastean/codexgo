@@ -1,8 +1,8 @@
 package login
 
 import (
-	sharedVO "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
-	userVO "github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
+	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
+	valueObject "github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 )
 
 type QueryHandler struct {
@@ -10,8 +10,8 @@ type QueryHandler struct {
 }
 
 func (queryHandler *QueryHandler) Handle(query *Query) *Response {
-	email := sharedVO.NewEmail(query.Email)
-	password := userVO.NewPassword(query.Password)
+	email := sharedValueObject.NewEmail(query.Email)
+	password := valueObject.NewPassword(query.Password)
 
 	user := queryHandler.Login.Run(email, password)
 

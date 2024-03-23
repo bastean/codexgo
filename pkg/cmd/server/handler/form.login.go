@@ -5,7 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/cmd/server/component/page"
 	"github.com/bastean/codexgo/pkg/cmd/server/event"
-	"github.com/bastean/codexgo/pkg/cmd/server/service"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/authentication"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/gin-gonic/gin"
@@ -18,13 +18,13 @@ type Post struct {
 
 func FormLogin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var user Post
+		var userPost Post
 
-		c.ShouldBind(&user)
+		c.ShouldBind(&userPost)
 
-		query := login.Query(user)
+		query := login.Query(userPost)
 
-		response := service.UserLoginHandler.Handle(&query)
+		response := user.UserLoginHandler.Handle(&query)
 
 		token := authentication.GenerateJWT(response.Id)
 

@@ -8,7 +8,7 @@
 
 <div align="center">
 
-> Example CRUD project applying Hexagonal Architecture, Domain-Driven Design (DDD), Command Query Responsibility Segregation (CQRS), Behavior-Driven Development (BDD), Continuous Integration (CI), and more... in Go
+> Example CRUD project applying Hexagonal Architecture, Domain-Driven Design (DDD), Event-Driven Architecture (EDA), Command Query Responsibility Segregation (CQRS), Behavior-Driven Development (BDD), Continuous Integration (CI), and more... in Go
 
 </div>
 
@@ -43,6 +43,10 @@
 - Project Layout
 
   - Based on [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
+
+- Message Broker
+
+  - Routing Key (based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition))
 
 - Devcontainer
 
@@ -220,6 +224,8 @@ make compose-prod
   - [Alpine.js](https://alpinejs.dev)
   - [Tailwind CSS](https://tailwindcss.com)
     - [daisyUI](https://daisyui.com)
+- [MongoDB](https://www.mongodb.com)
+- [RabbitMQ](https://www.rabbitmq.com)
 
 #### Please see
 

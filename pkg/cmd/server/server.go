@@ -10,24 +10,26 @@ import (
 	"time"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/router"
-	"github.com/bastean/codexgo/pkg/cmd/server/service"
+	_ "github.com/bastean/codexgo/pkg/cmd/server/service/broker"
+	_ "github.com/bastean/codexgo/pkg/cmd/server/service/database"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 )
 
 //go:embed static
 var Files embed.FS
 
 func Run(port string) {
-	service.Logger.Info("starting server")
+	logger.Logger.Info("starting server")
 
 	server := &http.Server{Addr: ":" + port, Handler: router.New(&Files)}
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			service.Logger.Fatal(err.Error())
+			logger.Logger.Fatal(err.Error())
 		}
 	}()
 
-	service.Logger.Info("listening and serving HTTP on :" + port)
+	logger.Logger.Info("listening and serving HTTP on :" + port)
 
 	shutdown := make(chan os.Signal, 1)
 
@@ -35,17 +37,17 @@ func Run(port string) {
 
 	<-shutdown
 
-	service.Logger.Info("shutting down server")
+	logger.Logger.Info("shutting down server")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		service.Logger.Fatal(err.Error())
+		logger.Logger.Fatal(err.Error())
 	}
 
 	<-ctx.Done()
 
-	service.Logger.Info("server exiting")
+	logger.Logger.Info("server exiting")
 }

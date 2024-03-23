@@ -1,7 +1,7 @@
 package delete
 
 import (
-	sharedVO "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
+	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 )
 
 type CommandHandler struct {
@@ -9,7 +9,7 @@ type CommandHandler struct {
 }
 
 func (commandHandler *CommandHandler) Handle(command *Command) {
-	id := sharedVO.NewId(command.Id)
+	id := sharedValueObject.NewId(command.Id)
 
 	commandHandler.Delete.Run(id)
 }

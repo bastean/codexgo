@@ -1,4 +1,4 @@
-package valueObject
+package sharedValueObject
 
 import (
 	"strings"

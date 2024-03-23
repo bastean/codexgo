@@ -3,7 +3,7 @@ package persistence
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
+	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -62,7 +62,7 @@ func (db UserCollection) Update(user *aggregate.User) {
 	}
 }
 
-func (db UserCollection) Delete(id *valueObject.Id) {
+func (db UserCollection) Delete(id *sharedValueObject.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)

@@ -6,3 +6,12 @@ type Response struct {
 	Username string
 	Password string
 }
+
+func NewResponse(id, email, username, password string) *Response {
+	return &Response{
+		Id:       id,
+		Email:    email,
+		Username: username,
+		Password: password,
+	}
+}

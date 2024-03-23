@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/component/partial"
-	"github.com/bastean/codexgo/pkg/cmd/server/service"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/gin-gonic/gin"
 )
@@ -19,17 +19,17 @@ type Patch struct {
 
 func FormUpdate() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var user Patch
+		var userPatch Patch
 
-		c.ShouldBind(&user)
+		c.ShouldBind(&userPatch)
 
 		id, _ := c.Get("id")
 
-		user.Id = id.(string)
+		userPatch.Id = id.(string)
 
-		command := update.Command(user)
+		command := update.Command(userPatch)
 
-		service.UserUpdateHandler.Handle(&command)
+		user.UserUpdateHandler.Handle(&command)
 
 		c.Status(http.StatusOK)
 
