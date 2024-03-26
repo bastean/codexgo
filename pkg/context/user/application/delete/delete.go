@@ -20,7 +20,7 @@ func (delete *Delete) Run(id *sharedValueObject.Id) {
 
 func NewDelete(repository model.Repository, hashing model.Hashing) *Delete {
 	return &Delete{
-		repository,
-		hashing,
+		Repository: repository,
+		Hashing:    hashing,
 	}
 }

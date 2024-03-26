@@ -101,8 +101,8 @@ func (db UserCollection) Search(filter model.RepositorySearchFilter) *aggregate.
 	return user
 }
 
-func NewUserMongoRepository(database *mongo.Database, hashing model.Hashing) model.Repository {
-	collection := database.Collection(collectionName)
+func NewUserMongoRepository(mdb *database.MongoDB, hashing model.Hashing) model.Repository {
+	collection := mdb.Database.Collection(collectionName)
 
 	collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
 		{

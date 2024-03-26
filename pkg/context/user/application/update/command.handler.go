@@ -10,6 +10,6 @@ func (commandHandler *CommandHandler) Handle(command *Command) {
 
 func NewCommandHandler(update *Update) *CommandHandler {
 	return &CommandHandler{
-		update,
+		Update: update,
 	}
 }

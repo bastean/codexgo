@@ -16,6 +16,6 @@ func (commandHandler *CommandHandler) Handle(command *Command) {
 
 func NewCommandHandler(delete *Delete) *CommandHandler {
 	return &CommandHandler{
-		delete,
+		Delete: delete,
 	}
 }

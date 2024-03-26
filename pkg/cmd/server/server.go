@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/router"
-	_ "github.com/bastean/codexgo/pkg/cmd/server/service/broker"
-	_ "github.com/bastean/codexgo/pkg/cmd/server/service/database"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/broker"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/database"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 )
 
@@ -19,6 +19,10 @@ import (
 var Files embed.FS
 
 func Run(port string) {
+	broker.Init()
+
+	database.Init()
+
 	logger.Logger.Info("starting server")
 
 	server := &http.Server{Addr: ":" + port, Handler: router.New(&Files)}
@@ -39,13 +43,15 @@ func Run(port string) {
 
 	logger.Logger.Info("shutting down server")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	defer cancel()
 
-	if err := server.Shutdown(ctx); err != nil {
-		logger.Logger.Fatal(err.Error())
-	}
+	broker.Close()
+
+	database.Close(ctx)
+
+	server.Shutdown(ctx)
 
 	<-ctx.Done()
 

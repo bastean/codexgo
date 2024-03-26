@@ -36,7 +36,7 @@ func (update *Update) Run(userUpdate *Command) {
 
 func NewUpdate(repository model.Repository, hashing model.Hashing) *Update {
 	return &Update{
-		repository,
-		hashing,
+		Repository: repository,
+		Hashing:    hashing,
 	}
 }

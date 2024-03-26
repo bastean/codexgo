@@ -5,14 +5,14 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type Password struct {
-	Value string `validate:"gte=8,lte=64"`
-}
-
 const PasswordMinCharactersLength = "8"
 const PasswordMaxCharactersLength = "64"
 
 var InvalidPasswordValue = errors.InvalidValue{Message: "Password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters"}
+
+type Password struct {
+	Value string `validate:"gte=8,lte=64"`
+}
 
 func ensureIsValidPassword(password *Password) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())

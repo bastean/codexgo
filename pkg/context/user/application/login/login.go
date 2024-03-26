@@ -23,7 +23,7 @@ func (login *Login) Run(email *sharedValueObject.Email, password *valueObject.Pa
 
 func NewLogin(repository model.Repository, hashing model.Hashing) *Login {
 	return &Login{
-		repository,
-		hashing,
+		Repository: repository,
+		Hashing:    hashing,
 	}
 }

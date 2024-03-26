@@ -7,11 +7,11 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+var InvalidEmailValue = errors.InvalidValue{Message: "Email Invalid"}
+
 type Email struct {
 	Value string `validate:"email"`
 }
-
-var InvalidEmailValue = errors.InvalidValue{Message: "Email Invalid"}
 
 func ensureIsValidEmail(email *Email) error {
 	validate := validator.New(validator.WithRequiredStructEnabled())

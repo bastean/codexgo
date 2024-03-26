@@ -19,7 +19,7 @@ var NotifySendAccountConfirmationQueue = queue.NewQueue(NotifySendAccountConfirm
 
 var NotifySendAccountConfirmationQueueConsumer = sendMail.NewRegisteredSucceededEventConsumer(notify.NotifySendMail, []*queue.Queue{NotifySendAccountConfirmationQueue})
 
-func init() {
+func Init() {
 	logger.Logger.Info("starting rabbitmq")
 
 	Broker.AddExchange(Exchange)
@@ -29,4 +29,9 @@ func init() {
 	Broker.AddQueueMessageBind(NotifySendAccountConfirmationQueue, []string{"#.event.#.registered.succeeded"})
 
 	Broker.AddQueueConsumer(NotifySendAccountConfirmationQueueConsumer)
+}
+
+func Close() {
+	communication.CloseRabbitMQ(Broker.(*communication.RabbitMQ))
+	logger.Logger.Info("rabbitmq closed")
 }

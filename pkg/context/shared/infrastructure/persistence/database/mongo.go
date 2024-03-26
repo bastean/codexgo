@@ -4,15 +4,29 @@ import (
 	"context"
 	"os"
 
+	"github.com/bastean/codexgo/pkg/context/shared/domain/service"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var uri = os.Getenv("DATABASE_URI")
-
 const databaseName = "codexgo"
 
-func NewMongoDatabase() *mongo.Database {
+var uri = os.Getenv("DATABASE_URI")
+
+type MongoDB struct {
+	*mongo.Client
+	*mongo.Database
+}
+
+func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) {
+	err := mdb.Client.Disconnect(ctx)
+
+	if err != nil {
+		service.FailOnError(err, "failed to close mongodb connection")
+	}
+}
+
+func NewMongoDatabase() *MongoDB {
 	var err error
 
 	clientOptions := options.Client().ApplyURI(uri)
@@ -28,5 +42,7 @@ func NewMongoDatabase() *mongo.Database {
 		panic(err)
 	}
 
-	return client.Database(databaseName)
+	return &MongoDB{
+		Client:   client,
+		Database: client.Database(databaseName)}
 }

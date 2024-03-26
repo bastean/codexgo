@@ -1,15 +1,19 @@
 package database
 
 import (
+	"context"
+
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var Database *mongo.Database
+var Database = database.NewMongoDatabase()
 
-func init() {
+func Init() {
 	logger.Logger.Info("starting mongodb")
+}
 
-	Database = database.NewMongoDatabase()
+func Close(ctx context.Context) {
+	database.CloseMongoDatabase(ctx, Database)
+	logger.Logger.Info("mongodb closed")
 }

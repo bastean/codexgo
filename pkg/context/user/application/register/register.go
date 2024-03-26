@@ -15,6 +15,6 @@ func (register *Register) Run(user *aggregate.User) {
 
 func NewRegister(repository model.Repository) *Register {
 	return &Register{
-		repository,
+		Repository: repository,
 	}
 }

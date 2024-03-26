@@ -14,6 +14,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/service"
 )
 
 var uri = os.Getenv("BROKER_URI")
@@ -37,7 +38,7 @@ func (rmq *RabbitMQ) AddExchange(exchange *exchange.Exchange) {
 
 	rmq.exchange = exchange.Name
 
-	failOnError(err, "Failed to declare an exchange")
+	service.FailOnError(err, "failed to declare an exchange")
 }
 
 func (rmq *RabbitMQ) AddQueue(queue *queue.Queue) {
@@ -50,12 +51,12 @@ func (rmq *RabbitMQ) AddQueue(queue *queue.Queue) {
 		nil,
 	)
 
-	failOnError(err, "Failed to declare a queue")
+	service.FailOnError(err, "failed to declare a queue")
 }
 
 func (rmq *RabbitMQ) AddQueueMessageBind(queue *queue.Queue, bindingKeys []string) {
 	for _, bindingKey := range bindingKeys {
-		log.Printf("Binding queue %s to exchange %s with routing key %s",
+		log.Printf("binding queue %s to exchange %s with routing key %s",
 			queue.Name, rmq.exchange, bindingKey)
 
 		err := rmq.Channel.QueueBind(
@@ -65,7 +66,7 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *queue.Queue, bindingKeys []strin
 			false,
 			nil)
 
-		failOnError(err, "Failed to bind a queue")
+		service.FailOnError(err, "failed to bind a queue")
 	}
 }
 
@@ -81,7 +82,7 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer model.Consumer) {
 			nil,
 		)
 
-		failOnError(err, "Failed to register a consumer")
+		service.FailOnError(err, "failed to register a consumer")
 
 		go func() {
 			for delivery := range messages {
@@ -89,7 +90,7 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer model.Consumer) {
 
 				err := json.Unmarshal(delivery.Body, message)
 
-				failOnError(err, "Failed to delivery a message")
+				service.FailOnError(err, "failed to delivery a message")
 
 				consumer.On(message)
 
@@ -125,21 +126,30 @@ func (rmq *RabbitMQ) PublishMessages(messages []*message.Message) {
 				Body:         messageJson,
 			})
 
-		failOnError(err, "Failed to publish a event")
+		service.FailOnError(err, "failed to publish a event")
 	}
 }
 
 func CloseRabbitMQ(rmq *RabbitMQ) {
-	rmq.Channel.Close()
-	rmq.Connection.Close()
+	err := rmq.Channel.Close()
+
+	if err != nil {
+		service.FailOnError(err, "failed to close channel")
+	}
+
+	err = rmq.Connection.Close()
+
+	if err != nil {
+		service.FailOnError(err, "failed to close rabbitmq connection")
+	}
 }
 
 func NewRabbitMQ() model.Broker {
 	conn, err := amqp.Dial(uri)
-	failOnError(err, "Failed to connect to RabbitMQ")
+	service.FailOnError(err, "failed to connect to rabbitmq")
 
 	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
+	service.FailOnError(err, "failed to open a channel")
 
 	return &RabbitMQ{
 		Connection: conn,

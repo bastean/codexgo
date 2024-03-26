@@ -22,7 +22,6 @@ type UserRegisterTestSuite struct {
 func (suite *UserRegisterTestSuite) SetupTest() {
 	suite.broker = communicationMock.NewBrokerMock()
 	suite.repository = persistenceMock.NewRepositoryMock()
-	suite.register = &register.Register{Repository: suite.repository}
 	suite.register = register.NewRegister(suite.repository)
 	suite.sut = register.NewCommandHandler(suite.register, suite.broker)
 }

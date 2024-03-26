@@ -22,6 +22,6 @@ func (queryHandler *QueryHandler) Handle(query *Query) *Response {
 
 func NewQueryHandler(login *Login) *QueryHandler {
 	return &QueryHandler{
-		login,
+		Login: login,
 	}
 }
