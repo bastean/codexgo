@@ -3,11 +3,11 @@ package update_test
 import (
 	"testing"
 
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	commandMother "github.com/bastean/codexgo/pkg/context/user/application/update/mother"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 	cryptographicMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/mock"
 	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
 	"github.com/stretchr/testify/suite"
@@ -33,7 +33,7 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 
 	user := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 
-	idVO := sharedValueObject.NewId(command.Id)
+	idVO := valueObject.NewId(command.Id)
 
 	filter := model.RepositorySearchFilter{Id: idVO}
 

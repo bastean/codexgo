@@ -1,9 +1,9 @@
-package sharedValueObject_test
+package valueObject_test
 
 import (
 	"testing"
 
-	sharedValueObjectMother "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject/mother"
+	valueObjectMother "github.com/bastean/codexgo/pkg/context/user/domain/valueObject/mother"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -16,7 +16,7 @@ func (suite *IdValueObjectTestSuite) SetupTest() {}
 func (suite *IdValueObjectTestSuite) TestId() {
 	msg := "Id Invalid"
 
-	suite.PanicsWithError(msg, func() { sharedValueObjectMother.InvalidId() })
+	suite.PanicsWithError(msg, func() { valueObjectMother.InvalidId() })
 }
 
 func TestIdValueObjectSuite(t *testing.T) {

@@ -3,9 +3,9 @@ package delete_test
 import (
 	"testing"
 
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	commandMother "github.com/bastean/codexgo/pkg/context/user/application/delete/mother"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 	cryptographicMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/mock"
 	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
 	"github.com/stretchr/testify/suite"
@@ -29,7 +29,7 @@ func (suite *UserDeleteTestSuite) SetupTest() {
 func (suite *UserDeleteTestSuite) TestDelete() {
 	command := commandMother.Random()
 
-	userId := sharedValueObject.NewId(command.Id)
+	userId := valueObject.NewId(command.Id)
 
 	suite.repository.On("Delete", userId)
 

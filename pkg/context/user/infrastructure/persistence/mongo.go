@@ -3,10 +3,10 @@ package persistence
 import (
 	"context"
 
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -62,7 +62,7 @@ func (db UserCollection) Update(user *aggregate.User) {
 	}
 }
 
-func (db UserCollection) Delete(id *sharedValueObject.Id) {
+func (db UserCollection) Delete(id *valueObject.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)

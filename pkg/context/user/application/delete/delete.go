@@ -1,8 +1,8 @@
 package delete
 
 import (
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 )
 
 type Delete struct {
@@ -10,10 +10,10 @@ type Delete struct {
 	model.Hashing
 }
 
-func (delete *Delete) Run(id *sharedValueObject.Id) {
-	// user := delete.Repository.Search(repository.Filter{Id: id})
+func (delete *Delete) Run(id *valueObject.Id) {
+	// TODO: user := delete.Repository.Search(repository.Filter{Id: id})
 
-	// service.IsPasswordInvalid(delete.Hashing, user.Password.Value, password.Value)
+	// TODO: service.IsPasswordInvalid(delete.Hashing, user.Password.Value, password.Value)
 
 	delete.Repository.Delete(id)
 }

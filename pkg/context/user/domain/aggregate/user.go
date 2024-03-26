@@ -2,15 +2,14 @@ package aggregate
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/aggregate"
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/domain/message"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 )
 
 type User struct {
 	*aggregate.AggregateRoot
-	*sharedValueObject.Id
-	*sharedValueObject.Email
+	*valueObject.Id
+	*valueObject.Email
 	*valueObject.Username
 	*valueObject.Password
 }
@@ -25,8 +24,8 @@ type UserPrimitive struct {
 func create(id, email, username, password string) *User {
 	aggregateRoot := aggregate.NewAggregateRoot()
 
-	idVO := sharedValueObject.NewId(id)
-	emailVO := sharedValueObject.NewEmail(email)
+	idVO := valueObject.NewId(id)
+	emailVO := valueObject.NewEmail(email)
 	usernameVO := valueObject.NewUsername(username)
 	passwordVO := valueObject.NewPassword(password)
 

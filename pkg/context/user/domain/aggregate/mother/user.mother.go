@@ -1,8 +1,6 @@
 package aggregateMother
 
 import (
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
-	sharedValueObjectMother "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject/mother"
 	"github.com/bastean/codexgo/pkg/context/user/application/register"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
@@ -10,13 +8,13 @@ import (
 )
 
 func FromCommand(command *register.Command) *aggregate.User {
-	return aggregate.NewUser(sharedValueObject.NewId(command.Id).Value, sharedValueObject.NewEmail(command.Email).Value, valueObject.NewUsername(command.Username).Value, valueObject.NewPassword(command.Password).Value)
+	return aggregate.NewUser(valueObject.NewId(command.Id).Value, valueObject.NewEmail(command.Email).Value, valueObject.NewUsername(command.Username).Value, valueObject.NewPassword(command.Password).Value)
 }
 
 func Invalid() *aggregate.User {
-	return aggregate.NewUser(sharedValueObjectMother.InvalidId().Value, sharedValueObjectMother.InvalidEmail().Value, valueObjectMother.WithInvalidUsernameLength().Value, valueObjectMother.WithInvalidPasswordLength().Value)
+	return aggregate.NewUser(valueObjectMother.InvalidId().Value, valueObjectMother.InvalidEmail().Value, valueObjectMother.WithInvalidUsernameLength().Value, valueObjectMother.WithInvalidPasswordLength().Value)
 }
 
 func Random() *aggregate.User {
-	return aggregate.NewUser(sharedValueObjectMother.RandomId().Value, sharedValueObjectMother.RandomEmail().Value, valueObjectMother.RandomUsername().Value, valueObjectMother.RandomPassword().Value)
+	return aggregate.NewUser(valueObjectMother.RandomId().Value, valueObjectMother.RandomEmail().Value, valueObjectMother.RandomUsername().Value, valueObjectMother.RandomPassword().Value)
 }

@@ -1,9 +1,9 @@
 package persistenceMock
 
 import (
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -19,7 +19,7 @@ func (m *RepositoryMock) Update(user *aggregate.User) {
 	m.Called(user)
 }
 
-func (m *RepositoryMock) Delete(id *sharedValueObject.Id) {
+func (m *RepositoryMock) Delete(id *valueObject.Id) {
 	m.Called(id)
 }
 

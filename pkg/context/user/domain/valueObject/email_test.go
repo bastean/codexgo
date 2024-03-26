@@ -1,9 +1,9 @@
-package sharedValueObject_test
+package valueObject_test
 
 import (
 	"testing"
 
-	sharedValueObjectMother "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject/mother"
+	valueObjectMother "github.com/bastean/codexgo/pkg/context/user/domain/valueObject/mother"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -16,7 +16,7 @@ func (suite *EmailValueObjectTestSuite) SetupTest() {}
 func (suite *EmailValueObjectTestSuite) TestEmail() {
 	msg := "Email Invalid"
 
-	suite.PanicsWithError(msg, func() { sharedValueObjectMother.InvalidEmail() })
+	suite.PanicsWithError(msg, func() { valueObjectMother.InvalidEmail() })
 }
 
 func TestEmailValueObjectSuite(t *testing.T) {

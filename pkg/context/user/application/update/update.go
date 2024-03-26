@@ -1,7 +1,6 @@
 package update
 
 import (
-	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
@@ -13,14 +12,14 @@ type Update struct {
 }
 
 func (update *Update) Run(userUpdate *Command) {
-	idVO := sharedValueObject.NewId(userUpdate.Id)
+	idVO := valueObject.NewId(userUpdate.Id)
 
 	userRegistered := update.Repository.Search(model.RepositorySearchFilter{Id: idVO})
 
 	service.IsPasswordInvalid(update.Hashing, userRegistered.Password.Value, userUpdate.Password)
 
 	if userUpdate.Email != "" {
-		userRegistered.Email = sharedValueObject.NewEmail(userUpdate.Email)
+		userRegistered.Email = valueObject.NewEmail(userUpdate.Email)
 	}
 
 	if userUpdate.Username != "" {
