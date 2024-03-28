@@ -1,19 +1,31 @@
 package communication
 
 import (
-	"log"
+	"net/smtp"
+	"os"
 
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 )
 
-type Smtp struct{}
+var host = os.Getenv("SMTP_HOST")
+var port = os.Getenv("SMTP_PORT")
+var username = os.Getenv("SMTP_USERNAME")
+var password = os.Getenv("SMTP_PASSWORD")
 
-func (smtp *Smtp) Send(to []string, msg string) {
-	// TODO
-	log.Println("TO:", to)
-	log.Println("Msg:", msg)
+type Smtp struct {
+	Auth smtp.Auth
+}
+
+func (client *Smtp) Send(to []string, msg string) {
+	err := smtp.SendMail(host+":"+port, client.Auth, username, to, []byte(msg))
+
+	if err != nil {
+		panic(err)
+	}
 }
 
 func NewNotifySmtpMail() model.Mail {
-	return new(Smtp)
+	return &Smtp{
+		Auth: smtp.PlainAuth("", username, password, host),
+	}
 }

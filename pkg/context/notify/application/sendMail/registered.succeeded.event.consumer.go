@@ -2,6 +2,7 @@ package sendMail
 
 import (
 	"encoding/json"
+	"os"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
@@ -22,7 +23,17 @@ func (consumer *RegisteredSucceededEventConsumer) On(message *message.Message) {
 
 	json.Unmarshal(message.Attributes, attributes)
 
-	msg := "Welcome " + attributes.Username
+	msg := "To: " + attributes.Email + "\r\n" +
+
+		"From: " + os.Getenv("SMTP_USERNAME") + "\r\n" +
+
+		"\r\n" +
+
+		"Subject: Welcome\r\n" +
+
+		"\r\n" +
+
+		"Registered Succeeded " + attributes.Username + "\r\n"
 
 	consumer.SendMail.Run(attributes.Email, msg)
 }
