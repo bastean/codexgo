@@ -44,6 +44,7 @@ vite.config.ts.timestamp-*
 **/.svelte-kit/*
 !**/.svelte-kit/tsconfig.json
 *_templ.txt
+*_templ.go
 
 #* Misc
 ignore*
