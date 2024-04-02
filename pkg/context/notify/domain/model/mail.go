@@ -1,5 +1,5 @@
 package model
 
 type Mail interface {
-	Send(to []string, msg string)
+	Send(template MailTemplate)
 }

@@ -51,7 +51,7 @@ func (suite *RabbitMQBrokerTestSuite) TestBroker() {
 
 	suite.sut.AddQueueConsumer(suite.consumer)
 
-	// TODO: suite.consumer.Mock.On("On", suite.messages[0])
+	// TODO?: suite.consumer.Mock.On("On", suite.messages[0])
 
 	suite.NotPanics(func() { suite.sut.PublishMessages(suite.messages) })
 

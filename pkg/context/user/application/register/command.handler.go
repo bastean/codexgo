@@ -10,12 +10,12 @@ type CommandHandler struct {
 	model.Broker
 }
 
-func (commandHandler *CommandHandler) Handle(command *Command) {
+func (handler *CommandHandler) Handle(command *Command) {
 	user := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 
-	commandHandler.Register.Run(user)
+	handler.Register.Run(user)
 
-	commandHandler.Broker.PublishMessages(user.PullMessages())
+	handler.Broker.PublishMessages(user.PullMessages())
 }
 
 func NewCommandHandler(register *Register, broker model.Broker) *CommandHandler {

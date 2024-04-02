@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/pkg/context/user/application/register"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
+	"github.com/bastean/codexgo/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 )
@@ -16,6 +17,9 @@ var userMongoRepository = persistence.NewUserMongoRepository(database.Database, 
 
 var userRegister = register.NewRegister(userMongoRepository)
 var UserRegisterHandler = register.NewCommandHandler(userRegister, broker.Broker)
+
+var userVerify = verify.NewVerify(userMongoRepository)
+var UserVerifyHandler = verify.NewCommandHandler(userVerify)
 
 var userLogin = login.NewLogin(userMongoRepository, userBcryptHashing)
 var UserLoginHandler = login.NewQueryHandler(userLogin)

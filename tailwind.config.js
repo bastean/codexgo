@@ -1,3 +1,3 @@
 export default {
-  content: ["src/**/*.{tpl,tmpl,templ,html}"],
+  content: ["pkg/**/*.{tpl,tmpl,templ,html}"],
 };

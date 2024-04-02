@@ -6,7 +6,7 @@ import (
 	communicationMock "github.com/bastean/codexgo/pkg/context/shared/infrastructure/communication/mock"
 	"github.com/bastean/codexgo/pkg/context/user/application/register"
 	commandMother "github.com/bastean/codexgo/pkg/context/user/application/register/mother"
-	aggregateMother "github.com/bastean/codexgo/pkg/context/user/domain/aggregate/mother"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
 	"github.com/stretchr/testify/suite"
 )
@@ -29,7 +29,7 @@ func (suite *UserRegisterTestSuite) SetupTest() {
 func (suite *UserRegisterTestSuite) TestRegister() {
 	command := commandMother.Random()
 
-	user := aggregateMother.FromCommand(command)
+	user := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 
 	messages := user.Messages
 

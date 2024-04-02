@@ -16,7 +16,7 @@ func (m *ConsumerMock) SubscribedTo() []*queue.Queue {
 }
 
 func (m *ConsumerMock) On(message *message.Message) {
-	// TODO: m.Called(message)
+	// TODO?: m.Called(message)
 }
 
 func NewConsumerMock() *ConsumerMock {

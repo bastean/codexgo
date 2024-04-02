@@ -87,24 +87,24 @@ release-dry-changelog:
 	@${release-it-dry} --changelog
 
 compose-dev-down:
-	@${compose-env} .env.example.dev down
+	@${compose-env} .env.dev down
 	@docker volume rm codexgo-database-dev -f
 
 compose-dev: compose-dev-down
-	@${compose-env} .env.example.dev up
+	@${compose-env} .env.dev up
 
 compose-test-down:
-	@${compose-env} .env.example.test down
+	@${compose-env} .env.test down
 	@docker volume rm codexgo-database-test -f
 
 compose-test: compose-test-down
-	@${compose-env} .env.example.test up --exit-code-from server
+	@${compose-env} .env.test up --exit-code-from server
 
 compose-prod-down:
-	@${compose-env} .env.example.prod down
+	@${compose-env} .env.prod down
 
 compose-prod: compose-prod-down
-	@${compose-env} .env.example.prod up
+	@${compose-env} .env.prod up
 
 compose-down: compose-dev-down compose-test-down compose-prod-down
 

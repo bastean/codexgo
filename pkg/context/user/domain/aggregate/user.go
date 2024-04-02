@@ -12,6 +12,7 @@ type User struct {
 	*valueObject.Email
 	*valueObject.Username
 	*valueObject.Password
+	*valueObject.Verified
 }
 
 type UserPrimitive struct {
@@ -19,15 +20,17 @@ type UserPrimitive struct {
 	Email    string
 	Username string
 	Password string
+	Verified bool
 }
 
-func create(id, email, username, password string) *User {
+func create(id, email, username, password string, verified bool) *User {
 	aggregateRoot := aggregate.NewAggregateRoot()
 
 	idVO := valueObject.NewId(id)
 	emailVO := valueObject.NewEmail(email)
 	usernameVO := valueObject.NewUsername(username)
 	passwordVO := valueObject.NewPassword(password)
+	verifiedVO := valueObject.NewVerified(verified)
 
 	return &User{
 		aggregateRoot,
@@ -35,6 +38,7 @@ func create(id, email, username, password string) *User {
 		emailVO,
 		usernameVO,
 		passwordVO,
+		verifiedVO,
 	}
 }
 
@@ -44,6 +48,7 @@ func (user *User) ToPrimitives() *UserPrimitive {
 		user.Email.Value,
 		user.Username.Value,
 		user.Password.Value,
+		user.Verified.Value,
 	}
 }
 
@@ -53,15 +58,19 @@ func FromPrimitives(userPrimitive *UserPrimitive) *User {
 		userPrimitive.Email,
 		userPrimitive.Username,
 		userPrimitive.Password,
+		userPrimitive.Verified,
 	)
 }
 
 func NewUser(id, email, username, password string) *User {
+	verified := false
+
 	user := create(
 		id,
 		email,
 		username,
 		password,
+		verified,
 	)
 
 	user.RecordMessage(message.NewRegisteredSucceededEvent(&message.RegisteredSucceededEventAttributes{Id: user.Id.Value, Email: user.Email.Value, Username: user.Username.Value}))

@@ -8,10 +8,10 @@ type CommandHandler struct {
 	*Delete
 }
 
-func (commandHandler *CommandHandler) Handle(command *Command) {
+func (handler *CommandHandler) Handle(command *Command) {
 	id := valueObject.NewId(command.Id)
 
-	commandHandler.Delete.Run(id)
+	handler.Delete.Run(id)
 }
 
 func NewCommandHandler(delete *Delete) *CommandHandler {

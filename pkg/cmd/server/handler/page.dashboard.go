@@ -9,6 +9,8 @@ import (
 func IndexDashboard() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("HX-Push-Url", "/dashboard")
-		layout.Base(page.Dashboard()).Render(c.Request.Context(), c.Writer)
+
+		// TODO!: page.Dashboard(false)
+		layout.Base(page.Dashboard(false)).Render(c.Request.Context(), c.Writer)
 	}
 }

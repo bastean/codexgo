@@ -3,6 +3,7 @@ package sendMail
 import (
 	"encoding/json"
 
+	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
@@ -22,9 +23,10 @@ func (consumer *RegisteredSucceededEventConsumer) On(message *message.Message) {
 
 	json.Unmarshal(message.Attributes, attributes)
 
-	msg := "Welcome " + attributes.Username
+	mailTemplate := template.NewMail([]string{attributes.Email})
+	accountConfirmationTemplate := template.NewAccountConfirmationMail(mailTemplate, attributes.Username, attributes.Id)
 
-	consumer.SendMail.Run(attributes.Email, msg)
+	consumer.SendMail.Run(accountConfirmationTemplate)
 }
 
 func NewRegisteredSucceededEventConsumer(sendEmail *SendMail, queues []*queue.Queue) model.Consumer {

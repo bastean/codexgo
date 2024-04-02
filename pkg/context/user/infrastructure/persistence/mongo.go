@@ -19,6 +19,7 @@ type userDocument struct {
 	Email    string `bson:"email"`
 	Username string `bson:"username"`
 	Password string `bson:"password"`
+	Verified bool   `bson:"verified"`
 }
 
 type UserCollection struct {
@@ -53,6 +54,10 @@ func (db UserCollection) Update(user *aggregate.User) {
 
 	if user.Password != nil {
 		updateUser["password"] = db.hashing.Hash(user.Password.Value)
+	}
+
+	if user.Verified != nil {
+		updateUser["verified"] = user.Verified.Value
 	}
 
 	_, err := db.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})

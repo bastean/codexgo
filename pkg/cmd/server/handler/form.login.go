@@ -39,6 +39,6 @@ func FormLogin() gin.HandlerFunc {
 
 		c.Header("HX-Push-Url", "/dashboard")
 
-		page.Dashboard().Render(c.Request.Context(), c.Writer)
+		page.Dashboard(response.Verified).Render(c.Request.Context(), c.Writer)
 	}
 }

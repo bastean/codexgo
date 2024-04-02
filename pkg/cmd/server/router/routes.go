@@ -12,6 +12,8 @@ func InitRoutes() {
 	router.PUT("/", handler.FormRegister())
 	router.POST("/", handler.FormLogin())
 
+	router.GET("/verify/:id", handler.Verify())
+
 	auth := router.Group("/dashboard", middleware.VerifyAuthentication())
 	auth.GET("/", handler.IndexDashboard())
 	auth.PATCH("/", handler.FormUpdate())

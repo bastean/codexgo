@@ -4,8 +4,8 @@ type CommandHandler struct {
 	*Update
 }
 
-func (commandHandler *CommandHandler) Handle(command *Command) {
-	commandHandler.Update.Run(command)
+func (handler *CommandHandler) Handle(command *Command) {
+	handler.Update.Run(command)
 }
 
 func NewCommandHandler(update *Update) *CommandHandler {

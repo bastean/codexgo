@@ -11,9 +11,9 @@ type Delete struct {
 }
 
 func (delete *Delete) Run(id *valueObject.Id) {
-	// TODO: user := delete.Repository.Search(repository.Filter{Id: id})
+	// TODO!: user := delete.Repository.Search(repository.Filter{Id: id})
 
-	// TODO: service.IsPasswordInvalid(delete.Hashing, user.Password.Value, password.Value)
+	// TODO!: service.IsPasswordInvalid(delete.Hashing, user.Password.Value, password.Value)
 
 	delete.Repository.Delete(id)
 }

@@ -8,11 +8,11 @@ type QueryHandler struct {
 	*Login
 }
 
-func (queryHandler *QueryHandler) Handle(query *Query) *Response {
+func (handler *QueryHandler) Handle(query *Query) *Response {
 	email := valueObject.NewEmail(query.Email)
 	password := valueObject.NewPassword(query.Password)
 
-	user := queryHandler.Login.Run(email, password)
+	user := handler.Login.Run(email, password)
 
 	response := Response(*user.ToPrimitives())
 
