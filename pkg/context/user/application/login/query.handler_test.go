@@ -48,6 +48,6 @@ func (suite *UserLoginTestSuite) TestLogin() {
 	suite.EqualValues(expected, actual)
 }
 
-func TestUserLoginSuite(t *testing.T) {
+func TestUnitUserLoginSuite(t *testing.T) {
 	suite.Run(t, new(UserLoginTestSuite))
 }

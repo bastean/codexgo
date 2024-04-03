@@ -86,6 +86,6 @@ func (suite *UserMongoRepositoryTestSuite) TestSearch() {
 	suite.EqualValues(expected, actual)
 }
 
-func TestUserMongoRepositorySuite(t *testing.T) {
+func TestIntegrationUserMongoRepositorySuite(t *testing.T) {
 	suite.Run(t, new(UserMongoRepositoryTestSuite))
 }

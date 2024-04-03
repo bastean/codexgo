@@ -124,7 +124,7 @@
     "hooks": {
       "before:init": [
         "make lint-check",
-        "make compose-test"
+        "make test-unit"
       ],
       "before:release": [
         "make lint",

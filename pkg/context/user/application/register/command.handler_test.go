@@ -44,6 +44,6 @@ func (suite *UserRegisterTestSuite) TestRegister() {
 	suite.broker.AssertExpectations(suite.T())
 }
 
-func TestUserRegisterSuite(t *testing.T) {
+func TestUnitUserRegisterSuite(t *testing.T) {
 	suite.Run(t, new(UserRegisterTestSuite))
 }

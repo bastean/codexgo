@@ -19,6 +19,6 @@ func (suite *IdValueObjectTestSuite) TestId() {
 	suite.PanicsWithError(msg, func() { valueObjectMother.InvalidId() })
 }
 
-func TestIdValueObjectSuite(t *testing.T) {
+func TestUnitIdValueObjectSuite(t *testing.T) {
 	suite.Run(t, new(IdValueObjectTestSuite))
 }

@@ -58,6 +58,6 @@ func (suite *RabbitMQBrokerTestSuite) TestBroker() {
 	suite.consumer.AssertExpectations(suite.T())
 }
 
-func TestRabbitMQBrokerSuite(t *testing.T) {
+func TestIntegrationRabbitMQBrokerSuite(t *testing.T) {
 	suite.Run(t, new(RabbitMQBrokerTestSuite))
 }

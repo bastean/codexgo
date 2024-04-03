@@ -36,6 +36,6 @@ func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
 	suite.False(isNotEqual)
 }
 
-func TestUserBcryptHashingSuite(t *testing.T) {
+func TestIntegrationUserBcryptHashingSuite(t *testing.T) {
 	suite.Run(t, new(UserBcryptHashingTestSuite))
 }

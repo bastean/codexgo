@@ -51,6 +51,6 @@ func (suite *UserVerifyTestSuite) TestVerify() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUserVerifySuite(t *testing.T) {
+func TestUnitUserVerifySuite(t *testing.T) {
 	suite.Run(t, new(UserVerifyTestSuite))
 }

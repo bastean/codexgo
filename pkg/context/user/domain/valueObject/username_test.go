@@ -20,6 +20,6 @@ func (suite *UsernameValueObjectTestSuite) TestUsername() {
 	suite.PanicsWithError(msg, func() { valueObjectMother.WithInvalidUsernameAlphanumeric() })
 }
 
-func TestUsernameValueObjectSuite(t *testing.T) {
+func TestUnitUsernameValueObjectSuite(t *testing.T) {
 	suite.Run(t, new(UsernameValueObjectTestSuite))
 }

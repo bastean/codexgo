@@ -24,7 +24,7 @@ func runLint() {
 }
 
 func runTest() {
-	if err := exec.Command("make", "compose-test").Run(); err != nil {
+	if err := exec.Command("make", "test-unit").Run(); err != nil {
 		panic(err)
 	}
 }

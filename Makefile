@@ -26,7 +26,7 @@ from-zero:
 	@${npx} husky install
 
 upgrade-manager:
-	@sudo apt update && sudo apt upgrade -y
+	#? @sudo apt update && sudo apt upgrade -y
 	@npm upgrade -g
 
 upgrade-go:
@@ -50,6 +50,7 @@ init: upgrade-manager
 	@go install honnef.co/go/tools/cmd/staticcheck@latest
 	@go install github.com/a-h/templ/cmd/templ@latest
 	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
+	@templ generate
 
 lint:
 	@go mod tidy
@@ -97,7 +98,13 @@ compose-test-down:
 	@${compose-env} .env.test down
 	@docker volume rm codexgo-database-test -f
 
-compose-test: compose-test-down
+compose-test-integration: compose-test-down
+	@${compose-env} .env.test --env-file .env.test.integration up --exit-code-from server
+
+compose-test-acceptance: compose-test-down
+	@${compose-env} .env.test --env-file .env.test.acceptance up --exit-code-from server
+
+compose-test-all: compose-test-down
 	@${compose-env} .env.test up --exit-code-from server
 
 compose-prod-down:
@@ -108,16 +115,27 @@ compose-prod: compose-prod-down
 
 compose-down: compose-dev-down compose-test-down compose-prod-down
 
-test-server:
+sut-start:
 	@air
 
-test-start:
+test-clean:
 	@go clean -testcache
 	@cd test/ && mkdir -p report
-	@TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt
 
-test-run: upgrade-go
-	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make test-server' '${npx} wait-on -l http-get://localhost:8080 && make test-start'
+test-sync: upgrade-go
+	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make sut-start' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
+
+test-unit: test-clean
+	@go test -v -cover ./pkg/context/... -run TestUnit.* > test/report/unit-report.txt
+
+test-integration: test-clean
+	@go test -v -cover ./pkg/context/... -run TestIntegration.* > test/report/integration-report.txt
+
+test-acceptance: test-clean
+	@TEST_SYNC="TEST_URL='http://localhost:8080' go test -v -cover ./pkg/cmd/... -run TestAcceptance.* > test/report/acceptance-report.txt" make test-sync
+
+test-all: test-clean
+	@TEST_SYNC="TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt" make test-sync
 
 build:
 	@rm -rf dist/
@@ -132,6 +150,10 @@ sync-env-reset:
 
 sync-env:
 	@cd deployments && go run ../scripts/sync-env/**
+
+git-forget:
+	@git rm -r --cached .
+	@git add .
 
 docker-usage:
 	@docker system df

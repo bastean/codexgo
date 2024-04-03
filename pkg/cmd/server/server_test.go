@@ -125,7 +125,7 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	})
 }
 
-func TestFeatures(t *testing.T) {
+func TestAcceptanceServerFeatures(t *testing.T) {
 	InitializeAssert(t)
 
 	InitializePlaywright()

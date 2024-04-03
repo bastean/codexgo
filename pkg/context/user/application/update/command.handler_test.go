@@ -50,6 +50,6 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 	suite.hashing.AssertExpectations(suite.T())
 }
 
-func TestUserUpdateSuite(t *testing.T) {
+func TestUnitUserUpdateSuite(t *testing.T) {
 	suite.Run(t, new(UserUpdateTestSuite))
 }

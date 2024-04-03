@@ -38,6 +38,6 @@ func (suite *UserDeleteTestSuite) TestDelete() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUserDeleteSuite(t *testing.T) {
+func TestUnitUserDeleteSuite(t *testing.T) {
 	suite.Run(t, new(UserDeleteTestSuite))
 }

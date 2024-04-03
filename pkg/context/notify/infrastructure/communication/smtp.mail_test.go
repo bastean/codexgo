@@ -32,6 +32,6 @@ func (suite *SmtpMailTestSuite) TestSendAccountConfirmation() {
 	suite.NotPanics(func() { suite.sut.Send(accountConfirmationTemplate) })
 }
 
-func TestSmtpMailSuite(t *testing.T) {
+func TestIntegrationSmtpMailSuite(t *testing.T) {
 	suite.Run(t, new(SmtpMailTestSuite))
 }

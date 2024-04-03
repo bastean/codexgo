@@ -19,6 +19,6 @@ func (suite *PasswordValueObjectTestSuite) TestPassword() {
 	suite.PanicsWithError(msg, func() { valueObjectMother.WithInvalidPasswordLength() })
 }
 
-func TestPasswordValueObjectSuite(t *testing.T) {
+func TestUnitPasswordValueObjectSuite(t *testing.T) {
 	suite.Run(t, new(PasswordValueObjectTestSuite))
 }

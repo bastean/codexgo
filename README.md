@@ -190,9 +190,29 @@ make compose-dev
 
 #### Test
 
-```bash
-make compose-test
-```
+- Unit
+
+  ```bash
+  make test-unit
+  ```
+
+- Integration
+
+  ```bash
+  make compose-test-integration
+  ```
+
+- Acceptance
+
+  ```bash
+  make compose-test-acceptance
+  ```
+
+- All
+
+  ```bash
+  make compose-test-all
+  ```
 
 #### Production
 

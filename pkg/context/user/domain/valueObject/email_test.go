@@ -19,6 +19,6 @@ func (suite *EmailValueObjectTestSuite) TestEmail() {
 	suite.PanicsWithError(msg, func() { valueObjectMother.InvalidEmail() })
 }
 
-func TestEmailValueObjectSuite(t *testing.T) {
+func TestUnitEmailValueObjectSuite(t *testing.T) {
 	suite.Run(t, new(EmailValueObjectTestSuite))
 }

@@ -47,6 +47,6 @@ func (suite *RegisteredSucceededEventConsumerTestSuite) TestEventConsumer() {
 	suite.mail.AssertExpectations(suite.T())
 }
 
-func TestRegisteredSucceededEventConsumerSuite(t *testing.T) {
+func TestUnitRegisteredSucceededEventConsumerSuite(t *testing.T) {
 	suite.Run(t, new(RegisteredSucceededEventConsumerTestSuite))
 }
