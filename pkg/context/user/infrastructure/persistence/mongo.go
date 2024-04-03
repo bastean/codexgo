@@ -12,8 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const collectionName = "users"
-
 type userDocument struct {
 	Id       string `bson:"id"`
 	Email    string `bson:"email"`
@@ -106,7 +104,7 @@ func (db UserCollection) Search(filter model.RepositorySearchFilter) *aggregate.
 	return user
 }
 
-func NewUserMongoRepository(mdb *database.MongoDB, hashing model.Hashing) model.Repository {
+func NewUserMongoRepository(mdb *database.MongoDB, collectionName string, hashing model.Hashing) model.Repository {
 	collection := mdb.Database.Collection(collectionName)
 
 	collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{

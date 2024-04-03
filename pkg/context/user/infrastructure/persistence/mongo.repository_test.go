@@ -1,6 +1,7 @@
 package persistence_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
@@ -19,9 +20,12 @@ type UserMongoRepositoryTestSuite struct {
 }
 
 func (suite *UserMongoRepositoryTestSuite) SetupTest() {
-	database := database.NewMongoDatabase()
+	uri := os.Getenv("DATABASE_URI")
+	databaseName := "codexgo-test"
+	database := database.NewMongoDatabase(uri, databaseName)
+	collectionName := "users-test"
 	suite.hashing = cryptographicMock.NewHashingMock()
-	suite.sut = persistence.NewUserMongoRepository(database, suite.hashing)
+	suite.sut = persistence.NewUserMongoRepository(database, collectionName, suite.hashing)
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSave() {

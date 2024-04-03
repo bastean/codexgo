@@ -1,6 +1,8 @@
 package broker
 
 import (
+	"os"
+
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/notify"
 	"github.com/bastean/codexgo/pkg/context/notify/application/sendMail"
@@ -9,7 +11,9 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communication"
 )
 
-var Broker = communication.NewRabbitMQ()
+var uri = os.Getenv("BROKER_URI")
+
+var Broker = communication.NewRabbitMQ(uri)
 
 var Exchange = exchange.NewExchange("codexgo")
 

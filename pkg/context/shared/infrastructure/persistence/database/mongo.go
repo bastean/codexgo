@@ -2,16 +2,11 @@ package database
 
 import (
 	"context"
-	"os"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/service"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-const databaseName = "codexgo"
-
-var uri = os.Getenv("DATABASE_URI")
 
 type MongoDB struct {
 	*mongo.Client
@@ -26,7 +21,7 @@ func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) {
 	}
 }
 
-func NewMongoDatabase() *MongoDB {
+func NewMongoDatabase(uri, databaseName string) *MongoDB {
 	var err error
 
 	clientOptions := options.Client().ApplyURI(uri)

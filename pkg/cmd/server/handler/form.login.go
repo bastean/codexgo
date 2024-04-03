@@ -5,8 +5,8 @@ import (
 
 	"github.com/bastean/codexgo/pkg/cmd/server/component/page"
 	"github.com/bastean/codexgo/pkg/cmd/server/event"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/auth"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/authentication"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +26,7 @@ func FormLogin() gin.HandlerFunc {
 
 		response := user.UserLoginHandler.Handle(&query)
 
-		token := authentication.GenerateJWT(response.Id)
+		token := auth.Auth.GenerateJWT(response.Id)
 
 		event, err := json.Marshal(map[string]string{event.Client.PutAuthorization: "Bearer " + token})
 

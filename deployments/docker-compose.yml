@@ -8,6 +8,7 @@ services:
     ports:
       - ${RABBITMQ_AMQP_PORT}:${RABBITMQ_AMQP_PORT}
       - ${RABBITMQ_ADMIN_PORT}:${RABBITMQ_ADMIN_PORT}
+    restart: ${RABBITMQ_RESTART}
     healthcheck:
       test: rabbitmq-diagnostics -q status
       interval: 5s

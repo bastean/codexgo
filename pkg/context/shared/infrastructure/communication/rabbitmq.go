@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"log"
-	"os"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,8 +15,6 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/service"
 )
-
-var uri = os.Getenv("BROKER_URI")
 
 type RabbitMQ struct {
 	*amqp.Connection
@@ -144,7 +141,7 @@ func CloseRabbitMQ(rmq *RabbitMQ) {
 	}
 }
 
-func NewRabbitMQ() model.Broker {
+func NewRabbitMQ(uri string) model.Broker {
 	conn, err := amqp.Dial(uri)
 	service.FailOnError(err, "failed to connect to rabbitmq")
 

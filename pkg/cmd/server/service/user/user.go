@@ -12,8 +12,9 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 )
 
+var collectionName = "users"
 var userBcryptHashing = cryptographic.NewUserBcryptHashing()
-var userMongoRepository = persistence.NewUserMongoRepository(database.Database, userBcryptHashing)
+var userMongoRepository = persistence.NewUserMongoRepository(database.Database, collectionName, userBcryptHashing)
 
 var userRegister = register.NewRegister(userMongoRepository)
 var UserRegisterHandler = register.NewCommandHandler(userRegister, broker.Broker)

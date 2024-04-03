@@ -1,6 +1,7 @@
 package communication_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/exchange"
@@ -22,7 +23,8 @@ type RabbitMQBrokerTestSuite struct {
 }
 
 func (suite *RabbitMQBrokerTestSuite) SetupTest() {
-	suite.sut = communication.NewRabbitMQ()
+	uri := os.Getenv("BROKER_URI")
+	suite.sut = communication.NewRabbitMQ(uri)
 
 	suite.exchange = exchange.NewExchange("test")
 

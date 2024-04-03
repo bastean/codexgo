@@ -1,7 +1,6 @@
 package authentication
 
 import (
-	"os"
 	"time"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
@@ -10,15 +9,17 @@ import (
 
 var InvalidJWT = errors.InvalidValue{Message: "JWT Invalid"}
 
-var secretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
+type Authentication struct {
+	secretKey []byte
+}
 
-func GenerateJWT(id string) string {
+func (auth *Authentication) GenerateJWT(id string) string {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"exp": time.Now().Add((24 * time.Hour) * 7).Unix(),
 		"id":  id,
 	})
 
-	tokenString, err := token.SignedString(secretKey)
+	tokenString, err := token.SignedString(auth.secretKey)
 
 	if err != nil {
 		panic(err.Error())
@@ -27,9 +28,9 @@ func GenerateJWT(id string) string {
 	return tokenString
 }
 
-func ValidateJWT(tokenString string) jwt.MapClaims {
+func (auth *Authentication) ValidateJWT(tokenString string) jwt.MapClaims {
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
-		return secretKey, nil
+		return auth.secretKey, nil
 	})
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
@@ -37,4 +38,10 @@ func ValidateJWT(tokenString string) jwt.MapClaims {
 	}
 
 	panic(InvalidJWT)
+}
+
+func NewAuthentication(secretKey string) *Authentication {
+	return &Authentication{
+		secretKey: []byte(secretKey),
+	}
 }
