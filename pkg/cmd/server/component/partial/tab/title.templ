@@ -1,0 +1,12 @@
+package tab
+
+templ Title(title string, checked bool) {
+	<input
+		type="radio"
+		name="tabs"
+		role="tab"
+		class="tab"
+		aria-label={ title }
+		{ templ.Attributes{"checked": checked}... }
+	/>
+}

@@ -1,78 +1,32 @@
 package page
 
+import (
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/tab"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/form"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/input"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/button"
+)
+
 templ Home() {
-	<div class="flex h-screen w-full items-center justify-center">
-		<div role="tablist" class="tabs tabs-lifted">
-			<input
-				type="radio"
-				name="tabs"
-				role="tab"
-				class="tab"
-				aria-label="Register"
-			/>
-			<div
-				role="tabpanel"
-				class="tab-content bg-base-100 border-base-300 rounded-box p-6"
-			>
-				<form
-					class="flex h-full w-full flex-col items-center justify-center gap-5"
-					hx-put="/"
-					hx-target-*="#alert"
-				>
-					<input
-						name="email"
-						type="email"
-						placeholder="Email"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<input
-						name="username"
-						type="text"
-						placeholder="Username"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<input
-						name="password"
-						type="password"
-						placeholder="Password"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<button class="btn btn-primary">Register</button>
-				</form>
-			</div>
-			<input
-				type="radio"
-				name="tabs"
-				role="tab"
-				class="tab"
-				aria-label="Login"
-				checked
-			/>
-			<div
-				role="tabpanel"
-				class="tab-content bg-base-100 border-base-300 rounded-box p-6"
-			>
-				<form
-					class="flex h-full w-full flex-col items-center justify-center gap-5"
-					hx-post="/"
-					hx-target="#main"
-					hx-target-error="#alert"
-				>
-					<input
-						name="email"
-						type="email"
-						placeholder="Email"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<input
-						name="password"
-						type="password"
-						placeholder="Password"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<button class="btn btn-primary">Login</button>
-				</form>
-			</div>
-		</div>
-	</div>
+	@tab.Wrapper() {
+		@tab.List() {
+			@tab.Title("Register", false)
+			@tab.Panel() {
+				@form.Form(templ.Attributes{"hx-put": "/", "hx-target-*": "#alert"}) {
+					@input.Input(templ.Attributes{"name": "email", "type": "email", "placeholder": "Email"})
+					@input.Input(templ.Attributes{"name": "username", "type": "text", "placeholder": "Username"})
+					@input.Input(templ.Attributes{"name": "password", "type": "password", "placeholder": "Password"})
+					@button.Primary("Register")
+				}
+			}
+			@tab.Title("Login", true)
+			@tab.Panel() {
+				@form.Form(templ.Attributes{"hx-post": "/", "hx-target": "#main", "hx-target-error": "#alert"}) {
+					@input.Input(templ.Attributes{"name": "email", "type": "email", "placeholder": "Email"})
+					@input.Input(templ.Attributes{"name": "password", "type": "password", "placeholder": "Password"})
+					@button.Primary("Login")
+				}
+			}
+		}
+	}
 }

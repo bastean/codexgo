@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/component/partial"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/alert"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/gin-gonic/gin"
@@ -33,6 +33,6 @@ func FormUpdate() gin.HandlerFunc {
 
 		c.Status(http.StatusOK)
 
-		partial.AlertMsg("success", "Successfully Updated").Render(c.Request.Context(), c.Writer)
+		alert.Message("success", "Successfully Updated").Render(c.Request.Context(), c.Writer)
 	}
 }

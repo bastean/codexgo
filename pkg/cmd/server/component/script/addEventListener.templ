@@ -1,6 +1,6 @@
-package layout
+package script
 
-script InitListeners(PutAuthorization, DeleteAuthorization string) {
+script AddEventListener(PutAuthorization, DeleteAuthorization string) {
     document.addEventListener('alpine:init', () => {
         Alpine.store('codexgo', {
             codexgo_jwt: Alpine.$persist(""),

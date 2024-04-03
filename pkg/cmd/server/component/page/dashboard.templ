@@ -1,78 +1,36 @@
 package page
 
-templ Dashboard(verified bool) {
-	<div class="flex h-screen w-full items-center justify-center">
-		<div role="tablist" class="tabs tabs-lifted">
-			<input
-				type="radio"
-				name="tabs"
-				role="tab"
-				class="tab"
-				aria-label="Update"
-				checked
-			/>
-			<div
-				role="tabpanel"
-				class="tab-content bg-base-100 border-base-300 rounded-box p-6"
-			>
-				<form
-					class="flex h-full w-full flex-col items-center justify-center gap-5"
-					hx-patch="/dashboard"
-					hx-target="#alert"
-					hx-target-error="#alert"
-				>
-					<input
-						name="email"
-						type="email"
-						placeholder="Email"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<input
-						name="username"
-						type="text"
-						placeholder="Username"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<input
-						name="password"
-						type="password"
-						placeholder="Current Password"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<input
-						name="updatedPassword"
-						type="password"
-						placeholder="New Password"
-						class="input input-bordered w-full max-w-xs"
-					/>
-					<div class="w-full flex justify-start gap-3">
-						<div class={ "badge", "badge-md", templ.KV("badge-success", verified),  templ.KV("badge-error", !verified) }></div>
+import (
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/tab"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/form"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/input"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/badge"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/button"
+)
+
+templ Dashboard(isVerified bool) {
+	@tab.Wrapper() {
+		@tab.List() {
+			@tab.Title("Update", true)
+			@tab.Panel() {
+				@form.Form(templ.Attributes{"hx-patch": "/dashboard", "hx-target": "#alert", "hx-target-error": "#alert"}) {
+					@input.Input(templ.Attributes{"name": "email", "type": "email", "placeholder": "Email"})
+					@input.Input(templ.Attributes{"name": "username", "type": "text", "placeholder": "Username"})
+					@input.Input(templ.Attributes{"name": "password", "type": "password", "placeholder": "Current Password"})
+					@input.Input(templ.Attributes{"name": "updatedPassword", "type": "password", "placeholder": "New Password"})
+					<div class="w-full flex justify-start items-center gap-3">
+						@badge.Status(isVerified)
 						<span class="">Account verified</span>
 					</div>
-					<button class="btn btn-primary">Update</button>
-				</form>
-			</div>
-			<input
-				type="radio"
-				name="tabs"
-				role="tab"
-				class="tab"
-				aria-label="Delete"
-			/>
-			<div
-				role="tabpanel"
-				class="tab-content bg-base-100 border-base-300 rounded-box p-6"
-			>
-				<form
-					class="flex h-full w-full flex-col items-center justify-center gap-5"
-					hx-delete="/dashboard"
-					hx-target="#main"
-					hx-target-error="#alert"
-					hx-confirm="Delete account?"
-				>
-					<button class="btn btn-error">Delete</button>
-				</form>
-			</div>
-		</div>
-	</div>
+					@button.Primary("Update")
+				}
+			}
+			@tab.Title("Delete", false)
+			@tab.Panel() {
+				@form.Form(templ.Attributes{"hx-delete": "/", "hx-target": "#main", "hx-target-error": "#alert", "hx-confirm": "Delete account?"}) {
+					@button.Error("Delete")
+				}
+			}
+		}
+	}
 }

@@ -1,0 +1,10 @@
+package form
+
+templ Form(attrs templ.Attributes) {
+	<form
+		class="flex h-full w-full flex-col items-center justify-center gap-5"
+		{ attrs... }
+	>
+		{ children... }
+	</form>
+}

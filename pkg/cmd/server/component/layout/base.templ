@@ -2,6 +2,9 @@ package layout
 
 import (
 	"github.com/bastean/codexgo/pkg/cmd/server/event"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/alert"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/theme"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
 )
 
 var PutAuthorization = event.Client.PutAuthorization
@@ -57,14 +60,17 @@ templ Base(content templ.Component) {
 			<title>codexgo</title>
 		</head>
 		<body hx-ext="response-targets, alpine-morph, multi-swap, remove-me">
-			@Alert()
+			@alert.Popup()
+			<div class="fixed top-5 right-10 z-50">
+				@theme.Selector()
+			</div>
 			<div
 				id="main"
 				class="container mx-auto flex h-screen flex-col overflow-y-auto overflow-x-hidden"
 			>
 				@content
 			</div>
-			@InitListeners(PutAuthorization, DeleteAuthorization)
+			@script.AddEventListener(PutAuthorization, DeleteAuthorization)
 		</body>
 	</html>
 }

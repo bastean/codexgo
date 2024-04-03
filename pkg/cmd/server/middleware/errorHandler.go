@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/component/partial"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/partial/alert"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +24,7 @@ func ErrorHandler(c *gin.Context, err any) {
 
 	c.Status(code)
 
-	partial.AlertMsg("error", err.(error).Error()).Render(c.Request.Context(), c.Writer)
+	alert.Message("error", err.(error).Error()).Render(c.Request.Context(), c.Writer)
 
 	c.Abort()
 }
