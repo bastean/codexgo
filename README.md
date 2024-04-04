@@ -64,7 +64,7 @@
 
   - Actions & Workflows
     - Setup Languages and Dependencies
-    - Secrets Scanning, Linting & Test Checks
+    - Secrets Scanning ([TruffleHog Action](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#octocat-trufflehog-github-action)), Linting & Test Checks
     - Upgrade Dependencies
     - Automate Release
   - Issue Templates (Defaults)
@@ -73,7 +73,7 @@
 
   - Hooks
     - Pre-Commit
-      - Secrets Scanning & Formatting
+      - Secrets Scanning ([TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)) & Formatting
     - Commit-Msg
       - Check [Conventional Commits](https://www.conventionalcommits.org) rules
 
@@ -86,6 +86,20 @@
     - CHANGELOG
     - Commit & Tag
     - GitHub Release
+
+- Security
+
+  - Account confirmation via email
+  - Password hashing ([Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt))
+
+- Scripts
+
+  - [sync-env](scripts/sync-env/sync-env.go)
+    - Synchronize all **.env\*** files in the directory using an **.env** model
+  - [upgrade](scripts/upgrade/upgrade.go)
+    1. Upgrade Go and Node dependencies
+    2. Linting and Testing
+    3. Commit changes
 
 ## First Steps
 
@@ -182,6 +196,18 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 ### Run
 
+#### ENVs
+
+> [!IMPORTANT]
+> Before running it, you must set the following environment variables and rename the file to **.env.(dev|test|prod)**
+>
+> - [.env.example](deployments/.env.example)
+
+> [!TIP]
+> You can check the demo file to see which values you can use
+>
+> - [.env.example.demo](deployments/.env.example.demo)
+
 #### Development
 
 ```bash
@@ -231,6 +257,8 @@ make compose-prod
 <img width="49%" src="assets/readme/mobile-welcome.png" />
 
 <img width="49%" src="assets/readme/mobile-dashboard.png" />
+
+<img src="assets/readme/mail-confirm-account.png" />
 
 </div>
 
