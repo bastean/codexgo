@@ -56,15 +56,13 @@ generate-required:
 #* Initializations
 init: upgrade-managers install-deps generate-required
 	
-init-ci: upgrade-managers install-deps
-
 init-from-zero:
 	@git init
 	@make init
 	@${npx} husky install
 
 #* Linters/Formatters
-lint:
+lint: generate-required
 	@go mod tidy
 	@gofmt -l -s -w .
 	@${npx} prettier --ignore-unknown --write .

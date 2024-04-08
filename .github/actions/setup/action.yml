@@ -20,4 +20,4 @@ runs:
 
     - name: Install Dependencies
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
-      run: make init-ci
+      run: make init
