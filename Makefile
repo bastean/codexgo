@@ -1,3 +1,5 @@
+.PHONY: *
+
 #* ---------- VARS ----------
 
 git-reset-hard = git reset --hard HEAD
