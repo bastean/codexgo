@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.1](https://github.com/bastean/codexgo/compare/v3.0.0...v3.0.1) (2024-04-08)
+
+### Bug Fixes
+
+- **deps:** upgrade dependencies ([bd92cf7](https://github.com/bastean/codexgo/commit/bd92cf74fced77cb9011171e60f15d687ddc94f7))
+- **makefile:** add phony target ([3c33a90](https://github.com/bastean/codexgo/commit/3c33a9005396067e0a2c130d78648a41bc677f73))
+- **makefile:** remove init-ci rule ([3311e14](https://github.com/bastean/codexgo/commit/3311e144798aaff6dfe34df1c2c8aa9751f3ca68))
+
+### Refactors
+
+- **makefile:** change rules order ([95c6170](https://github.com/bastean/codexgo/commit/95c6170e4719d0702efe2ed75197c42cd3103494))
+
 ## [3.0.0](https://github.com/bastean/codexgo/compare/v2.0.1...v3.0.0) (2024-04-04)
 
 ### Documentation
