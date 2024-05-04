@@ -25,7 +25,7 @@ type UserCollection struct {
 	hashing    model.Hashing
 }
 
-func (db UserCollection) Save(user *aggregate.User) {
+func (db *UserCollection) Save(user *aggregate.User) {
 	newUser := userDocument(*user.ToPrimitives())
 
 	newUser.Password = db.hashing.Hash(newUser.Password)
@@ -37,7 +37,7 @@ func (db UserCollection) Save(user *aggregate.User) {
 	}
 }
 
-func (db UserCollection) Update(user *aggregate.User) {
+func (db *UserCollection) Update(user *aggregate.User) {
 	updateFilter := bson.M{"id": user.Id.Value}
 
 	updateUser := bson.M{}
@@ -65,7 +65,7 @@ func (db UserCollection) Update(user *aggregate.User) {
 	}
 }
 
-func (db UserCollection) Delete(id *valueObject.Id) {
+func (db *UserCollection) Delete(id *valueObject.Id) {
 	deleteFilter := bson.M{"id": id.Value}
 
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
@@ -75,7 +75,7 @@ func (db UserCollection) Delete(id *valueObject.Id) {
 	}
 }
 
-func (db UserCollection) Search(filter model.RepositorySearchFilter) *aggregate.User {
+func (db *UserCollection) Search(filter model.RepositorySearchFilter) *aggregate.User {
 	var searchFilter bson.M
 	var index string
 

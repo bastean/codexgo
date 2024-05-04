@@ -7,7 +7,7 @@ import (
 
 type Bcrypt struct{}
 
-func (hashing Bcrypt) Hash(plain string) string {
+func (hashing *Bcrypt) Hash(plain string) string {
 	salt := 10
 	bytes, err := bcrypt.GenerateFromPassword([]byte(plain), salt)
 
@@ -18,7 +18,7 @@ func (hashing Bcrypt) Hash(plain string) string {
 	return string(bytes)
 }
 
-func (hashing Bcrypt) IsNotEqual(hashed, plain string) bool {
+func (hashing *Bcrypt) IsNotEqual(hashed, plain string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain))
 	return err != nil
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var InvalidJWT = errors.InvalidValue{Message: "JWT Invalid"}
+var InvalidJWT = errors.NewInvalidValue("JWT Invalid")
 
 type Authentication struct {
 	secretKey []byte

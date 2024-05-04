@@ -7,7 +7,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var InvalidIdValue = errors.InvalidValue{Message: "Id Invalid"}
+var InvalidIdValue = errors.NewInvalidValue("Id Invalid")
 
 type Id struct {
 	Value string `validate:"uuid4"`

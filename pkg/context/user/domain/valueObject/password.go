@@ -8,7 +8,7 @@ import (
 const PasswordMinCharactersLength = "8"
 const PasswordMaxCharactersLength = "64"
 
-var InvalidPasswordValue = errors.InvalidValue{Message: "Password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters"}
+var InvalidPasswordValue = errors.NewInvalidValue("Password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters")
 
 type Password struct {
 	Value string `validate:"gte=8,lte=64"`

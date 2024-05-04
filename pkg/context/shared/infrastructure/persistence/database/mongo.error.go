@@ -18,9 +18,9 @@ func HandleMongoDuplicateKeyError(error error) {
 
 	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
-	panic(errors.AlreadyExist{Message: field + " already registered"})
+	panic(errors.NewAlreadyExist(field + " already registered"))
 }
 
 func HandleMongoDocumentNotFound(index string) {
-	panic(errors.NotExist{Message: "Not Found " + index})
+	panic(errors.NewNotExist("Not Found " + index))
 }

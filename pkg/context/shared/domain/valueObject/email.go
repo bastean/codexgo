@@ -7,7 +7,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-var InvalidEmailValue = errors.InvalidValue{Message: "Email Invalid"}
+var InvalidEmailValue = errors.NewInvalidValue("Email Invalid")
 
 type Email struct {
 	Value string `validate:"email"`
@@ -22,13 +22,13 @@ func ensureIsValidEmail(email *Email) error {
 func NewEmail(email string) *Email {
 	email = strings.TrimSpace(email)
 
-	emailVo := &Email{email}
+	emailVO := &Email{email}
 
-	err := ensureIsValidEmail(emailVo)
+	err := ensureIsValidEmail(emailVO)
 
 	if err != nil {
 		panic(InvalidEmailValue)
 	}
 
-	return emailVo
+	return emailVO
 }

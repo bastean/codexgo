@@ -9,7 +9,7 @@ import (
 
 var RegisteredSucceededEventRoutingKey = message.NewMessageRoutingKey(&message.MessageRoutingKey{Module: "user", Version: "1", Type: message.Event, Aggregate: "user", Event: "registered", Status: message.Succeeded})
 
-var FailedRegisteredSucceededEvent = errors.Failed{Message: "Failed message creation for " + RegisteredSucceededEventRoutingKey}
+var FailedRegisteredSucceededEvent = errors.NewFailed("Failed message creation for " + RegisteredSucceededEventRoutingKey)
 
 type RegisteredSucceededEventAttributes struct {
 	Id       string
