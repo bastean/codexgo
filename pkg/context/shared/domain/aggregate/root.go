@@ -21,5 +21,7 @@ func (root *AggregateRoot) PullMessages() []*message.Message {
 }
 
 func NewAggregateRoot() *AggregateRoot {
-	return &AggregateRoot{Messages: []*message.Message{}}
+	return &AggregateRoot{
+		Messages: []*message.Message{},
+	}
 }

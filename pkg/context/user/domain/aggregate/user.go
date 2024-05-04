@@ -33,22 +33,22 @@ func create(id, email, username, password string, verified bool) *User {
 	verifiedVO := valueObject.NewVerified(verified)
 
 	return &User{
-		aggregateRoot,
-		idVO,
-		emailVO,
-		usernameVO,
-		passwordVO,
-		verifiedVO,
+		AggregateRoot: aggregateRoot,
+		Id:            idVO,
+		Email:         emailVO,
+		Username:      usernameVO,
+		Password:      passwordVO,
+		Verified:      verifiedVO,
 	}
 }
 
 func (user *User) ToPrimitives() *UserPrimitive {
 	return &UserPrimitive{
-		user.Id.Value,
-		user.Email.Value,
-		user.Username.Value,
-		user.Password.Value,
-		user.Verified.Value,
+		Id:       user.Id.Value,
+		Email:    user.Email.Value,
+		Username: user.Username.Value,
+		Password: user.Password.Value,
+		Verified: user.Verified.Value,
 	}
 }
 

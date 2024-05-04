@@ -122,5 +122,7 @@ func NewUserMongoRepository(mdb *database.MongoDB, collectionName string, hashin
 		},
 	})
 
-	return &UserCollection{collection, hashing}
+	return &UserCollection{
+		collection: collection,
+		hashing:    hashing}
 }
