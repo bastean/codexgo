@@ -6,9 +6,9 @@ import (
 )
 
 func Random() *verify.Command {
-	return verify.NewCommand(valueObjectMother.RandomId().Value)
-}
+	id, _ := valueObjectMother.RandomId()
 
-func Invalid() *verify.Command {
-	return verify.NewCommand(valueObjectMother.InvalidId().Value)
+	return &verify.Command{
+		Id: id.Value(),
+	}
 }

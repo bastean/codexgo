@@ -8,6 +8,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
 )
 
 type Smtp struct {
@@ -17,18 +18,39 @@ type Smtp struct {
 	ServerUrl                   string
 }
 
-func (client *Smtp) Send(mailTemplate model.MailTemplate) {
+func (client *Smtp) Send(mailTemplate model.MailTemplate) error {
+	var err error
+
 	switch mail := mailTemplate.(type) {
 	case *template.AccountConfirmationMail:
-		client.SendAccountConfirmation(mail)
+		err = client.SendAccountConfirmation(mail)
 	}
+
+	if err != nil {
+		return errs.BubbleUp("Send", err)
+	}
+
+	return nil
 }
 
 func (client *Smtp) SendMail(to []string, message []byte) error {
-	return smtp.SendMail(client.SmtpUrl, client.Auth, client.Username, to, message)
+	err := smtp.SendMail(client.SmtpUrl, client.Auth, client.Username, to, message)
+
+	if err != nil {
+		return errs.NewFailedError(&errs.Bubble{
+			Where: "SendMail",
+			What:  "failed to send a mail",
+			Why: errs.Meta{
+				"SmtpUrl": client.SmtpUrl,
+			},
+			Who: err,
+		})
+	}
+
+	return nil
 }
 
-func (client *Smtp) SendAccountConfirmation(mail *template.AccountConfirmationMail) {
+func (client *Smtp) SendAccountConfirmation(mail *template.AccountConfirmationMail) error {
 	var message bytes.Buffer
 
 	// TODO!: mail.To[0]
@@ -43,8 +65,10 @@ func (client *Smtp) SendAccountConfirmation(mail *template.AccountConfirmationMa
 	err := client.SendMail(mail.To, message.Bytes())
 
 	if err != nil {
-		panic(err)
+		return errs.BubbleUp("SendAccountConfirmation", err)
 	}
+
+	return nil
 }
 
 func NewNotifySmtpMail(host, port, username, password, serverUrl string) model.Mail {

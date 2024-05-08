@@ -18,15 +18,22 @@ type RegisteredSucceededEventConsumerTestSuite struct {
 	sut      model.Consumer
 	sendMail *sendMail.SendMail
 	mail     *communicationMock.MailMock
-	queue    []*queue.Queue
+	queues   []*queue.Queue
 }
 
 func (suite *RegisteredSucceededEventConsumerTestSuite) SetupTest() {
-	queueName := queue.NewQueueName(&queue.QueueName{Module: "queue", Action: "assert", Event: "test.succeeded"})
-	suite.queue = append(suite.queue, queue.NewQueue(queueName))
-	suite.mail = communicationMock.NewMailMock()
-	suite.sendMail = sendMail.NewSendMail(suite.mail)
-	suite.sut = sendMail.NewRegisteredSucceededEventConsumer(suite.sendMail, suite.queue)
+	queueName := queue.NewQueueName(&queue.QueueName{
+		Module: "queue",
+		Action: "assert",
+		Event:  "test.succeeded",
+	})
+	suite.queues = append(suite.queues, &queue.Queue{Name: queueName})
+	suite.mail = new(communicationMock.MailMock)
+	suite.sendMail = &sendMail.SendMail{Mail: suite.mail}
+	suite.sut = &sendMail.RegisteredSucceededEventConsumer{
+		UseCase: suite.sendMail,
+		Queues:  suite.queues,
+	}
 }
 
 func (suite *RegisteredSucceededEventConsumerTestSuite) TestEventConsumer() {
@@ -36,13 +43,17 @@ func (suite *RegisteredSucceededEventConsumerTestSuite) TestEventConsumer() {
 
 	json.Unmarshal(message.Attributes, attributes)
 
-	mailTemplate := template.NewMail([]string{attributes.Email})
-
-	accountConfirmationTemplate := template.NewAccountConfirmationMail(mailTemplate, attributes.Username, attributes.Id)
+	accountConfirmationTemplate := &template.AccountConfirmationMail{
+		Mail: &template.Mail{
+			To: []string{attributes.Email},
+		},
+		Username:         attributes.Username,
+		ConfirmationLink: attributes.Id,
+	}
 
 	suite.mail.On("Send", accountConfirmationTemplate)
 
-	suite.sut.On(message)
+	suite.NoError(suite.sut.On(message))
 
 	suite.mail.AssertExpectations(suite.T())
 }

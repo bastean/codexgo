@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/service"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -13,31 +13,47 @@ type MongoDB struct {
 	*mongo.Database
 }
 
-func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) {
+func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) error {
 	err := mdb.Client.Disconnect(ctx)
 
 	if err != nil {
-		service.FailOnError(err, "failed to close mongodb connection")
+		return errs.NewInternalError(&errs.Bubble{
+			Where: "CloseMongoDatabase",
+			What:  "failed to close mongodb connection",
+			Who:   err,
+		})
 	}
+
+	return nil
 }
 
-func NewMongoDatabase(uri, databaseName string) *MongoDB {
+func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 	var err error
 
 	clientOptions := options.Client().ApplyURI(uri)
+
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
 	if err != nil {
-		panic(err)
+		return nil, errs.NewInternalError(&errs.Bubble{
+			Where: "NewMongoDatabase",
+			What:  "failed to create a mongodb client",
+			Who:   err,
+		})
 	}
 
 	err = client.Ping(context.Background(), nil)
 
 	if err != nil {
-		panic(err)
+		return nil, errs.NewInternalError(&errs.Bubble{
+			Where: "NewMongoDatabase",
+			What:  "failed to connect with mongodb",
+			Who:   err,
+		})
 	}
 
 	return &MongoDB{
 		Client:   client,
-		Database: client.Database(databaseName)}
+		Database: client.Database(databaseName),
+	}, nil
 }

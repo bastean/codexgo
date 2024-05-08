@@ -22,20 +22,25 @@ type UserUpdateTestSuite struct {
 }
 
 func (suite *UserUpdateTestSuite) SetupTest() {
-	suite.repository = persistenceMock.NewRepositoryMock()
-	suite.hashing = cryptographicMock.NewHashingMock()
-	suite.update = update.NewUpdate(suite.repository, suite.hashing)
-	suite.sut = update.NewCommandHandler(suite.update)
+	suite.repository = new(persistenceMock.RepositoryMock)
+	suite.hashing = new(cryptographicMock.HashingMock)
+	suite.update = &update.Update{
+		Repository: suite.repository,
+		Hashing:    suite.hashing,
+	}
+	suite.sut = &update.CommandHandler{
+		UseCase: suite.update,
+	}
 }
 
 func (suite *UserUpdateTestSuite) TestUpdate() {
 	command := commandMother.Random()
 
-	user := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
+	user, _ := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 
-	idVO := valueObject.NewId(command.Id)
+	idVO, _ := valueObject.NewId(command.Id)
 
-	filter := model.RepositorySearchFilter{Id: idVO}
+	filter := model.RepositorySearchCriteria{Id: idVO}
 
 	suite.repository.On("Search", filter).Return(user)
 
@@ -43,7 +48,7 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 
 	suite.repository.On("Update", user)
 
-	suite.sut.Handle(command)
+	suite.NoError(suite.sut.Handle(command))
 
 	suite.repository.AssertExpectations(suite.T())
 

@@ -8,20 +8,27 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/service/mother"
 )
 
-var RegisteredSucceededEventRoutingKey = message.NewMessageRoutingKey(&message.MessageRoutingKey{Module: "user", Version: "1", Type: message.Event, Aggregate: "user", Event: "registered", Status: message.Succeeded})
+var RegisteredSucceededEventTypeRoutingKey = message.NewRoutingKey(&message.MessageRoutingKey{
+	Module:    "user",
+	Version:   "1",
+	Type:      message.Type.Event,
+	Aggregate: "user",
+	Event:     "registered",
+	Status:    message.Status.Succeeded,
+})
 
 func Random() *message.Message {
 	id := mother.Create.UUID()
 	email := mother.Create.Email()
 	username := mother.Create.Username()
 
-	attributes := sendMail.NewRegisteredSucceededEventAttributes(id, email, username)
-
-	attributesJson, err := json.Marshal(attributes)
-
-	if err != nil {
-		panic(err)
+	attributes := sendMail.RegisteredSucceededEventAttributes{
+		Id:       id,
+		Email:    email,
+		Username: username,
 	}
 
-	return message.NewMessage(RegisteredSucceededEventRoutingKey, attributesJson, []byte{})
+	attributesJson, _ := json.Marshal(attributes)
+
+	return message.NewMessage(RegisteredSucceededEventTypeRoutingKey, attributesJson, []byte{})
 }

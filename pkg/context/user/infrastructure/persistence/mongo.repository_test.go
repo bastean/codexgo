@@ -22,18 +22,18 @@ type UserMongoRepositoryTestSuite struct {
 func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 	uri := os.Getenv("DATABASE_URI")
 	databaseName := "codexgo-test"
-	database := database.NewMongoDatabase(uri, databaseName)
+	database, _ := database.NewMongoDatabase(uri, databaseName)
 	collectionName := "users-test"
-	suite.hashing = cryptographicMock.NewHashingMock()
+	suite.hashing = new(cryptographicMock.HashingMock)
 	suite.sut = persistence.NewUserMongoRepository(database, collectionName, suite.hashing)
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSave() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
 
-	suite.NotPanics(func() { suite.sut.Save(user) })
+	suite.NoError(suite.sut.Save(user))
 
 	suite.hashing.AssertExpectations(suite.T())
 }
@@ -41,25 +41,29 @@ func (suite *UserMongoRepositoryTestSuite) TestSave() {
 func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
 
-	suite.NotPanics(func() { suite.sut.Save(user) })
+	suite.NoError(suite.sut.Save(user))
 
-	suite.Panics(func() { suite.sut.Save(user) })
+	suite.Error(suite.sut.Save(user))
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
 
-	suite.NotPanics(func() { suite.sut.Save(user) })
+	suite.NoError(suite.sut.Save(user))
 
-	user.Password = valueObjectMother.RandomPassword()
+	password, _ := valueObjectMother.RandomPassword()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+	user.Password = password
 
-	suite.NotPanics(func() { suite.sut.Update(user) })
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
+
+	suite.NoError(suite.sut.Save(user))
+
+	suite.NoError(suite.sut.Update(user))
 
 	suite.hashing.AssertExpectations(suite.T())
 }
@@ -67,11 +71,11 @@ func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 func (suite *UserMongoRepositoryTestSuite) TestDelete() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value)
+	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
 
-	suite.NotPanics(func() { suite.sut.Save(user) })
+	suite.NoError(suite.sut.Save(user))
 
-	suite.NotPanics(func() { suite.sut.Delete(user.Id) })
+	suite.NoError(suite.sut.Delete(user.Id))
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSearch() {
@@ -79,13 +83,15 @@ func (suite *UserMongoRepositoryTestSuite) TestSearch() {
 
 	expected.PullMessages()
 
-	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value())
 
-	suite.NotPanics(func() { suite.sut.Save(expected) })
+	suite.NoError(suite.sut.Save(expected))
 
-	filter := model.RepositorySearchFilter{Email: expected.Email}
+	filter := model.RepositorySearchCriteria{Email: expected.Email}
 
-	actual := suite.sut.Search(filter)
+	user, _ := suite.sut.Search(filter)
+
+	actual := user
 
 	suite.EqualValues(expected, actual)
 }

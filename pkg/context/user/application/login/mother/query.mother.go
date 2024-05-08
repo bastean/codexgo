@@ -6,9 +6,11 @@ import (
 )
 
 func Random() *login.Query {
-	return login.NewQuery(valueObjectMother.RandomEmail().Value, valueObjectMother.RandomPassword().Value)
-}
+	email, _ := valueObjectMother.RandomEmail()
+	password, _ := valueObjectMother.RandomPassword()
 
-func Invalid() *login.Query {
-	return login.NewQuery(valueObjectMother.InvalidEmail().Value, valueObjectMother.WithInvalidPasswordLength().Value)
+	return &login.Query{
+		Email:    email.Value(),
+		Password: password.Value(),
+	}
 }

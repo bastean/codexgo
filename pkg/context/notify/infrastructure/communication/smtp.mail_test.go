@@ -28,11 +28,15 @@ func (suite *SmtpMailTestSuite) SetupTest() {
 }
 
 func (suite *SmtpMailTestSuite) TestSendAccountConfirmation() {
-	mailTemplate := template.NewMail([]string{suite.username})
+	accountConfirmationTemplate := &template.AccountConfirmationMail{
+		Mail: &template.Mail{
+			To: []string{suite.username},
+		},
+		Username:         suite.username,
+		ConfirmationLink: "test-send-account-confirmation-success",
+	}
 
-	accountConfirmationTemplate := template.NewAccountConfirmationMail(mailTemplate, suite.username, "test-send-account-confirmation-success")
-
-	suite.NotPanics(func() { suite.sut.Send(accountConfirmationTemplate) })
+	suite.NoError(suite.sut.Send(accountConfirmationTemplate))
 }
 
 func TestIntegrationSmtpMailSuite(t *testing.T) {

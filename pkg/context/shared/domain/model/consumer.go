@@ -7,5 +7,5 @@ import (
 
 type Consumer interface {
 	SubscribedTo() []*queue.Queue
-	On(message *message.Message)
+	On(message *message.Message) error
 }

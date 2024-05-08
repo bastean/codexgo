@@ -7,9 +7,9 @@ import (
 )
 
 type Broker interface {
-	AddExchange(exchange *exchange.Exchange)
-	AddQueue(queue *queue.Queue)
-	AddQueueMessageBind(queue *queue.Queue, bindingKeys []string)
-	AddQueueConsumer(consumer Consumer)
-	PublishMessages(messages []*message.Message)
+	AddExchange(exchange *exchange.Exchange) error
+	AddQueue(queue *queue.Queue) error
+	AddQueueMessageBind(queue *queue.Queue, bindingKeys []string) error
+	AddQueueConsumer(consumer Consumer) error
+	PublishMessages(messages []*message.Message) error
 }

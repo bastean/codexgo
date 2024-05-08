@@ -3,13 +3,18 @@ package message
 import (
 	"encoding/json"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 )
 
-var RegisteredSucceededEventRoutingKey = message.NewMessageRoutingKey(&message.MessageRoutingKey{Module: "user", Version: "1", Type: message.Event, Aggregate: "user", Event: "registered", Status: message.Succeeded})
-
-var FailedRegisteredSucceededEvent = errors.NewFailed("Failed message creation for " + RegisteredSucceededEventRoutingKey)
+var RegisteredSucceededEventTypeRoutingKey = message.NewRoutingKey(&message.MessageRoutingKey{
+	Module:    "user",
+	Version:   "1",
+	Type:      message.Type.Event,
+	Aggregate: "user",
+	Event:     "registered",
+	Status:    message.Status.Succeeded,
+})
 
 type RegisteredSucceededEventAttributes struct {
 	Id       string
@@ -17,12 +22,19 @@ type RegisteredSucceededEventAttributes struct {
 	Username string
 }
 
-func NewRegisteredSucceededEvent(attributes *RegisteredSucceededEventAttributes) *message.Message {
+func NewRegisteredSucceededEvent(attributes *RegisteredSucceededEventAttributes) (*message.Message, error) {
 	attributesJson, err := json.Marshal(attributes)
 
 	if err != nil {
-		panic(FailedRegisteredSucceededEvent)
+		return nil, errs.NewInternalError(&errs.Bubble{
+			Where: "NewRegisteredSucceededEvent",
+			What:  "failed to create event message",
+			Why: errs.Meta{
+				"Routing Key": RegisteredSucceededEventTypeRoutingKey,
+			},
+			Who: err,
+		})
 	}
 
-	return message.NewMessage(RegisteredSucceededEventRoutingKey, attributesJson, []byte{})
+	return message.NewMessage(RegisteredSucceededEventTypeRoutingKey, attributesJson, []byte{}), nil
 }

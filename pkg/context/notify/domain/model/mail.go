@@ -1,5 +1,5 @@
 package model
 
 type Mail interface {
-	Send(template MailTemplate)
+	Send(template MailTemplate) error
 }

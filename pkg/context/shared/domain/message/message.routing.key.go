@@ -5,17 +5,25 @@ import (
 	"strings"
 )
 
-var (
-	Event   = "event"
-	Command = "command"
-)
+var Type = struct {
+	Event   string
+	Command string
+}{
+	Event:   "event",
+	Command: "command",
+}
 
-var (
-	Queued    = "queued"
-	Succeeded = "succeeded"
-	Failed    = "failed"
-	Done      = "done"
-)
+var Status = struct {
+	Queued    string
+	Succeeded string
+	Failed    string
+	Done      string
+}{
+	Queued:    "queued",
+	Succeeded: "succeeded",
+	Failed:    "failed",
+	Done:      "done",
+}
 
 type MessageRoutingKey struct {
 	Organization string
@@ -28,15 +36,15 @@ type MessageRoutingKey struct {
 	Status       string
 }
 
-func NewMessageRoutingKey(routingKey *MessageRoutingKey) string {
+func NewRoutingKey(routingKey *MessageRoutingKey) string {
 	if routingKey.Organization == "" {
 		routingKey.Organization = "bastean"
 	}
 
 	switch routingKey.Type {
-	case Event:
+	case Type.Event:
 		routingKey.Command = ""
-	case Command:
+	case Type.Command:
 		routingKey.Event = ""
 	}
 

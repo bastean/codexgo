@@ -5,7 +5,7 @@ go 1.22
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.4
 	github.com/a-h/templ v0.2.663
-	github.com/brianvoe/gofakeit/v6 v6.28.0
+	github.com/brianvoe/gofakeit/v7 v7.0.2
 	github.com/cucumber/godog v0.14.1
 	github.com/gin-contrib/secure v1.0.0
 	github.com/gin-gonic/gin v1.9.1

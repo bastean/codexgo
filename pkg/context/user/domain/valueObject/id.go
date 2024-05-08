@@ -1,15 +1,10 @@
 package valueObject
 
 import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	sharedValueObject "github.com/bastean/codexgo/pkg/context/shared/domain/valueObject"
 )
 
-type Id struct {
-	Value string
-}
-
-func NewId(id string) *Id {
-	return &Id{
-		Value: sharedValueObject.NewId(id).Value,
-	}
+func NewId(id string) (model.ValueObject[string], error) {
+	return sharedValueObject.NewId(id)
 }

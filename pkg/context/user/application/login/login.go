@@ -1,10 +1,10 @@
 package login
 
 import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 )
 
 type Login struct {
@@ -12,17 +12,18 @@ type Login struct {
 	model.Hashing
 }
 
-func (login *Login) Run(email *valueObject.Email, password *valueObject.Password) *aggregate.User {
-	user := login.Repository.Search(model.RepositorySearchFilter{Email: email})
+func (login *Login) Run(input *Input) (*aggregate.User, error) {
+	user, err := login.Repository.Search(model.RepositorySearchCriteria{Email: input.Email})
 
-	service.IsPasswordInvalid(login.Hashing, user.Password.Value, password.Value)
-
-	return user
-}
-
-func NewLogin(repository model.Repository, hashing model.Hashing) *Login {
-	return &Login{
-		Repository: repository,
-		Hashing:    hashing,
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
 	}
+
+	err = service.IsPasswordInvalid(login.Hashing, user.Password.Value(), input.Password.Value())
+
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
+
+	return user, nil
 }

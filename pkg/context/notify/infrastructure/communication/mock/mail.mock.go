@@ -9,10 +9,7 @@ type MailMock struct {
 	mock.Mock
 }
 
-func (m *MailMock) Send(template model.MailTemplate) {
-	m.Called(template)
-}
-
-func NewMailMock() *MailMock {
-	return new(MailMock)
+func (mail *MailMock) Send(template model.MailTemplate) error {
+	args := mail.Called(template)
+	return args.Get(0).(error)
 }

@@ -1,6 +1,10 @@
 package update
 
 import (
+	"errors"
+
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
@@ -11,31 +15,50 @@ type Update struct {
 	model.Hashing
 }
 
-func (update *Update) Run(userUpdate *Command) {
-	idVO := valueObject.NewId(userUpdate.Id)
+func (update *Update) Run(userUpdate *Command) (*types.Empty, error) {
+	idVO, err := valueObject.NewId(userUpdate.Id)
 
-	userRegistered := update.Repository.Search(model.RepositorySearchFilter{Id: idVO})
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
 
-	service.IsPasswordInvalid(update.Hashing, userRegistered.Password.Value, userUpdate.Password)
+	userRegistered, err := update.Repository.Search(model.RepositorySearchCriteria{Id: idVO})
+
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
+
+	err = service.IsPasswordInvalid(update.Hashing, userRegistered.Password.Value(), userUpdate.Password)
+
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
+
+	var emailErr, usernameErr, passwordErr error
 
 	if userUpdate.Email != "" {
-		userRegistered.Email = valueObject.NewEmail(userUpdate.Email)
+		userRegistered.Email, emailErr = valueObject.NewEmail(userUpdate.Email)
 	}
 
 	if userUpdate.Username != "" {
-		userRegistered.Username = valueObject.NewUsername(userUpdate.Username)
+		userRegistered.Username, usernameErr = valueObject.NewUsername(userUpdate.Username)
 	}
 
 	if userUpdate.UpdatedPassword != "" {
-		userRegistered.Password = valueObject.NewPassword(userUpdate.UpdatedPassword)
+		userRegistered.Password, passwordErr = valueObject.NewPassword(userUpdate.UpdatedPassword)
 	}
 
-	update.Repository.Update(userRegistered)
-}
+	err = errors.Join(emailErr, usernameErr, passwordErr)
 
-func NewUpdate(repository model.Repository, hashing model.Hashing) *Update {
-	return &Update{
-		Repository: repository,
-		Hashing:    hashing,
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
 	}
+
+	err = update.Repository.Update(userRegistered)
+
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
+
+	return nil, nil
 }

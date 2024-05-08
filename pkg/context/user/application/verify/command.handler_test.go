@@ -20,9 +20,13 @@ type UserVerifyTestSuite struct {
 }
 
 func (suite *UserVerifyTestSuite) SetupTest() {
-	suite.repository = persistenceMock.NewRepositoryMock()
-	suite.verify = verify.NewVerify(suite.repository)
-	suite.sut = verify.NewCommandHandler(suite.verify)
+	suite.repository = new(persistenceMock.RepositoryMock)
+	suite.verify = &verify.Verify{
+		Repository: suite.repository,
+	}
+	suite.sut = &verify.CommandHandler{
+		UseCase: suite.verify,
+	}
 }
 
 func (suite *UserVerifyTestSuite) TestVerify() {
@@ -30,23 +34,23 @@ func (suite *UserVerifyTestSuite) TestVerify() {
 
 	user := aggregateMother.Random()
 
-	idVO := valueObject.NewId(command.Id)
+	idVO, _ := valueObject.NewId(command.Id)
 
 	user.Id = idVO
 
 	user.Password = nil
 
-	filter := model.RepositorySearchFilter{Id: idVO}
+	filter := model.RepositorySearchCriteria{Id: idVO}
 
 	suite.repository.On("Search", filter).Return(user)
 
-	verifiedVO := valueObject.NewVerified(true)
+	verifiedVO, _ := valueObject.NewVerified(true)
 
 	user.Verified = verifiedVO
 
 	suite.repository.On("Update", user)
 
-	suite.sut.Handle(command)
+	suite.NoError(suite.sut.Handle(command))
 
 	suite.repository.AssertExpectations(suite.T())
 }

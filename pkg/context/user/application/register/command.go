@@ -6,12 +6,3 @@ type Command struct {
 	Username string
 	Password string
 }
-
-func NewCommand(id, email, username, password string) *Command {
-	return &Command{
-		Id:       id,
-		Email:    email,
-		Username: username,
-		Password: password,
-	}
-}

@@ -19,17 +19,25 @@ func (suite *UserBcryptHashingTestSuite) SetupTest() {
 }
 
 func (suite *UserBcryptHashingTestSuite) TestHash() {
-	plain := valueObjectMother.RandomPassword().Value
+	password, _ := valueObjectMother.RandomPassword()
 
-	hashed := suite.sut.Hash(plain)
+	plain := password.Value()
+
+	hashed, err := suite.sut.Hash(plain)
+
+	suite.NoError(err)
 
 	suite.NotEqual(plain, hashed)
 }
 
 func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
-	plain := valueObjectMother.RandomPassword().Value
+	password, _ := valueObjectMother.RandomPassword()
 
-	hashed := suite.sut.Hash(plain)
+	plain := password.Value()
+
+	hashed, err := suite.sut.Hash(plain)
+
+	suite.NoError(err)
 
 	isNotEqual := suite.sut.IsNotEqual(hashed, plain)
 

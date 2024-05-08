@@ -2,18 +2,20 @@ package sendMail
 
 import (
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 )
 
 type SendMail struct {
 	model.Mail
 }
 
-func (sendMail *SendMail) Run(mail model.MailTemplate) {
-	sendMail.Mail.Send(mail)
-}
+func (sendMail *SendMail) Run(mail model.MailTemplate) (*types.Empty, error) {
+	err := sendMail.Mail.Send(mail)
 
-func NewSendMail(mail model.Mail) *SendMail {
-	return &SendMail{
-		Mail: mail,
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
 	}
+
+	return nil, nil
 }

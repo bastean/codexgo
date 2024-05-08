@@ -3,35 +3,44 @@ package valueObject
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/go-playground/validator/v10"
 )
 
 const UsernameMinCharactersLength = "2"
 const UsernameMaxCharactersLength = "20"
 
-var InvalidUsernameValue = errors.NewInvalidValue("Username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only")
-
 type Username struct {
-	Value string `validate:"gte=2,lte=20,alphanum"`
+	value string `validate:"gte=2,lte=20,alphanum"`
 }
 
-func ensureIsValidUsername(username *Username) error {
+func (username *Username) Value() string {
+	return username.value
+}
+
+func (username *Username) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
 	return validate.Struct(username)
 }
 
-func NewUsername(username string) *Username {
+func NewUsername(username string) (model.ValueObject[string], error) {
 	username = strings.TrimSpace(username)
 
-	usernameVO := &Username{username}
-
-	err := ensureIsValidUsername(usernameVO)
-
-	if err != nil {
-		panic(InvalidUsernameValue)
+	usernameVO := &Username{
+		value: username,
 	}
 
-	return usernameVO
+	if usernameVO.IsValid() != nil {
+		return nil, errs.NewInvalidValueError(&errs.Bubble{
+			Where: "NewUsername",
+			What:  "must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only",
+			Why: errs.Meta{
+				"Username": username,
+			},
+		})
+	}
+
+	return usernameVO, nil
 }

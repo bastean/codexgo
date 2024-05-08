@@ -1,19 +1,28 @@
 package verify
 
-import "github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
+import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
+)
 
 type CommandHandler struct {
-	*Verify
+	model.UseCase[model.ValueObject[string], *types.Empty]
 }
 
-func (handler *CommandHandler) Handle(command *Command) {
-	idVO := valueObject.NewId(command.Id)
+func (handler *CommandHandler) Handle(command *Command) error {
+	idVO, err := valueObject.NewId(command.Id)
 
-	handler.Verify.Run(idVO)
-}
-
-func NewCommandHandler(verify *Verify) *CommandHandler {
-	return &CommandHandler{
-		Verify: verify,
+	if err != nil {
+		return errs.BubbleUp("Handle", err)
 	}
+
+	_, err = handler.UseCase.Run(idVO)
+
+	if err != nil {
+		return errs.BubbleUp("Handle", err)
+	}
+
+	return nil
 }

@@ -6,9 +6,17 @@ import (
 )
 
 func Random() *update.Command {
-	return update.NewCommand(valueObjectMother.RandomId().Value, valueObjectMother.RandomEmail().Value, valueObjectMother.RandomUsername().Value, valueObjectMother.RandomPassword().Value, valueObjectMother.RandomPassword().Value)
-}
+	id, _ := valueObjectMother.RandomId()
+	email, _ := valueObjectMother.RandomEmail()
+	username, _ := valueObjectMother.RandomUsername()
+	password, _ := valueObjectMother.RandomPassword()
+	updatedPassword, _ := valueObjectMother.RandomPassword()
 
-func Invalid() *update.Command {
-	return update.NewCommand(valueObjectMother.InvalidId().Value, valueObjectMother.InvalidEmail().Value, valueObjectMother.WithInvalidUsernameLength().Value, valueObjectMother.WithInvalidPasswordLength().Value, valueObjectMother.WithInvalidPasswordLength().Value)
+	return &update.Command{
+		Id:              id.Value(),
+		Email:           email.Value(),
+		Username:        username.Value(),
+		Password:        password.Value(),
+		UpdatedPassword: updatedPassword.Value(),
+	}
 }

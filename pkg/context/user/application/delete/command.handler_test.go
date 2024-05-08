@@ -20,20 +20,25 @@ type UserDeleteTestSuite struct {
 }
 
 func (suite *UserDeleteTestSuite) SetupTest() {
-	suite.repository = persistenceMock.NewRepositoryMock()
-	suite.hashing = cryptographicMock.NewHashingMock()
-	suite.delete = delete.NewDelete(suite.repository, suite.hashing)
-	suite.sut = delete.NewCommandHandler(suite.delete)
+	suite.repository = new(persistenceMock.RepositoryMock)
+	suite.hashing = new(cryptographicMock.HashingMock)
+	suite.delete = &delete.Delete{
+		Repository: suite.repository,
+		Hashing:    suite.hashing,
+	}
+	suite.sut = &delete.CommandHandler{
+		UseCase: suite.delete,
+	}
 }
 
 func (suite *UserDeleteTestSuite) TestDelete() {
 	command := commandMother.Random()
 
-	userId := valueObject.NewId(command.Id)
+	userId, _ := valueObject.NewId(command.Id)
 
 	suite.repository.On("Delete", userId)
 
-	suite.sut.Handle(command)
+	suite.NoError(suite.sut.Handle(command))
 
 	suite.repository.AssertExpectations(suite.T())
 }

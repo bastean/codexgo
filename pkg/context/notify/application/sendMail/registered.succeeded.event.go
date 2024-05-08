@@ -5,11 +5,3 @@ type RegisteredSucceededEventAttributes struct {
 	Email    string
 	Username string
 }
-
-func NewRegisteredSucceededEventAttributes(id, email, username string) *RegisteredSucceededEventAttributes {
-	return &RegisteredSucceededEventAttributes{
-		Id:       id,
-		Email:    email,
-		Username: username,
-	}
-}

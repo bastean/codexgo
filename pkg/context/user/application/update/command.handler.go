@@ -1,15 +1,16 @@
 package update
 
+import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+)
+
 type CommandHandler struct {
-	*Update
+	model.UseCase[*Command, *types.Empty]
 }
 
-func (handler *CommandHandler) Handle(command *Command) {
-	handler.Update.Run(command)
-}
+func (handler *CommandHandler) Handle(command *Command) error {
+	handler.UseCase.Run(command)
 
-func NewCommandHandler(update *Update) *CommandHandler {
-	return &CommandHandler{
-		Update: update,
-	}
+	return nil
 }

@@ -12,26 +12,27 @@ type BrokerMock struct {
 	mock.Mock
 }
 
-func (m *BrokerMock) PublishMessages(messages []*message.Message) {
-	m.Called(messages)
+func (broker *BrokerMock) PublishMessages(messages []*message.Message) error {
+	args := broker.Called(messages)
+	return args.Get(0).(error)
 }
 
-func (m *BrokerMock) AddExchange(exchange *exchange.Exchange) {
-	m.Called(exchange)
+func (broker *BrokerMock) AddExchange(exchange *exchange.Exchange) error {
+	args := broker.Called(exchange)
+	return args.Get(0).(error)
 }
 
-func (m *BrokerMock) AddQueue(queue *queue.Queue) {
-	m.Called(queue)
+func (broker *BrokerMock) AddQueue(queue *queue.Queue) error {
+	args := broker.Called(queue)
+	return args.Get(0).(error)
 }
 
-func (m *BrokerMock) AddQueueMessageBind(queue *queue.Queue, bindingKeys []string) {
-	m.Called(queue, bindingKeys)
+func (broker *BrokerMock) AddQueueMessageBind(queue *queue.Queue, bindingKeys []string) error {
+	args := broker.Called(queue, bindingKeys)
+	return args.Get(0).(error)
 }
 
-func (m *BrokerMock) AddQueueConsumer(consumer model.Consumer) {
-	m.Called(consumer)
-}
-
-func NewBrokerMock() *BrokerMock {
-	return new(BrokerMock)
+func (broker *BrokerMock) AddQueueConsumer(consumer model.Consumer) error {
+	args := broker.Called(consumer)
+	return args.Get(0).(error)
 }

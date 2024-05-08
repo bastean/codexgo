@@ -3,32 +3,41 @@ package sharedValueObject
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/go-playground/validator/v10"
 )
 
-var InvalidIdValue = errors.NewInvalidValue("Id Invalid")
-
 type Id struct {
-	Value string `validate:"uuid4"`
+	value string `validate:"uuid4"`
 }
 
-func ensureIsValidId(id *Id) error {
+func (id *Id) Value() string {
+	return id.value
+}
+
+func (id *Id) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
 
 	return validate.Struct(id)
 }
 
-func NewId(id string) *Id {
+func NewId(id string) (model.ValueObject[string], error) {
 	id = strings.TrimSpace(id)
 
-	idVO := &Id{id}
-
-	err := ensureIsValidId(idVO)
-
-	if err != nil {
-		panic(InvalidIdValue)
+	idVO := &Id{
+		value: id,
 	}
 
-	return idVO
+	if idVO.IsValid() != nil {
+		return nil, errs.NewInvalidValueError(&errs.Bubble{
+			Where: "NewId",
+			What:  "invalid format",
+			Why: errs.Meta{
+				"Id": id,
+			},
+		})
+	}
+
+	return idVO, nil
 }

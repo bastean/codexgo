@@ -10,15 +10,12 @@ type ConsumerMock struct {
 	mock.Mock
 }
 
-func (m *ConsumerMock) SubscribedTo() []*queue.Queue {
-	args := m.Called()
+func (consumer *ConsumerMock) SubscribedTo() []*queue.Queue {
+	args := consumer.Called()
 	return args.Get(0).([]*queue.Queue)
 }
 
-func (m *ConsumerMock) On(message *message.Message) {
-	// TODO?: m.Called(message)
-}
-
-func NewConsumerMock() *ConsumerMock {
-	return new(ConsumerMock)
+func (consumer *ConsumerMock) On(message *message.Message) error {
+	args := consumer.Called()
+	return args.Get(0).(error)
 }

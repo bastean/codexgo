@@ -1,6 +1,9 @@
 package verify
 
 import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
 )
@@ -9,21 +12,30 @@ type Verify struct {
 	model.Repository
 }
 
-func (verify *Verify) Run(id *valueObject.Id) {
-	userRegistered := verify.Repository.Search(model.RepositorySearchFilter{Id: id})
+func (verify *Verify) Run(id sharedModel.ValueObject[string]) (*types.Empty, error) {
+	userRegistered, err := verify.Repository.Search(model.RepositorySearchCriteria{Id: id})
 
-	// TODO?: if userRegistered.Verified.Value { return }
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
 
-	userRegistered.Verified = valueObject.NewVerified(true)
+	if userRegistered.Verified.Value() {
+		return nil, nil
+	}
 
-	// TODO?: userRegistered.Password = nil
+	userRegistered.Verified, err = valueObject.NewVerified(true)
+
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
+	}
+
 	userRegistered.Password = nil
 
-	verify.Repository.Update(userRegistered)
-}
+	err = verify.Repository.Update(userRegistered)
 
-func NewVerify(repository model.Repository) *Verify {
-	return &Verify{
-		Repository: repository,
+	if err != nil {
+		return nil, errs.BubbleUp("Run", err)
 	}
+
+	return nil, nil
 }

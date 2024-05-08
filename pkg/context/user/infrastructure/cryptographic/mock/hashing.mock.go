@@ -8,16 +8,12 @@ type HashingMock struct {
 	mock.Mock
 }
 
-func (m *HashingMock) Hash(plain string) string {
-	args := m.Called(plain)
-	return args.Get(0).(string)
+func (hashing *HashingMock) Hash(plain string) (string, error) {
+	args := hashing.Called(plain)
+	return args.Get(0).(string), args.Get(1).(error)
 }
 
-func (m *HashingMock) IsNotEqual(hashed, plain string) bool {
-	args := m.Called(hashed, plain)
+func (hashing *HashingMock) IsNotEqual(hashed, plain string) bool {
+	args := hashing.Called(hashed, plain)
 	return args.Get(0).(bool)
-}
-
-func NewHashingMock() *HashingMock {
-	return new(HashingMock)
 }

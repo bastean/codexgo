@@ -6,9 +6,9 @@ import (
 )
 
 func Random() *delete.Command {
-	return delete.NewCommand(valueObjectMother.RandomId().Value)
-}
+	id, _ := valueObjectMother.RandomId()
 
-func Invalid() *delete.Command {
-	return delete.NewCommand(valueObjectMother.InvalidId().Value)
+	return &delete.Command{
+		Id: id.Value(),
+	}
 }
