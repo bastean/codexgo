@@ -31,7 +31,7 @@ func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 func (suite *UserMongoRepositoryTestSuite) TestSave() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
+	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
 	suite.NoError(suite.sut.Save(user))
 
@@ -41,7 +41,7 @@ func (suite *UserMongoRepositoryTestSuite) TestSave() {
 func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
+	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
 	suite.NoError(suite.sut.Save(user))
 
@@ -51,7 +51,7 @@ func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
 func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
+	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
 	suite.NoError(suite.sut.Save(user))
 
@@ -59,9 +59,7 @@ func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 
 	user.Password = password
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
-
-	suite.NoError(suite.sut.Save(user))
+	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
 	suite.NoError(suite.sut.Update(user))
 
@@ -71,7 +69,7 @@ func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 func (suite *UserMongoRepositoryTestSuite) TestDelete() {
 	user := aggregateMother.Random()
 
-	suite.hashing.On("Hash", user.Password.Value).Return(user.Password.Value())
+	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
 	suite.NoError(suite.sut.Save(user))
 
@@ -83,7 +81,7 @@ func (suite *UserMongoRepositoryTestSuite) TestSearch() {
 
 	expected.PullMessages()
 
-	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value())
+	suite.hashing.On("Hash", expected.Password.Value()).Return(expected.Password.Value())
 
 	suite.NoError(suite.sut.Save(expected))
 

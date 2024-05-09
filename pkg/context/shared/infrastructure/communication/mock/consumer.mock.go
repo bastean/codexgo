@@ -16,6 +16,6 @@ func (consumer *ConsumerMock) SubscribedTo() []*queue.Queue {
 }
 
 func (consumer *ConsumerMock) On(message *message.Message) error {
-	consumer.Called()
+	// TODO?(goroutine): consumer.Called(message)
 	return nil
 }

@@ -90,7 +90,7 @@ func (db *UserCollection) Update(user *aggregate.User) error {
 }
 
 func (db *UserCollection) Delete(id sharedModel.ValueObject[string]) error {
-	deleteFilter := bson.M{"id": id.Value}
+	deleteFilter := bson.M{"id": id.Value()}
 
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
 

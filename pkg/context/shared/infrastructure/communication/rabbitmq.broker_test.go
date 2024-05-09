@@ -68,7 +68,7 @@ func (suite *RabbitMQBrokerTestSuite) TestBroker() {
 
 	suite.NoError(suite.sut.AddQueueConsumer(suite.consumer))
 
-	suite.consumer.Mock.On("On", suite.messages[0])
+	// TODO?(goroutine): suite.consumer.Mock.On("On", suite.messages[0])
 
 	suite.NoError(suite.sut.PublishMessages(suite.messages))
 

@@ -25,7 +25,7 @@ type RegisteredSucceededEventConsumerTestSuite struct {
 
 func (suite *RegisteredSucceededEventConsumerTestSuite) SetupTest() {
 	queueName := queue.NewQueueName(&queue.QueueName{
-		Module: "notify",
+		Module: "queue",
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
