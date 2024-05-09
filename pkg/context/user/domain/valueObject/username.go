@@ -12,11 +12,11 @@ const UsernameMinCharactersLength = "2"
 const UsernameMaxCharactersLength = "20"
 
 type Username struct {
-	value string `validate:"gte=2,lte=20,alphanum"`
+	Username string `validate:"gte=2,lte=20,alphanum"`
 }
 
 func (username *Username) Value() string {
-	return username.value
+	return username.Username
 }
 
 func (username *Username) IsValid() error {
@@ -29,7 +29,7 @@ func NewUsername(username string) (model.ValueObject[string], error) {
 	username = strings.TrimSpace(username)
 
 	usernameVO := &Username{
-		value: username,
+		Username: username,
 	}
 
 	if usernameVO.IsValid() != nil {

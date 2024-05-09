@@ -3,6 +3,7 @@ package valueObject_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
 	valueObjectMother "github.com/bastean/codexgo/pkg/context/user/domain/valueObject/mother"
 	"github.com/stretchr/testify/suite"
 )
@@ -14,9 +15,21 @@ type PasswordValueObjectTestSuite struct {
 func (suite *PasswordValueObjectTestSuite) SetupTest() {}
 
 func (suite *PasswordValueObjectTestSuite) TestPassword() {
-	msg := "Password must be between " + "8" + " to " + "64" + " characters"
+	password, err := valueObjectMother.WithInvalidPasswordLength()
 
-	suite.PanicsWithError(msg, func() { valueObjectMother.WithInvalidPasswordLength() })
+	expected := errs.NewInvalidValueError(&errs.Bubble{
+		Where: "NewPassword",
+		What:  "must be between " + "8" + " to " + "64" + " characters",
+		Why: errs.Meta{
+			"Password": password,
+		},
+	})
+
+	var actual *errs.InvalidValueError
+
+	suite.ErrorAs(err, &actual)
+
+	suite.EqualError(expected, actual.Error())
 }
 
 func TestUnitPasswordValueObjectSuite(t *testing.T) {

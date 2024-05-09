@@ -15,13 +15,13 @@ func (handler *CommandHandler) Handle(command *Command) error {
 	idVO, err := valueObject.NewId(command.Id)
 
 	if err != nil {
-		return errs.BubbleUp("Handle", err)
+		return errs.BubbleUp(err, "Handle")
 	}
 
 	_, err = handler.UseCase.Run(idVO)
 
 	if err != nil {
-		return errs.BubbleUp("Handle", err)
+		return errs.BubbleUp(err, "Handle")
 	}
 
 	return nil

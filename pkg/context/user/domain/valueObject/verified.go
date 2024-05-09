@@ -8,11 +8,11 @@ import (
 )
 
 type Verified struct {
-	value bool
+	Verified bool
 }
 
 func (verified *Verified) Value() bool {
-	return verified.value
+	return verified.Verified
 }
 
 func (verified *Verified) IsValid() error {
@@ -21,7 +21,7 @@ func (verified *Verified) IsValid() error {
 
 func NewVerified(verified bool) (model.ValueObject[bool], error) {
 	verifiedVO := &Verified{
-		value: verified,
+		Verified: verified,
 	}
 
 	if verifiedVO.IsValid() != nil {

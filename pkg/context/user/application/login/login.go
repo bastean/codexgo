@@ -13,16 +13,18 @@ type Login struct {
 }
 
 func (login *Login) Run(input *Input) (*aggregate.User, error) {
-	user, err := login.Repository.Search(model.RepositorySearchCriteria{Email: input.Email})
+	user, err := login.Repository.Search(model.RepositorySearchCriteria{
+		Email: input.Email,
+	})
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	err = service.IsPasswordInvalid(login.Hashing, user.Password.Value(), input.Password.Value())
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	return user, nil

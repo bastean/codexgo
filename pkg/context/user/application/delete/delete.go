@@ -20,7 +20,7 @@ func (delete *Delete) Run(id sharedModel.ValueObject[string]) (*types.Empty, err
 	err := delete.Repository.Delete(id)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

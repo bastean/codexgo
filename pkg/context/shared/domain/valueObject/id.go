@@ -9,11 +9,11 @@ import (
 )
 
 type Id struct {
-	value string `validate:"uuid4"`
+	Id string `validate:"uuid4"`
 }
 
 func (id *Id) Value() string {
-	return id.value
+	return id.Id
 }
 
 func (id *Id) IsValid() error {
@@ -26,7 +26,7 @@ func NewId(id string) (model.ValueObject[string], error) {
 	id = strings.TrimSpace(id)
 
 	idVO := &Id{
-		value: id,
+		Id: id,
 	}
 
 	if idVO.IsValid() != nil {

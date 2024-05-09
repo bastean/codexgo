@@ -25,7 +25,7 @@ func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
 	err := errors.Join(emailErr, passwordErr)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Handle", err)
+		return nil, errs.BubbleUp(err, "Handle")
 	}
 
 	user, err := handler.UseCase.Run(&Input{
@@ -34,7 +34,7 @@ func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
 	})
 
 	if err != nil {
-		return nil, errs.BubbleUp("Handle", err)
+		return nil, errs.BubbleUp(err, "Handle")
 	}
 
 	response := Response(*user.ToPrimitives())

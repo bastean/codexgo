@@ -105,7 +105,7 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *queue.Queue, bindingKeys []strin
 	}
 
 	if errWrap != nil {
-		return errs.BubbleUp("AddQueueMessageBind", errWrap)
+		return errs.BubbleUp(errWrap, "AddQueueMessageBind")
 	}
 
 	return nil
@@ -165,7 +165,7 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer model.Consumer) error {
 	}
 
 	if errWrap != nil {
-		return errs.BubbleUp("AddQueueConsumer", errWrap)
+		return errs.BubbleUp(errWrap, "AddQueueConsumer")
 	}
 
 	return nil
@@ -216,7 +216,7 @@ func (rmq *RabbitMQ) PublishMessages(messages []*message.Message) error {
 	}
 
 	if errWrap != nil {
-		return errs.BubbleUp("PublishMessages", errWrap)
+		return errs.BubbleUp(errWrap, "PublishMessages")
 	}
 
 	return nil

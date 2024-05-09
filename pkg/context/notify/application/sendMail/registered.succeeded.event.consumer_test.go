@@ -6,32 +6,38 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/notify/application/sendMail"
 	eventMother "github.com/bastean/codexgo/pkg/context/notify/application/sendMail/mother"
+	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
 	communicationMock "github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication/mock"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/stretchr/testify/suite"
 )
 
 type RegisteredSucceededEventConsumerTestSuite struct {
 	suite.Suite
-	sut      model.Consumer
-	sendMail *sendMail.SendMail
-	mail     *communicationMock.MailMock
-	queues   []*queue.Queue
+	sut     sharedModel.Consumer
+	useCase sharedModel.UseCase[model.MailTemplate, *types.Empty]
+	mail    *communicationMock.MailMock
+	queues  []*queue.Queue
 }
 
 func (suite *RegisteredSucceededEventConsumerTestSuite) SetupTest() {
 	queueName := queue.NewQueueName(&queue.QueueName{
-		Module: "queue",
+		Module: "notify",
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
-	suite.queues = append(suite.queues, &queue.Queue{Name: queueName})
+	suite.queues = append(suite.queues, &queue.Queue{
+		Name: queueName,
+	})
 	suite.mail = new(communicationMock.MailMock)
-	suite.sendMail = &sendMail.SendMail{Mail: suite.mail}
+	suite.useCase = &sendMail.SendMail{
+		Mail: suite.mail,
+	}
 	suite.sut = &sendMail.RegisteredSucceededEventConsumer{
-		UseCase: suite.sendMail,
+		UseCase: suite.useCase,
 		Queues:  suite.queues,
 	}
 }

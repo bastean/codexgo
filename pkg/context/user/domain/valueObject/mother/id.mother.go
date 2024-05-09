@@ -10,10 +10,10 @@ func RandomId() (model.ValueObject[string], error) {
 	return valueObject.NewId(mother.Create.UUID())
 }
 
-func InvalidId() (model.ValueObject[string], error) {
-	return valueObject.NewId("x")
-}
+func InvalidId() (string, error) {
+	value := "x"
 
-func EmptyId() (model.ValueObject[string], error) {
-	return valueObject.NewId("")
+	_, err := valueObject.NewId(value)
+
+	return value, err
 }

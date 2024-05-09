@@ -39,7 +39,7 @@ func create(id, email, username, password string, verified bool) (*User, error) 
 	err := errors.Join(idErr, emailErr, usernameErr, passwordErr, verifiedErr)
 
 	if err != nil {
-		return nil, errs.BubbleUp("create", err)
+		return nil, errs.BubbleUp(err, "create")
 	}
 
 	return &User{
@@ -72,7 +72,7 @@ func FromPrimitives(userPrimitive *UserPrimitive) (*User, error) {
 	)
 
 	if err != nil {
-		return nil, errs.BubbleUp("FromPrimitives", err)
+		return nil, errs.BubbleUp(err, "FromPrimitives")
 	}
 
 	return user, nil
@@ -90,7 +90,7 @@ func NewUser(id, email, username, password string) (*User, error) {
 	)
 
 	if err != nil {
-		return nil, errs.BubbleUp("NewUser", err)
+		return nil, errs.BubbleUp(err, "NewUser")
 	}
 
 	eventMessage, err := message.NewRegisteredSucceededEvent(&message.RegisteredSucceededEventAttributes{
@@ -100,7 +100,7 @@ func NewUser(id, email, username, password string) (*User, error) {
 	})
 
 	if err != nil {
-		return nil, errs.BubbleUp("NewUser", err)
+		return nil, errs.BubbleUp(err, "NewUser")
 	}
 
 	user.RecordMessage(eventMessage)

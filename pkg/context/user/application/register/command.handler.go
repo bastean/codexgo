@@ -16,13 +16,13 @@ func (handler *CommandHandler) Handle(command *Command) error {
 	user, err := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 
 	if err != nil {
-		return errs.BubbleUp("Handle", err)
+		return errs.BubbleUp(err, "Handle")
 	}
 
 	_, err = handler.UseCase.Run(user)
 
 	if err != nil {
-		return errs.BubbleUp("Handle", err)
+		return errs.BubbleUp(err, "Handle")
 	}
 
 	handler.Broker.PublishMessages(user.PullMessages())

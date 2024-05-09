@@ -27,7 +27,7 @@ func (client *Smtp) Send(mailTemplate model.MailTemplate) error {
 	}
 
 	if err != nil {
-		return errs.BubbleUp("Send", err)
+		return errs.BubbleUp(err, "Send")
 	}
 
 	return nil
@@ -65,7 +65,7 @@ func (client *Smtp) SendAccountConfirmation(mail *template.AccountConfirmationMa
 	err := client.SendMail(mail.To, message.Bytes())
 
 	if err != nil {
-		return errs.BubbleUp("SendAccountConfirmation", err)
+		return errs.BubbleUp(err, "SendAccountConfirmation")
 	}
 
 	return nil

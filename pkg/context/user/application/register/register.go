@@ -15,7 +15,7 @@ func (register *Register) Run(user *aggregate.User) (*types.Empty, error) {
 	err := register.Repository.Save(user)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

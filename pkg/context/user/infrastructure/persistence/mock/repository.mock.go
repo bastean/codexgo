@@ -12,21 +12,21 @@ type RepositoryMock struct {
 }
 
 func (repository *RepositoryMock) Save(user *aggregate.User) error {
-	args := repository.Called(user)
-	return args.Get(0).(error)
+	repository.Called(user)
+	return nil
 }
 
 func (repository *RepositoryMock) Update(user *aggregate.User) error {
-	args := repository.Called(user)
-	return args.Get(0).(error)
+	repository.Called(user)
+	return nil
 }
 
 func (repository *RepositoryMock) Delete(id sharedModel.ValueObject[string]) error {
-	args := repository.Called(id)
-	return args.Get(0).(error)
+	repository.Called(id)
+	return nil
 }
 
 func (repository *RepositoryMock) Search(filter model.RepositorySearchCriteria) (*aggregate.User, error) {
 	args := repository.Called(filter)
-	return args.Get(0).(*aggregate.User), args.Get(1).(error)
+	return args.Get(0).(*aggregate.User), nil
 }

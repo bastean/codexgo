@@ -14,7 +14,7 @@ func (sendMail *SendMail) Run(mail model.MailTemplate) (*types.Empty, error) {
 	err := sendMail.Mail.Send(mail)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

@@ -3,6 +3,8 @@ package verify_test
 import (
 	"testing"
 
+	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
 	commandMother "github.com/bastean/codexgo/pkg/context/user/application/verify/mother"
 	aggregateMother "github.com/bastean/codexgo/pkg/context/user/domain/aggregate/mother"
@@ -14,18 +16,18 @@ import (
 
 type UserVerifyTestSuite struct {
 	suite.Suite
-	sut        *verify.CommandHandler
-	verify     *verify.Verify
+	sut        sharedModel.CommandHandler[*verify.Command]
+	useCase    sharedModel.UseCase[sharedModel.ValueObject[string], *types.Empty]
 	repository *persistenceMock.RepositoryMock
 }
 
 func (suite *UserVerifyTestSuite) SetupTest() {
 	suite.repository = new(persistenceMock.RepositoryMock)
-	suite.verify = &verify.Verify{
+	suite.useCase = &verify.Verify{
 		Repository: suite.repository,
 	}
 	suite.sut = &verify.CommandHandler{
-		UseCase: suite.verify,
+		UseCase: suite.useCase,
 	}
 }
 
@@ -40,13 +42,11 @@ func (suite *UserVerifyTestSuite) TestVerify() {
 
 	user.Password = nil
 
-	filter := model.RepositorySearchCriteria{Id: idVO}
+	filter := model.RepositorySearchCriteria{
+		Id: idVO,
+	}
 
 	suite.repository.On("Search", filter).Return(user)
-
-	verifiedVO, _ := valueObject.NewVerified(true)
-
-	user.Verified = verifiedVO
 
 	suite.repository.On("Update", user)
 

@@ -3,7 +3,8 @@ package valueObject_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	valueObjectMother "github.com/bastean/codexgo/pkg/context/user/domain/valueObject/mother"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -14,24 +15,21 @@ type EmailValueObjectTestSuite struct {
 func (suite *EmailValueObjectTestSuite) SetupTest() {}
 
 func (suite *EmailValueObjectTestSuite) TestEmail() {
-	// TODO!(test): fix unit tests
+	email, err := valueObjectMother.InvalidEmail()
 
-	invalidEmail := ""
+	expected := errs.NewInvalidValueError(&errs.Bubble{
+		Where: "NewEmail",
+		What:  "invalid format",
+		Why: errs.Meta{
+			"Email": email,
+		},
+	})
 
-	_, err := valueObject.NewEmail(invalidEmail)
+	var actual *errs.InvalidValueError
 
-	suite.Error(err)
+	suite.ErrorAs(err, &actual)
 
-	/*
-		expected := errs.NewInvalidValueError(&errs.Bubble{
-				Where: "NewEmail",
-				What:  "invalid format",
-				Why:   errs.Meta{
-					"Email": invalidEmail,
-				},
-			})
-	*/
-
+	suite.EqualError(expected, actual.Error())
 }
 
 func TestUnitEmailValueObjectSuite(t *testing.T) {

@@ -16,7 +16,7 @@ import (
 type UserLoginTestSuite struct {
 	suite.Suite
 	sut        sharedModel.QueryHandler[*login.Query, *login.Response]
-	login      sharedModel.UseCase[*login.Input, *aggregate.User]
+	useCase    sharedModel.UseCase[*login.Input, *aggregate.User]
 	hashing    *cryptographicMock.HashingMock
 	repository *persistenceMock.RepositoryMock
 }
@@ -24,12 +24,12 @@ type UserLoginTestSuite struct {
 func (suite *UserLoginTestSuite) SetupTest() {
 	suite.repository = new(persistenceMock.RepositoryMock)
 	suite.hashing = new(cryptographicMock.HashingMock)
-	suite.login = &login.Login{
+	suite.useCase = &login.Login{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
 	suite.sut = &login.QueryHandler{
-		UseCase: suite.login,
+		UseCase: suite.useCase,
 	}
 }
 
@@ -47,7 +47,7 @@ func (suite *UserLoginTestSuite) TestLogin() {
 
 	suite.repository.On("Search", filter).Return(user)
 
-	suite.hashing.On("IsNotEqual", user.Password.Value, user.Password.Value).Return(false)
+	suite.hashing.On("IsNotEqual", user.Password.Value(), user.Password.Value()).Return(false)
 
 	expected := user.ToPrimitives()
 

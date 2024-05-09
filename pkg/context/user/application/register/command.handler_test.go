@@ -16,7 +16,7 @@ import (
 type UserRegisterTestSuite struct {
 	suite.Suite
 	sut        model.CommandHandler[*register.Command]
-	register   model.UseCase[*aggregate.User, *types.Empty]
+	useCase    model.UseCase[*aggregate.User, *types.Empty]
 	repository *persistenceMock.RepositoryMock
 	broker     *communicationMock.BrokerMock
 }
@@ -24,11 +24,11 @@ type UserRegisterTestSuite struct {
 func (suite *UserRegisterTestSuite) SetupTest() {
 	suite.broker = new(communicationMock.BrokerMock)
 	suite.repository = new(persistenceMock.RepositoryMock)
-	suite.register = &register.Register{
+	suite.useCase = &register.Register{
 		Repository: suite.repository,
 	}
 	suite.sut = &register.CommandHandler{
-		UseCase: suite.register,
+		UseCase: suite.useCase,
 		Broker:  suite.broker,
 	}
 }

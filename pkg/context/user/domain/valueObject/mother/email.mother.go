@@ -10,10 +10,10 @@ func RandomEmail() (model.ValueObject[string], error) {
 	return valueObject.NewEmail(mother.Create.Email())
 }
 
-func InvalidEmail() (model.ValueObject[string], error) {
-	return valueObject.NewEmail("x")
-}
+func InvalidEmail() (string, error) {
+	value := "x"
 
-func EmptyEmail() (model.ValueObject[string], error) {
-	return valueObject.NewEmail("")
+	_, err := valueObject.NewEmail(value)
+
+	return value, err
 }

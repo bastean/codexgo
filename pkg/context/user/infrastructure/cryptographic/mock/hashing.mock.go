@@ -10,7 +10,7 @@ type HashingMock struct {
 
 func (hashing *HashingMock) Hash(plain string) (string, error) {
 	args := hashing.Called(plain)
-	return args.Get(0).(string), args.Get(1).(error)
+	return args.Get(0).(string), nil
 }
 
 func (hashing *HashingMock) IsNotEqual(hashed, plain string) bool {

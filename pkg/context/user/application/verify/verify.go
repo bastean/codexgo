@@ -13,10 +13,12 @@ type Verify struct {
 }
 
 func (verify *Verify) Run(id sharedModel.ValueObject[string]) (*types.Empty, error) {
-	userRegistered, err := verify.Repository.Search(model.RepositorySearchCriteria{Id: id})
+	userRegistered, err := verify.Repository.Search(model.RepositorySearchCriteria{
+		Id: id,
+	})
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	if userRegistered.Verified.Value() {
@@ -26,7 +28,7 @@ func (verify *Verify) Run(id sharedModel.ValueObject[string]) (*types.Empty, err
 	userRegistered.Verified, err = valueObject.NewVerified(true)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	userRegistered.Password = nil
@@ -34,7 +36,7 @@ func (verify *Verify) Run(id sharedModel.ValueObject[string]) (*types.Empty, err
 	err = verify.Repository.Update(userRegistered)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

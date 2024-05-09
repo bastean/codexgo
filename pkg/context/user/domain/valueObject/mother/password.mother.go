@@ -10,10 +10,10 @@ func RandomPassword() (model.ValueObject[string], error) {
 	return valueObject.NewPassword(mother.Create.Regex(`[\W\w]{8,64}`))
 }
 
-func WithInvalidPasswordLength() (model.ValueObject[string], error) {
-	return valueObject.NewPassword("x")
-}
+func WithInvalidPasswordLength() (string, error) {
+	value := "x"
 
-func EmptyPassword() (model.ValueObject[string], error) {
-	return valueObject.NewPassword("")
+	_, err := valueObject.NewPassword(value)
+
+	return value, err
 }

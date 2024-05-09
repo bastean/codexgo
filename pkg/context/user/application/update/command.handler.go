@@ -11,6 +11,5 @@ type CommandHandler struct {
 
 func (handler *CommandHandler) Handle(command *Command) error {
 	handler.UseCase.Run(command)
-
 	return nil
 }

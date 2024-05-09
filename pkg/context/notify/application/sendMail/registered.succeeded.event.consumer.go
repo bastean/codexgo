@@ -37,7 +37,7 @@ func (consumer *RegisteredSucceededEventConsumer) On(message *message.Message) e
 		})
 	}
 
-	accountConfirmationTemplate := template.AccountConfirmationMail{
+	accountConfirmationTemplate := &template.AccountConfirmationMail{
 		Mail: &template.Mail{
 			To: []string{attributes.Email},
 		},
@@ -48,7 +48,7 @@ func (consumer *RegisteredSucceededEventConsumer) On(message *message.Message) e
 	_, err = consumer.UseCase.Run(accountConfirmationTemplate)
 
 	if err != nil {
-		return errs.BubbleUp("On", err)
+		return errs.BubbleUp(err, "On")
 	}
 
 	return nil

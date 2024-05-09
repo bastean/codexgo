@@ -9,16 +9,16 @@ import (
 )
 
 type Email struct {
-	value string `validate:"email"`
+	Email string `validate:"email"`
 }
 
 func (email *Email) Value() string {
-	return email.value
+	return email.Email
 }
 
 func (email *Email) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	// TODO!(fix): structs exposed fields
+
 	return validate.Struct(email)
 }
 
@@ -26,7 +26,7 @@ func NewEmail(email string) (model.ValueObject[string], error) {
 	email = strings.TrimSpace(email)
 
 	emailVO := &Email{
-		value: email,
+		Email: email,
 	}
 
 	if emailVO.IsValid() != nil {

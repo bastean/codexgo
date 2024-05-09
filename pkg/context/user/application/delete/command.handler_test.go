@@ -3,6 +3,8 @@ package delete_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	commandMother "github.com/bastean/codexgo/pkg/context/user/application/delete/mother"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
@@ -13,8 +15,8 @@ import (
 
 type UserDeleteTestSuite struct {
 	suite.Suite
-	sut        *delete.CommandHandler
-	delete     *delete.Delete
+	sut        model.CommandHandler[*delete.Command]
+	useCase    model.UseCase[model.ValueObject[string], *types.Empty]
 	hashing    *cryptographicMock.HashingMock
 	repository *persistenceMock.RepositoryMock
 }
@@ -22,12 +24,12 @@ type UserDeleteTestSuite struct {
 func (suite *UserDeleteTestSuite) SetupTest() {
 	suite.repository = new(persistenceMock.RepositoryMock)
 	suite.hashing = new(cryptographicMock.HashingMock)
-	suite.delete = &delete.Delete{
+	suite.useCase = &delete.Delete{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
 	suite.sut = &delete.CommandHandler{
-		UseCase: suite.delete,
+		UseCase: suite.useCase,
 	}
 }
 

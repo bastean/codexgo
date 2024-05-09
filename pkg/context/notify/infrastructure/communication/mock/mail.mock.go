@@ -10,6 +10,6 @@ type MailMock struct {
 }
 
 func (mail *MailMock) Send(template model.MailTemplate) error {
-	args := mail.Called(template)
-	return args.Get(0).(error)
+	mail.Called(template)
+	return nil
 }

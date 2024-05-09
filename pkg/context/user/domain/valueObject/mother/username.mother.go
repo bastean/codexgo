@@ -10,14 +10,18 @@ func RandomUsername() (model.ValueObject[string], error) {
 	return valueObject.NewUsername(mother.Create.Regex(`[a-z0-9]{2,20}`))
 }
 
-func WithInvalidUsernameLength() (model.ValueObject[string], error) {
-	return valueObject.NewUsername("x")
+func WithInvalidUsernameLength() (string, error) {
+	value := "x"
+
+	_, err := valueObject.NewUsername(value)
+
+	return value, err
 }
 
-func WithInvalidUsernameAlphanumeric() (model.ValueObject[string], error) {
-	return valueObject.NewUsername("<></>")
-}
+func WithInvalidUsernameAlphanumeric() (string, error) {
+	value := "<></>"
 
-func EmptyUsername() (model.ValueObject[string], error) {
-	return valueObject.NewUsername("")
+	_, err := valueObject.NewUsername(value)
+
+	return value, err
 }

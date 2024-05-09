@@ -10,11 +10,11 @@ const PasswordMinCharactersLength = "8"
 const PasswordMaxCharactersLength = "64"
 
 type Password struct {
-	value string `validate:"gte=8,lte=64"`
+	Password string `validate:"gte=8,lte=64"`
 }
 
 func (password *Password) Value() string {
-	return password.value
+	return password.Password
 }
 
 func (password *Password) IsValid() error {
@@ -25,7 +25,7 @@ func (password *Password) IsValid() error {
 
 func NewPassword(password string) (model.ValueObject[string], error) {
 	passwordVO := &Password{
-		value: password,
+		Password: password,
 	}
 
 	if passwordVO.IsValid() != nil {

@@ -3,6 +3,8 @@ package update_test
 import (
 	"testing"
 
+	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	commandMother "github.com/bastean/codexgo/pkg/context/user/application/update/mother"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
@@ -15,8 +17,8 @@ import (
 
 type UserUpdateTestSuite struct {
 	suite.Suite
-	sut        *update.CommandHandler
-	update     *update.Update
+	sut        sharedModel.CommandHandler[*update.Command]
+	useCase    sharedModel.UseCase[*update.Command, *types.Empty]
 	hashing    *cryptographicMock.HashingMock
 	repository *persistenceMock.RepositoryMock
 }
@@ -24,12 +26,12 @@ type UserUpdateTestSuite struct {
 func (suite *UserUpdateTestSuite) SetupTest() {
 	suite.repository = new(persistenceMock.RepositoryMock)
 	suite.hashing = new(cryptographicMock.HashingMock)
-	suite.update = &update.Update{
+	suite.useCase = &update.Update{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
 	suite.sut = &update.CommandHandler{
-		UseCase: suite.update,
+		UseCase: suite.useCase,
 	}
 }
 
@@ -40,11 +42,13 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 
 	idVO, _ := valueObject.NewId(command.Id)
 
-	filter := model.RepositorySearchCriteria{Id: idVO}
+	filter := model.RepositorySearchCriteria{
+		Id: idVO,
+	}
 
 	suite.repository.On("Search", filter).Return(user)
 
-	suite.hashing.On("IsNotEqual", user.Password.Value, command.Password).Return(false)
+	suite.hashing.On("IsNotEqual", user.Password.Value(), command.Password).Return(false)
 
 	suite.repository.On("Update", user)
 

@@ -16,6 +16,6 @@ func (consumer *ConsumerMock) SubscribedTo() []*queue.Queue {
 }
 
 func (consumer *ConsumerMock) On(message *message.Message) error {
-	args := consumer.Called()
-	return args.Get(0).(error)
+	consumer.Called()
+	return nil
 }

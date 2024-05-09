@@ -19,19 +19,21 @@ func (update *Update) Run(userUpdate *Command) (*types.Empty, error) {
 	idVO, err := valueObject.NewId(userUpdate.Id)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
-	userRegistered, err := update.Repository.Search(model.RepositorySearchCriteria{Id: idVO})
+	userRegistered, err := update.Repository.Search(model.RepositorySearchCriteria{
+		Id: idVO,
+	})
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	err = service.IsPasswordInvalid(update.Hashing, userRegistered.Password.Value(), userUpdate.Password)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	var emailErr, usernameErr, passwordErr error
@@ -51,13 +53,13 @@ func (update *Update) Run(userUpdate *Command) (*types.Empty, error) {
 	err = errors.Join(emailErr, usernameErr, passwordErr)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	err = update.Repository.Update(userRegistered)
 
 	if err != nil {
-		return nil, errs.BubbleUp("Run", err)
+		return nil, errs.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

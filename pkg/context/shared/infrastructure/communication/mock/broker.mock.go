@@ -13,26 +13,26 @@ type BrokerMock struct {
 }
 
 func (broker *BrokerMock) PublishMessages(messages []*message.Message) error {
-	args := broker.Called(messages)
-	return args.Get(0).(error)
+	broker.Called(messages)
+	return nil
 }
 
 func (broker *BrokerMock) AddExchange(exchange *exchange.Exchange) error {
-	args := broker.Called(exchange)
-	return args.Get(0).(error)
+	broker.Called(exchange)
+	return nil
 }
 
 func (broker *BrokerMock) AddQueue(queue *queue.Queue) error {
-	args := broker.Called(queue)
-	return args.Get(0).(error)
+	broker.Called(queue)
+	return nil
 }
 
 func (broker *BrokerMock) AddQueueMessageBind(queue *queue.Queue, bindingKeys []string) error {
-	args := broker.Called(queue, bindingKeys)
-	return args.Get(0).(error)
+	broker.Called(queue, bindingKeys)
+	return nil
 }
 
 func (broker *BrokerMock) AddQueueConsumer(consumer model.Consumer) error {
-	args := broker.Called(consumer)
-	return args.Get(0).(error)
+	broker.Called(consumer)
+	return nil
 }
