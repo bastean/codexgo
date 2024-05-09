@@ -1,10 +1,10 @@
 package communicationMock
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/exchange"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/router"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -17,8 +17,8 @@ func (broker *BrokerMock) PublishMessages(messages []*message.Message) error {
 	return nil
 }
 
-func (broker *BrokerMock) AddExchange(exchange *exchange.Exchange) error {
-	broker.Called(exchange)
+func (broker *BrokerMock) AddRouter(router *router.Router) error {
+	broker.Called(router)
 	return nil
 }
 

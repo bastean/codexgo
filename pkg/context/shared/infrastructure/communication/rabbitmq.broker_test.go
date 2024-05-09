@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/exchange"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/router"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communication"
 	communicationMock "github.com/bastean/codexgo/pkg/context/shared/infrastructure/communication/mock"
 	loggerMock "github.com/bastean/codexgo/pkg/context/shared/infrastructure/logger/mock"
@@ -18,7 +18,7 @@ type RabbitMQBrokerTestSuite struct {
 	suite.Suite
 	sut      model.Broker
 	logger   *loggerMock.LoggerMock
-	exchange *exchange.Exchange
+	router   *router.Router
 	queue    *queue.Queue
 	consumer *communicationMock.ConsumerMock
 	messages []*message.Message
@@ -30,7 +30,7 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 	uri := os.Getenv("BROKER_URI")
 	suite.sut, _ = communication.NewRabbitMQ(uri, suite.logger)
 
-	suite.exchange = &exchange.Exchange{Name: "test"}
+	suite.router = &router.Router{Name: "test"}
 
 	queueName := queue.NewQueueName(&queue.QueueName{
 		Module: "queue",
@@ -58,7 +58,7 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 }
 
 func (suite *RabbitMQBrokerTestSuite) TestBroker() {
-	suite.NoError(suite.sut.AddExchange(suite.exchange))
+	suite.NoError(suite.sut.AddRouter(suite.router))
 
 	suite.NoError(suite.sut.AddQueue(suite.queue))
 

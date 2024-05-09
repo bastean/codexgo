@@ -12,10 +12,10 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/exchange"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/router"
 )
 
 type RabbitMQ struct {
@@ -25,9 +25,9 @@ type RabbitMQ struct {
 	exchange string
 }
 
-func (rmq *RabbitMQ) AddExchange(exchange *exchange.Exchange) error {
+func (rmq *RabbitMQ) AddRouter(router *router.Router) error {
 	err := rmq.Channel.ExchangeDeclare(
-		exchange.Name,
+		router.Name,
 		"topic",
 		true,
 		false,
@@ -36,15 +36,16 @@ func (rmq *RabbitMQ) AddExchange(exchange *exchange.Exchange) error {
 		nil,
 	)
 
-	rmq.exchange = exchange.Name
+	rmq.exchange = router.Name
 
 	if err != nil {
 		return errs.NewInternalError(&errs.Bubble{
-			Where: "AddExchange",
+			Where: "AddRouter",
 			What:  "failed to declare an exchange",
 			Why: errs.Meta{
-				"Exchange": exchange.Name,
+				"Router": router.Name,
 			},
+			Who: err,
 		})
 	}
 
@@ -68,6 +69,7 @@ func (rmq *RabbitMQ) AddQueue(queue *queue.Queue) error {
 			Why: errs.Meta{
 				"Queue": queue.Name,
 			},
+			Who: err,
 		})
 	}
 
