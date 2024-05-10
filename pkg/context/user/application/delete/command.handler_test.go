@@ -3,27 +3,26 @@ package delete_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
-	commandMother "github.com/bastean/codexgo/pkg/context/user/application/delete/mother"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
-	cryptographicMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/mock"
-	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserDeleteTestSuite struct {
 	suite.Suite
-	sut        model.CommandHandler[*delete.Command]
-	useCase    model.UseCase[model.ValueObject[string], *types.Empty]
-	hashing    *cryptographicMock.HashingMock
-	repository *persistenceMock.RepositoryMock
+	sut        smodel.CommandHandler[*delete.Command]
+	useCase    smodel.UseCase[smodel.ValueObject[string], *stype.Empty]
+	hashing    *cryptographic.HashingMock
+	repository *persistence.RepositoryMock
 }
 
 func (suite *UserDeleteTestSuite) SetupTest() {
-	suite.repository = new(persistenceMock.RepositoryMock)
-	suite.hashing = new(cryptographicMock.HashingMock)
+	suite.repository = new(persistence.RepositoryMock)
+	suite.hashing = new(cryptographic.HashingMock)
 	suite.useCase = &delete.Delete{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
@@ -34,9 +33,9 @@ func (suite *UserDeleteTestSuite) SetupTest() {
 }
 
 func (suite *UserDeleteTestSuite) TestDelete() {
-	command := commandMother.Random()
+	command := delete.RandomCommand()
 
-	userId, _ := valueObject.NewId(command.Id)
+	userId, _ := valueobj.NewId(command.Id)
 
 	suite.repository.On("Delete", userId)
 

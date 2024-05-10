@@ -3,26 +3,25 @@ package verify_test
 import (
 	"testing"
 
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
-	commandMother "github.com/bastean/codexgo/pkg/context/user/application/verify/mother"
-	aggregateMother "github.com/bastean/codexgo/pkg/context/user/domain/aggregate/mother"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
-	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserVerifyTestSuite struct {
 	suite.Suite
-	sut        sharedModel.CommandHandler[*verify.Command]
-	useCase    sharedModel.UseCase[sharedModel.ValueObject[string], *types.Empty]
-	repository *persistenceMock.RepositoryMock
+	sut        smodel.CommandHandler[*verify.Command]
+	useCase    smodel.UseCase[smodel.ValueObject[string], *stype.Empty]
+	repository *persistence.RepositoryMock
 }
 
 func (suite *UserVerifyTestSuite) SetupTest() {
-	suite.repository = new(persistenceMock.RepositoryMock)
+	suite.repository = new(persistence.RepositoryMock)
 	suite.useCase = &verify.Verify{
 		Repository: suite.repository,
 	}
@@ -32,11 +31,11 @@ func (suite *UserVerifyTestSuite) SetupTest() {
 }
 
 func (suite *UserVerifyTestSuite) TestVerify() {
-	command := commandMother.Random()
+	command := verify.RandomCommand()
 
-	user := aggregateMother.Random()
+	user := aggregate.RandomUser()
 
-	idVO, _ := valueObject.NewId(command.Id)
+	idVO, _ := valueobj.NewId(command.Id)
 
 	user.Id = idVO
 

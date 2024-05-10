@@ -3,29 +3,29 @@ package login
 import (
 	"errors"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 type Input struct {
-	Email    sharedModel.ValueObject[string]
-	Password sharedModel.ValueObject[string]
+	Email    smodel.ValueObject[string]
+	Password smodel.ValueObject[string]
 }
 
 type QueryHandler struct {
-	sharedModel.UseCase[*Input, *aggregate.User]
+	smodel.UseCase[*Input, *aggregate.User]
 }
 
 func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
-	email, emailErr := valueObject.NewEmail(query.Email)
-	password, passwordErr := valueObject.NewPassword(query.Password)
+	email, emailErr := valueobj.NewEmail(query.Email)
+	password, passwordErr := valueobj.NewPassword(query.Password)
 
 	err := errors.Join(emailErr, passwordErr)
 
 	if err != nil {
-		return nil, errs.BubbleUp(err, "Handle")
+		return nil, serror.BubbleUp(err, "Handle")
 	}
 
 	user, err := handler.UseCase.Run(&Input{
@@ -34,7 +34,7 @@ func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
 	})
 
 	if err != nil {
-		return nil, errs.BubbleUp(err, "Handle")
+		return nil, serror.BubbleUp(err, "Handle")
 	}
 
 	response := Response(*user.ToPrimitives())

@@ -5,32 +5,32 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/message"
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 )
 
 type RegisteredSucceededEventConsumer struct {
-	sharedModel.UseCase[model.MailTemplate, *types.Empty]
-	Queues []*queue.Queue
+	smodel.UseCase[model.MailTemplate, *stype.Empty]
+	Queues []*squeue.Queue
 }
 
-func (consumer *RegisteredSucceededEventConsumer) SubscribedTo() []*queue.Queue {
+func (consumer *RegisteredSucceededEventConsumer) SubscribedTo() []*squeue.Queue {
 	return consumer.Queues
 }
 
-func (consumer *RegisteredSucceededEventConsumer) On(message *message.Message) error {
+func (consumer *RegisteredSucceededEventConsumer) On(message *smessage.Message) error {
 	attributes := new(RegisteredSucceededEventAttributes)
 
 	err := json.Unmarshal(message.Attributes, attributes)
 
 	if err != nil {
-		return errs.NewFailedError(&errs.Bubble{
+		return serror.NewFailedError(&serror.Bubble{
 			Where: "On",
 			What:  "failed getting message attributes",
-			Why: errs.Meta{
+			Why: serror.Meta{
 				"Message": message.Id,
 			},
 			Who: err,
@@ -48,7 +48,7 @@ func (consumer *RegisteredSucceededEventConsumer) On(message *message.Message) e
 	_, err = consumer.UseCase.Run(accountConfirmationTemplate)
 
 	if err != nil {
-		return errs.BubbleUp(err, "On")
+		return serror.BubbleUp(err, "On")
 	}
 
 	return nil

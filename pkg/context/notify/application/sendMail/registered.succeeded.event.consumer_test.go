@@ -5,34 +5,33 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/notify/application/sendMail"
-	eventMother "github.com/bastean/codexgo/pkg/context/notify/application/sendMail/mother"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
-	communicationMock "github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication/mock"
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 	"github.com/stretchr/testify/suite"
 )
 
 type RegisteredSucceededEventConsumerTestSuite struct {
 	suite.Suite
-	sut     sharedModel.Consumer
-	useCase sharedModel.UseCase[model.MailTemplate, *types.Empty]
-	mail    *communicationMock.MailMock
-	queues  []*queue.Queue
+	sut     smodel.Consumer
+	useCase smodel.UseCase[model.MailTemplate, *stype.Empty]
+	mail    *communication.MailMock
+	queues  []*squeue.Queue
 }
 
 func (suite *RegisteredSucceededEventConsumerTestSuite) SetupTest() {
-	queueName := queue.NewQueueName(&queue.QueueName{
+	queueName := squeue.NewQueueName(&squeue.QueueName{
 		Module: "queue",
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
-	suite.queues = append(suite.queues, &queue.Queue{
+	suite.queues = append(suite.queues, &squeue.Queue{
 		Name: queueName,
 	})
-	suite.mail = new(communicationMock.MailMock)
+	suite.mail = new(communication.MailMock)
 	suite.useCase = &sendMail.SendMail{
 		Mail: suite.mail,
 	}
@@ -43,7 +42,7 @@ func (suite *RegisteredSucceededEventConsumerTestSuite) SetupTest() {
 }
 
 func (suite *RegisteredSucceededEventConsumerTestSuite) TestEventConsumer() {
-	message := eventMother.Random()
+	message := sendMail.RandomEvent()
 
 	attributes := new(sendMail.RegisteredSucceededEventAttributes)
 

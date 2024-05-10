@@ -3,29 +3,28 @@ package update_test
 import (
 	"testing"
 
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
-	commandMother "github.com/bastean/codexgo/pkg/context/user/application/update/mother"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueObject"
-	cryptographicMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/mock"
-	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserUpdateTestSuite struct {
 	suite.Suite
-	sut        sharedModel.CommandHandler[*update.Command]
-	useCase    sharedModel.UseCase[*update.Command, *types.Empty]
-	hashing    *cryptographicMock.HashingMock
-	repository *persistenceMock.RepositoryMock
+	sut        smodel.CommandHandler[*update.Command]
+	useCase    smodel.UseCase[*update.Command, *stype.Empty]
+	hashing    *cryptographic.HashingMock
+	repository *persistence.RepositoryMock
 }
 
 func (suite *UserUpdateTestSuite) SetupTest() {
-	suite.repository = new(persistenceMock.RepositoryMock)
-	suite.hashing = new(cryptographicMock.HashingMock)
+	suite.repository = new(persistence.RepositoryMock)
+	suite.hashing = new(cryptographic.HashingMock)
 	suite.useCase = &update.Update{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
@@ -36,11 +35,11 @@ func (suite *UserUpdateTestSuite) SetupTest() {
 }
 
 func (suite *UserUpdateTestSuite) TestUpdate() {
-	command := commandMother.Random()
+	command := update.RandomCommand()
 
 	user, _ := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 
-	idVO, _ := valueObject.NewId(command.Id)
+	idVO, _ := valueobj.NewId(command.Id)
 
 	filter := model.RepositorySearchCriteria{
 		Id: idVO,

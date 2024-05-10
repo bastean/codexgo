@@ -3,27 +3,26 @@ package register_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	communicationMock "github.com/bastean/codexgo/pkg/context/shared/infrastructure/communication/mock"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/scommunication"
 	"github.com/bastean/codexgo/pkg/context/user/application/register"
-	commandMother "github.com/bastean/codexgo/pkg/context/user/application/register/mother"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserRegisterTestSuite struct {
 	suite.Suite
-	sut        model.CommandHandler[*register.Command]
-	useCase    model.UseCase[*aggregate.User, *types.Empty]
-	repository *persistenceMock.RepositoryMock
-	broker     *communicationMock.BrokerMock
+	sut        smodel.CommandHandler[*register.Command]
+	useCase    smodel.UseCase[*aggregate.User, *stype.Empty]
+	repository *persistence.RepositoryMock
+	broker     *scommunication.BrokerMock
 }
 
 func (suite *UserRegisterTestSuite) SetupTest() {
-	suite.broker = new(communicationMock.BrokerMock)
-	suite.repository = new(persistenceMock.RepositoryMock)
+	suite.broker = new(scommunication.BrokerMock)
+	suite.repository = new(persistence.RepositoryMock)
 	suite.useCase = &register.Register{
 		Repository: suite.repository,
 	}
@@ -34,7 +33,7 @@ func (suite *UserRegisterTestSuite) SetupTest() {
 }
 
 func (suite *UserRegisterTestSuite) TestRegister() {
-	command := commandMother.Random()
+	command := register.RandomCommand()
 
 	user, _ := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
 

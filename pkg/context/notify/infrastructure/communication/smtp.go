@@ -8,7 +8,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
 )
 
 type Smtp struct {
@@ -27,7 +27,7 @@ func (client *Smtp) Send(mailTemplate model.MailTemplate) error {
 	}
 
 	if err != nil {
-		return errs.BubbleUp(err, "Send")
+		return serror.BubbleUp(err, "Send")
 	}
 
 	return nil
@@ -37,10 +37,10 @@ func (client *Smtp) SendMail(to []string, message []byte) error {
 	err := smtp.SendMail(client.SmtpUrl, client.Auth, client.Username, to, message)
 
 	if err != nil {
-		return errs.NewFailedError(&errs.Bubble{
+		return serror.NewFailedError(&serror.Bubble{
 			Where: "SendMail",
 			What:  "failed to send a mail",
-			Why: errs.Meta{
+			Why: serror.Meta{
 				"SmtpUrl": client.SmtpUrl,
 			},
 			Who: err,
@@ -65,7 +65,7 @@ func (client *Smtp) SendAccountConfirmation(mail *template.AccountConfirmationMa
 	err := client.SendMail(mail.To, message.Bytes())
 
 	if err != nil {
-		return errs.BubbleUp(err, "SendAccountConfirmation")
+		return serror.BubbleUp(err, "SendAccountConfirmation")
 	}
 
 	return nil

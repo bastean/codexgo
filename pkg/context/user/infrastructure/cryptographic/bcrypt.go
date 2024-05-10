@@ -1,7 +1,7 @@
 package cryptographic
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -13,7 +13,7 @@ func (hashing *Bcrypt) Hash(plain string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(plain), salt)
 
 	if err != nil {
-		return "", errs.NewFailedError(&errs.Bubble{
+		return "", serror.NewFailedError(&serror.Bubble{
 			Where: "Hash",
 			What:  "failed to generate a hash",
 			Who:   err,

@@ -1,12 +1,12 @@
 package update
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 )
 
 type CommandHandler struct {
-	model.UseCase[*Command, *types.Empty]
+	smodel.UseCase[*Command, *stype.Empty]
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {

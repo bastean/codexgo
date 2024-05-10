@@ -1,7 +1,7 @@
 package login
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
@@ -18,13 +18,13 @@ func (login *Login) Run(input *Input) (*aggregate.User, error) {
 	})
 
 	if err != nil {
-		return nil, errs.BubbleUp(err, "Run")
+		return nil, serror.BubbleUp(err, "Run")
 	}
 
 	err = service.IsPasswordInvalid(login.Hashing, user.Password.Value(), input.Password.Value())
 
 	if err != nil {
-		return nil, errs.BubbleUp(err, "Run")
+		return nil, serror.BubbleUp(err, "Run")
 	}
 
 	return user, nil

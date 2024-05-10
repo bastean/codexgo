@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	valueObjectMother "github.com/bastean/codexgo/pkg/context/user/domain/valueObject/mother"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/stretchr/testify/suite"
 )
@@ -19,7 +19,7 @@ func (suite *UserBcryptHashingTestSuite) SetupTest() {
 }
 
 func (suite *UserBcryptHashingTestSuite) TestHash() {
-	password, _ := valueObjectMother.RandomPassword()
+	password, _ := valueobj.RandomPassword()
 
 	plain := password.Value()
 
@@ -31,7 +31,7 @@ func (suite *UserBcryptHashingTestSuite) TestHash() {
 }
 
 func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
-	password, _ := valueObjectMother.RandomPassword()
+	password, _ := valueobj.RandomPassword()
 
 	plain := password.Value()
 

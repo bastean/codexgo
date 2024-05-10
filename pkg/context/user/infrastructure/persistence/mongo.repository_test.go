@@ -4,11 +4,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistence/database"
-	aggregateMother "github.com/bastean/codexgo/pkg/context/user/domain/aggregate/mother"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/spersistence"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	valueObjectMother "github.com/bastean/codexgo/pkg/context/user/domain/valueObject/mother"
-	cryptographicMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/mock"
+	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
@@ -16,20 +16,20 @@ import (
 type UserMongoRepositoryTestSuite struct {
 	suite.Suite
 	sut     model.Repository
-	hashing *cryptographicMock.HashingMock
+	hashing *cryptographic.HashingMock
 }
 
 func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 	uri := os.Getenv("DATABASE_URI")
 	databaseName := "codexgo-test"
-	database, _ := database.NewMongoDatabase(uri, databaseName)
+	database, _ := spersistence.NewMongoDatabase(uri, databaseName)
 	collectionName := "users-test"
-	suite.hashing = new(cryptographicMock.HashingMock)
+	suite.hashing = new(cryptographic.HashingMock)
 	suite.sut = persistence.NewUserMongoRepository(database, collectionName, suite.hashing)
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSave() {
-	user := aggregateMother.Random()
+	user := aggregate.RandomUser()
 
 	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
@@ -39,7 +39,7 @@ func (suite *UserMongoRepositoryTestSuite) TestSave() {
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
-	user := aggregateMother.Random()
+	user := aggregate.RandomUser()
 
 	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
@@ -49,13 +49,13 @@ func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
-	user := aggregateMother.Random()
+	user := aggregate.RandomUser()
 
 	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
 	suite.NoError(suite.sut.Save(user))
 
-	password, _ := valueObjectMother.RandomPassword()
+	password, _ := valueobj.RandomPassword()
 
 	user.Password = password
 
@@ -67,7 +67,7 @@ func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestDelete() {
-	user := aggregateMother.Random()
+	user := aggregate.RandomUser()
 
 	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
 
@@ -77,7 +77,7 @@ func (suite *UserMongoRepositoryTestSuite) TestDelete() {
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSearch() {
-	expected := aggregateMother.Random()
+	expected := aggregate.RandomUser()
 
 	expected.PullMessages()
 

@@ -1,9 +1,9 @@
 package delete
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errs"
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 )
 
@@ -12,7 +12,7 @@ type Delete struct {
 	model.Hashing
 }
 
-func (delete *Delete) Run(id sharedModel.ValueObject[string]) (*types.Empty, error) {
+func (delete *Delete) Run(id smodel.ValueObject[string]) (*stype.Empty, error) {
 	// TODO!: user := delete.Repository.Search(repository.Filter{Id: id})
 
 	// TODO!: service.IsPasswordInvalid(delete.Hashing, user.Password.Value, password.Value)
@@ -20,7 +20,7 @@ func (delete *Delete) Run(id sharedModel.ValueObject[string]) (*types.Empty, err
 	err := delete.Repository.Delete(id)
 
 	if err != nil {
-		return nil, errs.BubbleUp(err, "Run")
+		return nil, serror.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

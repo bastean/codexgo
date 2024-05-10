@@ -3,27 +3,26 @@ package login_test
 import (
 	"testing"
 
-	sharedModel "github.com/bastean/codexgo/pkg/context/shared/domain/model"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	aggregateMother "github.com/bastean/codexgo/pkg/context/user/domain/aggregate/mother"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	cryptographicMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/mock"
-	persistenceMock "github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/mock"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type UserLoginTestSuite struct {
 	suite.Suite
-	sut        sharedModel.QueryHandler[*login.Query, *login.Response]
-	useCase    sharedModel.UseCase[*login.Input, *aggregate.User]
-	hashing    *cryptographicMock.HashingMock
-	repository *persistenceMock.RepositoryMock
+	sut        smodel.QueryHandler[*login.Query, *login.Response]
+	useCase    smodel.UseCase[*login.Input, *aggregate.User]
+	hashing    *cryptographic.HashingMock
+	repository *persistence.RepositoryMock
 }
 
 func (suite *UserLoginTestSuite) SetupTest() {
-	suite.repository = new(persistenceMock.RepositoryMock)
-	suite.hashing = new(cryptographicMock.HashingMock)
+	suite.repository = new(persistence.RepositoryMock)
+	suite.hashing = new(cryptographic.HashingMock)
 	suite.useCase = &login.Login{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
@@ -34,7 +33,7 @@ func (suite *UserLoginTestSuite) SetupTest() {
 }
 
 func (suite *UserLoginTestSuite) TestLogin() {
-	user := aggregateMother.Random()
+	user := aggregate.RandomUser()
 
 	query := &login.Query{
 		Email:    user.Email.Value(),
