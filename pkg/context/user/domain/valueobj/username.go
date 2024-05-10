@@ -33,9 +33,9 @@ func NewUsername(username string) (smodel.ValueObject[string], error) {
 	}
 
 	if usernameVO.IsValid() != nil {
-		return nil, serror.NewInvalidValueError(&serror.Bubble{
+		return nil, serror.NewInvalidValue(&serror.Bubble{
 			Where: "NewUsername",
-			What:  "must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only",
+			What:  "username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only",
 			Why: serror.Meta{
 				"Username": username,
 			},

@@ -37,9 +37,9 @@ func (client *Smtp) SendMail(to []string, message []byte) error {
 	err := smtp.SendMail(client.SmtpUrl, client.Auth, client.Username, to, message)
 
 	if err != nil {
-		return serror.NewFailedError(&serror.Bubble{
+		return serror.NewFailure(&serror.Bubble{
 			Where: "SendMail",
-			What:  "failed to send a mail",
+			What:  "failure to send a mail",
 			Why: serror.Meta{
 				"SmtpUrl": client.SmtpUrl,
 			},

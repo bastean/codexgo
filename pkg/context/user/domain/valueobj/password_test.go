@@ -17,15 +17,15 @@ func (suite *PasswordValueObjectTestSuite) SetupTest() {}
 func (suite *PasswordValueObjectTestSuite) TestPassword() {
 	password, err := valueobj.WithInvalidPasswordLength()
 
-	expected := serror.NewInvalidValueError(&serror.Bubble{
+	expected := serror.NewInvalidValue(&serror.Bubble{
 		Where: "NewPassword",
-		What:  "must be between " + "8" + " to " + "64" + " characters",
+		What:  "password must be between " + "8" + " to " + "64" + " characters",
 		Why: serror.Meta{
 			"Password": password,
 		},
 	})
 
-	var actual *serror.InvalidValueError
+	var actual *serror.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 

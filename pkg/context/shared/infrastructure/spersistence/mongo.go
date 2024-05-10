@@ -17,9 +17,9 @@ func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) error {
 	err := mdb.Client.Disconnect(ctx)
 
 	if err != nil {
-		return serror.NewInternalError(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "CloseMongoDatabase",
-			What:  "failed to close mongodb connection",
+			What:  "failure to close connection with mongodb",
 			Who:   err,
 		})
 	}
@@ -35,9 +35,9 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
 	if err != nil {
-		return nil, serror.NewInternalError(&serror.Bubble{
+		return nil, serror.NewInternal(&serror.Bubble{
 			Where: "NewMongoDatabase",
-			What:  "failed to create a mongodb client",
+			What:  "failure to create a mongodb client",
 			Who:   err,
 		})
 	}
@@ -45,9 +45,9 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 	err = client.Ping(context.Background(), nil)
 
 	if err != nil {
-		return nil, serror.NewInternalError(&serror.Bubble{
+		return nil, serror.NewInternal(&serror.Bubble{
 			Where: "NewMongoDatabase",
-			What:  "failed to connect with mongodb",
+			What:  "failure connecting to mongodb",
 			Who:   err,
 		})
 	}

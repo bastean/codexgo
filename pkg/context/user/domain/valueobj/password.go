@@ -29,9 +29,9 @@ func NewPassword(password string) (smodel.ValueObject[string], error) {
 	}
 
 	if passwordVO.IsValid() != nil {
-		return nil, serror.NewInvalidValueError(&serror.Bubble{
+		return nil, serror.NewInvalidValue(&serror.Bubble{
 			Where: "NewPassword",
-			What:  "must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters",
+			What:  "password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters",
 			Why: serror.Meta{
 				"Password": password,
 			},

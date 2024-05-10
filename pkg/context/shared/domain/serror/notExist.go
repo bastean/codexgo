@@ -1,11 +1,11 @@
 package serror
 
-type NotExistError struct {
+type NotExist struct {
 	*Bubble
 }
 
-func NewNotExistError(bubble *Bubble) error {
-	return &NotExistError{
+func NewNotExist(bubble *Bubble) error {
+	return &NotExist{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

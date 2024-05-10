@@ -39,9 +39,9 @@ func (rmq *RabbitMQ) AddRouter(router *srouter.Router) error {
 	rmq.exchange = router.Name
 
 	if err != nil {
-		return serror.NewInternalError(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "AddRouter",
-			What:  "failed to declare an exchange",
+			What:  "failure to declare an exchange",
 			Why: serror.Meta{
 				"Router": router.Name,
 			},
@@ -63,9 +63,9 @@ func (rmq *RabbitMQ) AddQueue(queue *squeue.Queue) error {
 	)
 
 	if err != nil {
-		return serror.NewInternalError(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "AddQueue",
-			What:  "failed to declare a queue",
+			What:  "failure to declare a queue",
 			Why: serror.Meta{
 				"Queue": queue.Name,
 			},
@@ -91,9 +91,9 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *squeue.Queue, bindingKeys []stri
 			nil)
 
 		if err != nil {
-			errToWrap := serror.NewInternalError(&serror.Bubble{
+			errToWrap := serror.NewInternal(&serror.Bubble{
 				Where: "AddQueueMessageBind",
-				What:  "failed to bind a queue",
+				What:  "failure to bind a queue",
 				Why: serror.Meta{
 					"Queue":      queue.Name,
 					"BindingKey": bindingKey,
@@ -128,9 +128,9 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer smodel.Consumer) error {
 		)
 
 		if err != nil {
-			errToWrap := serror.NewInternalError(&serror.Bubble{
+			errToWrap := serror.NewInternal(&serror.Bubble{
 				Where: "AddQueueConsumer",
-				What:  "failed to register a consumer",
+				What:  "failure to register a consumer",
 				Why: serror.Meta{
 					"Queue":    queue.Name,
 					"Exchange": rmq.exchange,
@@ -203,9 +203,9 @@ func (rmq *RabbitMQ) PublishMessages(messages []*smessage.Message) error {
 			})
 
 		if err != nil {
-			errToWrap := serror.NewInternalError(&serror.Bubble{
+			errToWrap := serror.NewInternal(&serror.Bubble{
 				Where: "PublishMessages",
-				What:  "failed to publish a messages",
+				What:  "failure to publish a message",
 				Why: serror.Meta{
 					"Exchange": rmq.exchange,
 					"Message":  message.Id,
@@ -228,9 +228,9 @@ func CloseRabbitMQ(rmq *RabbitMQ) error {
 	err := rmq.Channel.Close()
 
 	if err != nil {
-		return serror.NewInternalError(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "CloseRabbitMQ",
-			What:  "failed to close channel",
+			What:  "failure to close channel",
 			Who:   err,
 		})
 	}
@@ -238,9 +238,9 @@ func CloseRabbitMQ(rmq *RabbitMQ) error {
 	err = rmq.Connection.Close()
 
 	if err != nil {
-		return serror.NewInternalError(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "CloseRabbitMQ",
-			What:  "failed to close rabbitmq connection",
+			What:  "failure to close rabbitmq connection",
 			Who:   err,
 		})
 	}
@@ -252,9 +252,9 @@ func NewRabbitMQ(uri string, logger smodel.Logger) (smodel.Broker, error) {
 	conn, err := amqp.Dial(uri)
 
 	if err != nil {
-		return nil, serror.NewInternalError(&serror.Bubble{
+		return nil, serror.NewInternal(&serror.Bubble{
 			Where: "NewRabbitMQ",
-			What:  "failed to connect with rabbitmq",
+			What:  "failure connecting to rabbitmq",
 			Who:   err,
 		})
 	}
@@ -262,9 +262,9 @@ func NewRabbitMQ(uri string, logger smodel.Logger) (smodel.Broker, error) {
 	ch, err := conn.Channel()
 
 	if err != nil {
-		return nil, serror.NewInternalError(&serror.Bubble{
+		return nil, serror.NewInternal(&serror.Bubble{
 			Where: "NewRabbitMQ",
-			What:  "failed to open a channel",
+			What:  "failure to open a channel",
 			Who:   err,
 		})
 	}

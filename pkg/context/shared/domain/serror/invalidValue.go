@@ -1,11 +1,11 @@
 package serror
 
-type InvalidValueError struct {
+type InvalidValue struct {
 	*Bubble
 }
 
-func NewInvalidValueError(bubble *Bubble) error {
-	return &InvalidValueError{
+func NewInvalidValue(bubble *Bubble) error {
+	return &InvalidValue{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

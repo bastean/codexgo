@@ -1,11 +1,11 @@
 package serror
 
-type InternalError struct {
+type Internal struct {
 	*Bubble
 }
 
-func NewInternalError(bubble *Bubble) error {
-	return &InternalError{
+func NewInternal(bubble *Bubble) error {
+	return &Internal{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

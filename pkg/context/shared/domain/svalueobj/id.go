@@ -30,9 +30,9 @@ func NewId(id string) (smodel.ValueObject[string], error) {
 	}
 
 	if idVO.IsValid() != nil {
-		return nil, serror.NewInvalidValueError(&serror.Bubble{
+		return nil, serror.NewInvalidValue(&serror.Bubble{
 			Where: "NewId",
-			What:  "invalid format",
+			What:  "invalid id format",
 			Why: serror.Meta{
 				"Id": id,
 			},

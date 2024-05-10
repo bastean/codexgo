@@ -17,15 +17,15 @@ func (suite *EmailValueObjectTestSuite) SetupTest() {}
 func (suite *EmailValueObjectTestSuite) TestEmail() {
 	email, err := valueobj.InvalidEmail()
 
-	expected := serror.NewInvalidValueError(&serror.Bubble{
+	expected := serror.NewInvalidValue(&serror.Bubble{
 		Where: "NewEmail",
-		What:  "invalid format",
+		What:  "invalid email format",
 		Why: serror.Meta{
 			"Email": email,
 		},
 	})
 
-	var actual *serror.InvalidValueError
+	var actual *serror.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 

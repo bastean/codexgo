@@ -18,7 +18,7 @@ func HandleMongoDuplicateKeyError(err error) error {
 
 	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
-	return serror.NewAlreadyExistError(&serror.Bubble{
+	return serror.NewAlreadyExist(&serror.Bubble{
 		Where: "HandleMongoDuplicateKeyError",
 		What:  "already registered",
 		Why: serror.Meta{
@@ -29,7 +29,7 @@ func HandleMongoDuplicateKeyError(err error) error {
 }
 
 func HandleMongoDocumentNotFound(index string, err error) error {
-	return serror.NewNotExistError(&serror.Bubble{
+	return serror.NewNotExist(&serror.Bubble{
 		Where: "HandleMongoDocumentNotFound",
 		What:  "not found",
 		Why: serror.Meta{

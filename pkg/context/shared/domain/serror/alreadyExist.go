@@ -1,11 +1,11 @@
 package serror
 
-type AlreadyExistError struct {
+type AlreadyExist struct {
 	*Bubble
 }
 
-func NewAlreadyExistError(bubble *Bubble) error {
-	return &AlreadyExistError{
+func NewAlreadyExist(bubble *Bubble) error {
+	return &AlreadyExist{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

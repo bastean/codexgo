@@ -30,9 +30,9 @@ func NewEmail(email string) (smodel.ValueObject[string], error) {
 	}
 
 	if emailVO.IsValid() != nil {
-		return nil, serror.NewInvalidValueError(&serror.Bubble{
+		return nil, serror.NewInvalidValue(&serror.Bubble{
 			Where: "NewEmail",
-			What:  "invalid format",
+			What:  "invalid email format",
 			Why: serror.Meta{
 				"Email": email,
 			},

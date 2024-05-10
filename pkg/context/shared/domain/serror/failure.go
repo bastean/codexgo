@@ -1,11 +1,11 @@
 package serror
 
-type FailedError struct {
+type Failure struct {
 	*Bubble
 }
 
-func NewFailedError(bubble *Bubble) error {
-	return &FailedError{
+func NewFailure(bubble *Bubble) error {
+	return &Failure{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

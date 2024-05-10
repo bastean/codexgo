@@ -20,9 +20,9 @@ func (auth *Authentication) GenerateJWT(id string) (string, error) {
 	tokenString, err := token.SignedString(auth.secretKey)
 
 	if err != nil {
-		return "", serror.NewInvalidValueError(&serror.Bubble{
+		return "", serror.NewFailure(&serror.Bubble{
 			Where: "GenerateJWT",
-			What:  "failed to sign jwt",
+			What:  "failure to sign a jwt",
 			Who:   err,
 		})
 	}
@@ -39,7 +39,7 @@ func (auth *Authentication) ValidateJWT(tokenString string) (jwt.MapClaims, erro
 		return claims, nil
 	}
 
-	return nil, serror.NewInvalidValueError(&serror.Bubble{
+	return nil, serror.NewInvalidValue(&serror.Bubble{
 		Where: "ValidateJWT",
 		What:  "invalid jwt signature",
 		Why: serror.Meta{

@@ -25,9 +25,9 @@ func NewVerified(verified bool) (smodel.ValueObject[bool], error) {
 	}
 
 	if verifiedVO.IsValid() != nil {
-		return nil, serror.NewInvalidValueError(&serror.Bubble{
+		return nil, serror.NewInvalidValue(&serror.Bubble{
 			Where: "NewVerified",
-			What:  "invalid",
+			What:  "invalid verified value",
 			Why: serror.Meta{
 				"Verified": fmt.Sprintf("%v", verified),
 			},

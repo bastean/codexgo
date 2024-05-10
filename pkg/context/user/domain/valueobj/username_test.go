@@ -17,15 +17,15 @@ func (suite *UsernameValueObjectTestSuite) SetupTest() {}
 func (suite *UsernameValueObjectTestSuite) TestUsernameWithInvalidLength() {
 	username, err := valueobj.WithInvalidUsernameLength()
 
-	expected := serror.NewInvalidValueError(&serror.Bubble{
+	expected := serror.NewInvalidValue(&serror.Bubble{
 		Where: "NewUsername",
-		What:  "must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "username must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
 		Why: serror.Meta{
 			"Username": username,
 		},
 	})
 
-	var actual *serror.InvalidValueError
+	var actual *serror.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
@@ -35,15 +35,15 @@ func (suite *UsernameValueObjectTestSuite) TestUsernameWithInvalidLength() {
 func (suite *UsernameValueObjectTestSuite) TestUsernameWithInvalidAlphanumeric() {
 	username, err := valueobj.WithInvalidUsernameAlphanumeric()
 
-	expected := serror.NewInvalidValueError(&serror.Bubble{
+	expected := serror.NewInvalidValue(&serror.Bubble{
 		Where: "NewUsername",
-		What:  "must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "username must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
 		Why: serror.Meta{
 			"Username": username,
 		},
 	})
 
-	var actual *serror.InvalidValueError
+	var actual *serror.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 

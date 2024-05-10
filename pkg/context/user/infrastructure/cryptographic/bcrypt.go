@@ -13,9 +13,9 @@ func (hashing *Bcrypt) Hash(plain string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(plain), salt)
 
 	if err != nil {
-		return "", serror.NewFailedError(&serror.Bubble{
+		return "", serror.NewFailure(&serror.Bubble{
 			Where: "Hash",
-			What:  "failed to generate a hash",
+			What:  "failure to generate a hash",
 			Who:   err,
 		})
 	}

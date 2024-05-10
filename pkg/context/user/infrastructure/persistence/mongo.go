@@ -43,6 +43,17 @@ func (db *UserCollection) Save(user *aggregate.User) error {
 		return serror.BubbleUp(spersistence.HandleMongoDuplicateKeyError(err), "Save")
 	}
 
+	if err != nil {
+		return serror.NewFailure(&serror.Bubble{
+			Where: "Save",
+			What:  "failure to save a user",
+			Why: serror.Meta{
+				"Id": user.Id.Value(),
+			},
+			Who: err,
+		})
+	}
+
 	return nil
 }
 
@@ -76,9 +87,9 @@ func (db *UserCollection) Update(user *aggregate.User) error {
 	_, err := db.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
 
 	if err != nil {
-		return serror.NewFailedError(&serror.Bubble{
+		return serror.NewFailure(&serror.Bubble{
 			Where: "Update",
-			What:  "failed on update",
+			What:  "failure to update a user",
 			Why: serror.Meta{
 				"Id": user.Id.Value(),
 			},
@@ -95,9 +106,9 @@ func (db *UserCollection) Delete(id smodel.ValueObject[string]) error {
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
 
 	if err != nil {
-		return serror.NewFailedError(&serror.Bubble{
+		return serror.NewFailure(&serror.Bubble{
 			Where: "Delete",
-			What:  "failed on delete",
+			What:  "failure to delete a user",
 			Why: serror.Meta{
 				"Id": id.Value(),
 			},
@@ -135,9 +146,9 @@ func (db *UserCollection) Search(filter model.RepositorySearchCriteria) (*aggreg
 	user, err := aggregate.FromPrimitives(&userPrimitive)
 
 	if err != nil {
-		return nil, serror.NewFailedError(&serror.Bubble{
+		return nil, serror.NewFailure(&serror.Bubble{
 			Where: "Search",
-			What:  "failed on search",
+			What:  "failure to search for a user",
 			Why: serror.Meta{
 				"Id":    filter.Id.Value(),
 				"Email": filter.Email.Value(),

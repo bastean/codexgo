@@ -26,9 +26,9 @@ func NewRegisteredSucceededEvent(attributes *RegisteredSucceededEventAttributes)
 	attributesJson, err := json.Marshal(attributes)
 
 	if err != nil {
-		return nil, serror.NewInternalError(&serror.Bubble{
+		return nil, serror.NewInternal(&serror.Bubble{
 			Where: "NewRegisteredSucceededEvent",
-			What:  "failed to create event message",
+			What:  "failure to create an event message",
 			Why: serror.Meta{
 				"Routing Key": RegisteredSucceededEventTypeRoutingKey,
 			},

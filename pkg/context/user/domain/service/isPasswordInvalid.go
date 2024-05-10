@@ -7,7 +7,7 @@ import (
 
 func IsPasswordInvalid(hashing model.Hashing, hashed, plain string) error {
 	if hashing.IsNotEqual(hashed, plain) {
-		return serror.NewFailedError(&serror.Bubble{
+		return serror.NewFailure(&serror.Bubble{
 			Where: "IsPasswordInvalid",
 			What:  "passwords do not match",
 		})
