@@ -30,7 +30,7 @@ upgrade-go:
 	@go get -t -u ./...
 
 upgrade-node:
-	@${npx} ncu -u
+	@${npx} ncu --root -ws -u
 	@rm -f package-lock.json
 	@npm i --legacy-peer-deps
 
@@ -39,9 +39,9 @@ upgrade-reset:
 	@${npm-ci}
 
 upgrade:
-	@go run scripts/upgrade/**
+	@go run ./scripts/upgrade
 
-#* Installations
+#* Dependencies
 install-deps:
 	@go mod download
 	@${npm-ci}
@@ -49,12 +49,16 @@ install-deps:
 	@go install github.com/a-h/templ/cmd/templ@latest
 	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
+copy-deps:
+	@go run ./scripts/copy-deps
+
 #* Generators
 generate-required:
+	@go generate ./...
 	@templ generate
 
 #* Initializations
-init: upgrade-managers install-deps generate-required
+init: upgrade-managers install-deps copy-deps generate-required
 	
 init-from-zero:
 	@git init
@@ -79,6 +83,9 @@ test-sut:
 test-clean:
 	@go clean -testcache
 	@cd test/ && mkdir -p report
+
+test-codegen:
+	@${npx} playwright codegen http://localhost:8080
 
 test-sync: upgrade-go
 	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make test-sut' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
@@ -136,7 +143,7 @@ sync-env-reset:
 	@${git-reset-hard}
 
 sync-env:
-	@cd deployments && go run ../scripts/sync-env/**
+	@cd deployments && go run ../scripts/sync-env
 
 #* Git
 commit:
@@ -155,6 +162,12 @@ WARNING-git-genesis:
 docker-usage:
 	@docker system df
 
+demo-down:
+	@${compose-env} .env.demo down
+
+demo: demo-down
+	@${compose-env} .env.demo up
+
 compose-dev-down:
 	@${compose-env} .env.dev down
 	@docker volume rm codexgo-database-dev -f
@@ -167,10 +180,10 @@ compose-test-down:
 	@docker volume rm codexgo-database-test -f
 
 compose-test-integration: compose-test-down
-	@${compose-env} .env.test --env-file .env.example.test.integration up --exit-code-from server
+	@${compose-env} .env.test --env-file .env.demo.test.integration up --exit-code-from server
 
 compose-test-acceptance: compose-test-down
-	@${compose-env} .env.test --env-file .env.example.test.acceptance up --exit-code-from server
+	@${compose-env} .env.test --env-file .env.demo.test.acceptance up --exit-code-from server
 
 compose-test-all: compose-test-down
 	@${compose-env} .env.test up --exit-code-from server
