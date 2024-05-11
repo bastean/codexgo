@@ -1,23 +1,14 @@
 root = "."
-testdata_dir = "testdata"
 tmp_dir = "tmp"
+testdata_dir = "testdata"
 
 [build]
-  args_bin = []
+  pre_cmd = ["make generate-required"]
+  cmd = "go build -buildvcs=false -o ./tmp/main ./cmd/codexgo"
+  post_cmd = []
   bin = "./tmp/main"
-  cmd = "templ generate && go build -buildvcs=false -o ./tmp/main ./cmd/codexgo"
-  delay = 1000
-  exclude_dir = []
-  exclude_file = []
-  exclude_regex = [
-    "_test.go"
-  ]
-  exclude_unchanged = false
-  follow_symlink = false
   full_bin = ""
-  include_dir = [
-    "pkg/cmd/server"
-  ]
+  args_bin = []
   include_ext = [
     "go",
     "html",
@@ -25,32 +16,48 @@ tmp_dir = "tmp"
     "tmpl",
     "tpl"
   ]
+  exclude_dir = []
+  include_dir = [
+    "pkg"
+  ]
   include_file = []
-  kill_delay = "5s"
-  log = "build-errors.log"
+  exclude_file = []
+  exclude_regex = [
+    "^.*_test\\.go$",
+    "^.*\\.mother\\.go$",
+    "^.*\\.mock\\.go$",
+    "^.*_templ\\.go$"
+  ]
+  exclude_unchanged = true
+  follow_symlink = true
+  log = "air.log"
   poll = false
-  poll_interval = 0
-  post_cmd = []
-  pre_cmd = []
-  rerun = false
-  rerun_delay = 500
-  send_interrupt = true
+  poll_interval = 1000
+  delay = 1000
   stop_on_error = false
-
-[color]
-  app = ""
-  build = "yellow"
-  main = "magenta"
-  runner = "green"
-  watcher = "cyan"
+  send_interrupt = true
+  kill_delay = 1000
+  rerun = false
+  rerun_delay = 1000
 
 [log]
-  main_only = false
   time = true
+  main_only = false
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
 
 [misc]
   clean_on_exit = true
 
 [screen]
-  clear_on_rebuild = false
+  clear_on_rebuild = true
   keep_scroll = true
+
+[proxy]
+  enabled = true
+  proxy_port = 8090
+  app_port = 8080
