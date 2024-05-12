@@ -11,16 +11,16 @@ type Authentication struct {
 	secretKey []byte
 }
 
-func (auth *Authentication) GenerateJWT(id string) (string, error) {
+func (auth *Authentication) GenerateJWT(userId string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"exp": time.Now().Add((24 * time.Hour) * 7).Unix(),
-		"id":  id,
+		"exp":    time.Now().Add((24 * time.Hour) * 7).Unix(),
+		"userId": userId,
 	})
 
 	tokenString, err := token.SignedString(auth.secretKey)
 
 	if err != nil {
-		return "", serror.NewFailure(&serror.Bubble{
+		return "", serror.NewInternal(&serror.Bubble{
 			Where: "GenerateJWT",
 			What:  "failure to sign a jwt",
 			Who:   err,
@@ -39,7 +39,7 @@ func (auth *Authentication) ValidateJWT(tokenString string) (jwt.MapClaims, erro
 		return claims, nil
 	}
 
-	return nil, serror.NewInvalidValue(&serror.Bubble{
+	return nil, serror.NewFailure(&serror.Bubble{
 		Where: "ValidateJWT",
 		What:  "invalid jwt signature",
 		Why: serror.Meta{

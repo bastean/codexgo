@@ -2,8 +2,6 @@ package slogger
 
 import (
 	"log"
-
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
 )
 
 type Logger struct{}
@@ -22,8 +20,4 @@ func (logger *Logger) Fatal(message string) {
 
 func (logger *Logger) Info(message string) {
 	log.Print(message)
-}
-
-func NewLogger() smodel.Logger {
-	return new(Logger)
 }

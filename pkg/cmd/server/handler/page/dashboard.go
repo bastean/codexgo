@@ -1,4 +1,4 @@
-package handler
+package page
 
 import (
 	"github.com/bastean/codexgo/pkg/cmd/server/component/layout"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func IndexDashboard() gin.HandlerFunc {
+func Dashboard() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("HX-Push-Url", "/dashboard")
 

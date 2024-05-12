@@ -1,4 +1,4 @@
-package handler
+package page
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NotRoute() gin.HandlerFunc {
+func NoRoute() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/")
 	}

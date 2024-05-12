@@ -27,7 +27,7 @@ func (consumer *RegisteredSucceededEventConsumer) On(message *smessage.Message) 
 	err := json.Unmarshal(message.Attributes, attributes)
 
 	if err != nil {
-		return serror.NewFailure(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "On",
 			What:  "failure to obtain message attributes",
 			Why: serror.Meta{

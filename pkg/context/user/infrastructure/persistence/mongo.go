@@ -44,7 +44,7 @@ func (db *UserCollection) Save(user *aggregate.User) error {
 	}
 
 	if err != nil {
-		return serror.NewFailure(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "Save",
 			What:  "failure to save a user",
 			Why: serror.Meta{
@@ -87,7 +87,7 @@ func (db *UserCollection) Update(user *aggregate.User) error {
 	_, err := db.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
 
 	if err != nil {
-		return serror.NewFailure(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "Update",
 			What:  "failure to update a user",
 			Why: serror.Meta{
@@ -106,7 +106,7 @@ func (db *UserCollection) Delete(id smodel.ValueObject[string]) error {
 	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
 
 	if err != nil {
-		return serror.NewFailure(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "Delete",
 			What:  "failure to delete a user",
 			Why: serror.Meta{
@@ -136,17 +136,17 @@ func (db *UserCollection) Search(filter model.RepositorySearchCriteria) (*aggreg
 	result := db.collection.FindOne(context.Background(), searchFilter)
 
 	if err := result.Err(); err != nil {
-		spersistence.HandleMongoDocumentNotFound(index, err)
+		return nil, spersistence.HandleMongoDocumentNotFound(index, err)
 	}
 
-	var userPrimitive aggregate.UserPrimitive
+	userPrimitive := new(aggregate.UserPrimitive)
 
-	result.Decode(&userPrimitive)
+	result.Decode(userPrimitive)
 
-	user, err := aggregate.FromPrimitives(&userPrimitive)
+	user, err := aggregate.FromPrimitives(userPrimitive)
 
 	if err != nil {
-		return nil, serror.NewFailure(&serror.Bubble{
+		return nil, serror.NewInternal(&serror.Bubble{
 			Where: "Search",
 			What:  "failure to search for a user",
 			Why: serror.Meta{
@@ -160,10 +160,10 @@ func (db *UserCollection) Search(filter model.RepositorySearchCriteria) (*aggreg
 	return user, nil
 }
 
-func NewUserMongoRepository(mdb *spersistence.MongoDB, collectionName string, hashing model.Hashing) model.Repository {
+func NewMongoCollection(mdb *spersistence.MongoDB, collectionName string, hashing model.Hashing) (model.Repository, error) {
 	collection := mdb.Database.Collection(collectionName)
 
-	collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
+	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "id", Value: 1}},
 			Options: options.Index().SetUnique(true),
@@ -178,8 +178,19 @@ func NewUserMongoRepository(mdb *spersistence.MongoDB, collectionName string, ha
 		},
 	})
 
+	if err != nil {
+		return nil, serror.NewInternal(&serror.Bubble{
+			Where: "NewMongoCollection",
+			What:  "failure to create indexes for user collection",
+			Why: serror.Meta{
+				"Collection": collectionName,
+			},
+			Who: err,
+		})
+	}
+
 	return &UserCollection{
 		collection: collection,
 		hashing:    hashing,
-	}
+	}, nil
 }

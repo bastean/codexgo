@@ -13,6 +13,8 @@ var username = os.Getenv("SMTP_USERNAME")
 var password = os.Getenv("SMTP_PASSWORD")
 var serverUrl = os.Getenv("URL")
 
-var notifySmtpMail = communication.NewNotifySmtpMail(host, port, username, password, serverUrl)
+var SMTP = communication.NewSMTP(host, port, username, password, serverUrl)
 
-var NotifySendMail = sendMail.NewSendMail(notifySmtpMail)
+var SendMail = &sendMail.SendMail{
+	Mail: SMTP,
+}

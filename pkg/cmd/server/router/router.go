@@ -15,13 +15,15 @@ func New(files *embed.FS) *gin.Engine {
 
 	router.Use(middleware.RateLimiter())
 
+	router.Use(gin.CustomRecovery(middleware.PanicHandler))
+
+	router.Use(middleware.ErrorHandler())
+
 	fs := http.FS(files)
 
 	router.StaticFS("/public", fs)
 
 	router.StaticFileFS("/robots.txt", "static/robots.txt", fs)
-
-	router.Use(gin.CustomRecovery(middleware.ErrorHandler))
 
 	InitRoutes()
 

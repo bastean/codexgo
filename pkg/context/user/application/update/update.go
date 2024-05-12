@@ -36,21 +36,21 @@ func (update *Update) Run(userUpdate *Command) (*stype.Empty, error) {
 		return nil, serror.BubbleUp(err, "Run")
 	}
 
-	var emailErr, usernameErr, passwordErr error
+	var errEmail, errUsername, errPassword error
 
 	if userUpdate.Email != "" {
-		userRegistered.Email, emailErr = valueobj.NewEmail(userUpdate.Email)
+		userRegistered.Email, errEmail = valueobj.NewEmail(userUpdate.Email)
 	}
 
 	if userUpdate.Username != "" {
-		userRegistered.Username, usernameErr = valueobj.NewUsername(userUpdate.Username)
+		userRegistered.Username, errUsername = valueobj.NewUsername(userUpdate.Username)
 	}
 
 	if userUpdate.UpdatedPassword != "" {
-		userRegistered.Password, passwordErr = valueobj.NewPassword(userUpdate.UpdatedPassword)
+		userRegistered.Password, errPassword = valueobj.NewPassword(userUpdate.UpdatedPassword)
 	}
 
-	err = errors.Join(emailErr, usernameErr, passwordErr)
+	err = errors.Join(errEmail, errUsername, errPassword)
 
 	if err != nil {
 		return nil, serror.BubbleUp(err, "Run")

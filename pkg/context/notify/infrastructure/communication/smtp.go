@@ -37,7 +37,7 @@ func (client *Smtp) SendMail(to []string, message []byte) error {
 	err := smtp.SendMail(client.SmtpUrl, client.Auth, client.Username, to, message)
 
 	if err != nil {
-		return serror.NewFailure(&serror.Bubble{
+		return serror.NewInternal(&serror.Bubble{
 			Where: "SendMail",
 			What:  "failure to send a mail",
 			Why: serror.Meta{
@@ -71,7 +71,7 @@ func (client *Smtp) SendAccountConfirmation(mail *template.AccountConfirmationMa
 	return nil
 }
 
-func NewNotifySmtpMail(host, port, username, password, serverUrl string) model.Mail {
+func NewSMTP(host, port, username, password, serverUrl string) model.Mail {
 	return &Smtp{
 		Auth:        smtp.PlainAuth("", username, password, host),
 		MIMEHeaders: "MIME-version: 1.0;\n" + "Content-Type: text/html; charset=\"UTF-8\";\n\n",

@@ -30,13 +30,13 @@ type UserPrimitive struct {
 func create(id, email, username, password string, verified bool) (*User, error) {
 	aggregateRoot := saggregate.NewAggregateRoot()
 
-	idVO, idErr := valueobj.NewId(id)
-	emailVO, emailErr := valueobj.NewEmail(email)
-	usernameVO, usernameErr := valueobj.NewUsername(username)
-	passwordVO, passwordErr := valueobj.NewPassword(password)
-	verifiedVO, verifiedErr := valueobj.NewVerified(verified)
+	idVO, errId := valueobj.NewId(id)
+	emailVO, errEmail := valueobj.NewEmail(email)
+	usernameVO, errUsername := valueobj.NewUsername(username)
+	passwordVO, errPassword := valueobj.NewPassword(password)
+	verifiedVO, errVerified := valueobj.NewVerified(verified)
 
-	err := errors.Join(idErr, emailErr, usernameErr, passwordErr, verifiedErr)
+	err := errors.Join(errId, errEmail, errUsername, errPassword, errVerified)
 
 	if err != nil {
 		return nil, serror.BubbleUp(err, "create")

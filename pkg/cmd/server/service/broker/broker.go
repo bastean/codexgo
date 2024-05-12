@@ -6,36 +6,82 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/notify"
 	"github.com/bastean/codexgo/pkg/context/notify/application/sendMail"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/exchange"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queue"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communication"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/srouter"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/scommunication"
 )
 
 var uri = os.Getenv("BROKER_URI")
 
-var Broker = communication.NewRabbitMQ(uri)
+var Broker smodel.Broker
 
-var Exchange = exchange.NewExchange("codexgo")
+func Init() error {
+	logger.Info("starting rabbitmq")
 
-var NotifySendAccountConfirmationQueueName = queue.NewQueueName(&queue.QueueName{Module: "notify", Action: "send account confirmation", Event: "registered.succeeded"})
+	rabbitMQ, err := scommunication.NewRabbitMQ(uri, logger.Logger)
 
-var NotifySendAccountConfirmationQueue = queue.NewQueue(NotifySendAccountConfirmationQueueName)
+	if err != nil {
+		return serror.BubbleUp(err, "Init")
+	}
 
-var NotifySendAccountConfirmationQueueConsumer = sendMail.NewRegisteredSucceededEventConsumer(notify.NotifySendMail, []*queue.Queue{NotifySendAccountConfirmationQueue})
+	Broker = rabbitMQ
 
-func Init() {
-	logger.Logger.Info("starting rabbitmq")
+	router := &srouter.Router{
+		Name: "codexgo",
+	}
 
-	Broker.AddExchange(Exchange)
+	notifySendAccountConfirmationQueueName := squeue.NewQueueName(&squeue.QueueName{
+		Module: "notify",
+		Action: "send account confirmation",
+		Event:  "registered.succeeded",
+	})
 
-	Broker.AddQueue(NotifySendAccountConfirmationQueue)
+	notifySendAccountConfirmationQueue := &squeue.Queue{
+		Name: notifySendAccountConfirmationQueueName,
+	}
 
-	Broker.AddQueueMessageBind(NotifySendAccountConfirmationQueue, []string{"#.event.#.registered.succeeded"})
+	notifySendAccountConfirmationQueueConsumer := &sendMail.RegisteredSucceededEventConsumer{
+		UseCase: notify.SendMail,
+		Queues:  []*squeue.Queue{notifySendAccountConfirmationQueue},
+	}
 
-	Broker.AddQueueConsumer(NotifySendAccountConfirmationQueueConsumer)
+	err = Broker.AddRouter(router)
+
+	if err != nil {
+		return serror.BubbleUp(err, "Init")
+	}
+
+	err = Broker.AddQueue(notifySendAccountConfirmationQueue)
+
+	if err != nil {
+		return serror.BubbleUp(err, "Init")
+	}
+
+	err = Broker.AddQueueMessageBind(notifySendAccountConfirmationQueue, []string{"#.event.#.registered.succeeded"})
+
+	if err != nil {
+		return serror.BubbleUp(err, "Init")
+	}
+
+	err = Broker.AddQueueConsumer(notifySendAccountConfirmationQueueConsumer)
+
+	if err != nil {
+		return serror.BubbleUp(err, "Init")
+	}
+
+	return nil
 }
 
-func Close() {
-	communication.CloseRabbitMQ(Broker.(*communication.RabbitMQ))
-	logger.Logger.Info("rabbitmq closed")
+func Close() error {
+	err := scommunication.CloseRabbitMQ(Broker.(*scommunication.RabbitMQ))
+
+	if err != nil {
+		return serror.BubbleUp(err, "Close")
+	}
+
+	logger.Info("rabbitmq closed")
+
+	return nil
 }

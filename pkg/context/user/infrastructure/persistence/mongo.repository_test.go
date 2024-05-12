@@ -25,7 +25,7 @@ func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 	database, _ := spersistence.NewMongoDatabase(uri, databaseName)
 	collectionName := "users-test"
 	suite.hashing = new(cryptographic.HashingMock)
-	suite.sut = persistence.NewUserMongoRepository(database, collectionName, suite.hashing)
+	suite.sut, _ = persistence.NewMongoCollection(database, collectionName, suite.hashing)
 }
 
 func (suite *UserMongoRepositoryTestSuite) TestSave() {

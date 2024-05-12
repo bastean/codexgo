@@ -8,6 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func abort(c *gin.Context) {
+	c.Redirect(http.StatusFound, "/")
+	c.Abort()
+}
+
 func VerifyAuthentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
@@ -19,18 +24,19 @@ func VerifyAuthentication() gin.HandlerFunc {
 
 		value := strings.Split(token, " ")[1]
 
-		claims := auth.Auth.ValidateJWT(value)
+		claims, err := auth.Auth.ValidateJWT(value)
 
-		if value, ok := claims["id"]; ok {
-			c.Set("id", value)
+		if err != nil {
+			c.Error(err)
+			abort(c)
+			return
+		}
+
+		if value, exists := claims["userId"]; exists {
+			c.Set("userId", value)
 			c.Next()
 		} else {
 			abort(c)
 		}
 	}
-}
-
-func abort(c *gin.Context) {
-	c.Redirect(http.StatusFound, "/")
-	c.Abort()
 }

@@ -1,21 +1,26 @@
 package router
 
 import (
-	"github.com/bastean/codexgo/pkg/cmd/server/handler"
+	"github.com/bastean/codexgo/pkg/cmd/server/handler/form"
+	"github.com/bastean/codexgo/pkg/cmd/server/handler/page"
+	"github.com/bastean/codexgo/pkg/cmd/server/handler/param"
 	"github.com/bastean/codexgo/pkg/cmd/server/middleware"
 )
 
 func InitRoutes() {
-	router.NoRoute(handler.NotRoute())
+	router.NoRoute(page.NoRoute())
 
-	router.GET("/", handler.IndexPage())
-	router.PUT("/", handler.FormRegister())
-	router.POST("/", handler.FormLogin())
+	public := router.Group("/")
 
-	router.GET("/verify/:id", handler.Verify())
+	public.GET("/", page.Index())
+	public.PUT("/", form.UserRegister())
+	public.POST("/", form.UserLogin())
 
-	auth := router.Group("/dashboard", middleware.VerifyAuthentication())
-	auth.GET("/", handler.IndexDashboard())
-	auth.PATCH("/", handler.FormUpdate())
-	auth.DELETE("/", handler.FormDelete())
+	public.GET("/verify/:id", param.UserVerify())
+
+	auth := public.Group("/dashboard", middleware.VerifyAuthentication())
+
+	auth.GET("/", page.Dashboard())
+	auth.PATCH("/", form.UserUpdate())
+	auth.DELETE("/", form.UserDelete())
 }

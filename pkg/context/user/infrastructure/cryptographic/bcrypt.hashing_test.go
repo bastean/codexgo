@@ -15,7 +15,7 @@ type UserBcryptHashingTestSuite struct {
 }
 
 func (suite *UserBcryptHashingTestSuite) SetupTest() {
-	suite.sut = cryptographic.NewUserBcryptHashing()
+	suite.sut = new(cryptographic.Bcrypt)
 }
 
 func (suite *UserBcryptHashingTestSuite) TestHash() {

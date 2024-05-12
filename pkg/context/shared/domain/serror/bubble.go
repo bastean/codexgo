@@ -8,7 +8,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/sservice"
 )
 
-type Meta map[string]string
+type Meta map[string]any
 
 type Bubble struct {
 	When  time.Time

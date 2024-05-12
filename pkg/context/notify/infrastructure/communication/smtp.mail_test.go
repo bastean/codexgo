@@ -24,7 +24,7 @@ func (suite *SmtpMailTestSuite) SetupTest() {
 
 	serverUrl := os.Getenv("URL")
 
-	suite.sut = communication.NewNotifySmtpMail(suite.host, suite.port, suite.username, suite.password, serverUrl)
+	suite.sut = communication.NewSMTP(suite.host, suite.port, suite.username, suite.password, serverUrl)
 }
 
 func (suite *SmtpMailTestSuite) TestSendAccountConfirmation() {
