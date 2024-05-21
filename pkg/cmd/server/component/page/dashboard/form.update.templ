@@ -1,0 +1,140 @@
+package dashboard
+
+var UpdateFormTagId = "update"
+
+script UpdateFormInit(formTagId string) {
+    $("#"+formTagId)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            fields: {
+                Email: {
+                    optional   : true,
+                    rules: [
+                        {
+                            type: "email"
+                        }
+                    ]
+                },
+                Username: {
+                    optional   : true,
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        }
+                    ]
+                },
+                Password: {
+                    rules: [
+                        {
+                            type: "size[8..64]"
+                        }
+                    ]
+                },
+                UpdatedPassword: {
+                    optional   : true,
+                    rules: [
+                        {
+                            type: "size[8..64]"
+                        }
+                    ]
+                },
+                ConfirmPassword: {
+                    depends    : 'UpdatedPassword',
+                    rules: [
+                        {
+                            type: "match[UpdatedPassword]"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "update user", 
+            method: "PATCH",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: 'success',
+                    message: response.message,
+                    showProgress: 'top',
+                });
+
+                 _.delay(function() {
+                    window.location.replace("/dashboard");
+                }, 3000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: 'error',
+                    message: response.message,
+                    showProgress: 'top'
+                });
+            }
+        })
+    ;
+}
+
+templ UpdateForm(email, username string) {
+	<form id={ UpdateFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Account settings
+		</h1>
+		<div class="required field">
+			<label>Email</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="envelope icon"></i>
+				<input type="text" placeholder="Email" name="Email" value={ email }/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Username</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Username" name="Username" value={ username }/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Current Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="lock icon"></i>
+				<input type="password" placeholder="Current Password" name="Password"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>New Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="lock icon"></i>
+				<input type="password" placeholder="New Password" name="UpdatedPassword"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Confirm Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="redo icon"></i>
+				<input type="password" placeholder="Confirm Password" name="ConfirmPassword"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui grid">
+			<div class="two column row">
+				<div class="ten wide column">
+					<button class="ui fluid primary submit button">Update</button>
+				</div>
+				<div class="six wide column">
+					<button class="ui animated fluid negative reset button">
+						<div class="visible content">Reset</div>
+						<div class="hidden content">
+							<i class="trash icon"></i>
+						</div>
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+	@UpdateFormInit(UpdateFormTagId)
+}

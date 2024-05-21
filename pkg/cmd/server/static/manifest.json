@@ -1,8 +1,8 @@
 {
-  "name": "codexgo",
-  "short_name": "codexgo",
+  "name": "codexGO",
+  "short_name": "codexGO",
   "version": "3.0.1",
-  "description": "codexgo",
+  "description": "codexGO",
   "author": "Bastean <bastean@pm.me>",
   "homepage_url": "https://github.com/bastean/codexgo#readme",
   "start_url": ".",

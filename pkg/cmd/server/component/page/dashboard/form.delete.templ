@@ -1,0 +1,83 @@
+package dashboard
+
+var DeleteFormTagId = "delete"
+
+script DeleteFormInit(formTagId string) {
+    $("#"+formTagId)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            fields: {
+                Password: {
+                    rules: [
+                        {
+                            type: "size[8..64]"
+                        }
+                    ]
+                },
+                ConfirmPassword: {
+                    rules: [
+                        {
+                            type: "match[Password]"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "delete user", 
+            method: "DELETE",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: 'success',
+                    message: response.message,
+                    showProgress: 'top',
+                });
+
+                 _.delay(function() {
+                    Storage.Clear();
+                    window.location.replace("/");
+                }, 3000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: 'error',
+                    message: response.message,
+                    showProgress: 'top'
+                });
+            }
+        })
+    ;
+}
+
+script DeleteFormShow() {
+    $(".ui.mini.modal").modal("show");
+}
+
+templ DeleteForm() {
+	<div class="ui mini inverted modal">
+		<div class="header">Delete Your Account</div>
+		<div class="content">
+			<form id={ DeleteFormTagId } class="ui inverted form">
+				<div class="required field">
+					<label>Password</label>
+					<div class="ui inverted transparent left icon input">
+						<i class="lock icon"></i>
+						<input type="password" placeholder="Password" name="Password"/>
+					</div>
+				</div>
+				<div class="required field">
+					<label>Confirm Password</label>
+					<div class="ui inverted transparent left icon input">
+						<i class="redo icon"></i>
+						<input type="password" placeholder="Confirm Password" name="ConfirmPassword"/>
+					</div>
+				</div>
+				<div class="ui divider"></div>
+				<button class="ui fluid positive submit button">Approve</button>
+			</form>
+		</div>
+	</div>
+	@DeleteFormInit(DeleteFormTagId)
+}

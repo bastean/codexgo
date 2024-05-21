@@ -93,7 +93,7 @@ func NewUser(id, email, username, password string) (*User, error) {
 		return nil, serror.BubbleUp(err, "NewUser")
 	}
 
-	eventMessage, err := message.NewRegisteredSucceededEvent(&message.RegisteredSucceededEventAttributes{
+	eventMessage, err := message.NewCreatedSucceededEvent(&message.CreatedSucceededEventAttributes{
 		Id:       id,
 		Email:    email,
 		Username: username,

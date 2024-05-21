@@ -48,6 +48,8 @@ func (update *Update) Run(userUpdate *Command) (*stype.Empty, error) {
 
 	if userUpdate.UpdatedPassword != "" {
 		userRegistered.Password, errPassword = valueobj.NewPassword(userUpdate.UpdatedPassword)
+	} else {
+		userRegistered.Password = nil
 	}
 
 	err = errors.Join(errEmail, errUsername, errPassword)

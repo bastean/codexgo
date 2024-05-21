@@ -35,14 +35,14 @@ func Init() error {
 	notifySendAccountConfirmationQueueName := squeue.NewQueueName(&squeue.QueueName{
 		Module: "notify",
 		Action: "send account confirmation",
-		Event:  "registered.succeeded",
+		Event:  "created.succeeded",
 	})
 
 	notifySendAccountConfirmationQueue := &squeue.Queue{
 		Name: notifySendAccountConfirmationQueueName,
 	}
 
-	notifySendAccountConfirmationQueueConsumer := &sendMail.RegisteredSucceededEventConsumer{
+	notifySendAccountConfirmationQueueConsumer := &sendMail.CreatedSucceededEventConsumer{
 		UseCase: notify.SendMail,
 		Queues:  []*squeue.Queue{notifySendAccountConfirmationQueue},
 	}
@@ -59,7 +59,7 @@ func Init() error {
 		return serror.BubbleUp(err, "Init")
 	}
 
-	err = Broker.AddQueueMessageBind(notifySendAccountConfirmationQueue, []string{"#.event.#.registered.succeeded"})
+	err = Broker.AddQueueMessageBind(notifySendAccountConfirmationQueue, []string{"#.event.#.created.succeeded"})
 
 	if err != nil {
 		return serror.BubbleUp(err, "Init")

@@ -1,0 +1,71 @@
+package layout
+
+import (
+	"github.com/bastean/codexgo/pkg/cmd/server/component/script/fomantic"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/script/storage"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/script/jquery"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
+)
+
+templ Index(headScripts script.Head, bodyScripts script.Body) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<!-- Meta -->
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="description" content="codexgo"/>
+			<meta name="keywords" content="codexgo"/>
+			<meta name="theme-color" content="#202224"/>
+			<meta name="apple-mobile-web-app-capable" content="yes"/>
+			<meta
+				name="apple-mobile-web-app-status-bar-style"
+				content="black-translucent"
+			/>
+			<!-- Remove "meta robots" and "robots.txt" rules for SEO -->
+			<meta
+				name="robots"
+				content="noindex, nofollow, noarchive, nositelinkssearchbox, nosnippet, notranslate, noimageindex"
+			/>
+			<!-- Properties -->
+			<title>codexGO</title>
+			<link rel="manifest" href="/public/static/manifest.json"/>
+			<link
+				rel="apple-touch-icon"
+				href="/public/static/assets/apple-touch-icon.png"
+			/>
+			<link rel="icon" href="/public/static/assets/favicon.png"/>
+			<!-- Dependencies -->
+			<!-- jQuery -->
+			<script src="/public/static/dist/jquery.com/jquery.min.js"></script>
+			<!-- Fomantic-UI -->
+			<link
+				rel="stylesheet"
+				type="text/css"
+				href="/public/static/dist/fomantic-ui.com/semantic.min.css"
+			/>
+			<script src="/public/static/dist/fomantic-ui.com/semantic.min.js"></script>
+			<!-- Lodash -->
+			<script src="/public/static/dist/lodash.com/lodash.min.js"></script>
+			<!-- Scripts -->
+			<!-- codexGO -->
+			@storage.Init()
+			<!-- jQuery -->
+			@jquery.Init()
+			<!-- Fomantic-UI -->
+			@fomantic.Init()
+			<!-- Any -->
+			for _, headScript := range headScripts {
+				@headScript
+			}
+		</head>
+		<body>
+			<div class="ui basic inverted vertical segment" style="height: 100%; overflow-x: hidden; overflow-y: auto;">
+				{ children... }
+			</div>
+			for _, bodyScript := range bodyScripts {
+				@bodyScript
+			}
+		</body>
+	</html>
+}

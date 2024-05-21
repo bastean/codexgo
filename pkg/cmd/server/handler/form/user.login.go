@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,7 @@ func UserLogin() gin.HandlerFunc {
 
 		c.BindJSON(query)
 
-		response, err := user.LoginHandler.Handle(query)
+		user, err := user.LoginHandler.Handle(query)
 
 		if err != nil {
 			c.Error(err)
@@ -24,7 +25,7 @@ func UserLogin() gin.HandlerFunc {
 			return
 		}
 
-		token, err := auth.Auth.GenerateJWT(response.Id)
+		token, err := auth.Auth.GenerateJWT(user.Id)
 
 		if err != nil {
 			c.Error(err)
@@ -32,6 +33,12 @@ func UserLogin() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "Logged in", reply.Payload{"Bearer": token}))
+		session := sessions.Default(c)
+
+		session.Set("Authorization", "Bearer "+token)
+
+		session.Save()
+
+		c.JSON(http.StatusOK, reply.JSON(true, "Logged in", reply.Payload{}))
 	}
 }

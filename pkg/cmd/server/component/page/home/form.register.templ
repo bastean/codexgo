@@ -1,0 +1,136 @@
+package home
+
+var RegisterFormTagId = "register"
+
+script RegisterFormInit(formTagId string) {
+    $("#"+formTagId)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            fields: {
+                Email: {
+                    rules: [
+                        {
+                            type: "email"
+                        }
+                    ]
+                },
+                Username: {
+                    rules: [
+                        {
+                            type: "size[2..20]"
+                        },
+                        {
+                            type: "regExp[/^[A-Za-z0-9]+$/]",
+                            prompt: "{name} must be alphanumeric only"
+                        }
+                    ]
+                },
+                Password: {
+                    rules: [
+                        {
+                            type: "size[8..64]"
+                        }
+                    ]
+                },
+                ConfirmPassword: {
+                    rules: [
+                        {
+                            type: "match[Password]"
+                        }
+                    ]
+                },
+                Terms: {
+                    rules: [
+                        {
+                            type: "checked",
+                            prompt: "Terms & Conditions must be checked"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "create user", 
+            method: "PUT",
+            beforeSend: function(settings) {
+                settings.data.Id = crypto.randomUUID();
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            },
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: 'success',
+                    message: response.message,
+                    showProgress: 'top',
+                });
+
+                $("#"+formTagId).form('reset');
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: 'error',
+                    message: response.message,
+                    showProgress: 'top'
+                });
+            }
+        })
+    ;
+}
+
+script ShowTerms(modalTagId string) {
+    $("#"+ modalTagId).modal("show")
+}
+
+templ RegisterForm() {
+	<form id={ RegisterFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Create an account
+			<div class="sub header">Already have an account? <a>Sign in</a></div>
+		</h1>
+		<div class="required field">
+			<label>Email</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="envelope icon"></i>
+				<input type="text" placeholder="Email" name="Email"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Username</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="user icon"></i>
+				<input type="text" placeholder="Username" name="Username"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="lock icon"></i>
+				<input type="password" placeholder="Password" name="Password"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Confirm Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="redo icon"></i>
+				<input type="password" placeholder="Confirm Password" name="ConfirmPassword"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="ui middle aligned center aligned grid">
+			<div class="column">
+				<div class="inline required field">
+					<div class="ui inverted checkbox">
+						<input type="checkbox" name="Terms"/>
+						<label for=" ">I agree to the <a onclick={ ShowTerms(TermsModalTagId) }><b>terms and conditions</b></a></label>
+					</div>
+				</div>
+				<button class="ui fluid primary submit button">Sign up</button>
+			</div>
+		</div>
+	</form>
+	@RegisterFormInit(RegisterFormTagId)
+}

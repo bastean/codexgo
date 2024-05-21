@@ -1,0 +1,27 @@
+package fomantic
+
+script Init() {
+    $.api.settings.api = {
+        'create user' : '/',
+        'login user' : '/',
+        'update user' : '/dashboard',
+        'delete user' : '/dashboard',
+    };
+    
+    $.api.settings.serializeForm = true;
+
+    $.api.settings.contentType = "application/json; charset=UTF-8";
+
+    $.api.settings.beforeSend = function(settings) {
+        settings.data = JSON.stringify(settings.data);
+        return settings;
+    };
+
+    $.api.settings.successTest = function(response) {
+        if(response && response.success) {
+            return response.success;
+        }
+
+        return false;
+    };
+}

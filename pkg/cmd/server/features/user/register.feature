@@ -1,19 +1,19 @@
-Feature: Register a new User account
+Feature: Create a new User account
 
-  Scenario: Register a valid non existing account
+  Scenario: Create a valid non existing account
     Given I am on / page
-    Then I click the Register tab
-    * I fill the Email with register@example.com
-    * I fill the Username with register
+    Then I click the Create tab
+    * I fill the Email with create@example.com
+    * I fill the Username with create
     * I fill the Password with 12345678
-    * I click the Register button
-    And I see Successfully Registered notification
+    * I click the Create button
+    And I see Successfully Created notification
 
-  Scenario: Register already existing account
+  Scenario: Create already existing account
     Given I am on / page
-    Then I click the Register tab
-    * I fill the Email with register@example.com
-    * I fill the Username with register
+    Then I click the Create tab
+    * I fill the Email with create@example.com
+    * I fill the Username with create
     * I fill the Password with 12345678
-    * I click the Register button
-    And I see Email already registered notification
+    * I click the Create button
+    And I see Email already created notification

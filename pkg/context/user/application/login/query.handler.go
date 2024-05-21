@@ -19,10 +19,10 @@ type QueryHandler struct {
 }
 
 func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
-	email, emailErr := valueobj.NewEmail(query.Email)
-	password, passwordErr := valueobj.NewPassword(query.Password)
+	email, errEmail := valueobj.NewEmail(query.Email)
+	password, errPassword := valueobj.NewPassword(query.Password)
 
-	err := errors.Join(emailErr, passwordErr)
+	err := errors.Join(errEmail, errPassword)
 
 	if err != nil {
 		return nil, serror.BubbleUp(err, "Handle")

@@ -1,13 +1,13 @@
 Feature: Delete a User account
 
-  Scenario: Register a valid non existing account
+  Scenario: Create a valid non existing account
     Given I am on / page
-    Then I click the Register tab
+    Then I click the Create tab
     * I fill the Email with delete@example.com
     * I fill the Username with delete
     * I fill the Password with 12345678
-    * I click the Register button
-    And I see Successfully Registered notification
+    * I click the Create button
+    And I see Successfully Created notification
 
   Scenario: Delete a valid existing account
     Given I am on / page

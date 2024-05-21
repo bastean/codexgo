@@ -8,12 +8,12 @@ import (
 )
 
 func InitRoutes() {
-	router.NoRoute(page.NoRoute())
+	router.NoRoute(page.Default())
 
 	public := router.Group("/")
 
-	public.GET("/", page.Index())
-	public.PUT("/", form.UserRegister())
+	public.GET("/", page.Home())
+	public.PUT("/", form.UserCreate())
 	public.POST("/", form.UserLogin())
 
 	public.GET("/verify/:id", param.UserVerify())

@@ -1,0 +1,48 @@
+package storage
+
+script Init() {
+    const Storage = {
+        MasterKey: "codexgo",
+        Key: {},
+        Init() {
+            let storage = localStorage.getItem(this.MasterKey);
+
+            if (storage == null) {
+                localStorage.setItem(this.MasterKey, JSON.stringify({}));
+            }
+        },
+        Put(key, value) {
+            let storage = localStorage.getItem(this.MasterKey);
+
+            storage = JSON.parse(storage)
+
+            storage[key] = value;
+
+            localStorage.setItem(this.MasterKey, JSON.stringify(storage));
+        },
+        Get(key) {
+            let storage = localStorage.getItem(this.MasterKey);
+
+            storage = JSON.parse(storage)
+
+            return _.get(storage, key, null);
+        },
+        Delete(key) {
+            let storage = localStorage.getItem(this.MasterKey);
+
+            storage = JSON.parse(storage)
+
+            delete storage[key];
+
+            localStorage.setItem(this.MasterKey, JSON.stringify(storage));
+        },
+        Clear() {
+            localStorage.removeItem(this.MasterKey);
+            cookieStore.delete(this.MasterKey);
+        }
+    }
+
+    Storage.Init();
+
+    window.Storage = Storage
+}

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/auth"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,14 +16,16 @@ func abort(c *gin.Context) {
 
 func VerifyAuthentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
+		session := sessions.Default(c)
 
-		if token == "" {
+		token := session.Get("Authorization")
+
+		if token == nil {
 			abort(c)
 			return
 		}
 
-		value := strings.Split(token, " ")[1]
+		value := strings.Split(token.(string), " ")[1]
 
 		claims, err := auth.Auth.ValidateJWT(value)
 

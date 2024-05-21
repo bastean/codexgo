@@ -32,6 +32,6 @@ func UserDelete() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "Account deleted", reply.EmptyPayload))
+		c.JSON(http.StatusOK, reply.JSON(true, "Account deleted", reply.Payload{}))
 	}
 }

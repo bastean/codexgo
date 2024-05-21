@@ -33,7 +33,10 @@ func Run(port string) {
 
 	logger.Info("starting server")
 
-	server := &http.Server{Addr: ":" + port, Handler: router.New(&Files)}
+	server := &http.Server{
+		Addr:    ":" + port,
+		Handler: router.New(&Files),
+	}
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {

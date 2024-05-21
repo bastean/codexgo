@@ -1,0 +1,53 @@
+package home
+
+import (
+	"github.com/bastean/codexgo/pkg/cmd/server/component/layout"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
+)
+
+var RegisterTabTagId = "tab-register"
+var LoginTabTagId = "tab-login"
+
+script PageInit() {
+    $(".container")
+        .transition("fade in", "3s")
+    ;
+
+    $(".container .column .menu .right .item")
+        .tab({
+            context: ".container"
+        })
+    ;
+}
+
+templ Page() {
+	@layout.Index(script.Head{}, script.Body{}) {
+		<div class="ui centered grid container" style="height: 100%;">
+			<div class="sixteen wide column">
+				<div class="ui inverted secondary menu">
+					<div class="header item">
+						<a
+							href="https://github.com/bastean/codexgo"
+							rel="noopener noreferrer"
+							target="_blank"
+						><img class="ui small image" src="/public/static/assets/logo.png"/></a>
+					</div>
+					<div class="right menu">
+						<a class="blue item" data-tab={ LoginTabTagId }>Sign in</a>
+						<a class="active blue item" data-tab={ RegisterTabTagId }>Sign up</a>
+					</div>
+				</div>
+			</div>
+			<div class="sixteen wide mobile eight wide computer column">
+				<div class="ui tab basic segment active" data-tab={ RegisterTabTagId }>
+					@RegisterForm()
+					@TermsModal()
+				</div>
+				<div class="ui tab basic segment" data-tab={ LoginTabTagId }>
+					@LoginForm()
+				</div>
+			</div>
+		</div>
+		@PageInit()
+	}
+}

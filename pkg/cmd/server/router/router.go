@@ -11,13 +11,15 @@ import (
 var router = gin.Default()
 
 func New(files *embed.FS) *gin.Engine {
+	router.Use(gin.CustomRecovery(middleware.PanicHandler))
+
+	router.Use(middleware.ErrorHandler())
+
 	router.Use(middleware.SecurityConfig())
 
 	router.Use(middleware.RateLimiter())
 
-	router.Use(gin.CustomRecovery(middleware.PanicHandler))
-
-	router.Use(middleware.ErrorHandler())
+	router.Use(middleware.CookieSession())
 
 	fs := http.FS(files)
 

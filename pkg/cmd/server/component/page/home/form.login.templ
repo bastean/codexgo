@@ -1,0 +1,77 @@
+package home
+
+var LoginFormTagId = "login"
+
+script LoginFormInit(formTagId string) {
+    $("#"+formTagId)
+        .form({
+            on: "blur",
+            inline : true,
+            preventLeaving: true,
+            fields: {
+                Email: {
+                    rules: [
+                        {
+                            type: "email"
+                        }
+                    ]
+                },
+                Password: {
+                    rules: [
+                        {
+                            type: "size[8..64]"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "login user", 
+            method: "POST",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: 'success',
+                    message: response.message,
+                    showProgress: 'top',
+                });
+
+                _.delay(function() {
+                    window.location.replace("/dashboard");
+                }, 3000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: 'error',
+                    message: response.message,
+                    showProgress: 'top'
+                });
+            }
+        })
+    ;
+}
+
+templ LoginForm() {
+	<form id={ LoginFormTagId } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Sign in to your account
+			<div class="sub header">Don't have an account? <a>Sign up</a></div>
+		</h1>
+		<div class="required field">
+			<label>Email</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="envelope icon"></i>
+				<input type="text" placeholder="Email" name="Email"/>
+			</div>
+		</div>
+		<div class="required field">
+			<label>Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="lock icon"></i>
+				<input type="password" placeholder="Password" name="Password"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<button class="ui fluid primary submit button">Sign in</button>
+	</form>
+	@LoginFormInit(LoginFormTagId)
+}

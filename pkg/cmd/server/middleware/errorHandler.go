@@ -36,7 +36,7 @@ func ErrorHandler() gin.HandlerFunc {
 				fallthrough
 			default:
 				logger.Error(err.Error())
-				c.JSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.EmptyPayload))
+				c.JSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
 			}
 		}
 	}

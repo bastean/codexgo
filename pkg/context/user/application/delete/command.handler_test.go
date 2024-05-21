@@ -6,7 +6,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
@@ -15,7 +16,7 @@ import (
 type UserDeleteTestSuite struct {
 	suite.Suite
 	sut        smodel.CommandHandler[*delete.Command]
-	useCase    smodel.UseCase[smodel.ValueObject[string], *stype.Empty]
+	useCase    smodel.UseCase[*delete.Input, *stype.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }
@@ -33,11 +34,22 @@ func (suite *UserDeleteTestSuite) SetupTest() {
 }
 
 func (suite *UserDeleteTestSuite) TestDelete() {
-	command := delete.RandomCommand()
+	user := aggregate.RandomUser()
 
-	userId, _ := valueobj.NewId(command.Id)
+	command := &delete.Command{
+		Id:       user.Id.Value(),
+		Password: user.Password.Value(),
+	}
 
-	suite.repository.On("Delete", userId)
+	filter := model.RepositorySearchCriteria{
+		Id: user.Id,
+	}
+
+	suite.repository.On("Search", filter).Return(user)
+
+	suite.hashing.On("IsNotEqual", user.Password.Value(), user.Password.Value()).Return(false)
+
+	suite.repository.On("Delete", user.Id)
 
 	suite.NoError(suite.sut.Handle(command))
 

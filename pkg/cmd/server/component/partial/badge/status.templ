@@ -1,5 +1,0 @@
-package badge
-
-templ Status(status bool) {
-	<div class={ "badge", "badge-md", templ.KV("badge-success", status),  templ.KV("badge-error", !status) }></div>
-}

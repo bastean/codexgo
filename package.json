@@ -2,7 +2,7 @@
   "private": true,
   "name": "codexgo",
   "version": "3.0.1",
-  "description": "codexgo",
+  "description": "codexGO",
   "author": "Bastean <bastean@pm.me>",
   "license": "MIT",
   "homepage": "https://github.com/bastean/codexgo#readme",
@@ -31,7 +31,6 @@
     "lint-staged": "15.2.2",
     "npm-check-updates": "16.14.20",
     "prettier": "3.2.5",
-    "prettier-plugin-tailwindcss": "0.5.14",
     "release-it": "17.2.1"
   },
   "lint-staged": {

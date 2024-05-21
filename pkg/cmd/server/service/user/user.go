@@ -4,9 +4,10 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/broker"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/database"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
-	"github.com/bastean/codexgo/pkg/context/user/application/register"
+	"github.com/bastean/codexgo/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -19,20 +20,23 @@ var Bcrypt = new(cryptographic.Bcrypt)
 var CollectionName = "users"
 var MongoCollection model.Repository
 
-var Register *register.Register
-var RegisterHandler *register.CommandHandler
+var Create *create.Create
+var CreateHandler *create.CommandHandler
 
-var Verify *verify.Verify
-var VerifyHandler *verify.CommandHandler
-
-var Login *login.Login
-var LoginHandler *login.QueryHandler
+var Read *read.Read
+var ReadHandler *read.QueryHandler
 
 var Update *update.Update
 var UpdateHandler *update.CommandHandler
 
 var Delete *delete.Delete
 var DeleteHandler *delete.CommandHandler
+
+var Verify *verify.Verify
+var VerifyHandler *verify.CommandHandler
+
+var Login *login.Login
+var LoginHandler *login.QueryHandler
 
 func Init() error {
 	collection, err := persistence.NewMongoCollection(database.Database, CollectionName, Bcrypt)
@@ -43,27 +47,19 @@ func Init() error {
 
 	MongoCollection = collection
 
-	Register = &register.Register{
+	Create = &create.Create{
 		Repository: MongoCollection,
 	}
-	RegisterHandler = &register.CommandHandler{
-		UseCase: Register,
+	CreateHandler = &create.CommandHandler{
+		UseCase: Create,
 		Broker:  broker.Broker,
 	}
 
-	Verify = &verify.Verify{
+	Read = &read.Read{
 		Repository: MongoCollection,
 	}
-	VerifyHandler = &verify.CommandHandler{
-		UseCase: Verify,
-	}
-
-	Login = &login.Login{
-		Repository: MongoCollection,
-		Hashing:    Bcrypt,
-	}
-	LoginHandler = &login.QueryHandler{
-		UseCase: Login,
+	ReadHandler = &read.QueryHandler{
+		UseCase: Read,
 	}
 
 	Update = &update.Update{
@@ -80,6 +76,21 @@ func Init() error {
 	}
 	DeleteHandler = &delete.CommandHandler{
 		UseCase: Delete,
+	}
+
+	Verify = &verify.Verify{
+		Repository: MongoCollection,
+	}
+	VerifyHandler = &verify.CommandHandler{
+		UseCase: Verify,
+	}
+
+	Login = &login.Login{
+		Repository: MongoCollection,
+		Hashing:    Bcrypt,
+	}
+	LoginHandler = &login.QueryHandler{
+		UseCase: Login,
 	}
 
 	return nil

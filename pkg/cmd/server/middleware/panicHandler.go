@@ -10,5 +10,5 @@ import (
 
 func PanicHandler(c *gin.Context, err any) {
 	logger.Error(err.(error).Error())
-	c.AbortWithStatusJSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.EmptyPayload))
+	c.AbortWithStatusJSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
 }
