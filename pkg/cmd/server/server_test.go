@@ -6,13 +6,12 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/cucumber/godog"
 	"github.com/playwright-community/playwright-go"
 	testify "github.com/stretchr/testify/assert"
 )
-
-// var testURL = "http://localhost:8080"
 
 var testURL = os.Getenv("TEST_URL")
 
@@ -23,6 +22,7 @@ var page playwright.Page
 
 var headless = true
 var exact = true
+var sleep = 4 * time.Second
 var err error
 
 var assert *testify.Assertions
@@ -59,7 +59,7 @@ func InitializePlaywright() {
 
 func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
-		browserCtx.ClearCookies()
+		//? browserCtx.ClearCookies()
 		return ctx, nil
 	})
 
@@ -68,27 +68,43 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 		assert.NoError(err)
 	})
 
+	sc.Then(`^redirect me to (.+) page$`, func(actual string) {
+		time.Sleep(sleep)
+
+		if actual == "/" {
+			actual = ""
+		}
+
+		expected := page.URL()
+
+		assert.True(strings.Contains(expected, actual))
+	})
+
 	sc.Then(`^the page title should be (.+)$`, func(expected string) {
 		actual, _ := page.Title()
 		assert.Equal(expected, actual)
 	})
 
-	sc.Then(`^I click the (.+) tab$`, func(tab string) {
-		element := page.GetByLabel(tab)
+	sc.Then(`^I click on the (.+) button$`, func(name string) {
+		element := page.GetByText(name, playwright.PageGetByTextOptions{Exact: &exact}).First()
 
-		if ok, _ := element.IsVisible(); ok {
-			err = element.Check()
-		}
+		err = element.Click()
+
+		assert.NoError(err)
+	})
+
+	sc.Then(`^I open the (.+) menu$`, func(name string) {
+		element := page.GetByRole("heading").First()
+
+		err = element.Click()
 
 		assert.NoError(err)
 	})
 
 	sc.Then(`^I fill the (.+) with (.+)$`, func(placeholder, value string) {
-		element := page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact})
+		element := page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact}).Last()
 
-		if ok, _ := element.IsVisible(); ok {
-			err = element.Fill(value)
-		}
+		err = element.Fill(value)
 
 		assert.NoError(err)
 	})
@@ -96,32 +112,27 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Then(`^I click the (.+) button$`, func(name string) {
 		element := page.GetByRole("button", playwright.PageGetByRoleOptions{Name: name})
 
-		if ok, _ := element.IsVisible(); ok {
-			err = element.Click()
-		}
+		err = element.Click()
 
 		assert.NoError(err)
 	})
 
-	sc.Then(`^I accept the (.+) confirm$`, func(name string) {
-		page.OnDialog(func(dialog playwright.Dialog) {
-			err = dialog.Accept()
-			assert.NoError(err)
-		})
+	sc.Then(`^I check the (.+)$`, func(name string) {
+		element := page.GetByRole("checkbox")
+
+		err = element.Check()
+
+		assert.NoError(err)
 	})
 
 	sc.Then(`^I see (.+) notification$`, func(expected string) {
 		element := page.GetByRole("alert")
 
-		if ok, _ := element.IsVisible(); ok {
-			actual, _ := element.InnerText()
-			assert.Equal(expected, actual)
-		}
-	})
+		actual, err := element.InnerText()
 
-	sc.Then(`^I am on (.+) page$`, func(expected string) {
-		actual := page.URL()
-		assert.True(strings.Contains(expected, actual))
+		assert.NoError(err)
+
+		assert.Equal(expected, actual)
 	})
 }
 

@@ -2,22 +2,29 @@ Feature: Update a User account
 
   Scenario: Create a valid non existing account
     Given I am on / page
-    Then I click the Create tab
-    * I fill the Email with update@example.com
+    Then I fill the Email with update@example.com
     * I fill the Username with update
-    * I fill the Password with 12345678
-    * I click the Create button
-    And I see Successfully Created notification
+    * I fill the Password with update@example
+    * I fill the Confirm Password with update@example
+    * I check the I agree to the terms and conditions
+    * I click the Sign up button
+    And I see account created notification
+
+  Scenario: Login a valid existing account
+    Given I am on / page
+    Then I click on the Sign in button
+    * I fill the Email with update@example.com
+    * I fill the Password with update@example
+    * I click the Sign in button
+    * I see logged in notification
+    And redirect me to /dashboard page
 
   Scenario: Update a valid existing account
-    Given I am on / page
-    Then I fill the Email with update@example.com
-    * I fill the Password with 12345678
-    * I click the Login button
-    * I am on /dashboard page
-    * I fill the Email with updated@example.com
+    Given I am on /dashboard page
+    Then I fill the Email with updated@example.com
     * I fill the Username with updated
-    * I fill the Current Password with 12345678
-    * I fill the New Password with 87654321
+    * I fill the Current Password with update@example
+    * I fill the New Password with example@update
+    * I fill the Confirm Password with example@update
     * I click the Update button
-    And I see Successfully Updated notification
+    And I see account updated notification

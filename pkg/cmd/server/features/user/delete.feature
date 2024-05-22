@@ -2,20 +2,29 @@ Feature: Delete a User account
 
   Scenario: Create a valid non existing account
     Given I am on / page
-    Then I click the Create tab
-    * I fill the Email with delete@example.com
+    Then I fill the Email with delete@example.com
     * I fill the Username with delete
-    * I fill the Password with 12345678
-    * I click the Create button
-    And I see Successfully Created notification
+    * I fill the Password with delete@example
+    * I fill the Confirm Password with delete@example
+    * I check the I agree to the terms and conditions
+    * I click the Sign up button
+    And I see account created notification
+
+  Scenario: Login a valid existing account
+    Given I am on / page
+    Then I click on the Sign in button
+    * I fill the Email with delete@example.com
+    * I fill the Password with delete@example
+    * I click the Sign in button
+    * I see logged in notification
+    And redirect me to /dashboard page
 
   Scenario: Delete a valid existing account
-    Given I am on / page
-    Then I fill the Email with delete@example.com
-    * I fill the Password with 12345678
-    * I click the Login button
-    * I am on /dashboard page
-    * I click the Delete tab
-    * I click the Delete button
-    * I accept the delete confirm
-    And I am on / page
+    Given I am on /dashboard page
+    Then I open the account menu
+    * I click on the Delete button
+    * I fill the Password with delete@example
+    * I fill the Confirm Password with delete@example
+    * I click the Approve button
+    * I see account deleted notification
+    And redirect me to / page
