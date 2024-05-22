@@ -23,185 +23,182 @@ compose-env = ${compose} --env-file
 
 #* Upgrades
 upgrade-managers:
-	#? @sudo apt update && sudo apt upgrade -y
-	@npm upgrade -g
+	#? sudo apt update && sudo apt upgrade -y
+	npm upgrade -g
 
 upgrade-go:
-	@go get -t -u ./...
+	go get -t -u ./...
 
 upgrade-node:
-	@${npx} ncu --root -ws -u
-	@rm -f package-lock.json
-	@npm i --legacy-peer-deps
+	${npx} ncu --root -ws -u
+	rm -f package-lock.json
+	npm i --legacy-peer-deps
 
 upgrade-reset:
-	@${git-reset-hard}
-	@${npm-ci}
+	${git-reset-hard}
+	${npm-ci}
 
 upgrade:
-	@go run ./scripts/upgrade
+	go run ./scripts/upgrade
 
 #* Dependencies
 install-deps:
-	@go mod download
-	@${npm-ci}
-	@go install honnef.co/go/tools/cmd/staticcheck@latest
-	@go install github.com/a-h/templ/cmd/templ@latest
-	@curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
+	go mod download
+	${npm-ci}
+	go install honnef.co/go/tools/cmd/staticcheck@latest
+	go install github.com/a-h/templ/cmd/templ@latest
+	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
 copy-deps:
-	@go run ./scripts/copy-deps
+	go run ./scripts/copy-deps
 
 #* Generators
 generate-required:
-	@go generate ./...
-	@templ generate
+	go generate ./...
+	templ generate
 
 #* Initializations
 init: upgrade-managers install-deps copy-deps generate-required
 	
 init-from-zero:
-	@git init
-	@make init
-	@${npx} husky install
+	git init
+	$(MAKE) init
+	${npx} husky install
 
 #* Linters/Formatters
 lint: generate-required
-	@go mod tidy
-	@gofmt -l -s -w .
-	@${npx} prettier --ignore-unknown --write .
-	@templ fmt .
+	go mod tidy
+	gofmt -l -s -w .
+	${npx} prettier --ignore-unknown --write .
+	templ fmt .
 
 lint-check:
-	@staticcheck ./...
-	@${npx} prettier --check .
+	staticcheck ./...
+	${npx} prettier --check .
 
 #* Tests
 test-sut:
-	@air
+	air
 
 test-clean:
-	@go clean -testcache
-	@cd test/ && mkdir -p report
+	go clean -testcache
+	cd test/ && mkdir -p report
 
 test-codegen:
-	@${npx} playwright codegen http://localhost:8080
+	${npx} playwright codegen http://localhost:8080
 
 test-sync: upgrade-go
-	@${npx} concurrently -s first -k --names 'SUT,TEST' 'make test-sut' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
+	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
 
 test-unit: test-clean
-	@go test -v -cover ./pkg/context/... -run TestUnit.* > test/report/unit-report.txt
+	go test -v -cover ./pkg/context/... -run TestUnit.* > test/report/unit-report.txt
 
 test-integration: test-clean
-	@go test -v -cover ./pkg/context/... -run TestIntegration.* > test/report/integration-report.txt
+	go test -v -cover ./pkg/context/... -run TestIntegration.* > test/report/integration-report.txt
 
 test-acceptance-sync: 
-	@TEST_URL='http://localhost:8080' go test -v -cover ./pkg/cmd/... -run TestAcceptance.* > test/report/acceptance-report.txt
+	TEST_URL='http://localhost:8080' go test -v -cover ./pkg/cmd/... -run TestAcceptance.* > test/report/acceptance-report.txt
 
 test-acceptance: test-clean
-	@TEST_SYNC="make test-acceptance-sync" make test-sync
+	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
 
 test-all-sync:
-	@TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt
+	TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt
 
 test-all: test-clean
-	@TEST_SYNC="make test-all-sync" make test-sync
+	TEST_SYNC="$(MAKE) test-all-sync" $(MAKE) test-sync
 
 #* Releases
 release:
-	@${release-it}
+	${release-it}
 
 release-alpha:
-	@${release-it} --preRelease=alpha
+	${release-it} --preRelease=alpha
 	
 release-beta:
-	@${release-it} --preRelease=beta
+	${release-it} --preRelease=beta
 
 release-ci:
-	@${release-it} --ci $(OPTIONS)
+	${release-it} --ci $(OPTIONS)
 
 release-dry:
-	@${release-it-dry}
+	${release-it-dry}
  
 release-dry-version:
-	@${release-it-dry} --release-version
+	${release-it-dry} --release-version
 
 release-dry-changelog:
-	@${release-it-dry} --changelog
+	${release-it-dry} --changelog
 
 #* Builds
 build: generate-required lint
-	@rm -rf build/
-	@go build -o build/codexgo ./cmd/codexgo
-
-build-upx: build
-	#? @upx build/codexgo
+	rm -rf build/
+	go build -o build/codexgo ./cmd/codexgo
 
 #* ENVs
 sync-env-reset:
-	@${git-reset-hard}
+	${git-reset-hard}
 
 sync-env:
-	@cd deployments && go run ../scripts/sync-env
+	cd deployments && go run ../scripts/sync-env
 
 #* Git
 commit:
-	@${npx} cz
+	${npx} cz
 
 WARNING-git-forget:
-	@git rm -r --cached .
-	@git add .
+	git rm -r --cached .
+	git add .
 
 WARNING-git-genesis:
-	@git clean -e .env* -fdx
-	@${git-reset-hard}
-	@make init
+	git clean -e .env* -fdx
+	${git-reset-hard}
+	$(MAKE) init
 
 #* Docker
 docker-usage:
-	@docker system df
+	docker system df
 
 demo-down:
-	@${compose-env} .env.demo down
+	${compose-env} .env.demo down
 
 demo: demo-down
-	@${compose-env} .env.demo up
+	${compose-env} .env.demo up
 
 compose-dev-down:
-	@${compose-env} .env.dev down
-	@docker volume rm codexgo-database-dev -f
+	${compose-env} .env.dev down
+	docker volume rm codexgo-database-dev -f
 
 compose-dev: compose-dev-down
-	@${compose-env} .env.dev up
+	${compose-env} .env.dev up
 
 compose-test-down:
-	@${compose-env} .env.test down
-	@docker volume rm codexgo-database-test -f
+	${compose-env} .env.test down
+	docker volume rm codexgo-database-test -f
 
 compose-test-integration: compose-test-down
-	@${compose-env} .env.test --env-file .env.demo.test.integration up --exit-code-from server
+	${compose-env} .env.test --env-file .env.demo.test.integration up --exit-code-from server
 
 compose-test-acceptance: compose-test-down
-	@${compose-env} .env.test --env-file .env.demo.test.acceptance up --exit-code-from server
+	${compose-env} .env.test --env-file .env.demo.test.acceptance up --exit-code-from server
 
 compose-test-all: compose-test-down
-	@${compose-env} .env.test up --exit-code-from server
+	${compose-env} .env.test up --exit-code-from server
 
 compose-prod-down:
-	@${compose-env} .env.prod down
+	${compose-env} .env.prod down
 
 compose-prod: compose-prod-down
-	@${compose-env} .env.prod up
+	${compose-env} .env.prod up
 
 compose-down: compose-dev-down compose-test-down compose-prod-down
 
 WARNING-docker-prune-soft:
-	@docker system prune
-	@make compose-down
-	@make docker-usage
+	docker system prune
+	$(MAKE) compose-down
+	$(MAKE) docker-usage
 
 WARNING-docker-prune-hard:
-	@docker system prune --volumes -a
-	@make compose-down
-	@make docker-usage
+	docker system prune --volumes -a
+	$(MAKE) compose-down
+	$(MAKE) docker-usage
