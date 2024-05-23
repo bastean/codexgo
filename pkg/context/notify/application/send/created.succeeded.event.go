@@ -1,4 +1,4 @@
-package sendMail
+package send
 
 type CreatedSucceededEventAttributes struct {
 	Id       string

@@ -1,4 +1,4 @@
-package sendMail
+package send
 
 import (
 	"encoding/json"

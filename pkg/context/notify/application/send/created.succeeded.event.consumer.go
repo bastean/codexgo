@@ -1,10 +1,8 @@
-package sendMail
+package send
 
 import (
 	"encoding/json"
 
-	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
-	"github.com/bastean/codexgo/pkg/context/notify/domain/template"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
@@ -13,7 +11,7 @@ import (
 )
 
 type CreatedSucceededEventConsumer struct {
-	smodel.UseCase[model.MailTemplate, *stype.Empty]
+	smodel.UseCase[any, *stype.Empty]
 	Queues []*squeue.Queue
 }
 
@@ -37,15 +35,7 @@ func (consumer *CreatedSucceededEventConsumer) On(message *smessage.Message) err
 		})
 	}
 
-	accountConfirmationTemplate := &template.AccountConfirmationMail{
-		Mail: &template.Mail{
-			To: []string{attributes.Email},
-		},
-		Username:         attributes.Username,
-		ConfirmationLink: attributes.Id,
-	}
-
-	_, err = consumer.UseCase.Run(accountConfirmationTemplate)
+	_, err = consumer.UseCase.Run(attributes)
 
 	if err != nil {
 		return serror.BubbleUp(err, "On")

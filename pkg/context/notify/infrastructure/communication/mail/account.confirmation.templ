@@ -1,6 +1,6 @@
-package communication
+package mail
 
-templ AccountConfirmation(username, confirmationLink string) {
+templ AccountConfirmationTemplate(username, confirmationLink string) {
 	<div style="padding: 64px 16px; background-color: #000000">
 		<div style="top: 8px; position: relative">
 			<div align="center">
@@ -25,7 +25,7 @@ templ AccountConfirmation(username, confirmationLink string) {
 				<div style="margin-top: 16px" align="center">
 					<a
 						style="color: #000000"
-						href={ templ.URL("https://github.com/bastean/codexgo") }
+						href="https://github.com/bastean/codexgo"
 						rel="noopener noreferrer"
 						target="_blank"
 					>
@@ -34,7 +34,7 @@ templ AccountConfirmation(username, confirmationLink string) {
 					<div style="margin-top: 5px">
 						<a
 							style="color: #000000"
-							href={ templ.URL("https://bastean.dev") }
+							href="https://bastean.dev"
 							rel="noopener noreferrer"
 							target="_blank"
 						>

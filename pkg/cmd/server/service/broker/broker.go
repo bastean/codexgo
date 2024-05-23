@@ -5,7 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/notify"
-	"github.com/bastean/codexgo/pkg/context/notify/application/sendMail"
+	"github.com/bastean/codexgo/pkg/context/notify/application/send"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
@@ -42,8 +42,8 @@ func Init() error {
 		Name: notifySendAccountConfirmationQueueName,
 	}
 
-	notifySendAccountConfirmationQueueConsumer := &sendMail.CreatedSucceededEventConsumer{
-		UseCase: notify.SendMail,
+	notifySendAccountConfirmationQueueConsumer := &send.CreatedSucceededEventConsumer{
+		UseCase: notify.SendAccountConfirmationMail,
 		Queues:  []*squeue.Queue{notifySendAccountConfirmationQueue},
 	}
 

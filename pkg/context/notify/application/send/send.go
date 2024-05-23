@@ -1,4 +1,4 @@
-package sendMail
+package send
 
 import (
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
@@ -6,12 +6,12 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
 )
 
-type SendMail struct {
-	model.Mail
+type Send struct {
+	model.Transport
 }
 
-func (sendMail *SendMail) Run(mail model.MailTemplate) (*stype.Empty, error) {
-	err := sendMail.Mail.Send(mail)
+func (send *Send) Run(data any) (*stype.Empty, error) {
+	err := send.Transport.Submit(data)
 
 	if err != nil {
 		return nil, serror.BubbleUp(err, "Run")
