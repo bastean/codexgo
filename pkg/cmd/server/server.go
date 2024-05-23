@@ -14,6 +14,7 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/broker"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/database"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/notify"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 )
 
@@ -21,11 +22,12 @@ import (
 var Files embed.FS
 
 func Run(port string) {
+	errNotify := notify.Init()
 	errBroker := broker.Init()
 	errDatabase := database.Init()
 	errUser := user.Init()
 
-	err := errors.Join(errBroker, errDatabase, errUser)
+	err := errors.Join(errNotify, errBroker, errDatabase, errUser)
 
 	if err != nil {
 		logger.Fatal(err.Error())
@@ -52,7 +54,7 @@ func Run(port string) {
 
 	<-shutdown
 
-	logger.Info("shutting down server")
+	logger.Info("closing server")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
@@ -66,5 +68,5 @@ func Run(port string) {
 
 	<-ctx.Done()
 
-	logger.Info("server exiting")
+	logger.Info("exiting server")
 }

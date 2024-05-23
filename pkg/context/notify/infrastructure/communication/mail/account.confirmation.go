@@ -24,19 +24,19 @@ func (client *AccountConfirmation) Submit(data any) error {
 
 	message.Write([]byte(fmt.Sprintf("%s\n%s\n", headers, client.MIMEHeaders)))
 
-	confirmationLink := fmt.Sprintf("%s/verify/%s", client.ServerUrl, account.Id)
+	confirmationLink := fmt.Sprintf("%s/verify/%s", client.ServerURL, account.Id)
 
 	AccountConfirmationTemplate(account.Username, confirmationLink).Render(context.Background(), &message)
 
-	err := smtp.SendMail(client.SmtpServerUrl, client.Auth, client.Username, []string{account.Email}, message.Bytes())
+	err := smtp.SendMail(client.SmtpServerURL, client.Auth, client.Username, []string{account.Email}, message.Bytes())
 
 	if err != nil {
 		return serror.NewInternal(&serror.Bubble{
 			Where: "Submit",
-			What:  "failure to send a account confirmation mail",
+			What:  "failure to send an account confirmation email",
 			Why: serror.Meta{
 				"AccountId":     account.Id,
-				"SmtpServerUrl": client.SmtpServerUrl,
+				"SMTPServerURL": client.SmtpServerURL,
 			},
 			Who: err,
 		})

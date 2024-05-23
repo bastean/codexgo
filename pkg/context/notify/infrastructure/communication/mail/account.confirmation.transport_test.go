@@ -14,25 +14,17 @@ import (
 
 type NotifyMailAccountConfirmationTransportTestSuite struct {
 	suite.Suite
-	sut                            model.Transport
-	smtp                           *stransport.SMTP
-	host, port, username, password string
+	sut  model.Transport
+	smtp *stransport.SMTP
 }
 
 func (suite *NotifyMailAccountConfirmationTransportTestSuite) SetupTest() {
-	suite.host = os.Getenv("SMTP_HOST")
-	suite.port = os.Getenv("SMTP_PORT")
-	suite.username = os.Getenv("SMTP_USERNAME")
-	suite.password = os.Getenv("SMTP_PASSWORD")
-
-	serverUrl := os.Getenv("URL")
-
 	suite.smtp = stransport.NewSMTP(
-		suite.host,
-		suite.port,
-		suite.username,
-		suite.password,
-		serverUrl,
+		os.Getenv("SMTP_HOST"),
+		os.Getenv("SMTP_PORT"),
+		os.Getenv("SMTP_USERNAME"),
+		os.Getenv("SMTP_PASSWORD"),
+		os.Getenv("URL"),
 	)
 
 	suite.sut = &mail.AccountConfirmation{

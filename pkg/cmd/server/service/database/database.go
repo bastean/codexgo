@@ -16,6 +16,8 @@ var databaseName = "codexgo"
 var Database *spersistence.MongoDB
 
 func Init() error {
+	logger.Info("starting mongodb")
+
 	database, err := spersistence.NewMongoDatabase(uri, databaseName)
 
 	if err != nil {
@@ -24,19 +26,17 @@ func Init() error {
 
 	Database = database
 
-	logger.Info("starting mongodb")
-
 	return nil
 }
 
 func Close(ctx context.Context) error {
+	logger.Info("closing mongodb")
+
 	err := spersistence.CloseMongoDatabase(ctx, Database)
 
 	if err != nil {
 		return serror.BubbleUp(err, "Close")
 	}
-
-	logger.Info("mongodb closed")
 
 	return nil
 }

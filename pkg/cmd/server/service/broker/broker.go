@@ -43,7 +43,7 @@ func Init() error {
 	}
 
 	notifySendAccountConfirmationQueueConsumer := &send.CreatedSucceededEventConsumer{
-		UseCase: notify.SendAccountConfirmationMail,
+		UseCase: notify.SendAccountConfirmation,
 		Queues:  []*squeue.Queue{notifySendAccountConfirmationQueue},
 	}
 
@@ -75,13 +75,13 @@ func Init() error {
 }
 
 func Close() error {
+	logger.Info("closing rabbitmq")
+
 	err := scommunication.CloseRabbitMQ(Broker.(*scommunication.RabbitMQ))
 
 	if err != nil {
 		return serror.BubbleUp(err, "Close")
 	}
-
-	logger.Info("rabbitmq closed")
 
 	return nil
 }
