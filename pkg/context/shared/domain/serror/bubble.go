@@ -19,7 +19,7 @@ type Bubble struct {
 }
 
 func (err *Bubble) Error() string {
-	message := fmt.Sprintf("%s (%s): %s", err.When.Format(time.DateTime), err.Where, err.What)
+	message := fmt.Sprintf("%s (%s): %s", err.When.Format(time.RFC3339Nano), err.Where, err.What)
 
 	if err.Why != nil {
 		why, _ := json.Marshal(err.Why)
@@ -43,7 +43,7 @@ func NewBubble(where, what string, why Meta, who error) *Bubble {
 	}
 
 	return &Bubble{
-		When:  time.Now(),
+		When:  time.Now().UTC(),
 		Where: where,
 		What:  what,
 		Why:   why,
