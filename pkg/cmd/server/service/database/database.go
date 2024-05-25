@@ -18,13 +18,13 @@ var Database *spersistence.MongoDB
 func Init() error {
 	logger.Info("starting mongodb")
 
-	database, err := spersistence.NewMongoDatabase(uri, databaseName)
+	mongoDB, err := spersistence.NewMongoDatabase(uri, databaseName)
 
 	if err != nil {
 		return serror.BubbleUp(err, "Init")
 	}
 
-	Database = database
+	Database = mongoDB
 
 	return nil
 }
