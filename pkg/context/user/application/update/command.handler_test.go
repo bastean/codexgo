@@ -24,11 +24,14 @@ type UserUpdateTestSuite struct {
 
 func (suite *UserUpdateTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
+
 	suite.hashing = new(cryptographic.HashingMock)
+
 	suite.useCase = &update.Update{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
+
 	suite.sut = &update.CommandHandler{
 		UseCase: suite.useCase,
 	}

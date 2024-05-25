@@ -21,13 +21,13 @@ type NotifyTerminalAccountConfirmationTransportTestSuite struct {
 }
 
 func (suite *NotifyTerminalAccountConfirmationTransportTestSuite) SetupTest() {
-	suite.serverURL = os.Getenv("URL")
-
 	suite.logger = new(slogger.LoggerMock)
 
+	suite.serverURL = os.Getenv("URL")
+
 	suite.sut = &terminal.AccountConfirmation{
-		ServerURL: suite.serverURL,
 		Logger:    suite.logger,
+		ServerURL: suite.serverURL,
 	}
 }
 
@@ -38,7 +38,7 @@ func (suite *NotifyTerminalAccountConfirmationTransportTestSuite) TestSubmit() {
 
 	json.Unmarshal(message.Attributes, attributes)
 
-	confirmationLink := fmt.Sprintf("Hi %s, please confirm your account using this link: %s/verify/%s", attributes.Username, suite.serverURL, attributes.Id)
+	confirmationLink := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", attributes.Username, suite.serverURL, attributes.Id)
 
 	suite.logger.Mock.On("Info", confirmationLink)
 

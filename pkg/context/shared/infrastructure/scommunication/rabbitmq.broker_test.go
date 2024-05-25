@@ -27,6 +27,7 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 	suite.logger = new(slogger.LoggerMock)
 
 	uri := os.Getenv("BROKER_URI")
+
 	suite.sut, _ = scommunication.NewRabbitMQ(uri, suite.logger)
 
 	suite.router = &srouter.Router{Name: "test"}
@@ -36,6 +37,7 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
+
 	suite.queue = &squeue.Queue{Name: queueName}
 
 	suite.consumer = new(scommunication.ConsumerMock)
@@ -48,11 +50,17 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 		Event:     "test",
 		Status:    smessage.Status.Succeeded,
 	})
+
 	messageAttributes := []byte{}
+
 	messageMeta := []byte{}
+
 	message := smessage.NewMessage(messageRoutingKey, messageAttributes, messageMeta)
+
 	message.Id = "0"
+
 	message.OccurredOn = "0"
+
 	suite.messages = append(suite.messages, message)
 }
 

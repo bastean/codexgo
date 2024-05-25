@@ -20,9 +20,11 @@ type UserReadTestSuite struct {
 
 func (suite *UserReadTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
+
 	suite.useCase = &read.Read{
 		Repository: suite.repository,
 	}
+
 	suite.sut = &read.QueryHandler{
 		UseCase: suite.useCase,
 	}

@@ -22,10 +22,13 @@ type UserCreateTestSuite struct {
 
 func (suite *UserCreateTestSuite) SetupTest() {
 	suite.broker = new(scommunication.BrokerMock)
+
 	suite.repository = new(persistence.RepositoryMock)
+
 	suite.useCase = &create.Create{
 		Repository: suite.repository,
 	}
+
 	suite.sut = &create.CommandHandler{
 		UseCase: suite.useCase,
 		Broker:  suite.broker,

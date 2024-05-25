@@ -26,13 +26,17 @@ func (suite *CreatedSucceededEventConsumerTestSuite) SetupTest() {
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
+
 	suite.queues = append(suite.queues, &squeue.Queue{
 		Name: queueName,
 	})
+
 	suite.transport = new(communication.TransportMock)
+
 	suite.useCase = &send.Send{
 		Transport: suite.transport,
 	}
+
 	suite.sut = &send.CreatedSucceededEventConsumer{
 		UseCase: suite.useCase,
 		Queues:  suite.queues,

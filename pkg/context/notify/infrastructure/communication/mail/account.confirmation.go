@@ -28,15 +28,15 @@ func (client *AccountConfirmation) Submit(data any) error {
 
 	AccountConfirmationTemplate(account.Username, confirmationLink).Render(context.Background(), &message)
 
-	err := smtp.SendMail(client.SmtpServerURL, client.Auth, client.Username, []string{account.Email}, message.Bytes())
+	err := smtp.SendMail(client.SMTPServerURL, client.Auth, client.Username, []string{account.Email}, message.Bytes())
 
 	if err != nil {
 		return serror.NewInternal(&serror.Bubble{
 			Where: "Submit",
-			What:  "failure to send an account confirmation email",
+			What:  "failure to send an account confirmation mail",
 			Why: serror.Meta{
 				"AccountId":     account.Id,
-				"SMTPServerURL": client.SmtpServerURL,
+				"SMTPServerURL": client.SMTPServerURL,
 			},
 			Who: err,
 		})

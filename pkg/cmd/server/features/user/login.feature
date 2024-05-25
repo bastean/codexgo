@@ -23,6 +23,6 @@ Feature: Login a User account
     Given I am on / page
     Then I click on the Sign in button
     * I fill the Email with non-existing@example.com
-    * I fill the Password with non-existing
+    * I fill the Password with non-existing@example
     * I click the Sign in button
     But I see not found notification

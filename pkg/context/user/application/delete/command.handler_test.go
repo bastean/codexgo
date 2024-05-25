@@ -23,11 +23,14 @@ type UserDeleteTestSuite struct {
 
 func (suite *UserDeleteTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
+
 	suite.hashing = new(cryptographic.HashingMock)
+
 	suite.useCase = &delete.Delete{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
+
 	suite.sut = &delete.CommandHandler{
 		UseCase: suite.useCase,
 	}

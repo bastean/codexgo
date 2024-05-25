@@ -22,11 +22,14 @@ type UserLoginTestSuite struct {
 
 func (suite *UserLoginTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
+
 	suite.hashing = new(cryptographic.HashingMock)
+
 	suite.useCase = &login.Login{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
+
 	suite.sut = &login.QueryHandler{
 		UseCase: suite.useCase,
 	}

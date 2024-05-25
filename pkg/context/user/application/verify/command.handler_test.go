@@ -22,9 +22,11 @@ type UserVerifyTestSuite struct {
 
 func (suite *UserVerifyTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
+
 	suite.useCase = &verify.Verify{
 		Repository: suite.repository,
 	}
+
 	suite.sut = &verify.CommandHandler{
 		UseCase: suite.useCase,
 	}

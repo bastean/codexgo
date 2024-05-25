@@ -23,8 +23,8 @@ Feature: Update a User account
     Given I am on /dashboard page
     Then I fill the Email with updated@example.com
     * I fill the Username with updated
+    * I fill the New Password with updated@example
+    * I fill the Confirm Password with updated@example
     * I fill the Current Password with update@example
-    * I fill the New Password with example@update
-    * I fill the Confirm Password with example@update
     * I click the Update button
     And I see account updated notification

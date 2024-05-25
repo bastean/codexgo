@@ -21,10 +21,15 @@ type UserMongoRepositoryTestSuite struct {
 
 func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 	uri := os.Getenv("DATABASE_URI")
+
 	databaseName := "codexgo-test"
+
 	database, _ := spersistence.NewMongoDatabase(uri, databaseName)
+
 	collectionName := "users-test"
+
 	suite.hashing = new(cryptographic.HashingMock)
+
 	suite.sut, _ = persistence.NewMongoCollection(database, collectionName, suite.hashing)
 }
 
