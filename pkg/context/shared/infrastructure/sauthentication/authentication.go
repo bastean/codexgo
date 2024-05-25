@@ -1,21 +1,18 @@
 package sauthentication
 
 import (
-	"time"
-
 	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
 	"github.com/golang-jwt/jwt"
 )
+
+type Payload map[string]any
 
 type Authentication struct {
 	secretKey []byte
 }
 
-func (auth *Authentication) GenerateJWT(userId string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"exp":    time.Now().Add((24 * time.Hour) * 7).Unix(),
-		"userId": userId,
-	})
+func (auth *Authentication) GenerateJWT(payload map[string]any) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims(payload))
 
 	tokenString, err := token.SignedString(auth.secretKey)
 

@@ -60,11 +60,17 @@ func Run(port string) {
 
 	defer cancel()
 
-	broker.Close()
+	errBroker = broker.Close()
 
-	database.Close(ctx)
+	errDatabase = database.Close(ctx)
 
-	server.Shutdown(ctx)
+	errServer := server.Shutdown(ctx)
+
+	err = errors.Join(errBroker, errDatabase, errServer)
+
+	if err != nil {
+		logger.Error(err.Error())
+	}
 
 	<-ctx.Done()
 

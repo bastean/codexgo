@@ -2,9 +2,11 @@ package form
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/auth"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
+	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/gin-contrib/sessions"
@@ -25,7 +27,10 @@ func UserLogin() gin.HandlerFunc {
 			return
 		}
 
-		token, err := auth.Auth.GenerateJWT(user.Id)
+		token, err := auth.GenerateJWT(auth.Payload{
+			key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
+			key.UserId: user.Id,
+		})
 
 		if err != nil {
 			c.Error(err)
@@ -35,7 +40,7 @@ func UserLogin() gin.HandlerFunc {
 
 		session := sessions.Default(c)
 
-		session.Set("Authorization", "Bearer "+token)
+		session.Set(key.Authorization, "Bearer "+token)
 
 		session.Save()
 
