@@ -13,7 +13,7 @@ script PageInit() {
         .transition("fade in", "3s")
     ;
 
-    $(".ui .container .column .menu .right .item")
+    $(".ui.container .column .menu .right .item")
         .tab({
             context: ".container"
         })
@@ -28,7 +28,7 @@ script PageInit() {
 }
 
 script ShowTab(tabTagId string) {
-   $(`.ui.menu .item[data-tab=${tabTagId}]`).trigger("click");
+   $(`.ui.menu .right .item[data-tab=${tabTagId}]`).trigger("click");
 }
 
 templ Page() {

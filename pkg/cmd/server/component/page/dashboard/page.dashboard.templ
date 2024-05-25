@@ -11,8 +11,12 @@ script PageInit() {
         .transition("fade in", "3s")
     ;
 
-    $(".ui.dropdown")
+    $(".ui.menu .right .dropdown")
         .dropdown()
+    ;
+
+    $(".ui.menu .right .header .icon")
+        .popup()
     ;
 
     $(".ui.blue.nag")
@@ -57,9 +61,9 @@ templ Page(user *read.Response) {
 									<div class="menu">
 										<div class="header">
 											if !user.Verified {
-												<i class="ui red empty circular label"></i>
+												<i class="inverted red times circle icon" data-variation="red" data-content="Unverified"></i>
 											} else {
-												<i class="ui green empty circular label"></i>
+												<i class="inverted green check circle icon" data-variation="green" data-content="Verified"></i>
 											}
 											Account
 										</div>
@@ -87,7 +91,7 @@ templ Page(user *read.Response) {
 			if !user.Verified {
 				<div class="ui looping pulsating transition blue bottom fixed nag">
 					<div class="title">
-						<i class="check square icon"></i>
+						<i class="check circle icon"></i>
 						Account Confirmation
 					</div>
 					<div>Link sent. Please check your inbox</div>
@@ -96,7 +100,7 @@ templ Page(user *read.Response) {
 			} else {
 				<div class="ui looping pulsating transition green bottom fixed nag">
 					<div class="title">
-						<i class="check square icon"></i>
+						<i class="check circle icon"></i>
 						Account Confirmed
 					</div>
 					<i class="close icon"></i>

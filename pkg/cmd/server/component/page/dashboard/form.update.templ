@@ -29,13 +29,6 @@ script UpdateFormInit(formTagId string) {
                         }
                     ]
                 },
-                Password: {
-                    rules: [
-                        {
-                            type: "size[8..64]"
-                        }
-                    ]
-                },
                 UpdatedPassword: {
                     optional   : true,
                     rules: [
@@ -51,7 +44,14 @@ script UpdateFormInit(formTagId string) {
                             type: "match[UpdatedPassword]"
                         }
                     ]
-                }
+                },
+                Password: {
+                    rules: [
+                        {
+                            type: "size[8..64]"
+                        }
+                    ]
+                },
             }
         })
         .api({
@@ -99,13 +99,6 @@ templ UpdateForm(email, username string) {
 			</div>
 		</div>
 		<div class="required field">
-			<label>Current Password</label>
-			<div class="ui inverted transparent left icon input">
-				<i class="lock icon"></i>
-				<input type="password" placeholder="Current Password" name="Password"/>
-			</div>
-		</div>
-		<div class="required field">
 			<label>New Password</label>
 			<div class="ui inverted transparent left icon input">
 				<i class="lock icon"></i>
@@ -117,6 +110,14 @@ templ UpdateForm(email, username string) {
 			<div class="ui inverted transparent left icon input">
 				<i class="redo icon"></i>
 				<input type="password" placeholder="Confirm Password" name="ConfirmPassword"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<div class="required field">
+			<label>Current Password</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="lock icon"></i>
+				<input type="password" placeholder="Current Password" name="Password"/>
 			</div>
 		</div>
 		<div class="ui divider"></div>
