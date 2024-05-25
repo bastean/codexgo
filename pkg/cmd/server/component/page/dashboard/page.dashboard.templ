@@ -15,8 +15,18 @@ script PageInit() {
         .dropdown()
     ;
 
-    $(".ui.nag")
-        .nag()
+    $(".ui.blue.nag")
+        .nag({
+            key: "account-confirmation",
+            value: true
+        })
+    ;
+
+     $(".ui.green.nag")
+        .nag({
+            key: "account-confirmed",
+            value: true
+        })
     ;
 }
 
@@ -28,24 +38,6 @@ script Logout() {
 templ Page(user *read.Response) {
 	@layout.Index(script.Head{}, script.Body{}) {
 		<div class="ui centered grid container" style="height: 100%;">
-			if !user.Verified {
-				<div class="ui looping pulsating transition blue bottom fixed nag">
-					<div class="title">
-						<i class="check square icon"></i>
-						Account Confirmation
-					</div>
-					<div>Link sent. Please check your inbox</div>
-					<i class="close icon"></i>
-				</div>
-			} else {
-				<div class="ui looping pulsating transition green bottom fixed nag">
-					<div class="title">
-						<i class="check square icon"></i>
-						Account Confirmed
-					</div>
-					<i class="close icon"></i>
-				</div>
-			}
 			<div class="sixteen wide column">
 				<div class="ui inverted secondary menu">
 					<div class="header item">
@@ -92,6 +84,24 @@ templ Page(user *read.Response) {
 				@UpdateForm(user.Email, user.Username)
 				@DeleteForm()
 			</div>
+			if !user.Verified {
+				<div class="ui looping pulsating transition blue bottom fixed nag">
+					<div class="title">
+						<i class="check square icon"></i>
+						Account Confirmation
+					</div>
+					<div>Link sent. Please check your inbox</div>
+					<i class="close icon"></i>
+				</div>
+			} else {
+				<div class="ui looping pulsating transition green bottom fixed nag">
+					<div class="title">
+						<i class="check square icon"></i>
+						Account Confirmed
+					</div>
+					<i class="close icon"></i>
+				</div>
+			}
 		</div>
 		@PageInit()
 	}

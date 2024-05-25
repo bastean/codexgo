@@ -18,6 +18,13 @@ script PageInit() {
             context: ".container"
         })
     ;
+
+    $(".ui.cookie.nag")
+        .nag({
+            key: "accepts-cookies",
+            value: true
+        })
+    ;
 }
 
 templ Page() {
@@ -46,6 +53,13 @@ templ Page() {
 				<div class="ui tab basic segment" data-tab={ LoginTabTagId }>
 					@LoginForm()
 				</div>
+			</div>
+			<div class="ui looping pulsating transition bottom fixed cookie nag">
+				<div class="title">
+					<i class="cookie bite icon"></i>
+					We use cookies to ensure you get the best experience on our website
+				</div>
+				<i class="close icon"></i>
 			</div>
 		</div>
 		@PageInit()

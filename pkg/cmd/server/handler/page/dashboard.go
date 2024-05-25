@@ -1,6 +1,8 @@
 package page
 
 import (
+	"net/http"
+
 	"github.com/bastean/codexgo/pkg/cmd/server/component/page/dashboard"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
@@ -15,6 +17,7 @@ func Dashboard() gin.HandlerFunc {
 
 		if !exists {
 			c.Error(errs.MissingKey(key.UserId, "Dashboard"))
+			c.Redirect(http.StatusFound, "/")
 			c.Abort()
 			return
 		}
@@ -27,6 +30,7 @@ func Dashboard() gin.HandlerFunc {
 
 		if err != nil {
 			c.Error(err)
+			c.Redirect(http.StatusFound, "/")
 			c.Abort()
 			return
 		}
