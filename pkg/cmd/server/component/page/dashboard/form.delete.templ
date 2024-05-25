@@ -3,7 +3,7 @@ package dashboard
 var DeleteFormTagId = "delete"
 
 script DeleteFormInit(formTagId string) {
-    $("#"+formTagId)
+    $(`#${formTagId}`)
         .form({
             on: "blur",
             inline : true,
@@ -30,21 +30,21 @@ script DeleteFormInit(formTagId string) {
             method: "DELETE",
             onSuccess: function(response, element, xhr) {
                 $.toast({
-                    class: 'success',
+                    class: "success",
                     message: response.message,
-                    showProgress: 'top',
+                    showProgress: "top",
                 });
 
                  _.delay(function() {
                     Storage.Clear();
                     window.location.replace("/");
-                }, 3000);
+                }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
-                    class: 'error',
+                    class: "error",
                     message: response.message,
-                    showProgress: 'top'
+                    showProgress: "top"
                 });
             }
         })

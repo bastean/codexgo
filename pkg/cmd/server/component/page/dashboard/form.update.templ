@@ -3,7 +3,7 @@ package dashboard
 var UpdateFormTagId = "update"
 
 script UpdateFormInit(formTagId string) {
-    $("#"+formTagId)
+    $(`#${formTagId}`)
         .form({
             on: "blur",
             inline : true,
@@ -45,7 +45,7 @@ script UpdateFormInit(formTagId string) {
                     ]
                 },
                 ConfirmPassword: {
-                    depends    : 'UpdatedPassword',
+                    depends    : "UpdatedPassword",
                     rules: [
                         {
                             type: "match[UpdatedPassword]"
@@ -59,20 +59,20 @@ script UpdateFormInit(formTagId string) {
             method: "PATCH",
             onSuccess: function(response, element, xhr) {
                 $.toast({
-                    class: 'success',
+                    class: "success",
                     message: response.message,
-                    showProgress: 'top',
+                    showProgress: "top",
                 });
 
                  _.delay(function() {
                     window.location.replace("/dashboard");
-                }, 3000);
+                }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
-                    class: 'error',
+                    class: "error",
                     message: response.message,
-                    showProgress: 'top'
+                    showProgress: "top"
                 });
             }
         })

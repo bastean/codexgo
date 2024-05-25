@@ -3,7 +3,7 @@ package home
 var RegisterFormTagId = "register"
 
 script RegisterFormInit(formTagId, loginTabTagId string) {
-    $("#"+formTagId)
+    $(`#${formTagId}`)
         .form({
             on: "blur",
             inline : true,
@@ -63,21 +63,21 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
             },
             onSuccess: function(response, element, xhr) {
                 $.toast({
-                    class: 'success',
+                    class: "success",
                     message: response.message,
-                    showProgress: 'top',
+                    showProgress: "top",
                 });
 
                 _.delay(function() {
-                    $.tab('change tab', loginTabTagId);
-                    $("#"+formTagId).form('reset');
+                    $.tab("change tab", loginTabTagId);
+                    $(`#${formTagId}`).form("reset");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
-                    class: 'error',
+                    class: "error",
                     message: response.message,
-                    showProgress: 'top'
+                    showProgress: "top"
                 });
             }
         })
@@ -85,7 +85,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
 }
 
 script ShowTerms(modalTagId string) {
-    $("#"+ modalTagId).modal("show")
+    $(`#${modalTagId}`).modal("show")
 }
 
 templ RegisterForm() {
