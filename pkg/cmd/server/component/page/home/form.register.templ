@@ -2,7 +2,7 @@ package home
 
 var RegisterFormTagId = "register"
 
-script RegisterFormInit(formTagId string) {
+script RegisterFormInit(formTagId, loginTabTagId string) {
     $("#"+formTagId)
         .form({
             on: "blur",
@@ -68,7 +68,10 @@ script RegisterFormInit(formTagId string) {
                     showProgress: 'top',
                 });
 
-                $("#"+formTagId).form('reset');
+                _.delay(function() {
+                    $.tab('change tab', loginTabTagId);
+                    $("#"+formTagId).form('reset');
+                }, 1000);
             },
             onFailure: function(response, element, xhr) {
                 $.toast({
@@ -89,7 +92,7 @@ templ RegisterForm() {
 	<form id={ RegisterFormTagId } class="ui inverted form">
 		<h1 class="ui dividing inverted header">
 			Create an account
-			<div class="sub header">Already have an account? <a>Sign in</a></div>
+			<div class="sub header">Already have an account? <a style="cursor: pointer;" onclick={ ShowTab(LoginTabTagId) }>Sign in</a></div>
 		</h1>
 		<div class="required field">
 			<label>Email</label>
@@ -125,12 +128,12 @@ templ RegisterForm() {
 				<div class="inline required field">
 					<div class="ui inverted checkbox">
 						<input type="checkbox" name="Terms"/>
-						<label for=" ">I agree to the <a onclick={ ShowTerms(TermsModalTagId) }><b>terms and conditions</b></a></label>
+						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagId) }>I agree to the <a><b>terms and conditions</b></a></label>
 					</div>
 				</div>
 				<button class="ui fluid primary submit button">Sign up</button>
 			</div>
 		</div>
 	</form>
-	@RegisterFormInit(RegisterFormTagId)
+	@RegisterFormInit(RegisterFormTagId, LoginTabTagId)
 }

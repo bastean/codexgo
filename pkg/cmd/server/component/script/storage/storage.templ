@@ -36,9 +36,18 @@ script Init() {
 
             localStorage.setItem(this.MasterKey, JSON.stringify(storage));
         },
-        Clear() {
+        async ClearSession() {
             localStorage.removeItem(this.MasterKey);
             cookieStore.delete(this.MasterKey);
+        },
+        async Clear() {
+            localStorage.clear();
+
+            let cookies = await cookieStore.getAll();
+
+            _.each(cookies, function(cookie) {
+                cookieStore.delete(cookie);
+            });
         }
     }
 

@@ -27,6 +27,10 @@ script PageInit() {
     ;
 }
 
+script ShowTab(tabTagId string) {
+   $(`.menu .item[data-tab=${tabTagId}]`).trigger("click");
+}
+
 templ Page() {
 	@layout.Index(script.Head{}, script.Body{}) {
 		<div class="ui centered grid container" style="height: 100%;">

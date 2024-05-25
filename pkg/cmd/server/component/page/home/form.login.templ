@@ -54,7 +54,7 @@ templ LoginForm() {
 	<form id={ LoginFormTagId } class="ui inverted form">
 		<h1 class="ui dividing inverted header">
 			Sign in to your account
-			<div class="sub header">Don't have an account? <a>Sign up</a></div>
+			<div class="sub header">Don't have an account? <a style="cursor: pointer;" onclick={ ShowTab(RegisterTabTagId) }>Sign up</a></div>
 		</h1>
 		<div class="required field">
 			<label>Email</label>
