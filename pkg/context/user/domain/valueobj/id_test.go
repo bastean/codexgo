@@ -17,17 +17,18 @@ func (suite *IdValueObjectTestSuite) SetupTest() {}
 func (suite *IdValueObjectTestSuite) TestId() {
 	id, err := valueobj.InvalidId()
 
-	expected := serror.NewInvalidValue(&serror.Bubble{
+	var actual *serror.InvalidValue
+
+	suite.ErrorAs(err, &actual)
+
+	expected := serror.InvalidValue{Bubble: &serror.Bubble{
+		When:  actual.When,
 		Where: "NewId",
 		What:  "invalid id format",
 		Why: serror.Meta{
 			"Id": id,
 		},
-	})
-
-	var actual *serror.InvalidValue
-
-	suite.ErrorAs(err, &actual)
+	}}
 
 	suite.EqualError(expected, actual.Error())
 }
