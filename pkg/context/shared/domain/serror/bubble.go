@@ -22,7 +22,12 @@ func (err *Bubble) Error() string {
 	message := fmt.Sprintf("%s (%s): %s", err.When.Format(time.RFC3339Nano), err.Where, err.What)
 
 	if err.Why != nil {
-		why, _ := json.Marshal(err.Why)
+		why, err := json.Marshal(err.Why)
+
+		if err != nil {
+			sservice.PanicOnError("Error", fmt.Sprintf("cannot json encoding why from error bubble: %s: [%s]", message, err.Error()))
+		}
+
 		message = fmt.Sprintf("%s: %s", message, why)
 	}
 
@@ -35,11 +40,11 @@ func (err *Bubble) Error() string {
 
 func NewBubble(where, what string, why Meta, who error) *Bubble {
 	if where == "" {
-		sservice.PanicOnError("NewBubble", "cannot create a bubble if where is not defined")
+		sservice.PanicOnError("NewBubble", "cannot create a error bubble if where is not defined")
 	}
 
 	if what == "" {
-		sservice.PanicOnError("NewBubble", "cannot create a bubble if what is not defined")
+		sservice.PanicOnError("NewBubble", "cannot create a error bubble if what is not defined")
 	}
 
 	return &Bubble{

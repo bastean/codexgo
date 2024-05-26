@@ -1,5 +1,5 @@
 package smodel
 
-type UseCase[Input any, Output any] interface {
+type UseCase[Input, Output any] interface {
 	Run(Input) (Output, error)
 }

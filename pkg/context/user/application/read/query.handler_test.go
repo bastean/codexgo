@@ -14,7 +14,7 @@ import (
 type UserReadTestSuite struct {
 	suite.Suite
 	sut        smodel.QueryHandler[*read.Query, *read.Response]
-	useCase    smodel.UseCase[*read.Input, *aggregate.User]
+	useCase    smodel.UseCase[smodel.ValueObject[string], *aggregate.User]
 	repository *persistence.RepositoryMock
 }
 

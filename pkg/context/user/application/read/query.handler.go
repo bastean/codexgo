@@ -7,12 +7,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
-type Input struct {
-	Id smodel.ValueObject[string]
-}
-
 type QueryHandler struct {
-	smodel.UseCase[*Input, *aggregate.User]
+	smodel.UseCase[smodel.ValueObject[string], *aggregate.User]
 }
 
 func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
@@ -22,9 +18,7 @@ func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
 		return nil, serror.BubbleUp(err, "Handle")
 	}
 
-	user, err := handler.UseCase.Run(&Input{
-		Id: id,
-	})
+	user, err := handler.UseCase.Run(id)
 
 	if err != nil {
 		return nil, serror.BubbleUp(err, "Handle")
