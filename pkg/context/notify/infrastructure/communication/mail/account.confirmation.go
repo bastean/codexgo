@@ -7,12 +7,12 @@ import (
 	"net/smtp"
 
 	"github.com/bastean/codexgo/pkg/context/notify/application/send"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/stransport"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
 )
 
 type AccountConfirmation struct {
-	*stransport.SMTP
+	*transports.SMTP
 }
 
 func (client *AccountConfirmation) Submit(data any) error {
@@ -31,10 +31,10 @@ func (client *AccountConfirmation) Submit(data any) error {
 	err := smtp.SendMail(client.SMTPServerURL, client.Auth, client.Username, []string{account.Email}, message.Bytes())
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "Submit",
 			What:  "failure to send an account confirmation mail",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"AccountId":     account.Id,
 				"SMTPServerURL": client.SMTPServerURL,
 			},

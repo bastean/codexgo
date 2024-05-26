@@ -1,9 +1,9 @@
-package spersistence
+package persistences
 
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -17,7 +17,7 @@ func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) error {
 	err := mdb.Client.Disconnect(ctx)
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "CloseMongoDatabase",
 			What:  "failure to close connection with mongodb",
 			Who:   err,
@@ -35,7 +35,7 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 	client, err := mongo.Connect(context.Background(), clientOptions)
 
 	if err != nil {
-		return nil, serror.NewInternal(&serror.Bubble{
+		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewMongoDatabase",
 			What:  "failure to create a mongodb client",
 			Who:   err,
@@ -45,7 +45,7 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 	err = client.Ping(context.Background(), nil)
 
 	if err != nil {
-		return nil, serror.NewInternal(&serror.Bubble{
+		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewMongoDatabase",
 			What:  "failure connecting to mongodb",
 			Who:   err,

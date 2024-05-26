@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/spersistence"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
@@ -24,7 +24,7 @@ func (suite *UserMongoRepositoryTestSuite) SetupTest() {
 
 	databaseName := "codexgo-test"
 
-	database, _ := spersistence.NewMongoDatabase(uri, databaseName)
+	database, _ := persistences.NewMongoDatabase(uri, databaseName)
 
 	collectionName := "users-test"
 

@@ -1,10 +1,10 @@
 package valueobj
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/svalueobj"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
 )
 
-func NewId(id string) (smodel.ValueObject[string], error) {
-	return svalueobj.NewId(id)
+func NewId(id string) (models.ValueObject[string], error) {
+	return valueobjs.NewId(id)
 }

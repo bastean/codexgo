@@ -4,53 +4,53 @@ import (
 	"os"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/srouter"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/scommunication"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/routers"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
 )
 
 var uri = os.Getenv("BROKER_URI")
 
-var Broker smodel.Broker
+var Broker models.Broker
 
 func Init() error {
 	logger.Info("starting rabbitmq")
 
-	rabbitMQ, err := scommunication.NewRabbitMQ(uri, logger.Logger)
+	rabbitMQ, err := communications.NewRabbitMQ(uri, logger.Logger)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	Broker = rabbitMQ
 
-	router := &srouter.Router{
+	router := &routers.Router{
 		Name: "codexgo",
 	}
 
 	err = Broker.AddRouter(router)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	err = Broker.AddQueue(NotifySendAccountConfirmationQueue)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	err = Broker.AddQueueMessageBind(NotifySendAccountConfirmationQueue, []string{"#.event.#.created.succeeded"})
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	err = Broker.AddQueueConsumer(NotifySendAccountConfirmationQueueConsumer)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	return nil
@@ -59,10 +59,10 @@ func Init() error {
 func Close() error {
 	logger.Info("closing rabbitmq")
 
-	err := scommunication.CloseRabbitMQ(Broker.(*scommunication.RabbitMQ))
+	err := communications.CloseRabbitMQ(Broker.(*communications.RabbitMQ))
 
 	if err != nil {
-		return serror.BubbleUp(err, "Close")
+		return errors.BubbleUp(err, "Close")
 	}
 
 	return nil

@@ -1,4 +1,4 @@
-package smodel
+package models
 
 type Logger interface {
 	Debug(message string)

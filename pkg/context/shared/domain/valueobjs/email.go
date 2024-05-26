@@ -1,10 +1,10 @@
-package svalueobj
+package valueobjs
 
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -22,7 +22,7 @@ func (email *Email) IsValid() error {
 	return validate.Struct(email)
 }
 
-func NewEmail(email string) (smodel.ValueObject[string], error) {
+func NewEmail(email string) (models.ValueObject[string], error) {
 	email = strings.TrimSpace(email)
 
 	emailVO := &Email{
@@ -30,10 +30,10 @@ func NewEmail(email string) (smodel.ValueObject[string], error) {
 	}
 
 	if emailVO.IsValid() != nil {
-		return nil, serror.NewInvalidValue(&serror.Bubble{
+		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewEmail",
 			What:  "invalid email format",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Email": email,
 			},
 		})

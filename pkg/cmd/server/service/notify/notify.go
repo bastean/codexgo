@@ -7,7 +7,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/notify/application/send"
 	"github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication/mail"
 	"github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication/terminal"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/stransport"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
 )
 
 var host = os.Getenv("SMTP_HOST")
@@ -16,7 +16,7 @@ var username = os.Getenv("SMTP_USERNAME")
 var password = os.Getenv("SMTP_PASSWORD")
 var serverURL = os.Getenv("URL")
 
-var smtp = stransport.NewSMTP(host, port, username, password, serverURL)
+var smtp = transports.NewSMTP(host, port, username, password, serverURL)
 
 var viaMail = &mail.AccountConfirmation{
 	SMTP: smtp,

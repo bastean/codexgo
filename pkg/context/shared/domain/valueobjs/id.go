@@ -1,10 +1,10 @@
-package svalueobj
+package valueobjs
 
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -22,7 +22,7 @@ func (id *Id) IsValid() error {
 	return validate.Struct(id)
 }
 
-func NewId(id string) (smodel.ValueObject[string], error) {
+func NewId(id string) (models.ValueObject[string], error) {
 	id = strings.TrimSpace(id)
 
 	idVO := &Id{
@@ -30,10 +30,10 @@ func NewId(id string) (smodel.ValueObject[string], error) {
 	}
 
 	if idVO.IsValid() != nil {
-		return nil, serror.NewInvalidValue(&serror.Bubble{
+		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewId",
 			What:  "invalid id format",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Id": id,
 			},
 		})

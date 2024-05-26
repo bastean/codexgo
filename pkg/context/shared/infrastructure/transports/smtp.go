@@ -1,4 +1,4 @@
-package stransport
+package transports
 
 import (
 	"net/smtp"

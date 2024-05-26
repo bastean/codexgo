@@ -1,12 +1,11 @@
 package middleware
 
 import (
-	"errors"
 	"net/http"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,13 +13,13 @@ func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		var invalidValue *serror.InvalidValue
-		var alreadyExist *serror.AlreadyExist
-		var notExist *serror.NotExist
+		var invalidValue *errors.InvalidValue
+		var alreadyExist *errors.AlreadyExist
+		var notExist *errors.NotExist
 
-		var failure *serror.Failure
+		var failure *errors.Failure
 
-		var internal *serror.Internal
+		var internal *errors.Internal
 
 		for _, err := range c.Errors {
 			switch {

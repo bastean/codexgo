@@ -3,7 +3,7 @@ package valueobj_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 	"github.com/stretchr/testify/suite"
 )
@@ -17,15 +17,15 @@ func (suite *IdValueObjectTestSuite) SetupTest() {}
 func (suite *IdValueObjectTestSuite) TestId() {
 	id, err := valueobj.InvalidId()
 
-	var actual *serror.InvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := serror.InvalidValue{Bubble: &serror.Bubble{
+	expected := errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewId",
 		What:  "invalid id format",
-		Why: serror.Meta{
+		Why: errors.Meta{
 			"Id": id,
 		},
 	}}

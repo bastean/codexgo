@@ -3,7 +3,7 @@ package read_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -13,8 +13,8 @@ import (
 
 type UserReadTestSuite struct {
 	suite.Suite
-	sut        smodel.QueryHandler[*read.Query, *read.Response]
-	useCase    smodel.UseCase[smodel.ValueObject[string], *aggregate.User]
+	sut        models.QueryHandler[*read.Query, *read.Response]
+	useCase    models.UseCase[models.ValueObject[string], *aggregate.User]
 	repository *persistence.RepositoryMock
 }
 

@@ -1,4 +1,4 @@
-package smodel
+package models
 
 type ValueObject[Value any] interface {
 	Value() Value

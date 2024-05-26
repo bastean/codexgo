@@ -1,12 +1,12 @@
 package valueobj
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/sservice"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func RandomEmail() (smodel.ValueObject[string], error) {
-	return NewEmail(sservice.Create.Email())
+func RandomEmail() (models.ValueObject[string], error) {
+	return NewEmail(services.Create.Email())
 }
 
 func InvalidEmail() (string, error) {

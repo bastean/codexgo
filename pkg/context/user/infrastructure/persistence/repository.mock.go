@@ -1,7 +1,7 @@
 package persistence
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/stretchr/testify/mock"
@@ -21,7 +21,7 @@ func (repository *RepositoryMock) Update(user *aggregate.User) error {
 	return nil
 }
 
-func (repository *RepositoryMock) Delete(id smodel.ValueObject[string]) error {
+func (repository *RepositoryMock) Delete(id models.ValueObject[string]) error {
 	repository.Called(id)
 	return nil
 }

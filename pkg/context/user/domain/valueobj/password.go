@@ -1,8 +1,8 @@
 package valueobj
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -23,16 +23,16 @@ func (password *Password) IsValid() error {
 	return validate.Struct(password)
 }
 
-func NewPassword(password string) (smodel.ValueObject[string], error) {
+func NewPassword(password string) (models.ValueObject[string], error) {
 	passwordVO := &Password{
 		Password: password,
 	}
 
 	if passwordVO.IsValid() != nil {
-		return nil, serror.NewInvalidValue(&serror.Bubble{
+		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewPassword",
 			What:  "password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Password": password,
 			},
 		})

@@ -4,7 +4,7 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/broker"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/database"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
@@ -45,7 +45,7 @@ func Init() error {
 	collection, err := persistence.NewMongoCollection(database.Database, CollectionName, Bcrypt)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	MongoCollection = collection

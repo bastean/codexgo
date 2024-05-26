@@ -1,20 +1,20 @@
 package update
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 )
 
 type CommandHandler struct {
-	smodel.UseCase[*Command, *stype.Empty]
+	models.UseCase[*Command, *types.Empty]
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {
 	_, err := handler.UseCase.Run(command)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err, "Handle")
 	}
 
 	return nil

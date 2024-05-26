@@ -1,4 +1,4 @@
-package serror
+package errors
 
 type Failure struct {
 	*Bubble

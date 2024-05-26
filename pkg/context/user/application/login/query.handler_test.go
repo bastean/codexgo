@@ -3,7 +3,7 @@ package login_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -14,8 +14,8 @@ import (
 
 type UserLoginTestSuite struct {
 	suite.Suite
-	sut        smodel.QueryHandler[*login.Query, *login.Response]
-	useCase    smodel.UseCase[*login.Input, *aggregate.User]
+	sut        models.QueryHandler[*login.Query, *login.Response]
+	useCase    models.UseCase[*login.Input, *aggregate.User]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }

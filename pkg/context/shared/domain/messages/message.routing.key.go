@@ -1,4 +1,4 @@
-package smessage
+package messages
 
 import (
 	"reflect"

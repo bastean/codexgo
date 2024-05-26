@@ -3,9 +3,9 @@ package create_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/scommunication"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
@@ -14,14 +14,14 @@ import (
 
 type UserCreateTestSuite struct {
 	suite.Suite
-	sut        smodel.CommandHandler[*create.Command]
-	useCase    smodel.UseCase[*aggregate.User, *stype.Empty]
+	sut        models.CommandHandler[*create.Command]
+	useCase    models.UseCase[*aggregate.User, *types.Empty]
 	repository *persistence.RepositoryMock
-	broker     *scommunication.BrokerMock
+	broker     *communications.BrokerMock
 }
 
 func (suite *UserCreateTestSuite) SetupTest() {
-	suite.broker = new(scommunication.BrokerMock)
+	suite.broker = new(communications.BrokerMock)
 
 	suite.repository = new(persistence.RepositoryMock)
 

@@ -1,4 +1,4 @@
-package smessage
+package messages
 
 type Message struct {
 	Id         string

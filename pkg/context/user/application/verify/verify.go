@@ -1,9 +1,9 @@
 package verify
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
@@ -12,13 +12,13 @@ type Verify struct {
 	model.Repository
 }
 
-func (verify *Verify) Run(id smodel.ValueObject[string]) (*stype.Empty, error) {
+func (verify *Verify) Run(id models.ValueObject[string]) (*types.Empty, error) {
 	userRegistered, err := verify.Repository.Search(model.RepositorySearchCriteria{
 		Id: id,
 	})
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err, "Run")
 	}
 
 	if userRegistered.Verified.Value() {
@@ -28,7 +28,7 @@ func (verify *Verify) Run(id smodel.ValueObject[string]) (*stype.Empty, error) {
 	userRegistered.Verified, err = valueobj.NewVerified(true)
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err, "Run")
 	}
 
 	userRegistered.Password = nil
@@ -36,7 +36,7 @@ func (verify *Verify) Run(id smodel.ValueObject[string]) (*stype.Empty, error) {
 	err = verify.Repository.Update(userRegistered)
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

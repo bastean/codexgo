@@ -9,19 +9,19 @@ import (
 	"github.com/bastean/codexgo/pkg/context/notify/application/send"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication/terminal"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/slogger"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
 	"github.com/stretchr/testify/suite"
 )
 
 type NotifyTerminalAccountConfirmationTransportTestSuite struct {
 	suite.Suite
 	sut       model.Transport
-	logger    *slogger.LoggerMock
+	logger    *loggers.LoggerMock
 	serverURL string
 }
 
 func (suite *NotifyTerminalAccountConfirmationTransportTestSuite) SetupTest() {
-	suite.logger = new(slogger.LoggerMock)
+	suite.logger = new(loggers.LoggerMock)
 
 	suite.serverURL = os.Getenv("URL")
 

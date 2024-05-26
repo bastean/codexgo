@@ -1,22 +1,20 @@
 package aggregate
 
 import (
-	"errors"
-
-	"github.com/bastean/codexgo/pkg/context/shared/domain/saggregate"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/aggregates"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/user/domain/message"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 type User struct {
-	*saggregate.AggregateRoot
-	Id       smodel.ValueObject[string]
-	Email    smodel.ValueObject[string]
-	Username smodel.ValueObject[string]
-	Password smodel.ValueObject[string]
-	Verified smodel.ValueObject[bool]
+	*aggregates.AggregateRoot
+	Id       models.ValueObject[string]
+	Email    models.ValueObject[string]
+	Username models.ValueObject[string]
+	Password models.ValueObject[string]
+	Verified models.ValueObject[bool]
 }
 
 type UserPrimitive struct {
@@ -28,7 +26,7 @@ type UserPrimitive struct {
 }
 
 func create(id, email, username, password string, verified bool) (*User, error) {
-	aggregateRoot := saggregate.NewAggregateRoot()
+	aggregateRoot := aggregates.NewAggregateRoot()
 
 	idVO, errId := valueobj.NewId(id)
 	emailVO, errEmail := valueobj.NewEmail(email)
@@ -39,7 +37,7 @@ func create(id, email, username, password string, verified bool) (*User, error) 
 	err := errors.Join(errId, errEmail, errUsername, errPassword, errVerified)
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "create")
+		return nil, errors.BubbleUp(err, "create")
 	}
 
 	return &User{
@@ -72,7 +70,7 @@ func FromPrimitives(userPrimitive *UserPrimitive) (*User, error) {
 	)
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "FromPrimitives")
+		return nil, errors.BubbleUp(err, "FromPrimitives")
 	}
 
 	return user, nil
@@ -90,7 +88,7 @@ func NewUser(id, email, username, password string) (*User, error) {
 	)
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "NewUser")
+		return nil, errors.BubbleUp(err, "NewUser")
 	}
 
 	eventMessage, err := message.NewCreatedSucceededEvent(&message.CreatedSucceededEventAttributes{
@@ -100,7 +98,7 @@ func NewUser(id, email, username, password string) (*User, error) {
 	})
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "NewUser")
+		return nil, errors.BubbleUp(err, "NewUser")
 	}
 
 	user.RecordMessage(eventMessage)

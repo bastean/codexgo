@@ -1,4 +1,4 @@
-package srouter
+package routers
 
 type Router struct {
 	Name string

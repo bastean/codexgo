@@ -1,9 +1,8 @@
-package scommunication
+package communications
 
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -11,21 +10,21 @@ import (
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/srouter"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/routers"
 )
 
 type RabbitMQ struct {
 	*amqp.Connection
 	*amqp.Channel
-	smodel.Logger
+	models.Logger
 	exchange string
 }
 
-func (rmq *RabbitMQ) AddRouter(router *srouter.Router) error {
+func (rmq *RabbitMQ) AddRouter(router *routers.Router) error {
 	err := rmq.Channel.ExchangeDeclare(
 		router.Name,
 		"topic",
@@ -39,10 +38,10 @@ func (rmq *RabbitMQ) AddRouter(router *srouter.Router) error {
 	rmq.exchange = router.Name
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "AddRouter",
 			What:  "failure to declare an exchange",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Router": router.Name,
 			},
 			Who: err,
@@ -52,7 +51,7 @@ func (rmq *RabbitMQ) AddRouter(router *srouter.Router) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueue(queue *squeue.Queue) error {
+func (rmq *RabbitMQ) AddQueue(queue *queues.Queue) error {
 	_, err := rmq.Channel.QueueDeclare(
 		queue.Name,
 		true,
@@ -63,10 +62,10 @@ func (rmq *RabbitMQ) AddQueue(queue *squeue.Queue) error {
 	)
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "AddQueue",
 			What:  "failure to declare a queue",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Queue": queue.Name,
 			},
 			Who: err,
@@ -76,7 +75,7 @@ func (rmq *RabbitMQ) AddQueue(queue *squeue.Queue) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueMessageBind(queue *squeue.Queue, bindingKeys []string) error {
+func (rmq *RabbitMQ) AddQueueMessageBind(queue *queues.Queue, bindingKeys []string) error {
 	var errWrap error
 
 	for _, bindingKey := range bindingKeys {
@@ -91,10 +90,10 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *squeue.Queue, bindingKeys []stri
 			nil)
 
 		if err != nil {
-			errToWrap := serror.NewInternal(&serror.Bubble{
+			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "AddQueueMessageBind",
 				What:  "failure to bind a queue",
-				Why: serror.Meta{
+				Why: errors.Meta{
 					"Queue":      queue.Name,
 					"BindingKey": bindingKey,
 					"Exchange":   rmq.exchange,
@@ -107,17 +106,17 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *squeue.Queue, bindingKeys []stri
 	}
 
 	if errWrap != nil {
-		return serror.BubbleUp(errWrap, "AddQueueMessageBind")
+		return errors.BubbleUp(errWrap, "AddQueueMessageBind")
 	}
 
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueConsumer(consumer smodel.Consumer) error {
+func (rmq *RabbitMQ) AddQueueConsumer(consumer models.Consumer) error {
 	var errWrap error
 
 	for _, queue := range consumer.SubscribedTo() {
-		messages, err := rmq.Channel.Consume(
+		deliveries, err := rmq.Channel.Consume(
 			queue.Name,
 			"",
 			false,
@@ -128,10 +127,10 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer smodel.Consumer) error {
 		)
 
 		if err != nil {
-			errToWrap := serror.NewInternal(&serror.Bubble{
+			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "AddQueueConsumer",
 				What:  "failure to register a consumer",
-				Why: serror.Meta{
+				Why: errors.Meta{
 					"Queue":    queue.Name,
 					"Exchange": rmq.exchange,
 				},
@@ -144,8 +143,8 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer smodel.Consumer) error {
 		}
 
 		go func() {
-			for delivery := range messages {
-				message := new(smessage.Message)
+			for delivery := range deliveries {
+				message := new(messages.Message)
 
 				err := json.Unmarshal(delivery.Body, message)
 
@@ -167,13 +166,13 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer smodel.Consumer) error {
 	}
 
 	if errWrap != nil {
-		return serror.BubbleUp(errWrap, "AddQueueConsumer")
+		return errors.BubbleUp(errWrap, "AddQueueConsumer")
 	}
 
 	return nil
 }
 
-func (rmq *RabbitMQ) PublishMessages(messages []*smessage.Message) error {
+func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 	var errWrap error
 
 	for _, message := range messages {
@@ -203,10 +202,10 @@ func (rmq *RabbitMQ) PublishMessages(messages []*smessage.Message) error {
 			})
 
 		if err != nil {
-			errToWrap := serror.NewInternal(&serror.Bubble{
+			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "PublishMessages",
 				What:  "failure to publish a message",
-				Why: serror.Meta{
+				Why: errors.Meta{
 					"Exchange": rmq.exchange,
 					"Message":  message.Id,
 				},
@@ -218,7 +217,7 @@ func (rmq *RabbitMQ) PublishMessages(messages []*smessage.Message) error {
 	}
 
 	if errWrap != nil {
-		return serror.BubbleUp(errWrap, "PublishMessages")
+		return errors.BubbleUp(errWrap, "PublishMessages")
 	}
 
 	return nil
@@ -228,7 +227,7 @@ func CloseRabbitMQ(rmq *RabbitMQ) error {
 	err := rmq.Channel.Close()
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "CloseRabbitMQ",
 			What:  "failure to close channel",
 			Who:   err,
@@ -238,7 +237,7 @@ func CloseRabbitMQ(rmq *RabbitMQ) error {
 	err = rmq.Connection.Close()
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "CloseRabbitMQ",
 			What:  "failure to close rabbitmq connection",
 			Who:   err,
@@ -248,11 +247,11 @@ func CloseRabbitMQ(rmq *RabbitMQ) error {
 	return nil
 }
 
-func NewRabbitMQ(uri string, logger smodel.Logger) (smodel.Broker, error) {
+func NewRabbitMQ(uri string, logger models.Logger) (models.Broker, error) {
 	conn, err := amqp.Dial(uri)
 
 	if err != nil {
-		return nil, serror.NewInternal(&serror.Bubble{
+		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewRabbitMQ",
 			What:  "failure connecting to rabbitmq",
 			Who:   err,
@@ -262,7 +261,7 @@ func NewRabbitMQ(uri string, logger smodel.Logger) (smodel.Broker, error) {
 	ch, err := conn.Channel()
 
 	if err != nil {
-		return nil, serror.NewInternal(&serror.Bubble{
+		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewRabbitMQ",
 			What:  "failure to open a channel",
 			Who:   err,

@@ -1,12 +1,12 @@
 package valueobj
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/sservice"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func RandomUsername() (smodel.ValueObject[string], error) {
-	return NewUsername(sservice.Create.Regex(`[a-z0-9]{2,20}`))
+func RandomUsername() (models.ValueObject[string], error) {
+	return NewUsername(services.Create.Regex(`[a-z0-9]{2,20}`))
 }
 
 func WithInvalidUsernameLength() (string, error) {

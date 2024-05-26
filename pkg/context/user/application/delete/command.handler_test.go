@@ -3,8 +3,8 @@ package delete_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -15,8 +15,8 @@ import (
 
 type UserDeleteTestSuite struct {
 	suite.Suite
-	sut        smodel.CommandHandler[*delete.Command]
-	useCase    smodel.UseCase[*delete.Input, *stype.Empty]
+	sut        models.CommandHandler[*delete.Command]
+	useCase    models.UseCase[*delete.Input, *types.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }

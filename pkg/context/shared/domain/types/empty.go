@@ -1,3 +1,3 @@
-package stype
+package types
 
 type Empty struct{}

@@ -1,27 +1,27 @@
 package verify
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 type CommandHandler struct {
-	smodel.UseCase[smodel.ValueObject[string], *stype.Empty]
+	models.UseCase[models.ValueObject[string], *types.Empty]
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {
 	idVO, err := valueobj.NewId(command.Id)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err, "Handle")
 	}
 
 	_, err = handler.UseCase.Run(idVO)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err, "Handle")
 	}
 
 	return nil

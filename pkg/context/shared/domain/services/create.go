@@ -1,4 +1,4 @@
-package sservice
+package services
 
 import (
 	"fmt"

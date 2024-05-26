@@ -3,14 +3,14 @@ package auth
 import (
 	"os"
 
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/sauthentication"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/authentications"
 )
 
-type Payload sauthentication.Payload
+type Payload authentications.Payload
 
 var secretKey = os.Getenv("JWT_SECRET_KEY")
 
-var auth = sauthentication.NewAuthentication(secretKey)
+var auth = authentications.NewAuthentication(secretKey)
 
 var GenerateJWT = auth.GenerateJWT
 

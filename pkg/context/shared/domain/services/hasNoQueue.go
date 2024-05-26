@@ -1,10 +1,10 @@
-package sservice
+package services
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 )
 
-func HasNoQueue(queues []*squeue.Queue, queue *squeue.Queue) bool {
+func HasNoQueue(queues []*queues.Queue, queue *queues.Queue) bool {
 	isNotPresent := true
 
 	for _, present := range queues {

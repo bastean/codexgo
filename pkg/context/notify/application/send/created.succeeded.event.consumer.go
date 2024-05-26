@@ -3,32 +3,32 @@ package send
 import (
 	"encoding/json"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 )
 
 type CreatedSucceededEventConsumer struct {
-	smodel.UseCase[any, *stype.Empty]
-	Queues []*squeue.Queue
+	models.UseCase[any, *types.Empty]
+	Queues []*queues.Queue
 }
 
-func (consumer *CreatedSucceededEventConsumer) SubscribedTo() []*squeue.Queue {
+func (consumer *CreatedSucceededEventConsumer) SubscribedTo() []*queues.Queue {
 	return consumer.Queues
 }
 
-func (consumer *CreatedSucceededEventConsumer) On(message *smessage.Message) error {
+func (consumer *CreatedSucceededEventConsumer) On(message *messages.Message) error {
 	attributes := new(CreatedSucceededEventAttributes)
 
 	err := json.Unmarshal(message.Attributes, attributes)
 
 	if err != nil {
-		return serror.NewInternal(&serror.Bubble{
+		return errors.NewInternal(&errors.Bubble{
 			Where: "On",
 			What:  "failure to obtain message attributes",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Message": message.Id,
 			},
 			Who: err,
@@ -38,7 +38,7 @@ func (consumer *CreatedSucceededEventConsumer) On(message *smessage.Message) err
 	_, err = consumer.UseCase.Run(attributes)
 
 	if err != nil {
-		return serror.BubbleUp(err, "On")
+		return errors.BubbleUp(err, "On")
 	}
 
 	return nil

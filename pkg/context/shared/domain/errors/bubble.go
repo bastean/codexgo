@@ -1,11 +1,11 @@
-package serror
+package errors
 
 import (
 	"encoding/json"
 	"fmt"
 	"time"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/sservice"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
 type Meta map[string]any
@@ -25,7 +25,7 @@ func (err *Bubble) Error() string {
 		why, err := json.Marshal(err.Why)
 
 		if err != nil {
-			sservice.PanicOnError("Error", fmt.Sprintf("cannot json encoding why from error bubble: %s: [%s]", message, err.Error()))
+			services.PanicOnError("Error", fmt.Sprintf("cannot json encoding why from error bubble: %s: [%s]", message, err.Error()))
 		}
 
 		message = fmt.Sprintf("%s: %s", message, why)
@@ -40,11 +40,11 @@ func (err *Bubble) Error() string {
 
 func NewBubble(where, what string, why Meta, who error) *Bubble {
 	if where == "" {
-		sservice.PanicOnError("NewBubble", "cannot create a error bubble if where is not defined")
+		services.PanicOnError("NewBubble", "cannot create a error bubble if where is not defined")
 	}
 
 	if what == "" {
-		sservice.PanicOnError("NewBubble", "cannot create a error bubble if what is not defined")
+		services.PanicOnError("NewBubble", "cannot create a error bubble if what is not defined")
 	}
 
 	return &Bubble{

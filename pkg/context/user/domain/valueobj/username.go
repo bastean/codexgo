@@ -3,8 +3,8 @@ package valueobj
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -25,7 +25,7 @@ func (username *Username) IsValid() error {
 	return validate.Struct(username)
 }
 
-func NewUsername(username string) (smodel.ValueObject[string], error) {
+func NewUsername(username string) (models.ValueObject[string], error) {
 	username = strings.TrimSpace(username)
 
 	usernameVO := &Username{
@@ -33,10 +33,10 @@ func NewUsername(username string) (smodel.ValueObject[string], error) {
 	}
 
 	if usernameVO.IsValid() != nil {
-		return nil, serror.NewInvalidValue(&serror.Bubble{
+		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewUsername",
 			What:  "username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Username": username,
 			},
 		})

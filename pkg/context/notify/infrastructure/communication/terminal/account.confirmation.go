@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/pkg/context/notify/application/send"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 )
 
 type AccountConfirmation struct {
-	smodel.Logger
+	models.Logger
 	ServerURL string
 }
 

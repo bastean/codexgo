@@ -1,4 +1,4 @@
-package serror
+package errors
 
 import (
 	"fmt"

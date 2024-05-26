@@ -3,8 +3,8 @@ package valueobj
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 )
 
 type Verified struct {
@@ -19,16 +19,16 @@ func (verified *Verified) IsValid() error {
 	return nil
 }
 
-func NewVerified(verified bool) (smodel.ValueObject[bool], error) {
+func NewVerified(verified bool) (models.ValueObject[bool], error) {
 	verifiedVO := &Verified{
 		Verified: verified,
 	}
 
 	if verifiedVO.IsValid() != nil {
-		return nil, serror.NewInvalidValue(&serror.Bubble{
+		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewVerified",
 			What:  "invalid verified value",
-			Why: serror.Meta{
+			Why: errors.Meta{
 				"Verified": fmt.Sprintf("%v", verified),
 			},
 		})

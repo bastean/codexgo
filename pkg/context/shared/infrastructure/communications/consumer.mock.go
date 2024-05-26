@@ -1,8 +1,8 @@
-package scommunication
+package communications
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -10,12 +10,12 @@ type ConsumerMock struct {
 	mock.Mock
 }
 
-func (consumer *ConsumerMock) SubscribedTo() []*squeue.Queue {
+func (consumer *ConsumerMock) SubscribedTo() []*queues.Queue {
 	args := consumer.Called()
-	return args.Get(0).([]*squeue.Queue)
+	return args.Get(0).([]*queues.Queue)
 }
 
-func (consumer *ConsumerMock) On(message *smessage.Message) error {
+func (consumer *ConsumerMock) On(message *messages.Message) error {
 	// TODO?(goroutine): consumer.Called(message)
 	return nil
 }

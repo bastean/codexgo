@@ -3,23 +3,23 @@ package send
 import (
 	"encoding/json"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/sservice"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-var CreatedSucceededEventTypeRoutingKey = smessage.NewRoutingKey(&smessage.MessageRoutingKey{
+var CreatedSucceededEventTypeRoutingKey = messages.NewRoutingKey(&messages.MessageRoutingKey{
 	Module:    "user",
 	Version:   "1",
-	Type:      smessage.Type.Event,
+	Type:      messages.Type.Event,
 	Aggregate: "user",
 	Event:     "created",
-	Status:    smessage.Status.Succeeded,
+	Status:    messages.Status.Succeeded,
 })
 
-func RandomEvent() *smessage.Message {
-	id := sservice.Create.UUID()
-	email := sservice.Create.Email()
-	username := sservice.Create.Username()
+func RandomEvent() *messages.Message {
+	id := services.Create.UUID()
+	email := services.Create.Email()
+	username := services.Create.Username()
 
 	attributes := CreatedSucceededEventAttributes{
 		Id:       id,
@@ -29,5 +29,5 @@ func RandomEvent() *smessage.Message {
 
 	attributesJson, _ := json.Marshal(attributes)
 
-	return smessage.NewMessage(CreatedSucceededEventTypeRoutingKey, attributesJson, []byte{})
+	return messages.NewMessage(CreatedSucceededEventTypeRoutingKey, attributesJson, []byte{})
 }

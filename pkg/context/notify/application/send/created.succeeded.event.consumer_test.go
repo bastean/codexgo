@@ -6,28 +6,28 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/notify/application/send"
 	"github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/stretchr/testify/suite"
 )
 
 type CreatedSucceededEventConsumerTestSuite struct {
 	suite.Suite
-	sut       smodel.Consumer
-	useCase   smodel.UseCase[any, *stype.Empty]
+	sut       models.Consumer
+	useCase   models.UseCase[any, *types.Empty]
 	transport *communication.TransportMock
-	queues    []*squeue.Queue
+	queues    []*queues.Queue
 }
 
 func (suite *CreatedSucceededEventConsumerTestSuite) SetupTest() {
-	queueName := squeue.NewQueueName(&squeue.QueueName{
+	queueName := queues.NewQueueName(&queues.QueueName{
 		Module: "queue",
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
 
-	suite.queues = append(suite.queues, &squeue.Queue{
+	suite.queues = append(suite.queues, &queues.Queue{
 		Name: queueName,
 	})
 

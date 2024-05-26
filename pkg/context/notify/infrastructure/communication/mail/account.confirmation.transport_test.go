@@ -8,18 +8,18 @@ import (
 	"github.com/bastean/codexgo/pkg/context/notify/application/send"
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
 	"github.com/bastean/codexgo/pkg/context/notify/infrastructure/communication/mail"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/stransport"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
 	"github.com/stretchr/testify/suite"
 )
 
 type NotifyMailAccountConfirmationTransportTestSuite struct {
 	suite.Suite
 	sut  model.Transport
-	smtp *stransport.SMTP
+	smtp *transports.SMTP
 }
 
 func (suite *NotifyMailAccountConfirmationTransportTestSuite) SetupTest() {
-	suite.smtp = stransport.NewSMTP(
+	suite.smtp = transports.NewSMTP(
 		os.Getenv("SMTP_HOST"),
 		os.Getenv("SMTP_PORT"),
 		os.Getenv("SMTP_USERNAME"),

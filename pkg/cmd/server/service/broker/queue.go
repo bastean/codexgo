@@ -1,11 +1,11 @@
 package broker
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 )
 
-var NotifySendAccountConfirmationQueue = &squeue.Queue{
-	Name: squeue.NewQueueName(&squeue.QueueName{
+var NotifySendAccountConfirmationQueue = &queues.Queue{
+	Name: queues.NewQueueName(&queues.QueueName{
 		Module: "notify",
 		Action: "send account confirmation",
 		Event:  "created.succeeded",

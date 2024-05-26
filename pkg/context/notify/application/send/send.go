@@ -2,19 +2,19 @@ package send
 
 import (
 	"github.com/bastean/codexgo/pkg/context/notify/domain/model"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 )
 
 type Send struct {
 	model.Transport
 }
 
-func (send *Send) Run(data any) (*stype.Empty, error) {
+func (send *Send) Run(data any) (*types.Empty, error) {
 	err := send.Transport.Submit(data)
 
 	if err != nil {
-		return nil, serror.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err, "Run")
 	}
 
 	return nil, nil

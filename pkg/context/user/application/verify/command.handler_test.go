@@ -3,8 +3,8 @@ package verify_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -15,8 +15,8 @@ import (
 
 type UserVerifyTestSuite struct {
 	suite.Suite
-	sut        smodel.CommandHandler[*verify.Command]
-	useCase    smodel.UseCase[smodel.ValueObject[string], *stype.Empty]
+	sut        models.CommandHandler[*verify.Command]
+	useCase    models.UseCase[models.ValueObject[string], *types.Empty]
 	repository *persistence.RepositoryMock
 }
 

@@ -1,10 +1,10 @@
-package spersistence
+package persistences
 
 import (
 	"regexp"
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -18,10 +18,10 @@ func HandleMongoDuplicateKeyError(err error) error {
 
 	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
-	return serror.NewAlreadyExist(&serror.Bubble{
+	return errors.NewAlreadyExist(&errors.Bubble{
 		Where: "HandleMongoDuplicateKeyError",
 		What:  "already registered",
-		Why: serror.Meta{
+		Why: errors.Meta{
 			"Field": field,
 		},
 		Who: err,
@@ -29,10 +29,10 @@ func HandleMongoDuplicateKeyError(err error) error {
 }
 
 func HandleMongoDocumentNotFound(index string, err error) error {
-	return serror.NewNotExist(&serror.Bubble{
+	return errors.NewNotExist(&errors.Bubble{
 		Where: "HandleMongoDocumentNotFound",
 		What:  "not found",
-		Why: serror.Meta{
+		Why: errors.Meta{
 			"Index": index,
 		},
 		Who: err,

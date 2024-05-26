@@ -1,4 +1,4 @@
-package slogger
+package loggers
 
 import (
 	"github.com/stretchr/testify/mock"

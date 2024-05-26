@@ -1,61 +1,61 @@
-package scommunication_test
+package communications_test
 
 import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smessage"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/squeue"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/srouter"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/scommunication"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/slogger"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/routers"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
 	"github.com/stretchr/testify/suite"
 )
 
 type RabbitMQBrokerTestSuite struct {
 	suite.Suite
-	sut      smodel.Broker
-	logger   *slogger.LoggerMock
-	router   *srouter.Router
-	queue    *squeue.Queue
-	consumer *scommunication.ConsumerMock
-	messages []*smessage.Message
+	sut      models.Broker
+	logger   *loggers.LoggerMock
+	router   *routers.Router
+	queue    *queues.Queue
+	consumer *communications.ConsumerMock
+	messages []*messages.Message
 }
 
 func (suite *RabbitMQBrokerTestSuite) SetupTest() {
-	suite.logger = new(slogger.LoggerMock)
+	suite.logger = new(loggers.LoggerMock)
 
 	uri := os.Getenv("BROKER_URI")
 
-	suite.sut, _ = scommunication.NewRabbitMQ(uri, suite.logger)
+	suite.sut, _ = communications.NewRabbitMQ(uri, suite.logger)
 
-	suite.router = &srouter.Router{Name: "test"}
+	suite.router = &routers.Router{Name: "test"}
 
-	queueName := squeue.NewQueueName(&squeue.QueueName{
+	queueName := queues.NewQueueName(&queues.QueueName{
 		Module: "queue",
 		Action: "assert",
 		Event:  "test.succeeded",
 	})
 
-	suite.queue = &squeue.Queue{Name: queueName}
+	suite.queue = &queues.Queue{Name: queueName}
 
-	suite.consumer = new(scommunication.ConsumerMock)
+	suite.consumer = new(communications.ConsumerMock)
 
-	messageRoutingKey := smessage.NewRoutingKey(&smessage.MessageRoutingKey{
+	messageRoutingKey := messages.NewRoutingKey(&messages.MessageRoutingKey{
 		Module:    "publisher",
 		Version:   "1",
-		Type:      smessage.Type.Event,
+		Type:      messages.Type.Event,
 		Aggregate: "publisher",
 		Event:     "test",
-		Status:    smessage.Status.Succeeded,
+		Status:    messages.Status.Succeeded,
 	})
 
 	messageAttributes := []byte{}
 
 	messageMeta := []byte{}
 
-	message := smessage.NewMessage(messageRoutingKey, messageAttributes, messageMeta)
+	message := messages.NewMessage(messageRoutingKey, messageAttributes, messageMeta)
 
 	message.Id = "0"
 
@@ -71,7 +71,7 @@ func (suite *RabbitMQBrokerTestSuite) TestBroker() {
 
 	suite.NoError(suite.sut.AddQueueMessageBind(suite.queue, []string{"#.event.#.test.succeeded"}))
 
-	suite.consumer.Mock.On("SubscribedTo").Return([]*squeue.Queue{suite.queue})
+	suite.consumer.Mock.On("SubscribedTo").Return([]*queues.Queue{suite.queue})
 
 	suite.NoError(suite.sut.AddQueueConsumer(suite.consumer))
 

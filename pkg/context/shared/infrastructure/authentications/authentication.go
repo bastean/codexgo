@@ -1,7 +1,7 @@
-package sauthentication
+package authentications
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/golang-jwt/jwt"
 )
 
@@ -17,7 +17,7 @@ func (auth *Authentication) GenerateJWT(payload map[string]any) (string, error) 
 	tokenString, err := token.SignedString(auth.secretKey)
 
 	if err != nil {
-		return "", serror.NewInternal(&serror.Bubble{
+		return "", errors.NewInternal(&errors.Bubble{
 			Where: "GenerateJWT",
 			What:  "failure to sign a jwt",
 			Who:   err,
@@ -36,10 +36,10 @@ func (auth *Authentication) ValidateJWT(tokenString string) (jwt.MapClaims, erro
 		return claims, nil
 	}
 
-	return nil, serror.NewFailure(&serror.Bubble{
+	return nil, errors.NewFailure(&errors.Bubble{
 		Where: "ValidateJWT",
 		What:  "invalid jwt signature",
-		Why: serror.Meta{
+		Why: errors.Meta{
 			"JWT": tokenString,
 		},
 	})

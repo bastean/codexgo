@@ -3,8 +3,8 @@ package update_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -16,8 +16,8 @@ import (
 
 type UserUpdateTestSuite struct {
 	suite.Suite
-	sut        smodel.CommandHandler[*update.Command]
-	useCase    smodel.UseCase[*update.Command, *stype.Empty]
+	sut        models.CommandHandler[*update.Command]
+	useCase    models.UseCase[*update.Command, *types.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }

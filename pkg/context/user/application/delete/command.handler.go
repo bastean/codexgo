@@ -1,21 +1,19 @@
 package delete
 
 import (
-	"errors"
-
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/smodel"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/stype"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 type Input struct {
-	Id       smodel.ValueObject[string]
-	Password smodel.ValueObject[string]
+	Id       models.ValueObject[string]
+	Password models.ValueObject[string]
 }
 
 type CommandHandler struct {
-	smodel.UseCase[*Input, *stype.Empty]
+	models.UseCase[*Input, *types.Empty]
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {
@@ -25,7 +23,7 @@ func (handler *CommandHandler) Handle(command *Command) error {
 	err := errors.Join(errId, errPassword)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err, "Handle")
 	}
 
 	_, err = handler.UseCase.Run(&Input{
@@ -34,7 +32,7 @@ func (handler *CommandHandler) Handle(command *Command) error {
 	})
 
 	if err != nil {
-		return serror.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err, "Handle")
 	}
 
 	return nil

@@ -5,23 +5,23 @@ import (
 	"os"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/serror"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/spersistence"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
 )
 
 var uri = os.Getenv("DATABASE_URI")
 
 var databaseName = "codexgo"
 
-var Database *spersistence.MongoDB
+var Database *persistences.MongoDB
 
 func Init() error {
 	logger.Info("starting mongodb")
 
-	mongoDB, err := spersistence.NewMongoDatabase(uri, databaseName)
+	mongoDB, err := persistences.NewMongoDatabase(uri, databaseName)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Init")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	Database = mongoDB
@@ -32,10 +32,10 @@ func Init() error {
 func Close(ctx context.Context) error {
 	logger.Info("closing mongodb")
 
-	err := spersistence.CloseMongoDatabase(ctx, Database)
+	err := persistences.CloseMongoDatabase(ctx, Database)
 
 	if err != nil {
-		return serror.BubbleUp(err, "Close")
+		return errors.BubbleUp(err, "Close")
 	}
 
 	return nil
