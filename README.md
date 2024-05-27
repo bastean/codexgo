@@ -237,7 +237,7 @@ make compose-dev
 - All
 
   ```bash
-  make compose-test-all
+  make compose-tests
   ```
 
 #### Production

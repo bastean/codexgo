@@ -1,27 +1,32 @@
 .PHONY: *
 
-#* ---------- VARS ----------
+#* ~~~~~~~~~~~~VARS~~~~~~~~~~~~
 
-#* Go
+#* ~~~~~~Go~~~~~~
+
 go-tidy = go mod tidy -e
 
-#* Node
+#* ~~~~~~Node~~~~~~
+
 npx = npx --no --
 npm-ci = npm ci --legacy-peer-deps
 
 release-it = ${npx} release-it -V
 release-it-dry = ${npx} release-it -V -d --no-git.requireCleanWorkingDir
 
-#* Git
+#* ~~~~~~Git~~~~~~
+
 git-reset-hard = git reset --hard HEAD
 
-#* Docker
+#* ~~~~~~Docker~~~~~~
+
 compose = cd deployments/ && docker compose
 compose-env = ${compose} --env-file
 
-#* ---------- RULES ----------
+#* ~~~~~~~~~~~~RULES~~~~~~~~~~~~
 
-#* Upgrades
+#* ~~~~~~Upgrades~~~~~~
+
 upgrade-managers:
 	#? sudo apt update && sudo apt upgrade -y
 	npm upgrade -g
@@ -41,7 +46,8 @@ upgrade-reset:
 upgrade:
 	go run ./scripts/upgrade
 
-#* Dependencies
+#* ~~~~~~Dependencies~~~~~~
+
 install-deps:
 	go mod download
 	${npm-ci}
@@ -52,12 +58,14 @@ install-deps:
 copy-deps:
 	go run ./scripts/copydeps
 
-#* Generators
+#* ~~~~~~Generators~~~~~~
+
 generate-required:
 	go generate ./...
 	templ generate
 
-#* Initializations
+#* ~~~~~~Initializations~~~~~~
+
 init: upgrade-managers install-deps copy-deps generate-required
 	
 init-from-zero:
@@ -65,7 +73,8 @@ init-from-zero:
 	$(MAKE) init
 	${npx} husky install
 
-#* Linters/Formatters
+#* ~~~~~~Linters/Formatters~~~~~~
+
 lint: generate-required
 	go mod tidy
 	gofmt -l -s -w .
@@ -76,7 +85,8 @@ lint-check:
 	staticcheck ./...
 	${npx} prettier --check .
 
-#* Tests
+#* ~~~~~~Tests~~~~~~
+
 test-sut:
 	air
 
@@ -102,13 +112,14 @@ test-acceptance-sync:
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
 
-test-all-sync:
+tests-sync:
 	TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt
 
-test-all: test-clean
-	TEST_SYNC="$(MAKE) test-all-sync" $(MAKE) test-sync
+tests: test-clean
+	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
 
-#* Releases
+#* ~~~~~~Releases~~~~~~
+
 release:
 	${release-it}
 
@@ -130,19 +141,22 @@ release-dry-version:
 release-dry-changelog:
 	${release-it-dry} --changelog
 
-#* Builds
+#* ~~~~~~Builds~~~~~~
+
 build: generate-required lint
 	rm -rf build/
-	go build -o build/codexgo ./cmd/codexgo
+	go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
 
-#* ENVs
+#* ~~~~~~ENVs~~~~~~
+
 sync-env-reset:
 	${git-reset-hard}
 
 sync-env:
 	cd deployments && go run ../scripts/syncenv
 
-#* Git
+#* ~~~~~~Git~~~~~~
+
 commit:
 	${npx} cz
 
@@ -155,15 +169,10 @@ WARNING-git-genesis:
 	${git-reset-hard}
 	$(MAKE) init
 
-#* Docker
+#* ~~~~~~Docker~~~~~~
+
 docker-usage:
 	docker system df
-
-demo-down:
-	${compose-env} .env.demo down
-
-demo: demo-down
-	${compose-env} .env.demo up
 
 compose-dev-down:
 	${compose-env} .env.dev down
@@ -182,7 +191,7 @@ compose-test-integration: compose-test-down
 compose-test-acceptance: compose-test-down
 	${compose-env} .env.test --env-file .env.demo.test.acceptance up --exit-code-from server
 
-compose-test-all: compose-test-down
+compose-tests: compose-test-down
 	${compose-env} .env.test up --exit-code-from server
 
 compose-prod-down:
@@ -191,7 +200,13 @@ compose-prod-down:
 compose-prod: compose-prod-down
 	${compose-env} .env.prod up
 
-compose-down: compose-dev-down compose-test-down compose-prod-down
+demo-down:
+	${compose-env} .env.demo down
+
+demo: demo-down
+	${compose-env} .env.demo up
+
+compose-down: compose-dev-down compose-test-down compose-prod-down demo-down
 
 WARNING-docker-prune-soft:
 	docker system prune
@@ -202,3 +217,9 @@ WARNING-docker-prune-hard:
 	docker system prune --volumes -a
 	$(MAKE) compose-down
 	$(MAKE) docker-usage
+
+#* ~~~~~~Fixes~~~~~~
+
+fix-local-playwright:
+	go get -u github.com/playwright-community/playwright-go
+	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
