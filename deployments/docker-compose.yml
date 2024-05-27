@@ -57,6 +57,7 @@ services:
     command: ${SERVER_COMMAND}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
+      - ${SERVER_PROXY_PORT}:${SERVER_PROXY_PORT}
     volumes:
       - ${SERVER_VOLUMES_APP}
       - codexgo-modules:/go/pkg/mod
