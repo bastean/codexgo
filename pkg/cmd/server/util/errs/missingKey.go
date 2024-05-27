@@ -1,12 +1,14 @@
 package errs
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"fmt"
+
+	"github.com/bastean/codexgo/pkg/cmd/server/service/errors"
 )
 
 func MissingKey(what, where string) error {
-	return errors.NewInternal(&errors.Bubble{
-		Where: where,
-		What:  "failure to get " + what + " from context",
-	})
+	return errors.NewInternal(
+		where,
+		fmt.Sprintf("failure to obtain the value of the key: [%s]", what),
+	)
 }

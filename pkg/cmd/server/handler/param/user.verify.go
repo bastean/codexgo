@@ -4,22 +4,27 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
-	"github.com/bastean/codexgo/pkg/context/user/application/verify"
+	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
+	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
 	"github.com/gin-gonic/gin"
 )
 
 func UserVerify() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if c.Param("id") == "" {
+		id := c.Param(key.Id)
+
+		if id == "" {
+			c.Error(errs.MissingKey(key.Id, "UserVerify"))
+			c.Redirect(http.StatusFound, "/")
 			c.Abort()
 			return
 		}
 
-		command := new(verify.Command)
+		command := new(user.VerifyCommand)
 
-		command.Id = c.Param("id")
+		command.Id = id
 
-		err := user.VerifyHandler.Handle(command)
+		err := user.Verify.Handle(command)
 
 		if err != nil {
 			c.Error(err)

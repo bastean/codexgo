@@ -7,7 +7,6 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
-	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,13 +20,13 @@ func UserDelete() gin.HandlerFunc {
 			return
 		}
 
-		command := new(delete.Command)
+		command := new(user.DeleteCommand)
 
 		c.BindJSON(command)
 
 		command.Id = id.(string)
 
-		err := user.DeleteHandler.Handle(command)
+		err := user.Delete.Handle(command)
 
 		if err != nil {
 			c.Error(err)

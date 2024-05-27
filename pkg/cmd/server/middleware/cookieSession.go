@@ -1,16 +1,15 @@
 package middleware
 
 import (
-	"os"
-
+	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
-var secretKey = os.Getenv("COOKIE_SECRET_KEY")
+var secretKey = env.Cookie.SecretKey
 
-var sessionName = os.Getenv("COOKIE_SESSION_NAME")
+var sessionName = env.Cookie.SessionName
 
 func CookieSession() gin.HandlerFunc {
 	store := cookie.NewStore([]byte(secretKey))

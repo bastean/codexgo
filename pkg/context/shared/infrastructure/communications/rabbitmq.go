@@ -79,8 +79,7 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *queues.Queue, bindingKeys []stri
 	var errWrap error
 
 	for _, bindingKey := range bindingKeys {
-		log.Printf("binding queue %s to exchange %s with routing key %s",
-			queue.Name, rmq.exchange, bindingKey)
+		log.Printf("binding queue %s to exchange %s with routing key %s", queue.Name, rmq.exchange, bindingKey)
 
 		err := rmq.Channel.QueueBind(
 			queue.Name,

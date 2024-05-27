@@ -7,7 +7,6 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
-	"github.com/bastean/codexgo/pkg/context/user/application/read"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,11 +21,11 @@ func Dashboard() gin.HandlerFunc {
 			return
 		}
 
-		query := &read.Query{
-			Id: id.(string),
-		}
+		query := new(user.ReadQuery)
 
-		user, err := user.ReadHandler.Handle(query)
+		query.Id = id.(string)
+
+		user, err := user.Read.Handle(query)
 
 		if err != nil {
 			c.Error(err)

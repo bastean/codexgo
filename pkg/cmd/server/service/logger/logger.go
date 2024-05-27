@@ -7,6 +7,9 @@ import (
 var Logger = new(loggers.Logger)
 
 var Debug = Logger.Debug
+
 var Error = Logger.Error
+
 var Fatal = Logger.Fatal
+
 var Info = Logger.Info

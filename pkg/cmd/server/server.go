@@ -11,23 +11,17 @@ import (
 	"time"
 
 	"github.com/bastean/codexgo/pkg/cmd/server/router"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/broker"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/database"
+	"github.com/bastean/codexgo/pkg/cmd/server/service"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/notify"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 )
 
 //go:embed static
 var Files embed.FS
 
 func Run(port string) {
-	errNotify := notify.Init()
-	errBroker := broker.Init()
-	errDatabase := database.Init()
-	errUser := user.Init()
+	logger.Info("starting services")
 
-	err := errors.Join(errNotify, errBroker, errDatabase, errUser)
+	err := service.Start()
 
 	if err != nil {
 		logger.Fatal(err.Error())
@@ -54,19 +48,19 @@ func Run(port string) {
 
 	<-shutdown
 
-	logger.Info("closing server")
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	defer cancel()
 
-	errBroker = broker.Close()
+	logger.Info("stopping services")
 
-	errDatabase = database.Close(ctx)
+	errService := service.Stop(ctx)
+
+	logger.Info("stopping server")
 
 	errServer := server.Shutdown(ctx)
 
-	err = errors.Join(errBroker, errDatabase, errServer)
+	err = errors.Join(errService, errServer)
 
 	if err != nil {
 		logger.Error(err.Error())

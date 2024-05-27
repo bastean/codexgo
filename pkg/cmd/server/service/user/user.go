@@ -1,100 +1,41 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/pkg/cmd/server/service/broker"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/database"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
+
 	"github.com/bastean/codexgo/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 )
 
-var Bcrypt = new(cryptographic.Bcrypt)
+var Create *create.CommandHandler
 
-var CollectionName = "users"
-var MongoCollection model.Repository
+var Read *read.QueryHandler
 
-var Create *create.Create
-var CreateHandler *create.CommandHandler
+var Update *update.CommandHandler
 
-var Read *read.Read
-var ReadHandler *read.QueryHandler
+var Delete *delete.CommandHandler
 
-var Update *update.Update
-var UpdateHandler *update.CommandHandler
+var Verify *verify.CommandHandler
 
-var Delete *delete.Delete
-var DeleteHandler *delete.CommandHandler
+var Login *login.QueryHandler
 
-var Verify *verify.Verify
-var VerifyHandler *verify.CommandHandler
+func Init(repository model.Repository, broker models.Broker, hashing model.Hashing) error {
+	Create = NewCreate(repository, broker)
 
-var Login *login.Login
-var LoginHandler *login.QueryHandler
+	Read = NewRead(repository)
 
-func Init() error {
-	logger.Info("starting module: user")
+	Update = NewUpdate(repository, hashing)
 
-	collection, err := persistence.NewMongoCollection(database.Database, CollectionName, Bcrypt)
+	Delete = NewDelete(repository, hashing)
 
-	if err != nil {
-		return errors.BubbleUp(err, "Init")
-	}
+	Verify = NewVerify(repository)
 
-	MongoCollection = collection
-
-	Create = &create.Create{
-		Repository: MongoCollection,
-	}
-	CreateHandler = &create.CommandHandler{
-		UseCase: Create,
-		Broker:  broker.Broker,
-	}
-
-	Read = &read.Read{
-		Repository: MongoCollection,
-	}
-	ReadHandler = &read.QueryHandler{
-		UseCase: Read,
-	}
-
-	Update = &update.Update{
-		Repository: MongoCollection,
-		Hashing:    Bcrypt,
-	}
-	UpdateHandler = &update.CommandHandler{
-		UseCase: Update,
-	}
-
-	Delete = &delete.Delete{
-		Repository: MongoCollection,
-		Hashing:    Bcrypt,
-	}
-	DeleteHandler = &delete.CommandHandler{
-		UseCase: Delete,
-	}
-
-	Verify = &verify.Verify{
-		Repository: MongoCollection,
-	}
-	VerifyHandler = &verify.CommandHandler{
-		UseCase: Verify,
-	}
-
-	Login = &login.Login{
-		Repository: MongoCollection,
-		Hashing:    Bcrypt,
-	}
-	LoginHandler = &login.QueryHandler{
-		UseCase: Login,
-	}
+	Login = NewLogin(repository, hashing)
 
 	return nil
 }

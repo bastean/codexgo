@@ -3,7 +3,7 @@ package dashboard
 import (
 	"github.com/bastean/codexgo/pkg/cmd/server/component/layout"
 	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
-	"github.com/bastean/codexgo/pkg/context/user/application/read"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 )
 
 script PageInit() {
@@ -39,7 +39,7 @@ script Logout() {
     window.location.replace("/");
 }
 
-templ Page(user *read.Response) {
+templ Page(user *user.ReadResponse) {
 	@layout.Index(script.Head{}, script.Body{}) {
 		<div class="ui centered grid container" style="height: 100%;">
 			<div class="sixteen wide column">

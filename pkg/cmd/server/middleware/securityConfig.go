@@ -1,15 +1,17 @@
 package middleware
 
 import (
-	"os"
 	"strings"
 
+	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-gonic/gin"
 )
 
+var allowedHosts = env.Security.AllowedHosts
+
 func getAllowedHosts() []string {
-	return strings.Split(os.Getenv("ALLOWED_HOSTS"), ", ")
+	return strings.Split(allowedHosts, ", ")
 }
 
 func SecurityConfig() gin.HandlerFunc {

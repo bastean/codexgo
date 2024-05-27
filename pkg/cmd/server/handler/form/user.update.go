@@ -7,7 +7,6 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
-	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,13 +20,13 @@ func UserUpdate() gin.HandlerFunc {
 			return
 		}
 
-		command := new(update.Command)
+		command := new(user.UpdateCommand)
 
 		c.BindJSON(command)
 
 		command.Id = id.(string)
 
-		err := user.UpdateHandler.Handle(command)
+		err := user.Update.Handle(command)
 
 		if err != nil {
 			c.Error(err)
