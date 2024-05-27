@@ -24,7 +24,7 @@ var Verify *verify.CommandHandler
 
 var Login *login.QueryHandler
 
-func Init(repository model.Repository, broker models.Broker, hashing model.Hashing) error {
+func Init(repository model.Repository, broker models.Broker, hashing model.Hashing) {
 	Create = NewCreate(repository, broker)
 
 	Read = NewRead(repository)
@@ -36,6 +36,4 @@ func Init(repository model.Repository, broker models.Broker, hashing model.Hashi
 	Verify = NewVerify(repository)
 
 	Login = NewLogin(repository, hashing)
-
-	return nil
 }

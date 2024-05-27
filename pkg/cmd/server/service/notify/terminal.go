@@ -6,9 +6,9 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 )
 
-func NewTerminalAccountConfirmation(serverURL string, logger models.Logger) model.Transport {
+func NewTerminalAccountConfirmation(logger models.Logger, serverURL string) model.Transport {
 	return &terminal.AccountConfirmation{
-		ServerURL: serverURL,
 		Logger:    logger,
+		ServerURL: serverURL,
 	}
 }

@@ -12,13 +12,13 @@ func New(uri string, logger models.Logger, exchange *routers.Router, queues []*q
 	rabbitMQ, err := communications.NewRabbitMQ(uri, logger)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Init")
+		return nil, errors.BubbleUp(err, "New")
 	}
 
 	err = rabbitMQ.AddRouter(exchange)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Init")
+		return nil, errors.BubbleUp(err, "New")
 	}
 
 	for _, queue := range queues {
@@ -26,13 +26,13 @@ func New(uri string, logger models.Logger, exchange *routers.Router, queues []*q
 		err = rabbitMQ.AddQueue(queue)
 
 		if err != nil {
-			return nil, errors.BubbleUp(err, "Init")
+			return nil, errors.BubbleUp(err, "New")
 		}
 
 		err = rabbitMQ.AddQueueMessageBind(queue, queue.BindingKeys)
 
 		if err != nil {
-			return nil, errors.BubbleUp(err, "Init")
+			return nil, errors.BubbleUp(err, "New")
 		}
 	}
 
@@ -40,7 +40,7 @@ func New(uri string, logger models.Logger, exchange *routers.Router, queues []*q
 		err = rabbitMQ.AddQueueConsumer(consumer)
 
 		if err != nil {
-			return nil, errors.BubbleUp(err, "Init")
+			return nil, errors.BubbleUp(err, "New")
 		}
 	}
 

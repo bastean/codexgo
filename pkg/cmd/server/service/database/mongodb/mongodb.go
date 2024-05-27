@@ -11,7 +11,7 @@ func New(uri, name string) (*persistences.MongoDB, error) {
 	mongoDB, err := persistences.NewMongoDatabase(uri, name)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Init")
+		return nil, errors.BubbleUp(err, "New")
 	}
 
 	return mongoDB, nil

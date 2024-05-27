@@ -40,7 +40,7 @@ func (rmq *RabbitMQ) AddRouter(router *routers.Router) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "AddRouter",
-			What:  "failure to declare an exchange",
+			What:  "failure to declare a router",
 			Why: errors.Meta{
 				"Router": router.Name,
 			},

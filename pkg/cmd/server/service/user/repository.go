@@ -7,11 +7,11 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 )
 
-func InitMongoCollection(database *persistences.MongoDB, name string, hashing model.Hashing) (model.Repository, error) {
+func NewMongoCollection(database *persistences.MongoDB, name string, hashing model.Hashing) (model.Repository, error) {
 	collection, err := persistence.NewMongoCollection(database, name, hashing)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Init")
+		return nil, errors.BubbleUp(err, "NewMongoCollection")
 	}
 
 	return collection, nil

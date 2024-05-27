@@ -40,8 +40,8 @@ func Start() error {
 		notify.Init(notify.NewMailAccountConfirmation(SMTP))
 	} else {
 		notify.Init(notify.NewTerminalAccountConfirmation(
-			env.ServerURL,
 			logger.Logger,
+			env.ServerURL,
 		))
 	}
 
@@ -74,7 +74,7 @@ func Start() error {
 
 	logger.Info("starting user")
 
-	userMongoCollection, err := user.InitMongoCollection(
+	userMongoCollection, err := user.NewMongoCollection(
 		MongoDB,
 		"users",
 		user.Bcrypt,
@@ -84,15 +84,11 @@ func Start() error {
 		return errors.BubbleUp(err, "Start")
 	}
 
-	err = user.Init(
+	user.Init(
 		userMongoCollection,
 		RabbitMQ,
 		user.Bcrypt,
 	)
-
-	if err != nil {
-		return errors.BubbleUp(err, "Start")
-	}
 
 	return nil
 }
