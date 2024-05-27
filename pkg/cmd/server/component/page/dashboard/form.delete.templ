@@ -8,11 +8,16 @@ script DeleteFormInit(formTagId string) {
             on: "blur",
             inline : true,
             preventLeaving: true,
+            keyboardShortcuts: false,
             fields: {
                 Password: {
                     rules: [
                         {
                             type: "size[8..64]"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
                         }
                     ]
                 },

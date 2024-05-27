@@ -6,6 +6,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/cmd/server/service/auth"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
+	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/reply"
 	"github.com/gin-contrib/sessions"
@@ -16,7 +17,13 @@ func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		query := new(user.LoginQuery)
 
-		c.BindJSON(query)
+		err := c.BindJSON(query)
+
+		if err != nil {
+			c.Error(errs.BindingJSON(err, "Login"))
+			c.Abort()
+			return
+		}
 
 		user, err := user.Login.Handle(query)
 

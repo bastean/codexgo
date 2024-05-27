@@ -22,11 +22,17 @@ func Update() gin.HandlerFunc {
 
 		command := new(user.UpdateCommand)
 
-		c.BindJSON(command)
+		err := c.BindJSON(command)
+
+		if err != nil {
+			c.Error(errs.BindingJSON(err, "Update"))
+			c.Abort()
+			return
+		}
 
 		command.Id = id.(string)
 
-		err := user.Update.Handle(command)
+		err = user.Update.Handle(command)
 
 		if err != nil {
 			c.Error(err)

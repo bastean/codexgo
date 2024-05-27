@@ -32,10 +32,10 @@ func ErrorHandler() gin.HandlerFunc {
 			case errors.As(err, &failure):
 				c.JSON(http.StatusBadRequest, reply.JSON(false, failure.What, failure.Why))
 			case errors.As(err, &internal):
+				c.JSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
 				fallthrough
 			default:
 				logger.Error(err.Error())
-				c.JSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
 			}
 		}
 	}

@@ -22,11 +22,17 @@ func Delete() gin.HandlerFunc {
 
 		command := new(user.DeleteCommand)
 
-		c.BindJSON(command)
+		err := c.BindJSON(command)
+
+		if err != nil {
+			c.Error(errs.BindingJSON(err, "Delete"))
+			c.Abort()
+			return
+		}
 
 		command.Id = id.(string)
 
-		err := user.Delete.Handle(command)
+		err = user.Delete.Handle(command)
 
 		if err != nil {
 			c.Error(err)

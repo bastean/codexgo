@@ -16,9 +16,20 @@ type Internal = errors.Internal
 
 var As = errors.As
 
-func NewInternal(where, what string) error {
+var Is = errors.Is
+
+func NewInternal(where, what string, who error) error {
 	return errors.NewInternal(&errors.Bubble{
 		Where: where,
 		What:  what,
+		Who:   who,
+	})
+}
+
+func NewFailure(where, what string, who error) error {
+	return errors.NewFailure(&errors.Bubble{
+		Where: where,
+		What:  what,
+		Who:   who,
 	})
 }

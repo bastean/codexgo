@@ -8,6 +8,7 @@ script UpdateFormInit(formTagId string) {
             on: "blur",
             inline : true,
             preventLeaving: true,
+            keyboardShortcuts: false,
             fields: {
                 Email: {
                     optional   : true,
@@ -26,6 +27,10 @@ script UpdateFormInit(formTagId string) {
                         {
                             type: "regExp[/^[A-Za-z0-9]+$/]",
                             prompt: "{name} must be alphanumeric only"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
                         }
                     ]
                 },
@@ -34,6 +39,10 @@ script UpdateFormInit(formTagId string) {
                     rules: [
                         {
                             type: "size[8..64]"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
                         }
                     ]
                 },
@@ -49,9 +58,13 @@ script UpdateFormInit(formTagId string) {
                     rules: [
                         {
                             type: "size[8..64]"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
                         }
                     ]
-                },
+                }
             }
         })
         .api({

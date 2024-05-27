@@ -8,6 +8,7 @@ script LoginFormInit(formTagId string) {
             on: "blur",
             inline : true,
             preventLeaving: true,
+            keyboardShortcuts: false,
             fields: {
                 Email: {
                     rules: [
@@ -20,6 +21,10 @@ script LoginFormInit(formTagId string) {
                     rules: [
                         {
                             type: "size[8..64]"
+                        },
+                        {
+                            type: "regExp[/^.*[^0-9].*$/]",
+                            prompt: "{name} cannot be only numbers"
                         }
                     ]
                 }
