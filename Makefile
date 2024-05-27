@@ -50,7 +50,7 @@ install-deps:
 	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
 copy-deps:
-	go run ./scripts/copy-deps
+	go run ./scripts/copydeps
 
 #* Generators
 generate-required:
@@ -140,7 +140,7 @@ sync-env-reset:
 	${git-reset-hard}
 
 sync-env:
-	cd deployments && go run ../scripts/sync-env
+	cd deployments && go run ../scripts/syncenv
 
 #* Git
 commit:

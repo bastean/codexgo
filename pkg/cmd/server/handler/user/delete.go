@@ -1,4 +1,4 @@
-package form
+package user
 
 import (
 	"net/http"
@@ -10,23 +10,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserUpdate() gin.HandlerFunc {
+func Delete() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			c.Error(errs.MissingKey(key.UserId, "UserUpdate"))
+			c.Error(errs.MissingKey(key.UserId, "UserDelete"))
 			c.Abort()
 			return
 		}
 
-		command := new(user.UpdateCommand)
+		command := new(user.DeleteCommand)
 
 		c.BindJSON(command)
 
 		command.Id = id.(string)
 
-		err := user.Update.Handle(command)
+		err := user.Delete.Handle(command)
 
 		if err != nil {
 			c.Error(err)
@@ -34,6 +34,6 @@ func UserUpdate() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "account updated", reply.Payload{}))
+		c.JSON(http.StatusOK, reply.JSON(true, "account deleted", reply.Payload{}))
 	}
 }

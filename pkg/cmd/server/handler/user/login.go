@@ -1,4 +1,4 @@
-package form
+package user
 
 import (
 	"net/http"
@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserLogin() gin.HandlerFunc {
+func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		query := new(user.LoginQuery)
 

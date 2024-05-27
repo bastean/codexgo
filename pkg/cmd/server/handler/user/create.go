@@ -1,4 +1,4 @@
-package form
+package user
 
 import (
 	"net/http"
@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserCreate() gin.HandlerFunc {
+func Create() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		command := new(user.CreateCommand)
 

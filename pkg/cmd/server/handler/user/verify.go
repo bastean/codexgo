@@ -1,4 +1,4 @@
-package param
+package user
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func UserVerify() gin.HandlerFunc {
+func Verify() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param(key.Id)
 

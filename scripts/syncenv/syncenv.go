@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const cli = "sync-env"
+const cli = "syncenv"
 
 var envFilesDir string
 var envFileModel string
