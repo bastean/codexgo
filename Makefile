@@ -174,6 +174,9 @@ WARNING-git-genesis:
 docker-usage:
 	docker system df
 
+docker-it:
+	docker exec -it $(ID) bash
+
 compose-dev-down:
 	${compose-env} .env.dev down
 	docker volume rm codexgo-database-dev -f
