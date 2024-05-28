@@ -250,11 +250,11 @@ make compose-prod
 
 <div align="center">
 
-<img src="assets/readme/desktop-welcome.png" />
+<img src="assets/readme/desktop-home.png" />
 
 <img src="assets/readme/desktop-dashboard.png" />
 
-<img width="49%" src="assets/readme/mobile-welcome.png" />
+<img width="49%" src="assets/readme/mobile-home.png" />
 
 <img width="49%" src="assets/readme/mobile-dashboard.png" />
 
