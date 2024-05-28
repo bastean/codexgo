@@ -1,5 +1,80 @@
 # Changelog
 
+## [4.0.0](https://github.com/bastean/codexgo/compare/v3.0.1...v4.0.0) (2024-05-28)
+
+### ⚠ BREAKING CHANGES
+
+- **server:** decouple service initializations
+- **context:** change notification system workflow
+- **server:** change acceptance tests to work with the new ui
+- **server:** add fomantic-ui
+- **server:** change error handling from panic to wrapped errors
+- **context:** change package names in shared module
+- **context:** change integration tests to check for wrapped errors instead of panic
+- **context:** change unit tests to check for wrapped errors instead of panic
+- **context:** change error handling from panic to wrapped errors
+
+### Chores
+
+- change air config ([a3b2f94](https://github.com/bastean/codexgo/commit/a3b2f94cb9f1f5b69ab719ae09001bac8382e7b2))
+- change git ignore list ([122f7b2](https://github.com/bastean/codexgo/commit/122f7b2ba448cf79e741e5c7c3e3b7283a2dcaaf))
+- change go version in mod file ([95ac107](https://github.com/bastean/codexgo/commit/95ac107f7b6dee5618ec459c911ca07440521c04))
+- change makefile rules ([285b30b](https://github.com/bastean/codexgo/commit/285b30b7e1c88503681279e097d4a6e0abf8154c))
+- **deps:** upgrade dependencies ([f804fc8](https://github.com/bastean/codexgo/commit/f804fc8c0e22f660407e80c826811455d9d13303))
+
+### Documentation
+
+- **readme:** add updated screenshots ([ffd6b17](https://github.com/bastean/codexgo/commit/ffd6b175b19292111ba5bff3611322c7ee8cdbb6))
+- **readme:** change description ([122b14c](https://github.com/bastean/codexgo/commit/122b14c69174c5de0f9cc0cac54e4b55ea3a25d2))
+
+### New Features
+
+- **air:** enable live-reloading on the browser ([7714c38](https://github.com/bastean/codexgo/commit/7714c38cf0a74ef07dff07d232b98f462070a71a))
+- **context:** add json marshal error handler to error bubble ([68819fe](https://github.com/bastean/codexgo/commit/68819fe9521117adb43504105b90f91abecebce4))
+- **context:** add new terminal transport port adapter to notify module ([28fd1fe](https://github.com/bastean/codexgo/commit/28fd1fe865666b65f25d93e1f7b1895f2b40a998))
+- **scripts:** add copy-deps script ([79e2d73](https://github.com/bastean/codexgo/commit/79e2d73989674b9a2d62841db87da89ef4bd8564))
+- **server:** add accepts cookies nag ([682c370](https://github.com/bastean/codexgo/commit/682c370366139911fa145defa9127310503d86e9))
+- **server:** add cookies cleaning ([30d4b9a](https://github.com/bastean/codexgo/commit/30d4b9aca620098e1ed4b9c0c0501003570f8007))
+- **server:** add fomantic-ui ([738bf51](https://github.com/bastean/codexgo/commit/738bf5140c0dcb310c4effcbd3659720ba2c20a5))
+- **server:** add log files ([141001a](https://github.com/bastean/codexgo/commit/141001a2d0bf0269a25030597c45d3a2b7c2f891))
+- **server:** add missing error handlers ([99938f6](https://github.com/bastean/codexgo/commit/99938f6a5c00a47a5d4471d07354fe565a6c50f5))
+- **server:** add popup to inform about account status ([77eb4a9](https://github.com/bastean/codexgo/commit/77eb4a917e1487a3736da346064befa0ff3d35c8))
+
+### Bug Fixes
+
+- add missing pointers ([b6b9343](https://github.com/bastean/codexgo/commit/b6b934305caecf51eea9c058e84d75cfaa2d353f))
+- **deps:** upgrade dependencies ([4574f31](https://github.com/bastean/codexgo/commit/4574f3147dff657eb1672a97d0acea236bf8d5c4))
+- **server:** add json unmarshal type error handler ([eb9eeb5](https://github.com/bastean/codexgo/commit/eb9eeb5e4442caf2abd07c294cd68a0c9db8f9b9))
+
+### Refactors
+
+- add field names at struct initialization ([55c5de3](https://github.com/bastean/codexgo/commit/55c5de3902be83a9066b9867e9493ad4ebab6f87))
+- **context:** change error handling from panic to wrapped errors ([ec3245c](https://github.com/bastean/codexgo/commit/ec3245c9caf81562cfb8c2ae61aa16ee34b4d5e6))
+- **context:** change exchange to router in broker model ([be19870](https://github.com/bastean/codexgo/commit/be198705206d0f0370b73dc5ed8bb9cf1c3d3572))
+- **context:** change notification system workflow ([f7ec73c](https://github.com/bastean/codexgo/commit/f7ec73cd038337f63b792f1f2623285b7e0eb854))
+- **context:** change package names in shared module ([e26da1e](https://github.com/bastean/codexgo/commit/e26da1e123692559f9a84a2ad3f0e53c4a1b1743))
+- **context:** change time format in errors ([23362e4](https://github.com/bastean/codexgo/commit/23362e40d7ea9fafe2b83a120f3bbc6652644057))
+- **context:** change type name of shared errors ([61c9b93](https://github.com/bastean/codexgo/commit/61c9b93fcec544e6d95c4e3ecd76a0f49ba38e43))
+- **context:** rename folders using plural names instead of the prefix s in shared module ([fe5aabf](https://github.com/bastean/codexgo/commit/fe5aabf7b3815b60a48382076f7f453e065f15f2))
+- **context:** rename packages using plural names in shared module ([db66e1d](https://github.com/bastean/codexgo/commit/db66e1d7e9c62ed8600f048512c37ec30bcba4ef))
+- **makefile:** add MAKE variable to rules with a recursive recipe ([75e31a8](https://github.com/bastean/codexgo/commit/75e31a84e9b58b1723270bce738162240628e21d))
+- **makefile:** change target names of test rules ([f078581](https://github.com/bastean/codexgo/commit/f0785811deabe3ab8343185cb14ca97933c6341c))
+- rename files using flatcase ([28d3e5f](https://github.com/bastean/codexgo/commit/28d3e5fafad4cdbeed23a8c6bb51724e6e6f746e))
+- **scripts:** change commit message on upgrade script ([9b257a2](https://github.com/bastean/codexgo/commit/9b257a223f1c2cc22dfe9c7dc5b1764389f3f8f1))
+- **server:** add ui class in jquery component selectors ([3c1743e](https://github.com/bastean/codexgo/commit/3c1743ed59d0e35fe5b4d2e2e7d9a4e62066a4a5))
+- **server:** change broker service components to individual files ([93d3c29](https://github.com/bastean/codexgo/commit/93d3c29e4669be36e5ed2f196fdb4e1183314a72))
+- **server:** change error handling from panic to wrapped errors ([1e3d766](https://github.com/bastean/codexgo/commit/1e3d766be194b64960e302b83318a9929f104e5c))
+- **server:** change error messages in services ([0f6a21e](https://github.com/bastean/codexgo/commit/0f6a21e98a89347d721f32b611fdacd6b405430d))
+- **server:** decouple service initializations ([61961d2](https://github.com/bastean/codexgo/commit/61961d2327948df5b9611ff75034c28d9f34a859))
+
+### Tests
+
+- **context:** add spaces between definitions in setup test ([4318ea2](https://github.com/bastean/codexgo/commit/4318ea27f6cac20154489c55917b9d639bd54fe0))
+- **context:** change integration tests to check for wrapped errors instead of panic ([6bb93ac](https://github.com/bastean/codexgo/commit/6bb93ac315e0049a2407952406e8349886274b2a))
+- **context:** change time on expected error messages ([56137d6](https://github.com/bastean/codexgo/commit/56137d695a6663e18272db70c1d98dcf97c03140))
+- **context:** change unit tests to check for wrapped errors instead of panic ([971b9de](https://github.com/bastean/codexgo/commit/971b9de188f998f9b6ecdec5435375be46789c9f))
+- **server:** change acceptance tests to work with the new ui ([8df4c59](https://github.com/bastean/codexgo/commit/8df4c59c9c280d7c7a55285fa662b682b2df9469))
+
 ## [3.0.1](https://github.com/bastean/codexgo/compare/v3.0.0...v3.0.1) (2024-04-08)
 
 ### Bug Fixes
