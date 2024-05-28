@@ -34,7 +34,7 @@ func commit() {
 		panic(err)
 	}
 
-	if err := exec.Command("git", "commit", "-m", "fix(deps): upgrade dependencies").Run(); err != nil {
+	if err := exec.Command("git", "commit", "-m", "chore(deps): upgrade dependencies").Run(); err != nil {
 		panic(err)
 	}
 }
