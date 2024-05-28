@@ -67,8 +67,8 @@ generate-required:
 #* ~~~~~~Initializations~~~~~~
 
 init: upgrade-managers install-deps copy-deps generate-required
-	
-init-from-zero:
+
+init-zero:
 	git init
 	$(MAKE) init
 	${npx} husky install

@@ -8,7 +8,7 @@
 
 <div align="center">
 
-> Example CRUD project applying Hexagonal Architecture, Domain-Driven Design (DDD), Event-Driven Architecture (EDA), Command Query Responsibility Segregation (CQRS), Behavior-Driven Development (BDD), Continuous Integration (CI), and more... in Go
+> Example CRUD project applying Hexagonal Architecture, Domain-Driven Design (DDD), Event-Driven Architecture (EDA), Command Query Responsibility Segregation (CQRS), Behavior-Driven Development (BDD), Continuous Integration (CI), and more... in Go.
 
 </div>
 
@@ -38,68 +38,149 @@
 
 </div>
 
+## Showcase
+
+<div align="center">
+
+<img src="assets/readme/desktop-home.png" />
+
+<img src="assets/readme/desktop-dashboard.png" />
+
+<img width="49%" src="assets/readme/mobile-home.png" />
+
+<img width="49%" src="assets/readme/mobile-dashboard.png" />
+
+<img src="assets/readme/mail-confirm-account.png" />
+
+</div>
+
+## Usage (Demo)
+
+> [!NOTE]
+>
+> - [System Requirements](#locally)
+> - In the Demo version, the link to confirm the account is sent through the Terminal.
+>   - _"Hi \<username\>, please confirm your account through this link: \<link\>"_
+> - You can define your own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the **SERVER_SMTP\_\*** variables, then you will receive the links by mail.
+
+```bash
+make demo
+```
+
 ## Features
 
-- Project Layout
+### Project Layout
 
-  - Based on [Standard Go Project Layout](https://github.com/golang-standards/project-layout)
+- Based on [Standard Go Project Layout](https://github.com/golang-standards/project-layout).
 
-- Message Broker
+### Git
 
-  - Routing Key (based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition))
+- Hooks managed by [husky](https://github.com/typicode/husky):
+  - Pre-Commit: [lint-staged](https://github.com/lint-staged/lint-staged)
+    - Secrets Scanning using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
+    - Formatting
+  - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
+    - Check [Conventional Commits](https://www.conventionalcommits.org) rules
+- Commit message helper using [Commitizen](https://github.com/commitizen/cz-cli).
+  - Interactive prompt that allows you to write commits following the [Conventional Commits](https://www.conventionalcommits.org) rules.
 
-- Devcontainer
+```bash
+make commit
+```
 
-  - Features
-  - Extensions & Settings
+### Linting/Formatting Tools
 
-- Docker
+- Go: **staticcheck** and **gofmt**.
+- templ: **templ fmt**.
+- Gherkin: **Cucumber extension**.
+- Others: **Prettier cli/extension**.
 
-  - Dockerfile
-    - Multistage
-  - Compose
-    - Setup by ENV
+### Testing Packages
 
-- GitHub
+- Random data generator: [Gofakeit](https://github.com/brianvoe/gofakeit).
+- Unit/Integration: [Testify](https://github.com/stretchr/testify).
+- Acceptance: [Testify](https://github.com/stretchr/testify), [Godog (Cucumber)](https://github.com/cucumber/godog) and [Playwright](https://github.com/playwright-community/playwright-go).
 
-  - Actions & Workflows
-    - Setup Languages and Dependencies
-    - Secrets Scanning ([TruffleHog Action](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#octocat-trufflehog-github-action)), Linting & Test Checks
+### Releases
+
+- Automatically managed by [Release It!](https://github.com/release-it/release-it):
+  - Before/After Hooks for:
+    - Linting
+    - Testing
+  - Bump version based on [Conventional Commits](https://www.conventionalcommits.org) and [SemVer](https://semver.org/):
+    - CHANGELOG generator
+    - Commits and Tags generator
+    - GitHub Releases
+
+### GitHub
+
+- Actions for:
+  - Setup Languages and Dependencies
+- Workflows running:
+  - Automatically (Triggered by **Push** or **Pull requests**):
+    - Secrets Scanning ([TruffleHog Action](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#octocat-trufflehog-github-action))
+    - Linting
+    - Testing
+  - Manually (Using the **Actions tab** on GitHub):
     - Upgrade Dependencies
     - Automate Release
-  - Issue Templates (Defaults)
+- Issue Templates **(Defaults)**.
 
-- Git
+### Devcontainer
 
-  - Hooks
-    - Pre-Commit
-      - Secrets Scanning ([TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)) & Formatting
-    - Commit-Msg
-      - Check [Conventional Commits](https://www.conventionalcommits.org) rules
+- Multiple Features already pre-configured:
+  - Go
+  - Node
+  - Docker in Docker
+- Extensions and their respective settings to work with:
+  - Go
+  - templ
+  - Cucumber
+    - Gherkin
+  - Prettier
+  - Better Comments
+  - Todo Tree
+  - cSpell
 
-- Releases
+### Docker
 
-  - Automatically
-    - Hooks
-      - Linting & Test Checks
-    - Bump Version (based on [Conventional Commits](https://www.conventionalcommits.org) & [SemVer](https://semver.org/))
-    - CHANGELOG
-    - Commit & Tag
-    - GitHub Release
+- Dockerfile
+  - **Multi-stage builds**:
+    - Development
+    - Testing
+    - Build
+    - Production
+- Compose
+  - Switched by ENVs.
 
-- Security
+### Message Broker
 
-  - Account confirmation via email
-  - Password hashing ([Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt))
+- Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
 
-- Scripts
+### Security
 
-  - [sync-env](scripts/sync-env/sync-env.go)
-    - Synchronize all **.env\*** files in the directory using an **.env** model
-  - [upgrade](scripts/upgrade/upgrade.go)
-    1. Upgrade Go and Node dependencies
-    2. Linting and Testing
-    3. Commit changes
+- Form validation at the client using [Fomantic - Form Validation](https://fomantic-ui.com/behaviors/form.html).
+  - On the server, the validations are performed using the **Value Objects** defined in the **Context**.
+- Data **authentication** via **JWT** managed by **Session Cookies**.
+- Account confirmation via **Mail** or **Terminal**.
+- Password hashing using [Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt).
+- Requests **Rate Limiting**.
+- Server log files.
+
+### Scripts
+
+- [syncenv](scripts/syncenv/syncenv.go)
+  - Synchronize all **.env\*** files in the directory using an **.env** model.
+- [copydeps](scripts/copydeps/copydeps.go)
+  - Copies the files required by the browser dependencies from the **node_modules** folder and places them inside the **static** folder on the server.
+- [upgrade](scripts/upgrade/upgrade.go)
+  - Perform the following steps to upgrade the project:
+    1. Upgrade Go and Node dependencies.
+    2. Linting and Testing.
+    3. Commit changes.
+- [run](deployments/run.sh)
+  - Display the logs and redirect them to a file whose name depends on the time at which the service was run.
+  - Used in Production Image.
 
 ## First Steps
 
@@ -121,7 +202,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 #### Dev Container (recommended)
 
-1. Install required
+1. System Requirements
 
    - [Docker](https://docs.docker.com/get-docker)
 
@@ -145,7 +226,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 #### Locally
 
-1. Install required
+1. System Requirements
 
    - [Go](https://go.dev/doc/install)
    - [Node](https://nodejs.org/en/download)
@@ -160,51 +241,51 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 #### ZIP
 
-1. [Install required](#locally)
+1. [System Requirements](#locally)
 
 2. Run
 
    ```bash
-   make from-zero
+   make init-zero
    ```
 
-### Repository
+### GitHub Repository
 
 #### Settings
 
+##### Actions
+
+- General
+
+  - Workflow permissions
+
+    - [x] Read and write permissions
+
+##### Secrets and variables
+
 - Actions
 
-  - General
+  - New repository secret
 
-    - Workflow permissions
+    - BOT_GPG_PRIVATE_KEY
 
-      - [x] Read and write permissions
+      ```bash
+      gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
+      ```
 
-- Secrets and variables
-
-  - Actions
-
-    - New repository secret
-
-      - BOT_GPG_PRIVATE_KEY
-
-        ```bash
-        gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
-        ```
-
-      - BOT_GPG_PASSPHRASE
+    - BOT_GPG_PASSPHRASE
 
 ### Run
 
 #### ENVs
 
 > [!IMPORTANT]
-> Before running it, you must set the following environment variables and rename the file to **.env.(dev|test|prod)**
+> Before running it, you must set the following environment variables and rename the file to **.env.(dev|test|prod)**.
 >
 > - [.env.example](deployments/.env.example)
 
 > [!TIP]
-> You can check the demo file to see which values you can use
+> You can check the demo file to see which values you can use.
 >
 > - [.env.example.demo](deployments/.env.example.demo)
 
@@ -214,31 +295,31 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 make compose-dev
 ```
 
-#### Test
+#### Tests
 
-- Unit
+##### Unit
 
-  ```bash
-  make test-unit
-  ```
+```bash
+make test-unit
+```
 
-- Integration
+##### Integration
 
-  ```bash
-  make compose-test-integration
-  ```
+```bash
+make compose-test-integration
+```
 
-- Acceptance
+##### Acceptance
 
-  ```bash
-  make compose-test-acceptance
-  ```
+```bash
+make compose-test-acceptance
+```
 
-- All
+##### Unit/Integration/Acceptance
 
-  ```bash
-  make compose-tests
-  ```
+```bash
+make compose-tests
+```
 
 #### Production
 
@@ -246,34 +327,15 @@ make compose-dev
 make compose-prod
 ```
 
-## Screenshots
-
-<div align="center">
-
-<img src="assets/readme/desktop-home.png" />
-
-<img src="assets/readme/desktop-dashboard.png" />
-
-<img width="49%" src="assets/readme/mobile-home.png" />
-
-<img width="49%" src="assets/readme/mobile-dashboard.png" />
-
-<img src="assets/readme/mail-confirm-account.png" />
-
-</div>
-
 ## Tech Stack
 
 #### Base
 
 - [Go](https://go.dev)
 - [templ](https://templ.guide)
-  - [htmx](https://htmx.org)
-  - [Alpine.js](https://alpinejs.dev)
-  - [Tailwind CSS](https://tailwindcss.com)
-    - [daisyUI](https://daisyui.com)
-- [MongoDB](https://www.mongodb.com)
-- [RabbitMQ](https://www.rabbitmq.com)
+  - [Fomantic-UI](https://fomantic-ui.com)
+- [RabbitMQ](https://www.rabbitmq.com/tutorials/tutorial-one-go)
+- [MongoDB](https://www.mongodb.com/docs/drivers/go)
 
 #### Please see
 
@@ -283,6 +345,7 @@ make compose-prod
 ## Contributing
 
 - Contributions and Feedback are always welcome!
+  - [Open a new issue](https://github.com/bastean/codexgo/issues/new/choose)
 
 ## License
 
