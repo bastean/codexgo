@@ -36,5 +36,5 @@ func NewCreatedSucceededEvent(attributes *CreatedSucceededEventAttributes) (*mes
 		})
 	}
 
-	return messages.NewMessage(CreatedSucceededEventTypeRoutingKey, attributesJson, []byte{}), nil
+	return messages.NewMessage(CreatedSucceededEventTypeRoutingKey, attributesJson, messages.Meta{}), nil
 }
