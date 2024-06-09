@@ -10,7 +10,7 @@ type Send struct {
 	model.Transport
 }
 
-func (send *Send) Run(data any) (*types.Empty, error) {
+func (send *Send) Run(data any) (types.Empty, error) {
 	err := send.Transport.Submit(data)
 
 	if err != nil {

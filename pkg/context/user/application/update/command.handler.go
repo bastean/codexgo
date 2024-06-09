@@ -7,7 +7,7 @@ import (
 )
 
 type CommandHandler struct {
-	models.UseCase[*Command, *types.Empty]
+	models.UseCase[*Command, types.Empty]
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {

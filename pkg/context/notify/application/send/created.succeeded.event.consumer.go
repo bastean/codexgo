@@ -11,7 +11,7 @@ import (
 )
 
 type CreatedSucceededEventConsumer struct {
-	models.UseCase[any, *types.Empty]
+	models.UseCase[any, types.Empty]
 	Queues []*queues.Queue
 }
 

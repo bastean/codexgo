@@ -17,7 +17,7 @@ import (
 type UserUpdateTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*update.Command]
-	useCase    models.UseCase[*update.Command, *types.Empty]
+	useCase    models.UseCase[*update.Command, types.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }

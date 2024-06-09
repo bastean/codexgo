@@ -13,7 +13,7 @@ type Update struct {
 	model.Hashing
 }
 
-func (update *Update) Run(userUpdate *Command) (*types.Empty, error) {
+func (update *Update) Run(userUpdate *Command) (types.Empty, error) {
 	idVO, err := valueobj.NewId(userUpdate.Id)
 
 	if err != nil {

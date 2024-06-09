@@ -1,3 +1,3 @@
 package types
 
-type Empty struct{}
+type Empty interface{}

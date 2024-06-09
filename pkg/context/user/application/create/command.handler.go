@@ -8,7 +8,7 @@ import (
 )
 
 type CommandHandler struct {
-	models.UseCase[*aggregate.User, *types.Empty]
+	models.UseCase[*aggregate.User, types.Empty]
 	models.Broker
 }
 

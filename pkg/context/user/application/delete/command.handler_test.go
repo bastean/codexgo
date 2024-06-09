@@ -16,7 +16,7 @@ import (
 type UserDeleteTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*delete.Command]
-	useCase    models.UseCase[*delete.Input, *types.Empty]
+	useCase    models.UseCase[*delete.Input, types.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }

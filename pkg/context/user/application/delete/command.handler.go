@@ -13,7 +13,7 @@ type Input struct {
 }
 
 type CommandHandler struct {
-	models.UseCase[*Input, *types.Empty]
+	models.UseCase[*Input, types.Empty]
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {

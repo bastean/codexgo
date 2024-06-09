@@ -12,7 +12,7 @@ type Delete struct {
 	model.Hashing
 }
 
-func (delete *Delete) Run(input *Input) (*types.Empty, error) {
+func (delete *Delete) Run(input *Input) (types.Empty, error) {
 	user, err := delete.Repository.Search(model.RepositorySearchCriteria{
 		Id: input.Id,
 	})

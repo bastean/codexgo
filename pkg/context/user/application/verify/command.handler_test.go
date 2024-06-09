@@ -16,7 +16,7 @@ import (
 type UserVerifyTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*verify.Command]
-	useCase    models.UseCase[models.ValueObject[string], *types.Empty]
+	useCase    models.UseCase[models.ValueObject[string], types.Empty]
 	repository *persistence.RepositoryMock
 }
 

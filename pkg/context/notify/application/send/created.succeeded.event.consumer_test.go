@@ -15,7 +15,7 @@ import (
 type CreatedSucceededEventConsumerTestSuite struct {
 	suite.Suite
 	sut       models.Consumer
-	useCase   models.UseCase[any, *types.Empty]
+	useCase   models.UseCase[any, types.Empty]
 	transport *communication.TransportMock
 	queues    []*queues.Queue
 }
