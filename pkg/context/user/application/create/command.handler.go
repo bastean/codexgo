@@ -13,7 +13,12 @@ type CommandHandler struct {
 }
 
 func (handler *CommandHandler) Handle(command *Command) error {
-	user, err := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
+	user, err := aggregate.NewUser(&aggregate.UserPrimitive{
+		Id:       command.Id,
+		Email:    command.Email,
+		Username: command.Username,
+		Password: command.Password,
+	})
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

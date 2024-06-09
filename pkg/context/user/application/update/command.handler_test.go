@@ -40,7 +40,12 @@ func (suite *UserUpdateTestSuite) SetupTest() {
 func (suite *UserUpdateTestSuite) TestUpdate() {
 	command := update.RandomCommand()
 
-	user, _ := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
+	user, _ := aggregate.NewUser(&aggregate.UserPrimitive{
+		Id:       command.Id,
+		Email:    command.Email,
+		Username: command.Username,
+		Password: command.Password,
+	})
 
 	idVO, _ := valueobj.NewId(command.Id)
 

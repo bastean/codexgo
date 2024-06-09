@@ -38,7 +38,12 @@ func (suite *UserCreateTestSuite) SetupTest() {
 func (suite *UserCreateTestSuite) TestCreate() {
 	command := create.RandomCommand()
 
-	user, _ := aggregate.NewUser(command.Id, command.Email, command.Username, command.Password)
+	user, _ := aggregate.NewUser(&aggregate.UserPrimitive{
+		Id:       command.Id,
+		Email:    command.Email,
+		Username: command.Username,
+		Password: command.Password,
+	})
 
 	messages := user.Messages
 
