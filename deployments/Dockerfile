@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN apt update && apt upgrade -y
 
-RUN go install github.com/cosmtrek/air@latest
+RUN go install github.com/air-verse/air@latest
 
 RUN go install github.com/a-h/templ/cmd/templ@latest
 
