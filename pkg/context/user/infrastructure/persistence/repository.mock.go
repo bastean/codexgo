@@ -26,7 +26,7 @@ func (repository *RepositoryMock) Delete(id models.ValueObject[string]) error {
 	return nil
 }
 
-func (repository *RepositoryMock) Search(filter model.RepositorySearchCriteria) (*aggregate.User, error) {
-	args := repository.Called(filter)
+func (repository *RepositoryMock) Search(criteria *model.RepositorySearchCriteria) (*aggregate.User, error) {
+	args := repository.Called(criteria)
 	return args.Get(0).(*aggregate.User), nil
 }

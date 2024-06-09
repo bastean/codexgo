@@ -20,7 +20,7 @@ func (update *Update) Run(userUpdate *Command) (types.Empty, error) {
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	userRegistered, err := update.Repository.Search(model.RepositorySearchCriteria{
+	userRegistered, err := update.Repository.Search(&model.RepositorySearchCriteria{
 		Id: idVO,
 	})
 

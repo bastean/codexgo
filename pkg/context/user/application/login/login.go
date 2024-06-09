@@ -13,7 +13,7 @@ type Login struct {
 }
 
 func (login *Login) Run(input *Input) (*aggregate.User, error) {
-	user, err := login.Repository.Search(model.RepositorySearchCriteria{
+	user, err := login.Repository.Search(&model.RepositorySearchCriteria{
 		Email: input.Email,
 	})
 

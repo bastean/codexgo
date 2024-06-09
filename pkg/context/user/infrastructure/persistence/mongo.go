@@ -119,18 +119,18 @@ func (db *UserCollection) Delete(id models.ValueObject[string]) error {
 	return nil
 }
 
-func (db *UserCollection) Search(filter model.RepositorySearchCriteria) (*aggregate.User, error) {
+func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*aggregate.User, error) {
 	var searchFilter bson.M
 	var index string
 
-	if filter.Email != nil {
-		searchFilter = bson.M{"email": filter.Email.Value()}
-		index = filter.Email.Value()
+	if criteria.Email != nil {
+		searchFilter = bson.M{"email": criteria.Email.Value()}
+		index = criteria.Email.Value()
 	}
 
-	if filter.Id != nil {
-		searchFilter = bson.M{"id": filter.Id.Value()}
-		index = filter.Id.Value()
+	if criteria.Id != nil {
+		searchFilter = bson.M{"id": criteria.Id.Value()}
+		index = criteria.Id.Value()
 	}
 
 	result := db.collection.FindOne(context.Background(), searchFilter)
@@ -150,8 +150,8 @@ func (db *UserCollection) Search(filter model.RepositorySearchCriteria) (*aggreg
 			Where: "Search",
 			What:  "failure to search for a user",
 			Why: errors.Meta{
-				"Id":    filter.Id.Value(),
-				"Email": filter.Email.Value(),
+				"Id":    criteria.Id.Value(),
+				"Email": criteria.Email.Value(),
 			},
 			Who: err,
 		})

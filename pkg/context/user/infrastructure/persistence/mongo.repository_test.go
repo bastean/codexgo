@@ -90,11 +90,11 @@ func (suite *UserMongoRepositoryTestSuite) TestSearch() {
 
 	suite.NoError(suite.sut.Save(expected))
 
-	filter := model.RepositorySearchCriteria{
+	criteria := &model.RepositorySearchCriteria{
 		Email: expected.Email,
 	}
 
-	user, err := suite.sut.Search(filter)
+	user, err := suite.sut.Search(criteria)
 
 	suite.NoError(err)
 

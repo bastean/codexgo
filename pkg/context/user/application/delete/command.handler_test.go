@@ -44,11 +44,11 @@ func (suite *UserDeleteTestSuite) TestDelete() {
 		Password: user.Password.Value(),
 	}
 
-	filter := model.RepositorySearchCriteria{
+	criteria := &model.RepositorySearchCriteria{
 		Id: user.Id,
 	}
 
-	suite.repository.On("Search", filter).Return(user)
+	suite.repository.On("Search", criteria).Return(user)
 
 	suite.hashing.On("IsNotEqual", user.Password.Value(), user.Password.Value()).Return(false)
 

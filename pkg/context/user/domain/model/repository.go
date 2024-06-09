@@ -6,13 +6,12 @@ import (
 )
 
 type RepositorySearchCriteria struct {
-	Id    models.ValueObject[string]
-	Email models.ValueObject[string]
+	Id, Email models.ValueObject[string]
 }
 
 type Repository interface {
 	Save(user *aggregate.User) error
 	Update(user *aggregate.User) error
 	Delete(id models.ValueObject[string]) error
-	Search(filter RepositorySearchCriteria) (*aggregate.User, error)
+	Search(criteria *RepositorySearchCriteria) (*aggregate.User, error)
 }

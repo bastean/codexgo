@@ -43,11 +43,11 @@ func (suite *UserVerifyTestSuite) TestVerify() {
 
 	user.Password = nil
 
-	filter := model.RepositorySearchCriteria{
+	criteria := &model.RepositorySearchCriteria{
 		Id: idVO,
 	}
 
-	suite.repository.On("Search", filter).Return(user)
+	suite.repository.On("Search", criteria).Return(user)
 
 	suite.repository.On("Update", user)
 

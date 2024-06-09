@@ -13,7 +13,7 @@ type Delete struct {
 }
 
 func (delete *Delete) Run(input *Input) (types.Empty, error) {
-	user, err := delete.Repository.Search(model.RepositorySearchCriteria{
+	user, err := delete.Repository.Search(&model.RepositorySearchCriteria{
 		Id: input.Id,
 	})
 

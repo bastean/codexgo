@@ -37,11 +37,11 @@ func (suite *UserReadTestSuite) TestLogin() {
 		Id: user.Id.Value(),
 	}
 
-	filter := model.RepositorySearchCriteria{
+	criteria := &model.RepositorySearchCriteria{
 		Id: user.Id,
 	}
 
-	suite.repository.On("Search", filter).Return(user)
+	suite.repository.On("Search", criteria).Return(user)
 
 	expected := user.ToPrimitives()
 

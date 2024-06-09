@@ -49,11 +49,11 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 
 	idVO, _ := valueobj.NewId(command.Id)
 
-	filter := model.RepositorySearchCriteria{
+	criteria := &model.RepositorySearchCriteria{
 		Id: idVO,
 	}
 
-	suite.repository.On("Search", filter).Return(user)
+	suite.repository.On("Search", criteria).Return(user)
 
 	suite.hashing.On("IsNotEqual", user.Password.Value(), command.Password).Return(false)
 
