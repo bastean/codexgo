@@ -7,11 +7,7 @@ import (
 )
 
 type QueueName struct {
-	Module    string
-	Aggregate string
-	Action    string
-	Event     string
-	Command   string
+	Module, Aggregate, Action, Event, Command string
 }
 
 func NewQueueName(queueName *QueueName) string {

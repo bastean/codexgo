@@ -6,18 +6,14 @@ import (
 )
 
 var Type = struct {
-	Event   string
-	Command string
+	Event, Command string
 }{
 	Event:   "event",
 	Command: "command",
 }
 
 var Status = struct {
-	Queued    string
-	Succeeded string
-	Failed    string
-	Done      string
+	Queued, Succeeded, Failed, Done string
 }{
 	Queued:    "queued",
 	Succeeded: "succeeded",
@@ -26,14 +22,7 @@ var Status = struct {
 }
 
 type MessageRoutingKey struct {
-	Organization string
-	Module       string
-	Version      string
-	Type         string
-	Aggregate    string
-	Event        string
-	Command      string
-	Status       string
+	Organization, Module, Version, Type, Aggregate, Event, Command, Status string
 }
 
 func NewRoutingKey(routingKey *MessageRoutingKey) string {

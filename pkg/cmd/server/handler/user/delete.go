@@ -15,7 +15,7 @@ func Delete() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			c.Error(errs.MissingKey(key.UserId, "UserDelete"))
+			c.Error(errs.MissingKey(key.UserId, "Delete"))
 			c.Abort()
 			return
 		}

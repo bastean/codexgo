@@ -8,8 +8,7 @@ import (
 )
 
 type Input struct {
-	Id       models.ValueObject[string]
-	Password models.ValueObject[string]
+	Id, Password models.ValueObject[string]
 }
 
 type CommandHandler struct {

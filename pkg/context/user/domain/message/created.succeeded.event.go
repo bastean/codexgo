@@ -17,9 +17,7 @@ var CreatedSucceededEventTypeRoutingKey = messages.NewRoutingKey(&messages.Messa
 })
 
 type CreatedSucceededEventAttributes struct {
-	Id       string
-	Email    string
-	Username string
+	Id, Email, Username string
 }
 
 func NewCreatedSucceededEvent(attributes *CreatedSucceededEventAttributes) (*messages.Message, error) {

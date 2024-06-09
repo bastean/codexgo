@@ -1,3 +1,3 @@
 package types
 
-type Empty interface{}
+type Empty = interface{}

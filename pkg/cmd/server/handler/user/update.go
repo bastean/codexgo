@@ -15,7 +15,7 @@ func Update() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			c.Error(errs.MissingKey(key.UserId, "UserUpdate"))
+			c.Error(errs.MissingKey(key.UserId, "Update"))
 			c.Abort()
 			return
 		}

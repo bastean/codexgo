@@ -6,9 +6,7 @@ import (
 
 type SMTP struct {
 	smtp.Auth
-	MIMEHeaders                       string
-	SMTPServerURL, Username, Password string
-	ServerURL                         string
+	MIMEHeaders, SMTPServerURL, Username, Password, ServerURL string
 }
 
 func NewSMTP(host, port, username, password, serverURL string) *SMTP {

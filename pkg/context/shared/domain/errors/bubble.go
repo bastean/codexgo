@@ -7,11 +7,10 @@ import (
 )
 
 type Bubble struct {
-	When  time.Time
-	Where string
-	What  string
-	Why   map[string]any
-	Who   error
+	When        time.Time
+	Where, What string
+	Why         map[string]any
+	Who         error
 }
 
 func (err *Bubble) Error() string {

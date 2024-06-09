@@ -1,7 +1,5 @@
 package send
 
 type CreatedSucceededEventAttributes struct {
-	Id       string
-	Email    string
-	Username string
+	Id, Email, Username string
 }

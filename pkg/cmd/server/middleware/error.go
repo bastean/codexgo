@@ -16,9 +16,7 @@ func ErrorHandler() gin.HandlerFunc {
 		var invalidValue *errors.InvalidValue
 		var alreadyExist *errors.AlreadyExist
 		var notExist *errors.NotExist
-
 		var failure *errors.Failure
-
 		var internal *errors.Internal
 
 		for _, err := range c.Errors {

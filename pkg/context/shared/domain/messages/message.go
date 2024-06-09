@@ -1,11 +1,8 @@
 package messages
 
 type Message struct {
-	Id         string
-	Type       string
-	OccurredOn string
-	Attributes []byte
-	Meta       []byte
+	Id, Type, OccurredOn string
+	Attributes, Meta     []byte
 }
 
 func NewMessage(routingKey string, attributes, meta []byte) *Message {

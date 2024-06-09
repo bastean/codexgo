@@ -29,5 +29,5 @@ func RandomEvent() *messages.Message {
 
 	attributesJson, _ := json.Marshal(attributes)
 
-	return messages.NewMessage(CreatedSucceededEventTypeRoutingKey, attributesJson, []byte{})
+	return messages.NewMessage(CreatedSucceededEventTypeRoutingKey, attributesJson, messages.Meta{})
 }

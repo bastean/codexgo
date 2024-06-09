@@ -8,8 +8,7 @@ import (
 )
 
 type Input struct {
-	Email    models.ValueObject[string]
-	Password models.ValueObject[string]
+	Email, Password models.ValueObject[string]
 }
 
 type QueryHandler struct {

@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type userDocument struct {
+type UserDocument struct {
 	Id       string `bson:"id"`
 	Email    string `bson:"email"`
 	Username string `bson:"username"`
@@ -27,7 +27,7 @@ type UserCollection struct {
 }
 
 func (db *UserCollection) Save(user *aggregate.User) error {
-	newUser := userDocument(*user.ToPrimitives())
+	newUser := UserDocument(*user.ToPrimitives())
 
 	hashed, err := db.hashing.Hash(newUser.Password)
 

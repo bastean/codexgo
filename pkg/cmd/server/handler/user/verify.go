@@ -14,7 +14,7 @@ func Verify() gin.HandlerFunc {
 		id := c.Param(key.Id)
 
 		if id == "" {
-			c.Error(errs.MissingKey(key.Id, "UserVerify"))
+			c.Error(errs.MissingKey(key.Id, "Verify"))
 			c.Redirect(http.StatusFound, "/")
 			c.Abort()
 			return
