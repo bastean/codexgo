@@ -14,8 +14,13 @@ type UsernameValueObjectTestSuite struct {
 
 func (suite *UsernameValueObjectTestSuite) SetupTest() {}
 
-func (suite *UsernameValueObjectTestSuite) TestUsernameWithInvalidLength() {
-	username, err := valueobj.WithInvalidUsernameLength()
+func (suite *UsernameValueObjectTestSuite) TestWithValidValue() {
+	_, err := valueobj.UsernameWithValidValue()
+	suite.NoError(err)
+}
+
+func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
+	username, err := valueobj.UsernameWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -33,8 +38,8 @@ func (suite *UsernameValueObjectTestSuite) TestUsernameWithInvalidLength() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func (suite *UsernameValueObjectTestSuite) TestUsernameWithInvalidAlphanumeric() {
-	username, err := valueobj.WithInvalidUsernameAlphanumeric()
+func (suite *UsernameValueObjectTestSuite) TestWithInvalidAlphanumeric() {
+	username, err := valueobj.UsernameWithInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
 

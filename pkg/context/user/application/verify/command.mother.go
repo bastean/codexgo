@@ -5,7 +5,7 @@ import (
 )
 
 func RandomCommand() *Command {
-	id, _ := valueobj.RandomId()
+	id, _ := valueobj.IdWithValidValue()
 
 	return &Command{
 		Id: id.Value(),

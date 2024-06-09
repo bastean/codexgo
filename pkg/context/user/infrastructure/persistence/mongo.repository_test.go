@@ -60,7 +60,7 @@ func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 
 	suite.NoError(suite.sut.Save(user))
 
-	password, _ := valueobj.RandomPassword()
+	password, _ := valueobj.PasswordWithValidValue()
 
 	user.Password = password
 

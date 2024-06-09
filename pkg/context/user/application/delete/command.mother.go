@@ -5,8 +5,8 @@ import (
 )
 
 func RandomCommand() *Command {
-	id, _ := valueobj.RandomId()
-	password, _ := valueobj.RandomPassword()
+	id, _ := valueobj.IdWithValidValue()
+	password, _ := valueobj.PasswordWithValidValue()
 
 	return &Command{
 		Id:       id.Value(),

@@ -5,11 +5,11 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func RandomUsername() (models.ValueObject[string], error) {
-	return NewUsername(services.Create.Regex(`[a-z0-9]{2,20}`))
+func UsernameWithValidValue() (models.ValueObject[string], error) {
+	return NewUsername(services.Create.Regex(`^[a-z0-9]{2,20}$`))
 }
 
-func WithInvalidUsernameLength() (string, error) {
+func UsernameWithInvalidLength() (string, error) {
 	value := "x"
 
 	_, err := NewUsername(value)
@@ -17,7 +17,7 @@ func WithInvalidUsernameLength() (string, error) {
 	return value, err
 }
 
-func WithInvalidUsernameAlphanumeric() (string, error) {
+func UsernameWithInvalidAlphanumeric() (string, error) {
 	value := "<></>"
 
 	_, err := NewUsername(value)

@@ -21,7 +21,6 @@ func (username *Username) Value() string {
 
 func (username *Username) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-
 	return validate.Struct(username)
 }
 

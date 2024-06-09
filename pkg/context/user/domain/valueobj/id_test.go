@@ -14,8 +14,13 @@ type IdValueObjectTestSuite struct {
 
 func (suite *IdValueObjectTestSuite) SetupTest() {}
 
-func (suite *IdValueObjectTestSuite) TestId() {
-	id, err := valueobj.InvalidId()
+func (suite *IdValueObjectTestSuite) TestWithValidValue() {
+	_, err := valueobj.IdWithValidValue()
+	suite.NoError(err)
+}
+
+func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
+	id, err := valueobj.IdWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
@@ -24,7 +29,7 @@ func (suite *IdValueObjectTestSuite) TestId() {
 	expected := errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewId",
-		What:  "invalid id format",
+		What:  "invalid uuid4 format",
 		Why: errors.Meta{
 			"Id": id,
 		},

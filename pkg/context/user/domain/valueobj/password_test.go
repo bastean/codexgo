@@ -14,8 +14,13 @@ type PasswordValueObjectTestSuite struct {
 
 func (suite *PasswordValueObjectTestSuite) SetupTest() {}
 
-func (suite *PasswordValueObjectTestSuite) TestPassword() {
-	password, err := valueobj.WithInvalidPasswordLength()
+func (suite *PasswordValueObjectTestSuite) TestWithValidValue() {
+	_, err := valueobj.PasswordWithValidValue()
+	suite.NoError(err)
+}
+
+func (suite *PasswordValueObjectTestSuite) TestWithInvalidLength() {
+	password, err := valueobj.PasswordWithInvalidLength()
 
 	var actual *errors.InvalidValue
 

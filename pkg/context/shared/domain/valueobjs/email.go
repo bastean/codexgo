@@ -18,7 +18,6 @@ func (email *Email) Value() string {
 
 func (email *Email) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-
 	return validate.Struct(email)
 }
 

@@ -14,8 +14,13 @@ type EmailValueObjectTestSuite struct {
 
 func (suite *EmailValueObjectTestSuite) SetupTest() {}
 
-func (suite *EmailValueObjectTestSuite) TestEmail() {
-	email, err := valueobj.InvalidEmail()
+func (suite *EmailValueObjectTestSuite) TestWithValidValue() {
+	_, err := valueobj.EmailWithValidValue()
+	suite.NoError(err)
+}
+
+func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
+	email, err := valueobj.EmailWithInvalidValue()
 
 	var actual *errors.InvalidValue
 

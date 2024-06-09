@@ -19,7 +19,6 @@ func (password *Password) Value() string {
 
 func (password *Password) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-
 	return validate.Struct(password)
 }
 

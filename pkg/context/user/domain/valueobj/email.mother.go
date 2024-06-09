@@ -5,11 +5,11 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func RandomEmail() (models.ValueObject[string], error) {
+func EmailWithValidValue() (models.ValueObject[string], error) {
 	return NewEmail(services.Create.Email())
 }
 
-func InvalidEmail() (string, error) {
+func EmailWithInvalidValue() (string, error) {
 	value := "x"
 
 	_, err := NewEmail(value)
