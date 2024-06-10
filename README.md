@@ -1,8 +1,8 @@
 <h1 align="center">
 
-<!-- [![logo readme](https://raw.githubusercontent.com/bastean/codexgo/main/assets/readme/logo-readme.png)](https://github.com/bastean) -->
+<!-- [![logo readme](https://raw.githubusercontent.com/bastean/codexgo/main/assets/readme/logo.png)](https://github.com/bastean) -->
 
-[![logo readme](assets/readme/logo-readme.png)](https://github.com/bastean/codexgo)
+[![logo readme](assets/readme/logo.png)](https://github.com/bastean/codexgo)
 
 </h1>
 
@@ -82,11 +82,10 @@ make demo
   - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
     - Check [Conventional Commits](https://www.conventionalcommits.org) rules
 - Commit message helper using [Commitizen](https://github.com/commitizen/cz-cli).
-  - Interactive prompt that allows you to write commits following the [Conventional Commits](https://www.conventionalcommits.org) rules.
-
-```bash
-make commit
-```
+  - Interactive prompt that allows you to write commits following the [Conventional Commits](https://www.conventionalcommits.org) rules:
+    ```bash
+    make commit
+    ```
 
 ### Linting/Formatting Tools
 
@@ -181,6 +180,52 @@ make commit
 - [run](deployments/run.sh)
   - Display the logs and redirect them to a file whose name depends on the time at which the service was run.
   - Used in Production Image.
+
+## Basic Workflow (Domain > (Infrastructure | Application) > Presentation)
+
+### Context (Domain, Infrastructure & Application) > (Modules)
+
+- Domain
+  - Value Objects
+    - Mother Creators
+    - Unit Tests
+  - Messages (Event/Command)
+  - Aggregates
+    - Aggregate Root
+    - Mother Creators
+  - Models (Ports)
+    - Repository
+    - Broker
+- Infrastructure
+  - Persistence
+    - Repository Mocks
+    - Adapters
+    - Integration Tests
+  - Communication
+    - Broker Mocks
+    - Adapters
+    - Integration Tests
+- Application
+  - Commands
+    - Mother Creators
+  - Querys/Responses
+    - Mother Creators
+  - Messages (Attributes/Meta)
+    - Mother Creators
+  - Handlers/Consumers
+    - Inputs & Outputs
+      - Uses Cases
+    - Unit Tests
+
+### App (Presentation) > (Server)
+
+- Presentation
+  - Services (Modules)
+  - Templates
+  - Handlers
+  - Routes
+  - Features (Gherkin)
+    - Acceptance Tests
 
 ## First Steps
 
