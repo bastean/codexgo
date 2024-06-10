@@ -53,6 +53,16 @@ func (suite *UserMongoRepositoryTestSuite) TestSaveDuplicate() {
 	suite.Error(suite.sut.Save(user))
 }
 
+func (suite *UserMongoRepositoryTestSuite) TestVerify() {
+	user := aggregate.RandomUser()
+
+	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
+
+	suite.NoError(suite.sut.Save(user))
+
+	suite.NoError(suite.sut.Verify(user.Id))
+}
+
 func (suite *UserMongoRepositoryTestSuite) TestUpdate() {
 	user := aggregate.RandomUser()
 
@@ -91,7 +101,7 @@ func (suite *UserMongoRepositoryTestSuite) TestSearch() {
 	suite.NoError(suite.sut.Save(expected))
 
 	criteria := &model.RepositorySearchCriteria{
-		Email: expected.Email,
+		Id: expected.Id,
 	}
 
 	user, err := suite.sut.Search(criteria)

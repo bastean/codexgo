@@ -17,7 +17,7 @@ import (
 type UserUpdateTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*update.Command]
-	useCase    models.UseCase[*update.Command, types.Empty]
+	useCase    models.UseCase[*update.Input, types.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }
@@ -44,7 +44,7 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
-		Password: command.Password,
+		Password: command.UpdatedPassword,
 	})
 
 	idVO, _ := valueobj.NewId(command.Id)

@@ -14,11 +14,11 @@ import (
 )
 
 type UserDocument struct {
-	Id       string `bson:"id"`
-	Email    string `bson:"email"`
-	Username string `bson:"username"`
-	Password string `bson:"password"`
-	Verified bool   `bson:"verified"`
+	Id       string `bson:"id,omitempty"`
+	Email    string `bson:"email,omitempty"`
+	Username string `bson:"username,omitempty"`
+	Password string `bson:"password,omitempty"`
+	Verified bool   `bson:"verified,omitempty"`
 }
 
 type UserCollection struct {
@@ -57,34 +57,43 @@ func (db *UserCollection) Save(user *aggregate.User) error {
 	return nil
 }
 
+func (db *UserCollection) Verify(id models.ValueObject[string]) error {
+	filter := bson.D{{Key: "id", Value: id.Value()}}
+
+	_, err := db.collection.UpdateOne(context.Background(), filter, bson.D{
+		{Key: "$set", Value: bson.D{
+			{Key: "verified", Value: true},
+		}},
+	})
+
+	if err != nil {
+		return errors.NewInternal(&errors.Bubble{
+			Where: "Verify",
+			What:  "failure to verify a user",
+			Why: errors.Meta{
+				"Id": id.Value(),
+			},
+			Who: err,
+		})
+	}
+
+	return nil
+}
+
 func (db *UserCollection) Update(user *aggregate.User) error {
-	updateFilter := bson.M{"id": user.Id.Value()}
+	updatedUser := UserDocument(*user.ToPrimitives())
 
-	updateUser := bson.M{}
+	filter := bson.D{{Key: "id", Value: user.Id.Value()}}
 
-	if user.Email != nil {
-		updateUser["email"] = user.Email.Value()
+	hashed, err := db.hashing.Hash(user.Password.Value())
+
+	if err != nil {
+		return errors.BubbleUp(err, "Update")
 	}
 
-	if user.Username != nil {
-		updateUser["username"] = user.Username.Value()
-	}
+	updatedUser.Password = hashed
 
-	if user.Password != nil {
-		hashed, err := db.hashing.Hash(user.Password.Value())
-
-		if err != nil {
-			return errors.BubbleUp(err, "Update")
-		}
-
-		updateUser["password"] = hashed
-	}
-
-	if user.Verified != nil {
-		updateUser["verified"] = user.Verified.Value()
-	}
-
-	_, err := db.collection.UpdateOne(context.Background(), updateFilter, bson.M{"$set": updateUser})
+	_, err = db.collection.ReplaceOne(context.Background(), filter, updatedUser)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -101,9 +110,9 @@ func (db *UserCollection) Update(user *aggregate.User) error {
 }
 
 func (db *UserCollection) Delete(id models.ValueObject[string]) error {
-	deleteFilter := bson.M{"id": id.Value()}
+	filter := bson.D{{Key: "id", Value: id.Value()}}
 
-	_, err := db.collection.DeleteOne(context.Background(), deleteFilter)
+	_, err := db.collection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -120,30 +129,29 @@ func (db *UserCollection) Delete(id models.ValueObject[string]) error {
 }
 
 func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*aggregate.User, error) {
-	var searchFilter bson.M
+	var filter bson.D
 	var index string
 
-	if criteria.Email != nil {
-		searchFilter = bson.M{"email": criteria.Email.Value()}
+	switch {
+	case criteria.Id != nil:
+		filter = bson.D{{Key: "id", Value: criteria.Id.Value()}}
+		index = criteria.Id.Value()
+	case criteria.Email != nil:
+		filter = bson.D{{Key: "email", Value: criteria.Email.Value()}}
 		index = criteria.Email.Value()
 	}
 
-	if criteria.Id != nil {
-		searchFilter = bson.M{"id": criteria.Id.Value()}
-		index = criteria.Id.Value()
-	}
-
-	result := db.collection.FindOne(context.Background(), searchFilter)
+	result := db.collection.FindOne(context.Background(), filter)
 
 	if err := result.Err(); err != nil {
 		return nil, persistences.HandleMongoDocumentNotFound(index, err)
 	}
 
-	userPrimitive := new(aggregate.UserPrimitive)
+	primitive := new(aggregate.UserPrimitive)
 
-	result.Decode(userPrimitive)
+	result.Decode(primitive)
 
-	user, err := aggregate.FromPrimitives(userPrimitive)
+	user, err := aggregate.FromPrimitives(primitive)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{

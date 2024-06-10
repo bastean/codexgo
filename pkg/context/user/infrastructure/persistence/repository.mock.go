@@ -16,6 +16,11 @@ func (repository *RepositoryMock) Save(user *aggregate.User) error {
 	return nil
 }
 
+func (repository *RepositoryMock) Verify(id models.ValueObject[string]) error {
+	repository.Called(id)
+	return nil
+}
+
 func (repository *RepositoryMock) Update(user *aggregate.User) error {
 	repository.Called(user)
 	return nil

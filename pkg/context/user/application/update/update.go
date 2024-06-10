@@ -5,7 +5,6 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 type Update struct {
@@ -13,50 +12,28 @@ type Update struct {
 	model.Hashing
 }
 
-func (update *Update) Run(userUpdate *Command) (types.Empty, error) {
-	idVO, err := valueobj.NewId(userUpdate.Id)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
-	}
-
-	userRegistered, err := update.Repository.Search(&model.RepositorySearchCriteria{
-		Id: idVO,
+func (update *Update) Run(input *Input) (types.Empty, error) {
+	user, err := update.Repository.Search(&model.RepositorySearchCriteria{
+		Id: input.User.Id,
 	})
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(update.Hashing, userRegistered.Password.Value(), userUpdate.Password)
+	err = service.IsPasswordInvalid(update.Hashing, user.Password.Value(), input.User.Password.Value())
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	var errEmail, errUsername, errPassword error
-
-	if userUpdate.Email != "" {
-		userRegistered.Email, errEmail = valueobj.NewEmail(userUpdate.Email)
+	if input.UpdatedPassword != nil {
+		input.User.Password = input.UpdatedPassword
 	}
 
-	if userUpdate.Username != "" {
-		userRegistered.Username, errUsername = valueobj.NewUsername(userUpdate.Username)
-	}
+	input.User.Verified = user.Verified
 
-	if userUpdate.UpdatedPassword != "" {
-		userRegistered.Password, errPassword = valueobj.NewPassword(userUpdate.UpdatedPassword)
-	} else {
-		userRegistered.Password = nil
-	}
-
-	err = errors.Join(errEmail, errUsername, errPassword)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
-	}
-
-	err = update.Repository.Update(userRegistered)
+	err = update.Repository.Update(input.User)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")

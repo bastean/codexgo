@@ -11,6 +11,7 @@ type RepositorySearchCriteria struct {
 
 type Repository interface {
 	Save(user *aggregate.User) error
+	Verify(id models.ValueObject[string]) error
 	Update(user *aggregate.User) error
 	Delete(id models.ValueObject[string]) error
 	Search(criteria *RepositorySearchCriteria) (*aggregate.User, error)
