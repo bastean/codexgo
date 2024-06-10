@@ -1,5 +1,37 @@
 # Changelog
 
+## [4.1.0](https://github.com/bastean/codexgo/compare/v4.0.0...v4.1.0) (2024-06-10)
+
+### Chores
+
+- **deps:** upgrade dependencies ([93fc426](https://github.com/bastean/codexgo/commit/93fc4264ee2f2937e07e9a8f9c96156df4dfb4f1))
+
+### Documentation
+
+- **readme:** add basic layers workflow ([b6f6d5d](https://github.com/bastean/codexgo/commit/b6f6d5d0f8b6bb75759a8a0744f86bd5abc44893))
+
+### New Features
+
+- **makefile:** add tee in test rules ([1d21d7a](https://github.com/bastean/codexgo/commit/1d21d7a31fac96db750c9266e181f93765ca1089))
+
+### Bug Fixes
+
+- **dockerfile:** update air module name ([71bc376](https://github.com/bastean/codexgo/commit/71bc376c7a6e834d16eaf10684806ca652bd3e51))
+
+### Refactors
+
+- add type alias ([f55bb9d](https://github.com/bastean/codexgo/commit/f55bb9d1fbe3c933c1bb48e6885270c92e69beee))
+- **context:** add pointer to search criteria type ([8648a18](https://github.com/bastean/codexgo/commit/8648a184464c355d5b6216a4cb6a2f58c4bc1b95))
+- **context:** change empty type from struct to interface ([4e5dcf0](https://github.com/bastean/codexgo/commit/4e5dcf0152a5eec35818edf90030ae449037e0a2))
+- **context:** change errors in shared module ([47fe621](https://github.com/bastean/codexgo/commit/47fe62172d93792694beef6df3145502690e8d6a))
+- **context:** change parameters to use primitive type in user module ([db8fc5b](https://github.com/bastean/codexgo/commit/db8fc5b12b24968677f2a452e703a5af3192020f))
+- **context:** change updates in user module ([ba294af](https://github.com/bastean/codexgo/commit/ba294aff99ac5a6d35b2701531d97bf16f6191fd))
+- squash struct fields ([8ccc22c](https://github.com/bastean/codexgo/commit/8ccc22c0ed57d02e1717d723462673ee1ebc55d3))
+
+### Tests
+
+- **context:** add more explicit test case names ([5027a31](https://github.com/bastean/codexgo/commit/5027a31a0fafcdbcac17ad09a04b557e145c5a55))
+
 ## [4.0.0](https://github.com/bastean/codexgo/compare/v3.0.1...v4.0.0) (2024-05-28)
 
 ### ⚠ BREAKING CHANGES
