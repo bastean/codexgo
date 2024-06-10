@@ -23,6 +23,10 @@ git-reset-hard = git reset --hard HEAD
 compose = cd deployments/ && docker compose
 compose-env = ${compose} --env-file
 
+#* ~~~~~~Bash~~~~~~
+
+bash = bash -c
+
 #* ~~~~~~~~~~~~RULES~~~~~~~~~~~~
 
 #* ~~~~~~Upgrades~~~~~~
@@ -101,19 +105,19 @@ test-sync: upgrade-go
 	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
 
 test-unit: test-clean
-	go test -v -cover ./pkg/context/... -run TestUnit.* > test/report/unit-report.txt
+	${bash} 'go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log'
 
 test-integration: test-clean
-	go test -v -cover ./pkg/context/... -run TestIntegration.* > test/report/integration-report.txt
+	${bash} 'go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log'
 
 test-acceptance-sync: 
-	TEST_URL='http://localhost:8080' go test -v -cover ./pkg/cmd/... -run TestAcceptance.* > test/report/acceptance-report.txt
+	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./pkg/cmd/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
 
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
 
 tests-sync:
-	TEST_URL='http://localhost:8080' go test -v -cover ./... > test/report/report.txt
+	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./... |& tee test/report/report.log'
 
 tests: test-clean
 	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
