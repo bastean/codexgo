@@ -25,7 +25,7 @@ compose-env = ${compose} --env-file
 
 #* ~~~~~~Bash~~~~~~
 
-bash = bash -c
+bash = bash -o pipefail -c
 
 #* ~~~~~~~~~~~~RULES~~~~~~~~~~~~
 
