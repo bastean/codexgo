@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.1.1](https://github.com/bastean/codexgo/compare/v4.1.0...v4.1.1) (2024-06-12)
+
+### Bug Fixes
+
+- **makefile:** add pipefail to return an error when a test fails ([5b4c26e](https://github.com/bastean/codexgo/commit/5b4c26e4621fec259eb1b6cfa0bd263534b50588))
+
 ## [4.1.0](https://github.com/bastean/codexgo/compare/v4.0.0...v4.1.0) (2024-06-10)
 
 ### Chores
