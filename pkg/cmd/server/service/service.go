@@ -7,7 +7,6 @@ import (
 	"github.com/bastean/codexgo/pkg/cmd/server/service/database/mongodb"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/notify"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/smtp"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
@@ -34,12 +33,10 @@ func Start() error {
 		env.SMTP.ServerURL,
 	)
 
-	logger.Info("starting notify")
-
 	if env.SMTP.Host != "" {
-		notify.Init(notify.NewMailAccountConfirmation(SMTP))
+		user.InitCreated(user.NewMailConfirmation(SMTP))
 	} else {
-		notify.Init(notify.NewTerminalAccountConfirmation(
+		user.InitCreated(user.NewTerminalConfirmation(
 			logger.Logger,
 			env.ServerURL,
 		))
@@ -53,7 +50,7 @@ func Start() error {
 		rabbitmq.Exchange,
 		rabbitmq.Queues,
 		rabbitmq.Consumers(
-			notify.SendAccountConfirmation,
+			user.Created,
 		),
 	)
 

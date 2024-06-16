@@ -4,7 +4,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/aggregates"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/user/domain/message"
+	"github.com/bastean/codexgo/pkg/context/user/domain/event"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
@@ -73,19 +73,19 @@ func NewUser(primitive *UserPrimitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "NewUser")
 	}
 
-	attributes := &message.CreatedSucceededEventAttributes{
-		Id:       primitive.Id,
-		Email:    primitive.Email,
-		Username: primitive.Username,
-	}
-
-	eventMessage, err := message.NewCreatedSucceededEvent(attributes)
+	message, err := event.NewCreatedSucceeded(&event.CreatedSucceeded{
+		Attributes: &event.CreatedSucceededAttributes{
+			Id:       user.Id.Value(),
+			Email:    user.Email.Value(),
+			Username: user.Username.Value(),
+		},
+	})
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "NewUser")
 	}
 
-	user.RecordMessage(eventMessage)
+	user.RecordMessage(message)
 
 	return user, nil
 }

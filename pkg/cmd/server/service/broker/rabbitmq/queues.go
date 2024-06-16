@@ -4,15 +4,15 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 )
 
-var NotifySendAccountConfirmationQueue = &queues.Queue{
+var UserSendConfirmationQueue = &queues.Queue{
 	Name: queues.NewQueueName(&queues.QueueName{
-		Module: "notify",
-		Action: "send account confirmation",
+		Module: "user",
+		Action: "send confirmation",
 		Event:  "created.succeeded",
 	}),
-	BindingKeys: []string{BindingKey.Event.CreatedSucceeded},
+	Bindings: []string{Binding.Event.CreatedSucceeded},
 }
 
 var Queues = []*queues.Queue{
-	NotifySendAccountConfirmationQueue,
+	UserSendConfirmationQueue,
 }

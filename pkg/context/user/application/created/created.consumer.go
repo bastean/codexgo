@@ -1,4 +1,4 @@
-package send
+package created
 
 import (
 	"encoding/json"
@@ -8,34 +8,39 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/user/domain/event"
 )
 
-type CreatedSucceededEventConsumer struct {
-	models.UseCase[any, types.Empty]
+type Consumer struct {
+	models.UseCase[*event.CreatedSucceeded, types.Empty]
 	Queues []*queues.Queue
 }
 
-func (consumer *CreatedSucceededEventConsumer) SubscribedTo() []*queues.Queue {
+func (consumer *Consumer) SubscribedTo() []*queues.Queue {
 	return consumer.Queues
 }
 
-func (consumer *CreatedSucceededEventConsumer) On(message *messages.Message) error {
-	attributes := new(CreatedSucceededEventAttributes)
+func (consumer *Consumer) On(message *messages.Message) error {
+	user := new(event.CreatedSucceeded)
 
-	err := json.Unmarshal(message.Attributes, attributes)
+	user.Attributes = new(event.CreatedSucceededAttributes)
+
+	err := json.Unmarshal(message.Attributes, user.Attributes)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "On",
 			What:  "failure to obtain message attributes",
 			Why: errors.Meta{
-				"Message": message.Id,
+				"Id":          message.Id,
+				"Routing Key": message.Type,
+				"Occurred On": message.OccurredOn,
 			},
 			Who: err,
 		})
 	}
 
-	_, err = consumer.UseCase.Run(attributes)
+	_, err = consumer.UseCase.Run(user)
 
 	if err != nil {
 		return errors.BubbleUp(err, "On")

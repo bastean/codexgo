@@ -1,6 +1,6 @@
 package queues
 
 type Queue struct {
-	Name        string
-	BindingKeys []string
+	Name     string
+	Bindings []string
 }

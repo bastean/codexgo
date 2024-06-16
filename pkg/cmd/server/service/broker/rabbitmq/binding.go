@@ -1,15 +1,15 @@
 package rabbitmq
 
-type EventKey struct {
+type Event struct {
 	CreatedSucceeded string
 }
 
 type Key struct {
-	Event *EventKey
+	*Event
 }
 
-var BindingKey = &Key{
-	Event: &EventKey{
+var Binding = &Key{
+	Event: &Event{
 		CreatedSucceeded: "#.event.#.created.succeeded",
 	},
 }

@@ -190,6 +190,7 @@ make demo
     - Mother Creators
     - Unit Tests
   - Messages (Event/Command)
+    - Mother Creators
   - Aggregates
     - Aggregate Root
     - Mother Creators
@@ -209,8 +210,6 @@ make demo
   - Commands
     - Mother Creators
   - Querys/Responses
-    - Mother Creators
-  - Messages (Attributes/Meta)
     - Mother Creators
   - Handlers/Consumers
     - Inputs & Outputs

@@ -29,7 +29,7 @@ func New(uri string, logger models.Logger, exchange *routers.Router, queues []*q
 			return nil, errors.BubbleUp(err, "New")
 		}
 
-		err = rabbitMQ.AddQueueMessageBind(queue, queue.BindingKeys)
+		err = rabbitMQ.AddQueueMessageBind(queue, queue.Bindings)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "New")

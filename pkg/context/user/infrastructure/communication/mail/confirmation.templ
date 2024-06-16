@@ -1,6 +1,6 @@
 package mail
 
-templ AccountConfirmationTemplate(username, confirmationLink string) {
+templ ConfirmationTemplate(username, link string) {
 	<div style="padding: 64px 16px; background-color: #000000">
 		<div style="top: 8px; position: relative">
 			<div align="center">
@@ -16,7 +16,7 @@ templ AccountConfirmationTemplate(username, confirmationLink string) {
 				</p>
 				<a
 					style="color: #d8d9d9; font-size: 20px"
-					href={ templ.URL(confirmationLink) }
+					href={ templ.URL(link) }
 					rel="noopener noreferrer"
 					target="_blank"
 				>
