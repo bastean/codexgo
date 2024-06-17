@@ -5,10 +5,10 @@ import (
 )
 
 func RandomCommand() *Command {
-	id, _ := valueobj.IdWithValidValue()
-	email, _ := valueobj.EmailWithValidValue()
-	username, _ := valueobj.UsernameWithValidValue()
-	password, _ := valueobj.PasswordWithValidValue()
+	id := valueobj.IdWithValidValue()
+	email := valueobj.EmailWithValidValue()
+	username := valueobj.UsernameWithValidValue()
+	password := valueobj.PasswordWithValidValue()
 
 	return &Command{
 		Id:       id.Value(),

@@ -19,7 +19,7 @@ func (suite *UserBcryptHashingTestSuite) SetupTest() {
 }
 
 func (suite *UserBcryptHashingTestSuite) TestHash() {
-	password, _ := valueobj.PasswordWithValidValue()
+	password := valueobj.PasswordWithValidValue()
 
 	plain := password.Value()
 
@@ -31,7 +31,7 @@ func (suite *UserBcryptHashingTestSuite) TestHash() {
 }
 
 func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
-	password, _ := valueobj.PasswordWithValidValue()
+	password := valueobj.PasswordWithValidValue()
 
 	plain := password.Value()
 

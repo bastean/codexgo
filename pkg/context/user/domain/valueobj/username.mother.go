@@ -1,12 +1,19 @@
 package valueobj
 
 import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func UsernameWithValidValue() (models.ValueObject[string], error) {
-	return NewUsername(services.Create.Regex(`^[a-z0-9]{2,20}$`))
+func UsernameWithValidValue() models.ValueObject[string] {
+	value, err := NewUsername(services.Create.Regex(`^[a-z0-9]{2,20}$`))
+
+	if err != nil {
+		errors.Panic(err.Error(), "UsernameWithValidValue")
+	}
+
+	return value
 }
 
 func UsernameWithInvalidLength() (string, error) {

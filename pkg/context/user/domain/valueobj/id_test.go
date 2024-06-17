@@ -14,11 +14,6 @@ type IdValueObjectTestSuite struct {
 
 func (suite *IdValueObjectTestSuite) SetupTest() {}
 
-func (suite *IdValueObjectTestSuite) TestWithValidValue() {
-	_, err := valueobj.IdWithValidValue()
-	suite.NoError(err)
-}
-
 func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
 	id, err := valueobj.IdWithInvalidValue()
 

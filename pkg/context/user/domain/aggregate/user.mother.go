@@ -1,21 +1,26 @@
 package aggregate
 
 import (
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 func RandomUser() *User {
-	id, _ := valueobj.IdWithValidValue()
-	email, _ := valueobj.EmailWithValidValue()
-	username, _ := valueobj.UsernameWithValidValue()
-	password, _ := valueobj.PasswordWithValidValue()
+	id := valueobj.IdWithValidValue()
+	email := valueobj.EmailWithValidValue()
+	username := valueobj.UsernameWithValidValue()
+	password := valueobj.PasswordWithValidValue()
 
-	user, _ := NewUser(&UserPrimitive{
+	user, err := NewUser(&UserPrimitive{
 		Id:       id.Value(),
 		Email:    email.Value(),
 		Username: username.Value(),
 		Password: password.Value(),
 	})
+
+	if err != nil {
+		errors.Panic(err.Error(), "RandomUser")
+	}
 
 	return user
 }

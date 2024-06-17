@@ -94,7 +94,7 @@ lint-check:
 test-sut:
 	air
 
-test-clean:
+test-clean: generate-required
 	go clean -testcache
 	cd test/ && mkdir -p report
 

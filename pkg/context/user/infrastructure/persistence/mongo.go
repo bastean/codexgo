@@ -37,7 +37,7 @@ func (db *UserCollection) Save(user *aggregate.User) error {
 
 	newUser.Password = hashed
 
-	_, err = db.collection.InsertOne(context.Background(), newUser)
+	_, err = db.collection.InsertOne(context.Background(), &newUser)
 
 	if mongo.IsDuplicateKeyError(err) {
 		return errors.BubbleUp(persistences.HandleMongoDuplicateKeyError(err), "Save")
@@ -93,7 +93,7 @@ func (db *UserCollection) Update(user *aggregate.User) error {
 
 	updatedUser.Password = hashed
 
-	_, err = db.collection.ReplaceOne(context.Background(), filter, updatedUser)
+	_, err = db.collection.ReplaceOne(context.Background(), filter, &updatedUser)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{

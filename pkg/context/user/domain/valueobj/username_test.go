@@ -14,11 +14,6 @@ type UsernameValueObjectTestSuite struct {
 
 func (suite *UsernameValueObjectTestSuite) SetupTest() {}
 
-func (suite *UsernameValueObjectTestSuite) TestWithValidValue() {
-	_, err := valueobj.UsernameWithValidValue()
-	suite.NoError(err)
-}
-
 func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
 	username, err := valueobj.UsernameWithInvalidLength()
 
