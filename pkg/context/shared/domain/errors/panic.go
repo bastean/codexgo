@@ -4,6 +4,6 @@ import (
 	"log"
 )
 
-func PanicOnError(where, what string) {
-	log.Panicf("(%s): [%s]", where, what)
+func Panic(what, where string) {
+	log.Panicf("(%v): [%v]", where, what)
 }

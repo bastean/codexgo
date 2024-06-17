@@ -24,9 +24,9 @@ const fomanticStaticPath = staticPath + "/fomantic-ui.com"
 const lodashSourcePath = "node_modules/lodash"
 const lodashStaticPath = staticPath + "/lodash.com"
 
-func failOnError(err error, msg string) {
+func Panic(msg string, err error) {
 	if err != nil {
-		log.Panicf("%s: %s", msg, err)
+		log.Panicf("%v: [%v]", msg, err)
 	}
 }
 
@@ -34,7 +34,7 @@ func createDirectory(path string) {
 	err := os.MkdirAll(path, os.ModePerm)
 
 	if err != nil {
-		failOnError(err, fmt.Sprintf("Failed to create \"%s\"", path))
+		Panic(fmt.Sprintf("Failed to create \"%s\"", path), err)
 	}
 
 	log.Printf("Created: \"%s\"", path)
@@ -44,13 +44,13 @@ func copyFile(filename, sourcePath, targetPath string) {
 	data, err := os.ReadFile(filepath.Join(sourcePath, filepath.Base(filename)))
 
 	if err != nil {
-		failOnError(err, fmt.Sprintf("Failed to read \"%s\" from \"%s\"", filename, sourcePath))
+		Panic(fmt.Sprintf("Failed to read \"%s\" from \"%s\"", filename, sourcePath), err)
 	}
 
 	err = os.WriteFile(filepath.Join(targetPath, filepath.Base(filename)), data, os.ModePerm)
 
 	if err != nil {
-		failOnError(err, fmt.Sprintf("Failed to write \"%s\" on \"%s\"", filename, targetPath))
+		Panic(fmt.Sprintf("Failed to write \"%s\" on \"%s\"", filename, targetPath), err)
 	}
 
 	log.Printf("Created: \"%s\"", filepath.Join(targetPath, filepath.Base(filename)))
@@ -60,7 +60,7 @@ func copyDeps(filenames []string, sourcePath, targetPath string) {
 	files, err := os.ReadDir(sourcePath)
 
 	if err != nil {
-		failOnError(err, fmt.Sprintf("Failed to copy \"%s\" from \"%s\"", filenames, sourcePath))
+		Panic(fmt.Sprintf("Failed to copy \"%s\" from \"%s\"", filenames, sourcePath), err)
 	}
 
 	createDirectory(targetPath)
@@ -90,7 +90,7 @@ func main() {
 	err := os.RemoveAll(staticPath)
 
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		failOnError(err, fmt.Sprintf("Failed to remove \"%s\"", staticPath))
+		Panic(fmt.Sprintf("Failed to remove \"%s\"", staticPath), err)
 	}
 
 	createDirectory(staticPath)
