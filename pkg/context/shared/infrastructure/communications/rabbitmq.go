@@ -183,13 +183,29 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 			message.OccurredOn = time.Now().UTC().Format(time.DateTime)
 		}
 
-		messageJson, _ := json.Marshal(message)
+		body, err := json.Marshal(message)
+
+		if err != nil {
+			errToWrap := errors.NewInternal(&errors.Bubble{
+				Where: "PublishMessages",
+				What:  "cannot encode message to json",
+				Why: errors.Meta{
+					"Exchange": rmq.exchange,
+					"Message":  message.Id,
+				},
+				Who: err,
+			})
+
+			errWrap = errors.Join(errWrap, errToWrap)
+
+			continue
+		}
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 
 		defer cancel()
 
-		err := rmq.Channel.PublishWithContext(ctx,
+		err = rmq.Channel.PublishWithContext(ctx,
 			rmq.exchange,
 			message.Type,
 			false,
@@ -197,7 +213,7 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 			amqp.Publishing{
 				DeliveryMode: amqp.Persistent,
 				ContentType:  "application/json",
-				Body:         messageJson,
+				Body:         body,
 			})
 
 		if err != nil {

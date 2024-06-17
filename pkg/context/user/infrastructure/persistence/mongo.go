@@ -149,17 +149,28 @@ func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*agg
 
 	primitive := new(aggregate.UserPrimitive)
 
-	result.Decode(primitive)
+	err := result.Decode(primitive)
+
+	if err != nil {
+		return nil, errors.NewInternal(&errors.Bubble{
+			Where: "Search",
+			What:  "failure to decode a result",
+			Why: errors.Meta{
+				"Index": index,
+			},
+			Who: err,
+		})
+	}
 
 	user, err := aggregate.FromPrimitives(primitive)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "failure to search for a user",
+			What:  "failure to create an aggregate from a primitive",
 			Why: errors.Meta{
-				"Id":    criteria.Id.Value(),
-				"Email": criteria.Email.Value(),
+				"Primitive": primitive,
+				"Index":     index,
 			},
 			Who: err,
 		})

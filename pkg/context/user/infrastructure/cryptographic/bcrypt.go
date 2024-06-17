@@ -24,6 +24,5 @@ func (hashing *Bcrypt) Hash(plain string) (string, error) {
 
 func (hashing *Bcrypt) IsNotEqual(hashed, plain string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain))
-
 	return err != nil
 }
