@@ -7,12 +7,12 @@ import (
 
 type VerifyCommand = verify.Command
 
-func NewVerify(repository model.Repository) *verify.CommandHandler {
-	useCase := &verify.Verify{
+func NewVerify(repository model.Repository) *verify.Handler {
+	usecase := &verify.Verify{
 		Repository: repository,
 	}
 
-	return &verify.CommandHandler{
-		UseCase: useCase,
+	return &verify.Handler{
+		UseCase: usecase,
 	}
 }

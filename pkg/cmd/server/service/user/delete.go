@@ -7,13 +7,13 @@ import (
 
 type DeleteCommand = delete.Command
 
-func NewDelete(repository model.Repository, hashing model.Hashing) *delete.CommandHandler {
-	useCase := &delete.Delete{
+func NewDelete(repository model.Repository, hashing model.Hashing) *delete.Handler {
+	usecase := &delete.Delete{
 		Repository: repository,
 		Hashing:    hashing,
 	}
 
-	return &delete.CommandHandler{
-		UseCase: useCase,
+	return &delete.Handler{
+		UseCase: usecase,
 	}
 }

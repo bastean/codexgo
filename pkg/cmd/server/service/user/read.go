@@ -9,12 +9,12 @@ type ReadQuery = read.Query
 
 type ReadResponse = read.Response
 
-func NewRead(repository model.Repository) *read.QueryHandler {
-	useCase := &read.Read{
+func NewRead(repository model.Repository) *read.Handler {
+	usecase := &read.Read{
 		Repository: repository,
 	}
 
-	return &read.QueryHandler{
-		UseCase: useCase,
+	return &read.Handler{
+		UseCase: usecase,
 	}
 }

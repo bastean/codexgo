@@ -7,12 +7,12 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 )
 
-type CommandHandler struct {
+type Handler struct {
 	models.UseCase[*aggregate.User, types.Empty]
 	models.Broker
 }
 
-func (handler *CommandHandler) Handle(command *Command) error {
+func (handler *Handler) Handle(command *Command) error {
 	user, err := aggregate.NewUser(&aggregate.UserPrimitive{
 		Id:       command.Id,
 		Email:    command.Email,

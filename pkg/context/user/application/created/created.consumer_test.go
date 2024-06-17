@@ -13,15 +13,15 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UserCreatedTestSuite struct {
+type CreatedConsumerTestSuite struct {
 	suite.Suite
 	sut       models.Consumer
-	useCase   models.UseCase[*event.CreatedSucceeded, types.Empty]
+	usecase   models.UseCase[*event.CreatedSucceeded, types.Empty]
 	transport *communication.TransportMock
 	queues    []*queues.Queue
 }
 
-func (suite *UserCreatedTestSuite) SetupTest() {
+func (suite *CreatedConsumerTestSuite) SetupTest() {
 	queueName := queues.NewQueueName(&queues.QueueName{
 		Module: "queue",
 		Action: "assert",
@@ -34,17 +34,17 @@ func (suite *UserCreatedTestSuite) SetupTest() {
 
 	suite.transport = new(communication.TransportMock)
 
-	suite.useCase = &created.Created{
+	suite.usecase = &created.Created{
 		Transport: suite.transport,
 	}
 
 	suite.sut = &created.Consumer{
-		UseCase: suite.useCase,
+		UseCase: suite.usecase,
 		Queues:  suite.queues,
 	}
 }
 
-func (suite *UserCreatedTestSuite) TestCreatedSucceeded() {
+func (suite *CreatedConsumerTestSuite) TestCreatedSucceeded() {
 	message := event.RandomCreatedSucceeded()
 
 	user := new(event.CreatedSucceeded)
@@ -60,6 +60,6 @@ func (suite *UserCreatedTestSuite) TestCreatedSucceeded() {
 	suite.transport.AssertExpectations(suite.T())
 }
 
-func TestUnitUserCreatedSuite(t *testing.T) {
-	suite.Run(t, new(UserCreatedTestSuite))
+func TestUnitCreatedConsumerSuite(t *testing.T) {
+	suite.Run(t, new(CreatedConsumerTestSuite))
 }

@@ -13,11 +13,11 @@ type Input struct {
 	UpdatedPassword models.ValueObject[string]
 }
 
-type CommandHandler struct {
+type Handler struct {
 	models.UseCase[*Input, types.Empty]
 }
 
-func (handler *CommandHandler) Handle(command *Command) error {
+func (handler *Handler) Handle(command *Command) error {
 	user, err := aggregate.NewUser(&aggregate.UserPrimitive{
 		Id:       command.Id,
 		Email:    command.Email,

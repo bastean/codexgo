@@ -12,17 +12,17 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 )
 
-var Create *create.CommandHandler
+var Create *create.Handler
 
-var Read *read.QueryHandler
+var Read *read.Handler
 
-var Update *update.CommandHandler
+var Update *update.Handler
 
-var Delete *delete.CommandHandler
+var Delete *delete.Handler
 
-var Verify *verify.CommandHandler
+var Verify *verify.Handler
 
-var Login *login.QueryHandler
+var Login *login.Handler
 
 func Init(repository model.Repository, broker models.Broker, hashing model.Hashing) {
 	Create = NewCreate(repository, broker)

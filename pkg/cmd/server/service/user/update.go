@@ -7,13 +7,13 @@ import (
 
 type UpdateCommand = update.Command
 
-func NewUpdate(repository model.Repository, hashing model.Hashing) *update.CommandHandler {
-	useCase := &update.Update{
+func NewUpdate(repository model.Repository, hashing model.Hashing) *update.Handler {
+	usecase := &update.Update{
 		Repository: repository,
 		Hashing:    hashing,
 	}
 
-	return &update.CommandHandler{
-		UseCase: useCase,
+	return &update.Handler{
+		UseCase: usecase,
 	}
 }

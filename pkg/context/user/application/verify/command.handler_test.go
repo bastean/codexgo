@@ -13,26 +13,26 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UserVerifyTestSuite struct {
+type VerifyHandlerTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*verify.Command]
-	useCase    models.UseCase[models.ValueObject[string], types.Empty]
+	usecase    models.UseCase[models.ValueObject[string], types.Empty]
 	repository *persistence.RepositoryMock
 }
 
-func (suite *UserVerifyTestSuite) SetupTest() {
+func (suite *VerifyHandlerTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
 
-	suite.useCase = &verify.Verify{
+	suite.usecase = &verify.Verify{
 		Repository: suite.repository,
 	}
 
-	suite.sut = &verify.CommandHandler{
-		UseCase: suite.useCase,
+	suite.sut = &verify.Handler{
+		UseCase: suite.usecase,
 	}
 }
 
-func (suite *UserVerifyTestSuite) TestVerify() {
+func (suite *VerifyHandlerTestSuite) TestVerify() {
 	command := verify.RandomCommand()
 
 	user := aggregate.RandomUser()
@@ -54,6 +54,6 @@ func (suite *UserVerifyTestSuite) TestVerify() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUnitUserVerifySuite(t *testing.T) {
-	suite.Run(t, new(UserVerifyTestSuite))
+func TestUnitVerifyHandlerSuite(t *testing.T) {
+	suite.Run(t, new(VerifyHandlerTestSuite))
 }

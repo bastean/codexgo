@@ -7,13 +7,13 @@ import (
 
 type LoginQuery = login.Query
 
-func NewLogin(repository model.Repository, hashing model.Hashing) *login.QueryHandler {
-	useCase := &login.Login{
+func NewLogin(repository model.Repository, hashing model.Hashing) *login.Handler {
+	usecase := &login.Login{
 		Repository: repository,
 		Hashing:    hashing,
 	}
 
-	return &login.QueryHandler{
-		UseCase: useCase,
+	return &login.Handler{
+		UseCase: usecase,
 	}
 }

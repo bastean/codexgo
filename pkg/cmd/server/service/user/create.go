@@ -8,13 +8,13 @@ import (
 
 type CreateCommand = create.Command
 
-func NewCreate(repository model.Repository, broker models.Broker) *create.CommandHandler {
-	useCase := &create.Create{
+func NewCreate(repository model.Repository, broker models.Broker) *create.Handler {
+	usecase := &create.Create{
 		Repository: repository,
 	}
 
-	return &create.CommandHandler{
-		UseCase: useCase,
+	return &create.Handler{
+		UseCase: usecase,
 		Broker:  broker,
 	}
 }

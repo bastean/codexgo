@@ -93,9 +93,9 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *queues.Queue, bindingKeys []stri
 				Where: "AddQueueMessageBind",
 				What:  "failure to bind a queue",
 				Why: errors.Meta{
-					"Queue":      queue.Name,
-					"BindingKey": bindingKey,
-					"Exchange":   rmq.exchange,
+					"Queue":       queue.Name,
+					"Binding Key": bindingKey,
+					"Exchange":    rmq.exchange,
 				},
 				Who: err,
 			})

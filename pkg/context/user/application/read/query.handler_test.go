@@ -11,26 +11,26 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UserReadTestSuite struct {
+type ReadHandlerTestSuite struct {
 	suite.Suite
 	sut        models.QueryHandler[*read.Query, *read.Response]
-	useCase    models.UseCase[models.ValueObject[string], *aggregate.User]
+	usecase    models.UseCase[models.ValueObject[string], *aggregate.User]
 	repository *persistence.RepositoryMock
 }
 
-func (suite *UserReadTestSuite) SetupTest() {
+func (suite *ReadHandlerTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
 
-	suite.useCase = &read.Read{
+	suite.usecase = &read.Read{
 		Repository: suite.repository,
 	}
 
-	suite.sut = &read.QueryHandler{
-		UseCase: suite.useCase,
+	suite.sut = &read.Handler{
+		UseCase: suite.usecase,
 	}
 }
 
-func (suite *UserReadTestSuite) TestLogin() {
+func (suite *ReadHandlerTestSuite) TestLogin() {
 	user := aggregate.RandomUser()
 
 	query := &read.Query{
@@ -54,6 +54,6 @@ func (suite *UserReadTestSuite) TestLogin() {
 	suite.EqualValues(expected, actual)
 }
 
-func TestUnitUserReadSuite(t *testing.T) {
-	suite.Run(t, new(UserReadTestSuite))
+func TestUnitReadHandlerSuite(t *testing.T) {
+	suite.Run(t, new(ReadHandlerTestSuite))
 }

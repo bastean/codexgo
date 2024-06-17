@@ -14,30 +14,30 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UserUpdateTestSuite struct {
+type UpdateHandlerTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*update.Command]
-	useCase    models.UseCase[*update.Input, types.Empty]
+	usecase    models.UseCase[*update.Input, types.Empty]
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }
 
-func (suite *UserUpdateTestSuite) SetupTest() {
+func (suite *UpdateHandlerTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
 
 	suite.hashing = new(cryptographic.HashingMock)
 
-	suite.useCase = &update.Update{
+	suite.usecase = &update.Update{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
 
-	suite.sut = &update.CommandHandler{
-		UseCase: suite.useCase,
+	suite.sut = &update.Handler{
+		UseCase: suite.usecase,
 	}
 }
 
-func (suite *UserUpdateTestSuite) TestUpdate() {
+func (suite *UpdateHandlerTestSuite) TestUpdate() {
 	command := update.RandomCommand()
 
 	user, _ := aggregate.NewUser(&aggregate.UserPrimitive{
@@ -66,6 +66,6 @@ func (suite *UserUpdateTestSuite) TestUpdate() {
 	suite.hashing.AssertExpectations(suite.T())
 }
 
-func TestUnitUserUpdateSuite(t *testing.T) {
-	suite.Run(t, new(UserUpdateTestSuite))
+func TestUnitUpdateHandlerSuite(t *testing.T) {
+	suite.Run(t, new(UpdateHandlerTestSuite))
 }

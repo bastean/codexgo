@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UserBcryptHashingTestSuite struct {
+type BcryptHashingTestSuite struct {
 	suite.Suite
 	sut model.Hashing
 }
 
-func (suite *UserBcryptHashingTestSuite) SetupTest() {
+func (suite *BcryptHashingTestSuite) SetupTest() {
 	suite.sut = new(cryptographic.Bcrypt)
 }
 
-func (suite *UserBcryptHashingTestSuite) TestHash() {
+func (suite *BcryptHashingTestSuite) TestHash() {
 	password := valueobj.PasswordWithValidValue()
 
 	plain := password.Value()
@@ -30,7 +30,7 @@ func (suite *UserBcryptHashingTestSuite) TestHash() {
 	suite.NotEqual(plain, hashed)
 }
 
-func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
+func (suite *BcryptHashingTestSuite) TestIsNotEqual() {
 	password := valueobj.PasswordWithValidValue()
 
 	plain := password.Value()
@@ -44,6 +44,6 @@ func (suite *UserBcryptHashingTestSuite) TestIsNotEqual() {
 	suite.False(isNotEqual)
 }
 
-func TestIntegrationUserBcryptHashingSuite(t *testing.T) {
-	suite.Run(t, new(UserBcryptHashingTestSuite))
+func TestIntegrationBcryptHashingSuite(t *testing.T) {
+	suite.Run(t, new(BcryptHashingTestSuite))
 }

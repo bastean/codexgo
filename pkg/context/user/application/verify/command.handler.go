@@ -7,11 +7,11 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
-type CommandHandler struct {
+type Handler struct {
 	models.UseCase[models.ValueObject[string], types.Empty]
 }
 
-func (handler *CommandHandler) Handle(command *Command) error {
+func (handler *Handler) Handle(command *Command) error {
 	idVO, err := valueobj.NewId(command.Id)
 
 	if err != nil {

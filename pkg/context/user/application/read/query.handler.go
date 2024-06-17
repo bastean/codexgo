@@ -7,11 +7,11 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
-type QueryHandler struct {
+type Handler struct {
 	models.UseCase[models.ValueObject[string], *aggregate.User]
 }
 
-func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
+func (handler *Handler) Handle(query *Query) (*Response, error) {
 	id, err := valueobj.NewId(query.Id)
 
 	if err != nil {

@@ -11,11 +11,11 @@ type Input struct {
 	Email, Password models.ValueObject[string]
 }
 
-type QueryHandler struct {
+type Handler struct {
 	models.UseCase[*Input, *aggregate.User]
 }
 
-func (handler *QueryHandler) Handle(query *Query) (*Response, error) {
+func (handler *Handler) Handle(query *Query) (*Response, error) {
 	email, errEmail := valueobj.NewEmail(query.Email)
 	password, errPassword := valueobj.NewPassword(query.Password)
 

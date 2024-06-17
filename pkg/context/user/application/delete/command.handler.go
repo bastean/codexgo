@@ -11,11 +11,11 @@ type Input struct {
 	Id, Password models.ValueObject[string]
 }
 
-type CommandHandler struct {
+type Handler struct {
 	models.UseCase[*Input, types.Empty]
 }
 
-func (handler *CommandHandler) Handle(command *Command) error {
+func (handler *Handler) Handle(command *Command) error {
 	id, errId := valueobj.NewId(command.Id)
 	password, errPassword := valueobj.NewPassword(command.Password)
 

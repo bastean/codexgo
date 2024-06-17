@@ -12,30 +12,30 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type UserCreateTestSuite struct {
+type CreateHandlerTestSuite struct {
 	suite.Suite
 	sut        models.CommandHandler[*create.Command]
-	useCase    models.UseCase[*aggregate.User, types.Empty]
+	usecase    models.UseCase[*aggregate.User, types.Empty]
 	repository *persistence.RepositoryMock
 	broker     *communications.BrokerMock
 }
 
-func (suite *UserCreateTestSuite) SetupTest() {
+func (suite *CreateHandlerTestSuite) SetupTest() {
 	suite.broker = new(communications.BrokerMock)
 
 	suite.repository = new(persistence.RepositoryMock)
 
-	suite.useCase = &create.Create{
+	suite.usecase = &create.Create{
 		Repository: suite.repository,
 	}
 
-	suite.sut = &create.CommandHandler{
-		UseCase: suite.useCase,
+	suite.sut = &create.Handler{
+		UseCase: suite.usecase,
 		Broker:  suite.broker,
 	}
 }
 
-func (suite *UserCreateTestSuite) TestCreate() {
+func (suite *CreateHandlerTestSuite) TestCreate() {
 	command := create.RandomCommand()
 
 	user, _ := aggregate.NewUser(&aggregate.UserPrimitive{
@@ -58,6 +58,6 @@ func (suite *UserCreateTestSuite) TestCreate() {
 	suite.broker.AssertExpectations(suite.T())
 }
 
-func TestUnitUserCreateSuite(t *testing.T) {
-	suite.Run(t, new(UserCreateTestSuite))
+func TestUnitCreateHandlerSuite(t *testing.T) {
+	suite.Run(t, new(CreateHandlerTestSuite))
 }
