@@ -40,7 +40,7 @@ func (suite *TerminalConfirmationTransportTestSuite) TestSubmit() {
 
 	_ = json.Unmarshal(message.Attributes, user.Attributes)
 
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", user.Attributes.Username, suite.serverURL, user.Attributes.Id)
+	link := fmt.Sprintf("Hi %v, please confirm your account through this link: %v/verify/%v", user.Attributes.Username, suite.serverURL, user.Attributes.Id)
 
 	suite.logger.Mock.On("Info", link)
 

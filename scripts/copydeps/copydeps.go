@@ -34,33 +34,33 @@ func createDirectory(path string) {
 	err := os.MkdirAll(path, os.ModePerm)
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to create \"%s\"", path), err)
+		Panic(fmt.Sprintf("Failed to create \"%v\"", path), err)
 	}
 
-	log.Printf("Created: \"%s\"", path)
+	log.Printf("Created: \"%v\"", path)
 }
 
 func copyFile(filename, sourcePath, targetPath string) {
 	data, err := os.ReadFile(filepath.Join(sourcePath, filepath.Base(filename)))
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to read \"%s\" from \"%s\"", filename, sourcePath), err)
+		Panic(fmt.Sprintf("Failed to read \"%v\" from \"%v\"", filename, sourcePath), err)
 	}
 
 	err = os.WriteFile(filepath.Join(targetPath, filepath.Base(filename)), data, os.ModePerm)
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to write \"%s\" on \"%s\"", filename, targetPath), err)
+		Panic(fmt.Sprintf("Failed to write \"%v\" on \"%v\"", filename, targetPath), err)
 	}
 
-	log.Printf("Created: \"%s\"", filepath.Join(targetPath, filepath.Base(filename)))
+	log.Printf("Created: \"%v\"", filepath.Join(targetPath, filepath.Base(filename)))
 }
 
 func copyDeps(filenames []string, sourcePath, targetPath string) {
 	files, err := os.ReadDir(sourcePath)
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to copy \"%s\" from \"%s\"", filenames, sourcePath), err)
+		Panic(fmt.Sprintf("Failed to copy \"%v\" from \"%v\"", filenames, sourcePath), err)
 	}
 
 	createDirectory(targetPath)
@@ -90,7 +90,7 @@ func main() {
 	err := os.RemoveAll(staticPath)
 
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		Panic(fmt.Sprintf("Failed to remove \"%s\"", staticPath), err)
+		Panic(fmt.Sprintf("Failed to remove \"%v\"", staticPath), err)
 	}
 
 	createDirectory(staticPath)

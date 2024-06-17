@@ -15,7 +15,7 @@ func (create *mother) Email() string {
 	username := strings.Split(create.Faker.Email(), "@")[0]
 	domain := "example.com"
 
-	return fmt.Sprintf("%s@%s", username, domain)
+	return fmt.Sprintf("%v@%v", username, domain)
 }
 
 var Create = &mother{

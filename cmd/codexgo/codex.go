@@ -13,8 +13,8 @@ const cli = "codexgo"
 var port string
 
 func usage() {
-	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
-	fmt.Printf("\nE.g.: %s -p 8080\n\n", cli)
+	fmt.Printf("Usage: %v [OPTIONS]\n", cli)
+	fmt.Printf("\nE.g.: %v -p 8080\n\n", cli)
 	flag.PrintDefaults()
 }
 
