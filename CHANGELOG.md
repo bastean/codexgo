@@ -1,5 +1,26 @@
 # Changelog
 
+## [4.2.0](https://github.com/bastean/codexgo/compare/v4.1.1...v4.2.0) (2024-06-17)
+
+### Chores
+
+- **deps:** upgrade dependencies ([7b19ee7](https://github.com/bastean/codexgo/commit/7b19ee7dee15d14a7fad328977d090c031ef2964))
+
+### New Features
+
+- **context:** add handling of omitted errors ([f70c276](https://github.com/bastean/codexgo/commit/f70c2767a368859560c1c2986411384ee36ae92e))
+
+### Refactors
+
+- add default format verb to strings ([c459caa](https://github.com/bastean/codexgo/commit/c459caaf4c6fb7c5aede730caad10ab0093e3a3e))
+- change panic on error ([1fc83fa](https://github.com/bastean/codexgo/commit/1fc83fa7b6433059e098bbe8a21762b7eb95000a))
+- **context:** remove notify module ([064815f](https://github.com/bastean/codexgo/commit/064815f9efb7b75638c4f2d88efe1a27cacecc80))
+- **context:** remove redundant details from type names ([27a666a](https://github.com/bastean/codexgo/commit/27a666a11bf7232df9d9ba34c20f1d15e03abade))
+
+### Tests
+
+- **context:** add handling of unexpected errors in mothers to avoid flaky tests ([2fbea22](https://github.com/bastean/codexgo/commit/2fbea223fada03944b1deb6a1b83f2f7df879e93))
+
 ## [4.1.1](https://github.com/bastean/codexgo/compare/v4.1.0...v4.1.1) (2024-06-12)
 
 ### Bug Fixes
