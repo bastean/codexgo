@@ -5,5 +5,5 @@ import (
 )
 
 func Panic(what, where string) {
-	log.Panicf("(%v): [%v]", where, what)
+	log.Panicf("(%s): [%s]", where, what)
 }

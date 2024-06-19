@@ -35,25 +35,25 @@ func InitializePlaywright() {
 	pw, err = playwright.Run()
 
 	if err != nil {
-		log.Fatalf("could not start playwright: %v", err)
+		log.Fatalf("could not start playwright: %s", err)
 	}
 
 	browser, err = pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{Headless: &headless})
 
 	if err != nil {
-		log.Fatalf("could not launch browser: %v", err)
+		log.Fatalf("could not launch browser: %s", err)
 	}
 
 	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &testURL})
 
 	if err != nil {
-		log.Fatalf("could not create context: %v", err)
+		log.Fatalf("could not create context: %s", err)
 	}
 
 	page, err = browserCtx.NewPage()
 
 	if err != nil {
-		log.Fatalf("could not create page: %v", err)
+		log.Fatalf("could not create page: %s", err)
 	}
 }
 

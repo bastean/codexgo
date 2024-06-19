@@ -18,8 +18,8 @@ var envFileModel string
 var envFileBackupRegex = regexp.MustCompile(`\.env\..*\.tmp`)
 
 func usage() {
-	fmt.Printf("Usage: %v [OPTIONS]\n", cli)
-	fmt.Printf("\nE.g.: %v -dir . -model .env.example\n\n", cli)
+	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
+	fmt.Printf("\nE.g.: %s -dir . -model .env.example\n\n", cli)
 	flag.PrintDefaults()
 }
 

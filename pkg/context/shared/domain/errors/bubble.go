@@ -14,20 +14,20 @@ type Bubble struct {
 }
 
 func (err *Bubble) Error() string {
-	message := fmt.Sprintf("%v (%v): %v", err.When.Format(time.RFC3339Nano), err.Where, err.What)
+	message := fmt.Sprintf("%s (%s): %s", err.When.Format(time.RFC3339Nano), err.Where, err.What)
 
 	if err.Why != nil {
 		why, err := json.Marshal(err.Why)
 
 		if err != nil {
-			Panic(fmt.Sprintf("cannot json encoding \"why\" from error bubble: %v: [%v]", message, err.Error()), "Error")
+			Panic(fmt.Sprintf("cannot json encoding \"why\" from error bubble: %s: [%s]", message, err.Error()), "Error")
 		}
 
-		message = fmt.Sprintf("%v: %v", message, why)
+		message = fmt.Sprintf("%s: %s", message, why)
 	}
 
 	if err.Who != nil {
-		message = fmt.Sprintf("%v: [%v]", message, err.Who)
+		message = fmt.Sprintf("%s: [%s]", message, err.Who)
 	}
 
 	return message

@@ -29,7 +29,7 @@ func NewVerified(verified bool) (models.ValueObject[bool], error) {
 			Where: "NewVerified",
 			What:  "invalid verified value",
 			Why: errors.Meta{
-				"Verified": fmt.Sprintf("%v", verified),
+				"Verified": fmt.Sprintf("%s", verified),
 			},
 		})
 	}

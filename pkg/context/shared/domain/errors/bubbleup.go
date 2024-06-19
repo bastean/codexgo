@@ -5,5 +5,5 @@ import (
 )
 
 func BubbleUp(who error, where string) error {
-	return fmt.Errorf("(%v): [%w]", where, who)
+	return fmt.Errorf("(%s): [%w]", where, who)
 }

@@ -27,7 +27,7 @@ func (client *Confirmation) Submit(data any) error {
 		})
 	}
 
-	link := fmt.Sprintf("Hi %v, please confirm your account through this link: %v/verify/%v", user.Username, client.ServerURL, user.Id)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", user.Username, client.ServerURL, user.Id)
 
 	client.Logger.Info(link)
 

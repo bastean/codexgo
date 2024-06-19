@@ -31,11 +31,11 @@ func (client *Confirmation) Submit(data any) error {
 
 	var message bytes.Buffer
 
-	headers := fmt.Sprintf("From: %v\n"+"To: %v\n"+"Subject: Account Confirmation", client.Username, user.Email)
+	headers := fmt.Sprintf("From: %s\n"+"To: %s\n"+"Subject: Account Confirmation", client.Username, user.Email)
 
-	_, _ = message.Write([]byte(fmt.Sprintf("%v\n%v\n", headers, client.MIMEHeaders)))
+	_, _ = message.Write([]byte(fmt.Sprintf("%s\n%s\n", headers, client.MIMEHeaders)))
 
-	link := fmt.Sprintf("%v/verify/%v", client.ServerURL, user.Id)
+	link := fmt.Sprintf("%s/verify/%s", client.ServerURL, user.Id)
 
 	ConfirmationTemplate(user.Username, link).Render(context.Background(), &message)
 

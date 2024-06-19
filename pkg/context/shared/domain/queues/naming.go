@@ -39,7 +39,7 @@ func NewQueueName(queueName *QueueName) string {
 	}
 
 	if trigger != "" {
-		name = fmt.Sprintf("%v_on_%v", name, trigger)
+		name = fmt.Sprintf("%s_on_%s", name, trigger)
 	}
 
 	name = strings.ToLower(name)

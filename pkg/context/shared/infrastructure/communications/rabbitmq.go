@@ -79,7 +79,7 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *queues.Queue, bindingKeys []stri
 	var errWrap error
 
 	for _, bindingKey := range bindingKeys {
-		log.Printf("binding queue %v to exchange %v with routing key %v", queue.Name, rmq.exchange, bindingKey)
+		log.Printf("binding queue %s to exchange %s with routing key %s", queue.Name, rmq.exchange, bindingKey)
 
 		err := rmq.Channel.QueueBind(
 			queue.Name,
@@ -148,14 +148,14 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer models.Consumer) error {
 				err := json.Unmarshal(delivery.Body, message)
 
 				if err != nil {
-					rmq.Logger.Error(fmt.Sprintf("failed to deliver a message with Id:%v from Queue:%v", message.Id, queue.Name))
+					rmq.Logger.Error(fmt.Sprintf("failed to deliver a message with Id:%s from Queue:%s", message.Id, queue.Name))
 					continue
 				}
 
 				err = consumer.On(message)
 
 				if err != nil {
-					rmq.Logger.Error(fmt.Sprintf("failed to consume a message with Id:%v from Queue:%v", message.Id, queue.Name))
+					rmq.Logger.Error(fmt.Sprintf("failed to consume a message with Id:%s from Queue:%s", message.Id, queue.Name))
 					continue
 				}
 
