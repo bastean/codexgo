@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,8 +12,6 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/routers"
 )
 
 type RabbitMQ struct {
@@ -24,7 +21,7 @@ type RabbitMQ struct {
 	exchange string
 }
 
-func (rmq *RabbitMQ) AddRouter(router *routers.Router) error {
+func (rmq *RabbitMQ) AddRouter(router *messages.Router) error {
 	err := rmq.Channel.ExchangeDeclare(
 		router.Name,
 		"topic",
@@ -51,7 +48,7 @@ func (rmq *RabbitMQ) AddRouter(router *routers.Router) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueue(queue *queues.Queue) error {
+func (rmq *RabbitMQ) AddQueue(queue *messages.Queue) error {
 	_, err := rmq.Channel.QueueDeclare(
 		queue.Name,
 		true,
@@ -75,11 +72,11 @@ func (rmq *RabbitMQ) AddQueue(queue *queues.Queue) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueMessageBind(queue *queues.Queue, bindingKeys []string) error {
+func (rmq *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys []string) error {
 	var errWrap error
 
 	for _, bindingKey := range bindingKeys {
-		log.Printf("binding queue %s to exchange %s with routing key %s", queue.Name, rmq.exchange, bindingKey)
+		rmq.Logger.Info(fmt.Sprintf("binding queue [%s] to exchange [%s] with binding key [%s]", queue.Name, rmq.exchange, bindingKey))
 
 		err := rmq.Channel.QueueBind(
 			queue.Name,
@@ -111,7 +108,7 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *queues.Queue, bindingKeys []stri
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueConsumer(consumer models.Consumer) error {
+func (rmq *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 	var errWrap error
 
 	for _, queue := range consumer.SubscribedTo() {
@@ -148,14 +145,14 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer models.Consumer) error {
 				err := json.Unmarshal(delivery.Body, message)
 
 				if err != nil {
-					rmq.Logger.Error(fmt.Sprintf("failed to deliver a message with Id:%s from Queue:%s", message.Id, queue.Name))
+					rmq.Logger.Error(fmt.Sprintf("failed to deliver a message with id [%s] from queue [%s]", message.Id, queue.Name))
 					continue
 				}
 
 				err = consumer.On(message)
 
 				if err != nil {
-					rmq.Logger.Error(fmt.Sprintf("failed to consume a message with Id:%s from Queue:%s", message.Id, queue.Name))
+					rmq.Logger.Error(fmt.Sprintf("failed to consume a message with id [%s] from queue [%s]", message.Id, queue.Name))
 					continue
 				}
 
@@ -180,7 +177,7 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 		}
 
 		if message.OccurredOn == "" {
-			message.OccurredOn = time.Now().UTC().Format(time.DateTime)
+			message.OccurredOn = time.Now().UTC().Format(time.RFC3339Nano)
 		}
 
 		body, err := json.Marshal(message)
@@ -262,7 +259,7 @@ func CloseRabbitMQ(rmq *RabbitMQ) error {
 	return nil
 }
 
-func NewRabbitMQ(uri string, logger models.Logger) (models.Broker, error) {
+func NewRabbitMQ(uri string, logger models.Logger) (messages.Broker, error) {
 	conn, err := amqp.Dial(uri)
 
 	if err != nil {

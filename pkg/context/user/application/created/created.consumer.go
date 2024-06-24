@@ -6,17 +6,16 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/event"
 )
 
 type Consumer struct {
 	models.UseCase[*event.CreatedSucceeded, types.Empty]
-	Queues []*queues.Queue
+	Queues []*messages.Queue
 }
 
-func (consumer *Consumer) SubscribedTo() []*queues.Queue {
+func (consumer *Consumer) SubscribedTo() []*messages.Queue {
 	return consumer.Queues
 }
 

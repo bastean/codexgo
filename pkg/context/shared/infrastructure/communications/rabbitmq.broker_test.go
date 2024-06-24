@@ -1,13 +1,11 @@
 package communications_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/routers"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
 	"github.com/stretchr/testify/suite"
@@ -15,10 +13,10 @@ import (
 
 type RabbitMQBrokerTestSuite struct {
 	suite.Suite
-	sut      models.Broker
+	sut      messages.Broker
 	logger   *loggers.LoggerMock
-	router   *routers.Router
-	queue    *queues.Queue
+	router   *messages.Router
+	queue    *messages.Queue
 	consumer *communications.ConsumerMock
 	messages []*messages.Message
 }
@@ -30,30 +28,32 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 
 	suite.sut, _ = communications.NewRabbitMQ(uri, suite.logger)
 
-	suite.router = &routers.Router{Name: "test"}
+	suite.router = &messages.Router{Name: "test"}
 
-	queueName := queues.NewQueueName(&queues.QueueName{
-		Module: "queue",
-		Action: "assert",
-		Event:  "test.succeeded",
+	queueName := messages.NewRecipientName(&messages.RecipientNameComponents{
+		Service: "queue",
+		Entity:  "queue",
+		Action:  "assert",
+		Event:   "test",
+		Status:  "succeeded",
 	})
 
-	suite.queue = &queues.Queue{Name: queueName}
+	suite.queue = &messages.Queue{Name: queueName}
 
 	suite.consumer = new(communications.ConsumerMock)
 
-	messageRoutingKey := messages.NewRoutingKey(&messages.MessageRoutingKey{
-		Module:    "publisher",
-		Version:   "1",
-		Type:      messages.Type.Event,
-		Aggregate: "publisher",
-		Event:     "test",
-		Status:    messages.Status.Succeeded,
+	messageRoutingKey := messages.NewRoutingKey(&messages.RoutingKeyComponents{
+		Service: "publisher",
+		Version: "1",
+		Type:    messages.Type.Event,
+		Entity:  "publisher",
+		Event:   "test",
+		Status:  messages.Status.Succeeded,
 	})
 
-	messageAttributes := []byte{}
+	messageAttributes := messages.Attributes{}
 
-	messageMeta := []byte{}
+	messageMeta := messages.Meta{}
 
 	message := messages.NewMessage(messageRoutingKey, messageAttributes, messageMeta)
 
@@ -69,15 +69,23 @@ func (suite *RabbitMQBrokerTestSuite) TestBroker() {
 
 	suite.NoError(suite.sut.AddQueue(suite.queue))
 
-	suite.NoError(suite.sut.AddQueueMessageBind(suite.queue, []string{"#.event.#.test.succeeded"}))
+	bindingKeys := []string{"#.event.#.test.succeeded"}
 
-	suite.consumer.Mock.On("SubscribedTo").Return([]*queues.Queue{suite.queue})
+	bindingSucceeded := fmt.Sprintf("binding queue [%s] to exchange [%s] with binding key [%s]", suite.queue.Name, suite.router.Name, bindingKeys[0])
+
+	suite.logger.Mock.On("Info", bindingSucceeded)
+
+	suite.NoError(suite.sut.AddQueueMessageBind(suite.queue, bindingKeys))
+
+	suite.consumer.Mock.On("SubscribedTo").Return([]*messages.Queue{suite.queue})
 
 	suite.NoError(suite.sut.AddQueueConsumer(suite.consumer))
 
 	// TODO?(goroutine): suite.consumer.Mock.On("On", suite.messages[0])
 
 	suite.NoError(suite.sut.PublishMessages(suite.messages))
+
+	suite.logger.AssertExpectations(suite.T())
 
 	suite.consumer.AssertExpectations(suite.T())
 }

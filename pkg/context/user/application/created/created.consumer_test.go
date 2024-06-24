@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/created"
 	"github.com/bastean/codexgo/pkg/context/user/domain/event"
@@ -15,20 +15,22 @@ import (
 
 type CreatedConsumerTestSuite struct {
 	suite.Suite
-	sut       models.Consumer
+	sut       messages.Consumer
 	usecase   models.UseCase[*event.CreatedSucceeded, types.Empty]
 	transport *communication.TransportMock
-	queues    []*queues.Queue
+	queues    []*messages.Queue
 }
 
 func (suite *CreatedConsumerTestSuite) SetupTest() {
-	queueName := queues.NewQueueName(&queues.QueueName{
-		Module: "queue",
-		Action: "assert",
-		Event:  "test.succeeded",
+	queueName := messages.NewRecipientName(&messages.RecipientNameComponents{
+		Service: "queue",
+		Entity:  "queue",
+		Action:  "assert",
+		Event:   "test",
+		Status:  "succeeded",
 	})
 
-	suite.queues = append(suite.queues, &queues.Queue{
+	suite.queues = append(suite.queues, &messages.Queue{
 		Name: queueName,
 	})
 

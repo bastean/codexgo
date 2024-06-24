@@ -1,4 +1,4 @@
-package routers
+package messages
 
 type Router struct {
 	Name string

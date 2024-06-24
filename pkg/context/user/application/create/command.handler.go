@@ -2,6 +2,7 @@ package create
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
@@ -9,7 +10,7 @@ import (
 
 type Handler struct {
 	models.UseCase[*aggregate.User, types.Empty]
-	models.Broker
+	messages.Broker
 }
 
 func (handler *Handler) Handle(command *Command) error {

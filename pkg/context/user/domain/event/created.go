@@ -7,13 +7,13 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 )
 
-var CreatedSucceededTypeRoutingKey = messages.NewRoutingKey(&messages.MessageRoutingKey{
-	Module:    "user",
-	Version:   "1",
-	Type:      messages.Type.Event,
-	Aggregate: "user",
-	Event:     "created",
-	Status:    messages.Status.Succeeded,
+var CreatedSucceededTypeRoutingKey = messages.NewRoutingKey(&messages.RoutingKeyComponents{
+	Service: "user",
+	Version: "1",
+	Type:    messages.Type.Event,
+	Entity:  "user",
+	Event:   "created",
+	Status:  messages.Status.Succeeded,
 })
 
 type CreatedSucceededAttributes struct {
