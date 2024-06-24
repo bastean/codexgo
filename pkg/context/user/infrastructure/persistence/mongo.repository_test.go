@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
@@ -50,7 +51,25 @@ func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
 
 	suite.NoError(suite.sut.Save(user))
 
-	suite.Error(suite.sut.Save(user))
+	err := suite.sut.Save(user)
+
+	suite.hashing.AssertExpectations(suite.T())
+
+	var actual *errors.AlreadyExist
+
+	suite.ErrorAs(err, &actual)
+
+	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "HandleMongoDuplicateKeyError",
+		What:  "already registered",
+		Why: errors.Meta{
+			"Field": "Id",
+		},
+		Who: actual.Who,
+	}}
+
+	suite.EqualError(expected, actual.Error())
 }
 
 func (suite *MongoRepositoryTestSuite) TestVerify() {
