@@ -13,29 +13,29 @@ type Password struct {
 	Password string `validate:"gte=8,lte=64"`
 }
 
-func (password *Password) Value() string {
-	return password.Password
+func (value *Password) Value() string {
+	return value.Password
 }
 
-func (password *Password) IsValid() error {
+func (value *Password) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(password)
+	return validate.Struct(value)
 }
 
-func NewPassword(password string) (models.ValueObject[string], error) {
-	passwordVO := &Password{
-		Password: password,
+func NewPassword(value string) (models.ValueObject[string], error) {
+	valueObj := &Password{
+		Password: value,
 	}
 
-	if passwordVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewPassword",
 			What:  "password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters",
 			Why: errors.Meta{
-				"Password": password,
+				"Password": value,
 			},
 		})
 	}
 
-	return passwordVO, nil
+	return valueObj, nil
 }

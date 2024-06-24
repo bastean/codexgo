@@ -7,7 +7,7 @@ import (
 )
 
 func OrganizationWithValidValue() models.ValueObject[string] {
-	value, err := NewOrganization(services.Create.Regex(`^[a-z0-9]{1,20}$`))
+	value, err := NewOrganization(services.Create.Regex(`^[A-Za-z0-9]{1,20}$`))
 
 	if err != nil {
 		errors.Panic(err.Error(), "OrganizationWithValidValue")

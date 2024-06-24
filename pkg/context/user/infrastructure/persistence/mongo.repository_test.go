@@ -110,7 +110,7 @@ func (suite *MongoRepositoryTestSuite) TestSearch() {
 
 	actual := user
 
-	suite.EqualValues(expected, actual)
+	suite.Equal(expected, actual)
 }
 
 func TestIntegrationMongoRepositorySuite(t *testing.T) {

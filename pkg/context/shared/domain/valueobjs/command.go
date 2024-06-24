@@ -27,11 +27,11 @@ func (value *Command) IsValid() error {
 func NewCommand(value string) (models.ValueObject[string], error) {
 	value = strings.TrimSpace(value)
 
-	commandVO := &Command{
+	valueObj := &Command{
 		Command: value,
 	}
 
-	if commandVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewCommand",
 			What:  "command must be between " + CommandMinCharactersLength + " to " + CommandMaxCharactersLength + " characters and be alpha only",
@@ -41,5 +41,5 @@ func NewCommand(value string) (models.ValueObject[string], error) {
 		})
 	}
 
-	return commandVO, nil
+	return valueObj, nil
 }

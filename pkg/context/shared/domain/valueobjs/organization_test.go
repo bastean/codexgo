@@ -15,7 +15,7 @@ type OrganizationValueObjectTestSuite struct {
 func (suite *OrganizationValueObjectTestSuite) SetupTest() {}
 
 func (suite *OrganizationValueObjectTestSuite) TestWithInvalidLength() {
-	organization, err := valueobjs.OrganizationWithInvalidLength()
+	value, err := valueobjs.OrganizationWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -26,7 +26,7 @@ func (suite *OrganizationValueObjectTestSuite) TestWithInvalidLength() {
 		Where: "NewOrganization",
 		What:  "organization must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
 		Why: errors.Meta{
-			"Organization": organization,
+			"Organization": value,
 		},
 	}}
 
@@ -34,7 +34,7 @@ func (suite *OrganizationValueObjectTestSuite) TestWithInvalidLength() {
 }
 
 func (suite *OrganizationValueObjectTestSuite) TestWithInvalidAlphanumeric() {
-	organization, err := valueobjs.OrganizationWithInvalidAlphanumeric()
+	value, err := valueobjs.OrganizationWithInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
 
@@ -45,7 +45,7 @@ func (suite *OrganizationValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 		Where: "NewOrganization",
 		What:  "organization must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
 		Why: errors.Meta{
-			"Organization": organization,
+			"Organization": value,
 		},
 	}}
 

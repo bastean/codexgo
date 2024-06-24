@@ -26,11 +26,11 @@ func (value *Type) IsValid() error {
 func NewType(value string) (models.ValueObject[string], error) {
 	value = strings.TrimSpace(value)
 
-	typeVO := &Type{
+	valueObj := &Type{
 		Type: value,
 	}
 
-	if typeVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewType",
 			What:  "type must be only one of these values: " + strings.Join(TypeOneOf, ", "),
@@ -40,5 +40,5 @@ func NewType(value string) (models.ValueObject[string], error) {
 		})
 	}
 
-	return typeVO, nil
+	return valueObj, nil
 }

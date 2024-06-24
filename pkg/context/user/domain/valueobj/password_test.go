@@ -15,18 +15,18 @@ type PasswordValueObjectTestSuite struct {
 func (suite *PasswordValueObjectTestSuite) SetupTest() {}
 
 func (suite *PasswordValueObjectTestSuite) TestWithInvalidLength() {
-	password, err := valueobj.PasswordWithInvalidLength()
+	value, err := valueobj.PasswordWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewPassword",
 		What:  "password must be between " + "8" + " to " + "64" + " characters",
 		Why: errors.Meta{
-			"Password": password,
+			"Password": value,
 		},
 	}}
 

@@ -12,31 +12,31 @@ type Id struct {
 	Id string `validate:"uuid4"`
 }
 
-func (id *Id) Value() string {
-	return id.Id
+func (value *Id) Value() string {
+	return value.Id
 }
 
-func (id *Id) IsValid() error {
+func (value *Id) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(id)
+	return validate.Struct(value)
 }
 
-func NewId(id string) (models.ValueObject[string], error) {
-	id = strings.TrimSpace(id)
+func NewId(value string) (models.ValueObject[string], error) {
+	value = strings.TrimSpace(value)
 
-	idVO := &Id{
-		Id: id,
+	valueObj := &Id{
+		Id: value,
 	}
 
-	if idVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewId",
 			What:  "invalid uuid4 format",
 			Why: errors.Meta{
-				"Id": id,
+				"Id": value,
 			},
 		})
 	}
 
-	return idVO, nil
+	return valueObj, nil
 }

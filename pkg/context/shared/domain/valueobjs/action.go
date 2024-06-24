@@ -27,11 +27,11 @@ func (value *Action) IsValid() error {
 func NewAction(value string) (models.ValueObject[string], error) {
 	value = strings.TrimSpace(value)
 
-	actionVO := &Action{
+	valueObj := &Action{
 		Action: value,
 	}
 
-	if actionVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewAction",
 			What:  "action must be between " + ActionMinCharactersLength + " to " + ActionMaxCharactersLength + " characters",
@@ -41,5 +41,5 @@ func NewAction(value string) (models.ValueObject[string], error) {
 		})
 	}
 
-	return actionVO, nil
+	return valueObj, nil
 }

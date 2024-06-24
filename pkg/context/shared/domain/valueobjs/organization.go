@@ -15,31 +15,31 @@ type Organization struct {
 	Organization string `validate:"gte=1,lte=20,alphanum"`
 }
 
-func (organization *Organization) Value() string {
-	return organization.Organization
+func (value *Organization) Value() string {
+	return value.Organization
 }
 
-func (organization *Organization) IsValid() error {
+func (value *Organization) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(organization)
+	return validate.Struct(value)
 }
 
-func NewOrganization(organization string) (models.ValueObject[string], error) {
-	organization = strings.TrimSpace(organization)
+func NewOrganization(value string) (models.ValueObject[string], error) {
+	value = strings.TrimSpace(value)
 
-	organizationVO := &Organization{
-		Organization: organization,
+	valueObj := &Organization{
+		Organization: value,
 	}
 
-	if organizationVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewOrganization",
 			What:  "organization must be between " + OrganizationMinCharactersLength + " to " + OrganizationMaxCharactersLength + " characters and be alphanumeric only",
 			Why: errors.Meta{
-				"Organization": organization,
+				"Organization": value,
 			},
 		})
 	}
 
-	return organizationVO, nil
+	return valueObj, nil
 }

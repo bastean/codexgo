@@ -15,18 +15,18 @@ type IdValueObjectTestSuite struct {
 func (suite *IdValueObjectTestSuite) SetupTest() {}
 
 func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
-	id, err := valueobj.IdWithInvalidValue()
+	value, err := valueobj.IdWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewId",
 		What:  "invalid uuid4 format",
 		Why: errors.Meta{
-			"Id": id,
+			"Id": value,
 		},
 	}}
 

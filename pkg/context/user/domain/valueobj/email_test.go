@@ -15,18 +15,18 @@ type EmailValueObjectTestSuite struct {
 func (suite *EmailValueObjectTestSuite) SetupTest() {}
 
 func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
-	email, err := valueobj.EmailWithInvalidValue()
+	value, err := valueobj.EmailWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEmail",
 		What:  "invalid email format",
 		Why: errors.Meta{
-			"Email": email,
+			"Email": value,
 		},
 	}}
 

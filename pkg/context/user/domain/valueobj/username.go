@@ -15,31 +15,31 @@ type Username struct {
 	Username string `validate:"gte=2,lte=20,alphanum"`
 }
 
-func (username *Username) Value() string {
-	return username.Username
+func (value *Username) Value() string {
+	return value.Username
 }
 
-func (username *Username) IsValid() error {
+func (value *Username) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(username)
+	return validate.Struct(value)
 }
 
-func NewUsername(username string) (models.ValueObject[string], error) {
-	username = strings.TrimSpace(username)
+func NewUsername(value string) (models.ValueObject[string], error) {
+	value = strings.TrimSpace(value)
 
-	usernameVO := &Username{
-		Username: username,
+	valueObj := &Username{
+		Username: value,
 	}
 
-	if usernameVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewUsername",
 			What:  "username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only",
 			Why: errors.Meta{
-				"Username": username,
+				"Username": value,
 			},
 		})
 	}
 
-	return usernameVO, nil
+	return valueObj, nil
 }

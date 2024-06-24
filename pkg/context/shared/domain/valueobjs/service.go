@@ -15,31 +15,31 @@ type Service struct {
 	Service string `validate:"gte=1,lte=20,alphanum"`
 }
 
-func (service *Service) Value() string {
-	return service.Service
+func (value *Service) Value() string {
+	return value.Service
 }
 
-func (service *Service) IsValid() error {
+func (value *Service) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(service)
+	return validate.Struct(value)
 }
 
-func NewService(service string) (models.ValueObject[string], error) {
-	service = strings.TrimSpace(service)
+func NewService(value string) (models.ValueObject[string], error) {
+	value = strings.TrimSpace(value)
 
-	serviceVO := &Service{
-		Service: service,
+	valueObj := &Service{
+		Service: value,
 	}
 
-	if serviceVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewService",
 			What:  "service must be between " + ServiceMinCharactersLength + " to " + ServiceMaxCharactersLength + " characters and be alphanumeric only",
 			Why: errors.Meta{
-				"Service": service,
+				"Service": value,
 			},
 		})
 	}
 
-	return serviceVO, nil
+	return valueObj, nil
 }

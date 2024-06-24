@@ -27,11 +27,11 @@ func (value *Entity) IsValid() error {
 func NewEntity(value string) (models.ValueObject[string], error) {
 	value = strings.TrimSpace(value)
 
-	entityVO := &Entity{
+	valueObj := &Entity{
 		Entity: value,
 	}
 
-	if entityVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewEntity",
 			What:  "entity must be between " + EntityMinCharactersLength + " to " + EntityMaxCharactersLength + " characters and be alpha only",
@@ -41,5 +41,5 @@ func NewEntity(value string) (models.ValueObject[string], error) {
 		})
 	}
 
-	return entityVO, nil
+	return valueObj, nil
 }

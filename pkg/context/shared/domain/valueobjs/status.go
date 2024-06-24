@@ -26,11 +26,11 @@ func (value *Status) IsValid() error {
 func NewStatus(value string) (models.ValueObject[string], error) {
 	value = strings.TrimSpace(value)
 
-	statusVO := &Status{
+	valueObj := &Status{
 		Status: value,
 	}
 
-	if statusVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewStatus",
 			What:  "status must be only one of these values: " + strings.Join(StatusOneOf, ", "),
@@ -40,5 +40,5 @@ func NewStatus(value string) (models.ValueObject[string], error) {
 		})
 	}
 
-	return statusVO, nil
+	return valueObj, nil
 }

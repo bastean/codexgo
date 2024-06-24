@@ -11,28 +11,28 @@ type Verified struct {
 	Verified bool
 }
 
-func (verified *Verified) Value() bool {
-	return verified.Verified
+func (value *Verified) Value() bool {
+	return value.Verified
 }
 
-func (verified *Verified) IsValid() error {
+func (value *Verified) IsValid() error {
 	return nil
 }
 
-func NewVerified(verified bool) (models.ValueObject[bool], error) {
-	verifiedVO := &Verified{
-		Verified: verified,
+func NewVerified(value bool) (models.ValueObject[bool], error) {
+	valueObj := &Verified{
+		Verified: value,
 	}
 
-	if verifiedVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewVerified",
 			What:  "invalid verified value",
 			Why: errors.Meta{
-				"Verified": fmt.Sprintf("%t", verified),
+				"Verified": fmt.Sprintf("%t", value),
 			},
 		})
 	}
 
-	return verifiedVO, nil
+	return valueObj, nil
 }

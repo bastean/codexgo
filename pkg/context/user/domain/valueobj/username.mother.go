@@ -7,7 +7,7 @@ import (
 )
 
 func UsernameWithValidValue() models.ValueObject[string] {
-	value, err := NewUsername(services.Create.Regex(`^[a-z0-9]{2,20}$`))
+	value, err := NewUsername(services.Create.Regex(`^[A-Za-z0-9]{2,20}$`))
 
 	if err != nil {
 		errors.Panic(err.Error(), "UsernameWithValidValue")

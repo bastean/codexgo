@@ -15,18 +15,18 @@ type VersionValueObjectTestSuite struct {
 func (suite *VersionValueObjectTestSuite) SetupTest() {}
 
 func (suite *VersionValueObjectTestSuite) TestWithInvalidValue() {
-	version, err := valueobjs.VersionWithInvalidValue()
+	value, err := valueobjs.VersionWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewVersion",
 		What:  "version must be numeric only",
 		Why: errors.Meta{
-			"Version": version,
+			"Version": value,
 		},
 	}}
 

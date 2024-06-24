@@ -21,7 +21,7 @@ func (suite *TypeValueObjectTestSuite) TestWithInvalidValue() {
 
 	suite.ErrorAs(err, &actual)
 
-	expected := errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewType",
 		What:  "type must be only one of these values: event, command",

@@ -12,31 +12,31 @@ type Email struct {
 	Email string `validate:"email"`
 }
 
-func (email *Email) Value() string {
-	return email.Email
+func (value *Email) Value() string {
+	return value.Email
 }
 
-func (email *Email) IsValid() error {
+func (value *Email) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(email)
+	return validate.Struct(value)
 }
 
-func NewEmail(email string) (models.ValueObject[string], error) {
-	email = strings.TrimSpace(email)
+func NewEmail(value string) (models.ValueObject[string], error) {
+	value = strings.TrimSpace(value)
 
-	emailVO := &Email{
-		Email: email,
+	valueObj := &Email{
+		Email: value,
 	}
 
-	if emailVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewEmail",
 			What:  "invalid email format",
 			Why: errors.Meta{
-				"Email": email,
+				"Email": value,
 			},
 		})
 	}
 
-	return emailVO, nil
+	return valueObj, nil
 }

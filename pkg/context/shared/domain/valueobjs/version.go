@@ -12,31 +12,31 @@ type Version struct {
 	Version string `validate:"number"`
 }
 
-func (version *Version) Value() string {
-	return version.Version
+func (value *Version) Value() string {
+	return value.Version
 }
 
-func (version *Version) IsValid() error {
+func (value *Version) IsValid() error {
 	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(version)
+	return validate.Struct(value)
 }
 
-func NewVersion(version string) (models.ValueObject[string], error) {
-	version = strings.TrimSpace(version)
+func NewVersion(value string) (models.ValueObject[string], error) {
+	value = strings.TrimSpace(value)
 
-	versionVO := &Version{
-		Version: version,
+	valueObj := &Version{
+		Version: value,
 	}
 
-	if versionVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewVersion",
 			What:  "version must be numeric only",
 			Why: errors.Meta{
-				"Version": version,
+				"Version": value,
 			},
 		})
 	}
 
-	return versionVO, nil
+	return valueObj, nil
 }

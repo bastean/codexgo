@@ -27,11 +27,11 @@ func (value *Event) IsValid() error {
 func NewEvent(value string) (models.ValueObject[string], error) {
 	value = strings.TrimSpace(value)
 
-	eventVO := &Entity{
+	valueObj := &Entity{
 		Entity: value,
 	}
 
-	if eventVO.IsValid() != nil {
+	if valueObj.IsValid() != nil {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewEvent",
 			What:  "event must be between " + EventMinCharactersLength + " to " + EventMaxCharactersLength + " characters and be alpha only",
@@ -41,5 +41,5 @@ func NewEvent(value string) (models.ValueObject[string], error) {
 		})
 	}
 
-	return eventVO, nil
+	return valueObj, nil
 }

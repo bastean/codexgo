@@ -15,7 +15,7 @@ type ServiceValueObjectTestSuite struct {
 func (suite *ServiceValueObjectTestSuite) SetupTest() {}
 
 func (suite *ServiceValueObjectTestSuite) TestWithInvalidLength() {
-	service, err := valueobjs.ServiceWithInvalidLength()
+	value, err := valueobjs.ServiceWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -26,7 +26,7 @@ func (suite *ServiceValueObjectTestSuite) TestWithInvalidLength() {
 		Where: "NewService",
 		What:  "service must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
 		Why: errors.Meta{
-			"Service": service,
+			"Service": value,
 		},
 	}}
 
@@ -34,7 +34,7 @@ func (suite *ServiceValueObjectTestSuite) TestWithInvalidLength() {
 }
 
 func (suite *ServiceValueObjectTestSuite) TestWithInvalidAlphanumeric() {
-	service, err := valueobjs.ServiceWithInvalidAlphanumeric()
+	value, err := valueobjs.ServiceWithInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
 
@@ -45,7 +45,7 @@ func (suite *ServiceValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 		Where: "NewService",
 		What:  "service must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
 		Why: errors.Meta{
-			"Service": service,
+			"Service": value,
 		},
 	}}
 
