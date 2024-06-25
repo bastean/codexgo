@@ -3,27 +3,28 @@ package service
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/broker/rabbitmq"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/database/mongodb"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/communication"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/communication/rabbitmq"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/env"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/errors"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/logger"
-	"github.com/bastean/codexgo/pkg/cmd/server/service/smtp"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/persistence/mongodb"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/transport/smtp"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
 )
 
 var (
 	err      error
-	SMTP     *transports.SMTP
-	RabbitMQ models.Broker
-	MongoDB  *persistences.MongoDB
+	RabbitMQ communication.Broker
+	MongoDB  mongodb.MongoDB
+	SMTP     smtp.SMTP
 )
 
-func Start() error {
-	logger.Info("starting smtp")
+func startSMTP() {
+	if env.SMTP.Host == "" {
+		user.InitCreated(user.TerminalConfirmation(logger.Logger, env.ServerURL), user.QueueSendConfirmation)
+		return
+	}
 
 	SMTP = smtp.New(
 		env.SMTP.Host,
@@ -33,56 +34,55 @@ func Start() error {
 		env.SMTP.ServerURL,
 	)
 
-	if env.SMTP.Host != "" {
-		user.InitCreated(user.NewMailConfirmation(SMTP))
-	} else {
-		user.InitCreated(user.NewTerminalConfirmation(
-			logger.Logger,
-			env.ServerURL,
-		))
-	}
+	user.InitCreated(user.MailConfirmation(SMTP), user.QueueSendConfirmation)
+}
 
-	logger.Info("starting rabbitmq")
-
+func startRabbitMQ() error {
 	RabbitMQ, err = rabbitmq.New(
 		env.Broker.URI,
 		logger.Logger,
 		rabbitmq.Exchange,
-		rabbitmq.Queues,
-		rabbitmq.Consumers(
+		rabbitmq.Queues{
+			user.QueueSendConfirmation,
+		},
+		rabbitmq.Consumers{
 			user.Created,
-		),
+		},
 	)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err, "startRabbitMQ")
 	}
 
-	logger.Info("starting mongodb")
+	return nil
+}
 
+func startMongoDB() error {
 	MongoDB, err = mongodb.New(
 		env.Database.URI,
 		"codexgo",
 	)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err, "startMongoDB")
 	}
 
-	logger.Info("starting user")
+	return nil
+}
 
-	userMongoCollection, err := user.NewMongoCollection(
+func startUser() error {
+	collection, err := user.MongoCollection(
 		MongoDB,
 		"users",
 		user.Bcrypt,
 	)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err, "startUser")
 	}
 
 	user.Init(
-		userMongoCollection,
+		collection,
 		RabbitMQ,
 		user.Bcrypt,
 	)
@@ -90,21 +90,73 @@ func Start() error {
 	return nil
 }
 
-func Stop(ctx context.Context) error {
-	logger.Info("closing rabbitmq")
+func Start() error {
+	logger.Info("starting smtp")
 
+	startSMTP()
+
+	logger.Info("starting rabbitmq")
+
+	err = startRabbitMQ()
+
+	if err != nil {
+		return errors.BubbleUp(err, "Start")
+	}
+
+	logger.Info("starting mongodb")
+
+	err = startMongoDB()
+
+	if err != nil {
+		return errors.BubbleUp(err, "Start")
+	}
+
+	logger.Info("starting user")
+
+	err = startUser()
+
+	if err != nil {
+		return errors.BubbleUp(err, "Start")
+	}
+
+	return nil
+}
+
+func stopRabbitMQ() error {
 	err = rabbitmq.Close(RabbitMQ)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Stop")
+		return errors.BubbleUp(err, "stopRabbitMQ")
+	}
+
+	return nil
+}
+
+func stopMongoDB(ctx context.Context) error {
+	err = mongodb.Close(MongoDB, ctx)
+
+	if err != nil {
+		return errors.BubbleUp(err, "stopMongoDB")
+	}
+
+	return nil
+}
+
+func Stop(ctx context.Context) error {
+	logger.Info("closing rabbitmq")
+
+	err = stopRabbitMQ()
+
+	if err != nil {
+		return errors.BubbleUp(err, "Start")
 	}
 
 	logger.Info("closing mongodb")
 
-	err = mongodb.Close(MongoDB, ctx)
+	err = stopMongoDB(ctx)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Stop")
+		return errors.BubbleUp(err, "Start")
 	}
 
 	return nil

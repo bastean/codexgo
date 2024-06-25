@@ -9,7 +9,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
 )
 
-// codexGO equivalents:
+// Terminology:
 //   - Service = Module
 //   - Entity  = Aggregate/Root
 //

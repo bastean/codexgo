@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/auth"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/authentication/jwt"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -26,9 +26,9 @@ func VerifyAuthentication() gin.HandlerFunc {
 			return
 		}
 
-		value := strings.Split(token.(string), " ")[1]
+		signature := strings.Split(token.(string), " ")[1]
 
-		claims, err := auth.ValidateJWT(value)
+		claims, err := jwt.Validate(signature)
 
 		if err != nil {
 			c.Error(err)

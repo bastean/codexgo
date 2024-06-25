@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/bastean/codexgo/pkg/cmd/server/service/auth"
+	"github.com/bastean/codexgo/pkg/cmd/server/service/authentication/jwt"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/errs"
 	"github.com/bastean/codexgo/pkg/cmd/server/util/key"
@@ -33,7 +33,7 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		token, err := auth.GenerateJWT(auth.Payload{
+		token, err := jwt.Generate(jwt.Payload{
 			key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
 			key.UserId: user.Id,
 		})

@@ -4,12 +4,10 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
 )
 
-var Logger = new(loggers.Logger)
-
-var Debug = Logger.Debug
-
-var Error = Logger.Error
-
-var Fatal = Logger.Fatal
-
-var Info = Logger.Info
+var (
+	Logger = new(loggers.Logger)
+	Debug  = Logger.Debug
+	Error  = Logger.Error
+	Fatal  = Logger.Fatal
+	Info   = Logger.Info
+)

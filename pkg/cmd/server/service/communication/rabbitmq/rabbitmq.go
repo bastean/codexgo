@@ -2,13 +2,12 @@ package rabbitmq
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/queues"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/routers"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
 )
 
-func New(uri string, logger models.Logger, exchange *routers.Router, queues []*queues.Queue, consumers []models.Consumer) (models.Broker, error) {
+func New(uri string, logger models.Logger, exchange *messages.Router, queues []*messages.Queue, consumers []messages.Consumer) (messages.Broker, error) {
 	rabbitMQ, err := communications.NewRabbitMQ(uri, logger)
 
 	if err != nil {
@@ -47,7 +46,7 @@ func New(uri string, logger models.Logger, exchange *routers.Router, queues []*q
 	return rabbitMQ, nil
 }
 
-func Close(rabbitMQ models.Broker) error {
+func Close(rabbitMQ messages.Broker) error {
 	err := communications.CloseRabbitMQ(rabbitMQ.(*communications.RabbitMQ))
 
 	if err != nil {

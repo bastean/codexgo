@@ -7,6 +7,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
 )
 
+type MongoDB = *persistences.MongoDB
+
 func New(uri, name string) (*persistences.MongoDB, error) {
 	mongoDB, err := persistences.NewMongoDatabase(uri, name)
 

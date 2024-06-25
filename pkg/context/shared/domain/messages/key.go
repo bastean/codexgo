@@ -25,7 +25,7 @@ var Status = struct {
 	Done:      "done",
 }
 
-// codexGO equivalents:
+// Terminology:
 //   - Organization = Context
 //   - Service		= Module
 //   - Entity		= Aggregate/Root

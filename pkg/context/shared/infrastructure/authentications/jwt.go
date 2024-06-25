@@ -5,30 +5,30 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-type Payload map[string]any
+type Payload = map[string]any
 
-type Authentication struct {
+type JWT struct {
 	secretKey []byte
 }
 
-func (auth *Authentication) GenerateJWT(payload map[string]any) (string, error) {
+func (auth *JWT) Generate(payload map[string]any) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims(payload))
 
-	tokenString, err := token.SignedString(auth.secretKey)
+	signature, err := token.SignedString(auth.secretKey)
 
 	if err != nil {
 		return "", errors.NewInternal(&errors.Bubble{
-			Where: "GenerateJWT",
+			Where: "Generate",
 			What:  "failure to sign a jwt",
 			Who:   err,
 		})
 	}
 
-	return tokenString, nil
+	return signature, nil
 }
 
-func (auth *Authentication) ValidateJWT(tokenString string) (jwt.MapClaims, error) {
-	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
+func (auth *JWT) Validate(signature string) (jwt.MapClaims, error) {
+	token, _ := jwt.Parse(signature, func(token *jwt.Token) (any, error) {
 		return auth.secretKey, nil
 	})
 
@@ -37,16 +37,16 @@ func (auth *Authentication) ValidateJWT(tokenString string) (jwt.MapClaims, erro
 	}
 
 	return nil, errors.NewFailure(&errors.Bubble{
-		Where: "ValidateJWT",
+		Where: "Validate",
 		What:  "invalid jwt signature",
 		Why: errors.Meta{
-			"JWT": tokenString,
+			"JWT": signature,
 		},
 	})
 }
 
-func NewAuthentication(secretKey string) *Authentication {
-	return &Authentication{
+func NewJWT(secretKey string) *JWT {
+	return &JWT{
 		secretKey: []byte(secretKey),
 	}
 }
