@@ -76,8 +76,10 @@ make demo
 ### Git
 
 - Hooks managed by [husky](https://github.com/typicode/husky):
+  - Pre-Push:
+    - Scanning Repository for leaks using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog) and [Trivy](https://github.com/aquasecurity/trivy)
   - Pre-Commit: [lint-staged](https://github.com/lint-staged/lint-staged)
-    - Secrets Scanning using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
+    - Scanning files for leaks using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
     - Formatting
   - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
     - Check [Conventional Commits](https://www.conventionalcommits.org) rules
@@ -93,6 +95,12 @@ make demo
 - templ: **templ fmt**.
 - Gherkin: **Cucumber extension**.
 - Others: **Prettier cli/extension**.
+
+### Scanners
+
+- [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog): Secrets.
+- [Trivy](https://github.com/aquasecurity/trivy): Secrets, Vulnerabilities and Misconfigurations.
+- [OSV-Scanner](https://github.com/google/osv-scanner): Vulnerabilities.
 
 ### Testing Packages
 
