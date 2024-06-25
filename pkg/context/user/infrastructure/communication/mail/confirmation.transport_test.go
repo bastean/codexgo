@@ -39,7 +39,7 @@ func (suite *MailConfirmationTransportTestSuite) TestSubmit() {
 
 	user.Attributes = new(event.CreatedSucceededAttributes)
 
-	_ = json.Unmarshal(message.Attributes, user.Attributes)
+	suite.NoError(json.Unmarshal(message.Attributes, user.Attributes))
 
 	suite.NoError(suite.sut.Submit(user.Attributes))
 }

@@ -38,7 +38,7 @@ func (suite *TerminalConfirmationTransportTestSuite) TestSubmit() {
 
 	user.Attributes = new(event.CreatedSucceededAttributes)
 
-	_ = json.Unmarshal(message.Attributes, user.Attributes)
+	suite.NoError(json.Unmarshal(message.Attributes, user.Attributes))
 
 	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", user.Attributes.Username, suite.serverURL, user.Attributes.Id)
 

@@ -53,7 +53,7 @@ func (suite *CreatedConsumerTestSuite) TestCreatedSucceeded() {
 
 	user.Attributes = new(event.CreatedSucceededAttributes)
 
-	_ = json.Unmarshal(message.Attributes, user.Attributes)
+	suite.NoError(json.Unmarshal(message.Attributes, user.Attributes))
 
 	suite.transport.On("Submit", user.Attributes)
 
