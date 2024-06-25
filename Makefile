@@ -2,6 +2,10 @@
 
 #* ~~~~~~~~~~~~VARS~~~~~~~~~~~~
 
+#* ~~~~~~URLs~~~~~~
+
+github = https://github.com/bastean/codexgo
+
 #* ~~~~~~Go~~~~~~
 
 go-tidy = go mod tidy -e
@@ -14,6 +18,10 @@ npm-ci = npm ci --legacy-peer-deps
 release-it = ${npx} release-it -V
 release-it-dry = ${npx} release-it -V -d --no-git.requireCleanWorkingDir
 
+#* ~~~~~~Bash~~~~~~
+
+bash = bash -o pipefail -c
+
 #* ~~~~~~Git~~~~~~
 
 git-reset-hard = git reset --hard HEAD
@@ -22,10 +30,6 @@ git-reset-hard = git reset --hard HEAD
 
 compose = cd deployments/ && docker compose
 compose-env = ${compose} --env-file
-
-#* ~~~~~~Bash~~~~~~
-
-bash = bash -o pipefail -c
 
 #* ~~~~~~~~~~~~RULES~~~~~~~~~~~~
 
@@ -52,12 +56,16 @@ upgrade:
 
 #* ~~~~~~Dependencies~~~~~~
 
+install-tools:
+	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
+	curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
+	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
+	go install honnef.co/go/tools/cmd/staticcheck@latest
+	go install github.com/a-h/templ/cmd/templ@latest
+
 install-deps:
 	go mod download
 	${npm-ci}
-	go install honnef.co/go/tools/cmd/staticcheck@latest
-	go install github.com/a-h/templ/cmd/templ@latest
-	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 
 copy-deps:
 	go run ./scripts/copydeps
@@ -70,7 +78,7 @@ generate-required:
 
 #* ~~~~~~Initializations~~~~~~
 
-init: upgrade-managers install-deps copy-deps generate-required
+init: upgrade-managers install-tools install-deps copy-deps generate-required
 
 init-zero:
 	git init
@@ -88,6 +96,31 @@ lint: generate-required
 lint-check:
 	staticcheck ./...
 	${npx} prettier --check .
+
+#* ~~~~~~Scanners~~~~~~
+
+leak-check:
+	sudo trufflehog git file://. --only-verified
+	trivy repo --scanners secret .
+
+leak-remote-check:
+	sudo trufflehog git ${github} --only-verified
+	trivy repo --scanners secret ${github}
+
+vuln-check:
+	osv-scanner --call-analysis=all -r .
+	trivy repo --scanners vuln .
+
+misconfig-check:
+	trivy repo --scanners misconfig .
+
+scan-leaks: leak-check leak-remote-check
+
+scan-vulns: vuln-check
+
+scan-misconfigs: misconfig-check
+
+scans: scan-leaks scan-vulns scan-misconfigs
 
 #* ~~~~~~Tests~~~~~~
 
