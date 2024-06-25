@@ -41,7 +41,7 @@ func startRabbitMQ() error {
 	RabbitMQ, err = rabbitmq.New(
 		env.Broker.URI,
 		logger.Logger,
-		rabbitmq.Exchange,
+		rabbitmq.Exchange("codexgo"),
 		rabbitmq.Queues{
 			user.QueueSendConfirmation,
 		},
@@ -143,20 +143,20 @@ func stopMongoDB(ctx context.Context) error {
 }
 
 func Stop(ctx context.Context) error {
-	logger.Info("closing rabbitmq")
+	logger.Info("stopping rabbitmq")
 
 	err = stopRabbitMQ()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err, "Stop")
 	}
 
-	logger.Info("closing mongodb")
+	logger.Info("stopping mongodb")
 
 	err = stopMongoDB(ctx)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err, "Stop")
 	}
 
 	return nil

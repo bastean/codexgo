@@ -4,6 +4,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 )
 
-var Exchange = &messages.Router{
-	Name: "codexgo",
+func Exchange(name string) *messages.Router {
+	return &messages.Router{
+		Name: name,
+	}
 }
