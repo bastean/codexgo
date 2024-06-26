@@ -17,37 +17,7 @@ var envFileModel string
 
 var envFileBackupRegex = regexp.MustCompile(`\.env\..*\.tmp`)
 
-func usage() {
-	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
-	fmt.Printf("\nE.g.: %s -dir . -model .env.example\n\n", cli)
-	flag.PrintDefaults()
-}
-
-func backupEnvFiles() {
-	files, err := os.ReadDir(envFilesDir)
-
-	if err != nil {
-		panic(err)
-	}
-
-	for _, file := range files {
-		if strings.Contains(file.Name(), ".env") {
-			dataBytes, err := os.ReadFile(file.Name())
-
-			if err != nil {
-				panic(err)
-			}
-
-			err = os.WriteFile(file.Name()+".tmp", dataBytes, 0644)
-
-			if err != nil {
-				panic(err)
-			}
-		}
-	}
-}
-
-func restoreEnvFilesBackup() {
+func RestoreEnvFilesBackup() {
 	files, err := os.ReadDir(envFilesDir)
 
 	if err != nil {
@@ -62,11 +32,52 @@ func restoreEnvFilesBackup() {
 	}
 }
 
-func removeEnvFilesBackup() {
+func Panic(who error, where string) {
+	log.Println("Sync .env* failed!")
+
+	log.Println("Restoring .env* from backups")
+	RestoreEnvFilesBackup()
+
+	log.Println("Please, check 'Error' or undo changes with: make sync-env-reset")
+
+	log.Panicf("Error: (%s): [%s]", where, who)
+}
+
+func usage() {
+	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
+	fmt.Printf("\nE.g.: %s -dir . -model .env.example\n\n", cli)
+	flag.PrintDefaults()
+}
+
+func BackupEnvFiles() {
 	files, err := os.ReadDir(envFilesDir)
 
 	if err != nil {
-		panic(err)
+		Panic(err, "BackupEnvFiles")
+	}
+
+	for _, file := range files {
+		if strings.Contains(file.Name(), ".env") {
+			data, err := os.ReadFile(file.Name())
+
+			if err != nil {
+				Panic(err, "BackupEnvFiles")
+			}
+
+			err = os.WriteFile(file.Name()+".tmp", data, 0644)
+
+			if err != nil {
+				Panic(err, "BackupEnvFiles")
+			}
+		}
+	}
+}
+
+func RemoveEnvFilesBackup() {
+	files, err := os.ReadDir(envFilesDir)
+
+	if err != nil {
+		Panic(err, "RemoveEnvFilesBackup")
 	}
 
 	for _, file := range files {
@@ -74,17 +85,17 @@ func removeEnvFilesBackup() {
 			err = os.Remove(file.Name())
 
 			if err != nil {
-				panic(err)
+				Panic(err, "RemoveEnvFilesBackup")
 			}
 		}
 	}
 }
 
-func getEnvFiles() (envFiles []string) {
+func GetEnvFiles() (envFiles []string) {
 	files, err := os.ReadDir(envFilesDir)
 
 	if err != nil {
-		panic(err)
+		Panic(err, "GetEnvFiles")
 	}
 
 	for _, file := range files {
@@ -96,11 +107,11 @@ func getEnvFiles() (envFiles []string) {
 	return
 }
 
-func getEnvFileModelVars() []string {
+func GetEnvFileModelVars() []string {
 	dataBytes, err := os.ReadFile(envFileModel)
 
 	if err != nil {
-		panic(err)
+		Panic(err, "GetEnvFileModelVars")
 	}
 
 	enVars := strings.Split(string(dataBytes), "\n")
@@ -112,14 +123,14 @@ func getEnvFileModelVars() []string {
 	return enVars
 }
 
-func syncEnv(envModelVars []string, envFile string) {
-	dataBytes, err := os.ReadFile(envFile)
+func SyncEnv(envModelVars []string, envFile string) {
+	data, err := os.ReadFile(envFile)
 
 	if err != nil {
-		panic(err)
+		Panic(err, "SyncEnv")
 	}
 
-	envFileVars := strings.Split(string(dataBytes), "\n")
+	envFileVars := strings.Split(string(data), "\n")
 
 	envFileVarsCleaned := []string{}
 
@@ -167,29 +178,17 @@ func syncEnv(envModelVars []string, envFile string) {
 	file, err := os.Create(envFile)
 
 	if err != nil {
-		panic(err)
+		Panic(err, "SyncEnv")
 	}
 
 	_, err = file.WriteString(envFileUpdatedVars)
 
 	if err != nil {
-		panic(err)
+		Panic(err, "SyncEnv")
 	}
 }
 
 func main() {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Println("Sync .env* failed!")
-
-			log.Println("Restoring .env* from backups")
-			restoreEnvFilesBackup()
-
-			log.Println("Please, check 'Error' or undo changes with: make sync-env-reset")
-			log.Println("Error:", r)
-		}
-	}()
-
 	flag.StringVar(&envFilesDir, "dir", ".", ".env files directory")
 	flag.StringVar(&envFileModel, "model", ".env.example", ".env file model")
 
@@ -198,19 +197,19 @@ func main() {
 	flag.Parse()
 
 	log.Println("Creating .env* backups")
-	backupEnvFiles()
+	BackupEnvFiles()
 
 	log.Println("Searching .env*")
-	envFiles := getEnvFiles()
-	envFileModelVars := getEnvFileModelVars()
+	envFiles := GetEnvFiles()
+	envFileModelVars := GetEnvFileModelVars()
 
 	log.Println("Syncing .env*")
 	for _, envFile := range envFiles {
-		syncEnv(envFileModelVars, envFile)
+		SyncEnv(envFileModelVars, envFile)
 	}
 
 	log.Println("Removing .env* backups")
-	removeEnvFilesBackup()
+	RemoveEnvFilesBackup()
 
 	log.Println("Sync .env* completed!")
 }

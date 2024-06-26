@@ -24,53 +24,51 @@ const fomanticStaticPath = staticPath + "/fomantic-ui.com"
 const lodashSourcePath = "node_modules/lodash"
 const lodashStaticPath = staticPath + "/lodash.com"
 
-func Panic(msg string, err error) {
-	if err != nil {
-		log.Panicf("%s: [%s]", msg, err)
-	}
+func Panic(who error, what, where string) {
+	log.Panicf("(%s): %s: [%s]", where, what, who)
 }
 
-func createDirectory(path string) {
+func CreateDirectory(path string) {
 	err := os.MkdirAll(path, os.ModePerm)
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to create \"%s\"", path), err)
+		Panic(err, fmt.Sprintf("failed to create \"%s\"", path), "CreateDirectory")
 	}
 
-	log.Printf("Created: \"%s\"", path)
+	log.Printf("created: \"%s\"", path)
 }
 
-func copyFile(filename, sourcePath, targetPath string) {
+func CopyFile(filename, sourcePath, targetPath string) {
 	data, err := os.ReadFile(filepath.Join(sourcePath, filepath.Base(filename)))
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to read \"%s\" from \"%s\"", filename, sourcePath), err)
+		Panic(err, fmt.Sprintf("failed to read \"%s\" from \"%s\"", filename, sourcePath), "CopyFile")
 	}
 
 	err = os.WriteFile(filepath.Join(targetPath, filepath.Base(filename)), data, os.ModePerm)
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to write \"%s\" on \"%s\"", filename, targetPath), err)
+		Panic(err, fmt.Sprintf("failed to write \"%s\" on \"%s\"", filename, targetPath), "CopyFile")
 	}
 
-	log.Printf("Created: \"%s\"", filepath.Join(targetPath, filepath.Base(filename)))
+	log.Printf("created: \"%s\"", filepath.Join(targetPath, filepath.Base(filename)))
 }
 
-func copyDeps(filenames []string, sourcePath, targetPath string) {
+func CopyDeps(filenames []string, sourcePath, targetPath string) {
 	files, err := os.ReadDir(sourcePath)
 
 	if err != nil {
-		Panic(fmt.Sprintf("Failed to copy \"%s\" from \"%s\"", filenames, sourcePath), err)
+		Panic(err, fmt.Sprintf("failed to copy \"%s\" from \"%s\"", filenames, sourcePath), "CopyDeps")
 	}
 
-	createDirectory(targetPath)
+	CreateDirectory(targetPath)
 
 	if strings.HasPrefix(filenames[0], "^") && strings.HasSuffix(filenames[0], "$") {
 		isMinFile := regexp.MustCompile(filenames[0]).MatchString
 
 		for _, file := range files {
 			if isMinFile(file.Name()) {
-				copyFile(file.Name(), sourcePath, targetPath)
+				CopyFile(file.Name(), sourcePath, targetPath)
 			}
 		}
 
@@ -80,7 +78,7 @@ func copyDeps(filenames []string, sourcePath, targetPath string) {
 	for _, filename := range filenames {
 		for _, file := range files {
 			if filepath.Base(filename) == file.Name() {
-				copyFile(filename, sourcePath, targetPath)
+				CopyFile(filename, sourcePath, targetPath)
 			}
 		}
 	}
@@ -90,16 +88,16 @@ func main() {
 	err := os.RemoveAll(staticPath)
 
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
-		Panic(fmt.Sprintf("Failed to remove \"%s\"", staticPath), err)
+		Panic(err, fmt.Sprintf("failed to remove \"%s\"", staticPath), "main")
 	}
 
-	createDirectory(staticPath)
+	CreateDirectory(staticPath)
 
-	copyDeps([]string{"jquery.min.js"}, jquerySourcePath, jqueryStaticPath)
+	CopyDeps([]string{"jquery.min.js"}, jquerySourcePath, jqueryStaticPath)
 
-	copyDeps([]string{"semantic.min.js", "semantic.min.css"}, fomanticSourcePath, fomanticStaticPath)
-	copyDeps([]string{regExpEveryMinFile}, filepath.Join(fomanticSourcePath, "components"), filepath.Join(fomanticStaticPath, "components"))
-	copyDeps([]string{regExpEveryWoff2File}, filepath.Join(fomanticSourcePath, "themes/default/assets/fonts"), filepath.Join(fomanticStaticPath, "themes/default/assets/fonts"))
+	CopyDeps([]string{"semantic.min.js", "semantic.min.css"}, fomanticSourcePath, fomanticStaticPath)
+	CopyDeps([]string{regExpEveryMinFile}, filepath.Join(fomanticSourcePath, "components"), filepath.Join(fomanticStaticPath, "components"))
+	CopyDeps([]string{regExpEveryWoff2File}, filepath.Join(fomanticSourcePath, "themes/default/assets/fonts"), filepath.Join(fomanticStaticPath, "themes/default/assets/fonts"))
 
-	copyDeps([]string{"lodash.min.js"}, lodashSourcePath, lodashStaticPath)
+	CopyDeps([]string{"lodash.min.js"}, lodashSourcePath, lodashStaticPath)
 }

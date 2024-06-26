@@ -5,68 +5,68 @@ import (
 	"os/exec"
 )
 
-func upgradeGo() {
+func Panic(who error, where string) {
+	log.Println("Upgrade failed!")
+
+	log.Println("Please, check 'Error' or undo changes with: make upgrade-reset")
+
+	log.Panicf("Error: (%s): [%s]", where, who)
+}
+
+func UpgradeGo() {
 	if err := exec.Command("make", "upgrade-go").Run(); err != nil {
-		panic(err)
+		Panic(err, "UpgradeGo")
 	}
 }
 
-func upgradeNode() {
+func UpgradeNode() {
 	if err := exec.Command("make", "upgrade-node").Run(); err != nil {
-		panic(err)
+		Panic(err, "UpgradeNode")
 	}
 }
 
-func runLint() {
+func RunLint() {
 	if err := exec.Command("make", "lint-check").Run(); err != nil {
-		panic(err)
+		Panic(err, "RunLint")
 	}
 }
 
-func runTest() {
+func RunTest() {
 	if err := exec.Command("make", "test-unit").Run(); err != nil {
-		panic(err)
+		Panic(err, "RunTest")
 	}
 }
 
-func commit() {
+func Commit() {
 	if err := exec.Command("git", "add", ".", "--update").Run(); err != nil {
-		panic(err)
+		Panic(err, "Commit")
 	}
 
 	if err := exec.Command("git", "commit", "-m", "chore(deps): upgrade dependencies").Run(); err != nil {
-		panic(err)
+		Panic(err, "Commit")
 	}
 }
 
 func main() {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Println("Upgrade failed!")
-			log.Println("Please, check 'Error' or undo changes with: make upgrade-reset")
-			log.Println("Error:", r)
-		}
-	}()
-
 	log.Println("Upgrading dependencies")
 
 	log.Println("Running Go Tidy")
-	runLint()
+	RunLint()
 
 	log.Println("Upgrading Go dependencies")
-	upgradeGo()
+	UpgradeGo()
 
 	log.Println("Upgrading Node dependencies")
-	upgradeNode()
+	UpgradeNode()
 
 	log.Println("Running Lint")
-	runLint()
+	RunLint()
 
 	log.Println("Running Test")
-	runTest()
+	RunTest()
 
 	log.Println("Commit changes")
-	commit()
+	Commit()
 
 	log.Println("Upgrade completed!")
 }
