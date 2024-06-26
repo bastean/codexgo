@@ -1,5 +1,33 @@
 # Changelog
 
+## [4.3.0](https://github.com/bastean/codexgo/compare/v4.2.1...v4.3.0) (2024-06-26)
+
+### Chores
+
+- **deps:** upgrade dependencies ([bce72d8](https://github.com/bastean/codexgo/commit/bce72d872897ad527dd3e435fe45fe5f93300d81))
+- **deps:** upgrade jwt to v5 ([18054b7](https://github.com/bastean/codexgo/commit/18054b747b8250e7a169359dc1f54287328d0edc))
+
+### Documentation
+
+- add scanners ([a34ea61](https://github.com/bastean/codexgo/commit/a34ea616ff1425c3053115df604e64ef9609e283))
+
+### New Features
+
+- add trivy and osv scanners ([6fe3c53](https://github.com/bastean/codexgo/commit/6fe3c53255d3fb68dbbda985a0c15e7b9b68ae5c))
+
+### Refactors
+
+- **context:** change domain message components ([157ef5b](https://github.com/bastean/codexgo/commit/157ef5bcd3a54c9784ddcdd6339e9223da735a38))
+- **context:** rename variables in value objects ([c8f46a1](https://github.com/bastean/codexgo/commit/c8f46a1e857c25d38a72da5a9f30273c8dc64e3d))
+- **scripts:** change panic on error ([4577790](https://github.com/bastean/codexgo/commit/4577790af035df66e18aa96ee8289c30409a1687))
+- **server:** rename service logs ([65bd07c](https://github.com/bastean/codexgo/commit/65bd07c900686326c91d5fba163c501348a8589e))
+- **server:** reorganize services ([f559715](https://github.com/bastean/codexgo/commit/f5597153bd121cce16d77aecba2cf0e268bcf1ce))
+
+### Tests
+
+- **context:** add assertion for duplication error in mongo ([201fd53](https://github.com/bastean/codexgo/commit/201fd53f5970546dddaf62c2b21d50a35841052c))
+- **context:** add assertion for omitted json errors ([a08ea38](https://github.com/bastean/codexgo/commit/a08ea38efd3fa0d191505f48de571a234c9b2217))
+
 ## [4.2.1](https://github.com/bastean/codexgo/compare/v4.2.0...v4.2.1) (2024-06-19)
 
 ### Bug Fixes
