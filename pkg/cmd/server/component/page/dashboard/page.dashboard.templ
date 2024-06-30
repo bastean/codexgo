@@ -2,7 +2,7 @@ package dashboard
 
 import (
 	"github.com/bastean/codexgo/pkg/cmd/server/component/layout"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/scripts"
 	"github.com/bastean/codexgo/pkg/cmd/server/service/user"
 )
 
@@ -40,7 +40,7 @@ script Logout() {
 }
 
 templ Page(user *user.ReadResponse) {
-	@layout.Index(script.Head{}, script.Body{}) {
+	@layout.Index(scripts.Head{}, scripts.Body{}) {
 		<div class="ui centered grid container" style="height: 100%;">
 			<div class="sixteen wide column">
 				<div class="ui inverted secondary menu">

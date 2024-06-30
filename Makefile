@@ -74,6 +74,7 @@ copy-deps:
 
 generate-required:
 	go generate ./...
+	find . -name "*_templ.go" -type f -delete
 	templ generate
 
 #*______Initializations______
@@ -82,8 +83,9 @@ init: upgrade-managers install-tools install-deps copy-deps generate-required
 
 init-zero:
 	git init
+	git add .
 	$(MAKE) init
-	${npx} husky install
+	${npx} husky init
 
 #*______Linters/Formatters______
 
@@ -180,7 +182,7 @@ release-dry-changelog:
 
 #*______Builds______
 
-build: generate-required lint
+build: lint
 	rm -rf build/
 	go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
 

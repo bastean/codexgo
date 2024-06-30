@@ -1,13 +1,13 @@
 package layout
 
 import (
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script/fomantic"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script/storage"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script/jquery"
-	"github.com/bastean/codexgo/pkg/cmd/server/component/script"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/scripts"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/scripts/fomantic"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/scripts/jquery"
+	"github.com/bastean/codexgo/pkg/cmd/server/component/scripts/storage"
 )
 
-templ Index(headScripts script.Head, bodyScripts script.Body) {
+templ Index(headScripts scripts.Head, bodyScripts scripts.Body) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
