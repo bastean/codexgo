@@ -238,6 +238,7 @@ compose-tests: compose-test-down
 
 compose-prod-down:
 	${compose-env} .env.prod down
+	docker rmi -f codexgo-server
 
 compose-prod: compose-prod-down
 	${compose-env} .env.prod up
