@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.4
-	github.com/a-h/templ v0.2.707
+	github.com/a-h/templ v0.2.731
 	github.com/brianvoe/gofakeit/v7 v7.0.4
 	github.com/cucumber/godog v0.14.1
 	github.com/gin-contrib/secure v1.1.0
@@ -16,7 +16,7 @@ require (
 	github.com/playwright-community/playwright-go v0.4401.1
 	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/stretchr/testify v1.9.0
-	go.mongodb.org/mongo-driver v1.15.1
+	go.mongodb.org/mongo-driver v1.16.0
 	golang.org/x/crypto v0.24.0
 	golang.org/x/text v0.16.0
 )
