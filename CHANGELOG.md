@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.3.1](https://github.com/bastean/codexgo/compare/v4.3.0...v4.3.1) (2024-07-01)
+
+### Chores
+
+- **deps:** upgrade dependencies ([1011a81](https://github.com/bastean/codexgo/commit/1011a814c472f1d00b75aa125e05f8b21721db8d))
+
+### Bug Fixes
+
+- **makefile:** remove previous production docker image ([bcd39a0](https://github.com/bastean/codexgo/commit/bcd39a0d1b51eb6314e59c6239454d98dfeaa350))
+- **templ:** resolve imported and not used error ([84cbd69](https://github.com/bastean/codexgo/commit/84cbd69f90eccc3909e0ae620876bc3a1729acab))
+
 ## [4.3.0](https://github.com/bastean/codexgo/compare/v4.2.1...v4.3.0) (2024-06-26)
 
 ### Chores
