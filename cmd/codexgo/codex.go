@@ -26,7 +26,7 @@ func usage() {
 }
 
 func main() {
-	flag.StringVar(&port, "p", os.Getenv("PORT"), "Port")
+	flag.StringVar(&port, "p", os.Getenv("CODEXGO_SERVER_GIN_PORT"), "Port")
 
 	flag.Usage = usage
 

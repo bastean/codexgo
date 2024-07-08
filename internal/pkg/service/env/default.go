@@ -4,45 +4,47 @@ import (
 	"os"
 )
 
-var ServerURL = os.Getenv("URL")
+var ServerURL = os.Getenv("CODEXGO_SERVER_URL")
 
-var Broker = &struct {
-	URI string
+var RabbitMQ = &struct {
+	URI, Name string
 }{
-	URI: os.Getenv("BROKER_URI"),
+	URI:  os.Getenv("BROKER_RABBIT_URI"),
+	Name: os.Getenv("BROKER_RABBIT_NAME"),
 }
 
-var Database = &struct {
-	URI string
+var Mongo = &struct {
+	URI, Name string
 }{
-	URI: os.Getenv("DATABASE_URI"),
+	URI:  os.Getenv("DATABASE_MONGO_URI"),
+	Name: os.Getenv("DATABASE_MONGO_NAME"),
 }
 
 var SMTP = &struct {
 	Host, Port, Username, Password, ServerURL string
 }{
-	Host:      os.Getenv("SMTP_HOST"),
-	Port:      os.Getenv("SMTP_PORT"),
-	Username:  os.Getenv("SMTP_USERNAME"),
-	Password:  os.Getenv("SMTP_PASSWORD"),
+	Host:      os.Getenv("CODEXGO_SMTP_HOST"),
+	Port:      os.Getenv("CODEXGO_SMTP_PORT"),
+	Username:  os.Getenv("CODEXGO_SMTP_USERNAME"),
+	Password:  os.Getenv("CODEXGO_SMTP_PASSWORD"),
 	ServerURL: ServerURL,
 }
 
 var Security = &struct {
 	AllowedHosts string
 }{
-	AllowedHosts: os.Getenv("ALLOWED_HOSTS"),
+	AllowedHosts: os.Getenv("CODEXGO_SERVER_GIN_ALLOWED_HOSTS"),
 }
 
 var JWT = &struct {
 	SecretKey string
 }{
-	SecretKey: os.Getenv("JWT_SECRET_KEY"),
+	SecretKey: os.Getenv("CODEXGO_JWT_SECRET_KEY"),
 }
 
 var Cookie = &struct {
 	SecretKey, SessionName string
 }{
-	SecretKey:   os.Getenv("COOKIE_SECRET_KEY"),
-	SessionName: os.Getenv("COOKIE_SESSION_NAME"),
+	SecretKey:   os.Getenv("CODEXGO_SERVER_COOKIE_SECRET_KEY"),
+	SessionName: os.Getenv("CODEXGO_SERVER_COOKIE_SESSION_NAME"),
 }

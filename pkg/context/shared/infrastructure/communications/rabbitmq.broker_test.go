@@ -24,11 +24,11 @@ type RabbitMQBrokerTestSuite struct {
 func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 	suite.logger = new(loggers.LoggerMock)
 
-	uri := os.Getenv("BROKER_URI")
+	uri := os.Getenv("BROKER_RABBIT_URI")
 
 	suite.sut, _ = communications.NewRabbitMQ(uri, suite.logger)
 
-	suite.router = &messages.Router{Name: "test"}
+	suite.router = &messages.Router{Name: os.Getenv("BROKER_RABBIT_NAME")}
 
 	queueName := messages.NewRecipientName(&messages.RecipientNameComponents{
 		Service: "queue",

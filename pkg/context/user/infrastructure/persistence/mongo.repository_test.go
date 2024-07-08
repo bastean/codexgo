@@ -21,9 +21,9 @@ type MongoRepositoryTestSuite struct {
 }
 
 func (suite *MongoRepositoryTestSuite) SetupTest() {
-	uri := os.Getenv("DATABASE_URI")
+	uri := os.Getenv("DATABASE_MONGO_URI")
 
-	databaseName := "codexgo-test"
+	databaseName := os.Getenv("DATABASE_MONGO_NAME")
 
 	database, _ := persistences.NewMongoDatabase(uri, databaseName)
 

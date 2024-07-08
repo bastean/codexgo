@@ -28,6 +28,9 @@ git-reset-hard = git reset --hard HEAD
 
 #*______Docker______
 
+docker-rm-vol=docker volume rm -f
+docker-rm-img=docker rmi -f
+
 compose = cd deployments/ && docker compose
 compose-env = ${compose} --env-file
 
@@ -204,7 +207,7 @@ WARNING-git-forget:
 	git add .
 
 WARNING-git-genesis:
-	git clean -e .env*-fdx
+	git clean -e .env* -fdx
 	${git-reset-hard}
 	$(MAKE) init
 
@@ -218,27 +221,27 @@ docker-it:
 
 compose-dev-down:
 	${compose-env} .env.dev down
-	docker volume rm codexgo-database-dev -f
+	${docker-rm-vol} codexgo-database-mongo-dev
 
 compose-dev: compose-dev-down
 	${compose-env} .env.dev up
 
 compose-test-down:
 	${compose-env} .env.test down
-	docker volume rm codexgo-database-test -f
+	${docker-rm-vol} codexgo-database-mongo-test
 
 compose-test-integration: compose-test-down
-	${compose-env} .env.test --env-file .env.demo.test.integration up --exit-code-from server
+	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from codexgo
 
 compose-test-acceptance: compose-test-down
-	${compose-env} .env.test --env-file .env.demo.test.acceptance up --exit-code-from server
+	${compose-env} .env.test --env-file .env.test.acceptance up --exit-code-from codexgo
 
 compose-tests: compose-test-down
-	${compose-env} .env.test up --exit-code-from server
+	${compose-env} .env.test up --exit-code-from codexgo
 
 compose-prod-down:
 	${compose-env} .env.prod down
-	docker rmi -f codexgo-server
+	${docker-rm-img} codexgo
 
 compose-prod: compose-prod-down
 	${compose-env} .env.prod up

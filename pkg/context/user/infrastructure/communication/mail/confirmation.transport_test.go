@@ -20,11 +20,11 @@ type MailConfirmationTransportTestSuite struct {
 
 func (suite *MailConfirmationTransportTestSuite) SetupTest() {
 	suite.smtp = transports.NewSMTP(
-		os.Getenv("SMTP_HOST"),
-		os.Getenv("SMTP_PORT"),
-		os.Getenv("SMTP_USERNAME"),
-		os.Getenv("SMTP_PASSWORD"),
-		os.Getenv("URL"),
+		os.Getenv("CODEXGO_SMTP_HOST"),
+		os.Getenv("CODEXGO_SMTP_PORT"),
+		os.Getenv("CODEXGO_SMTP_USERNAME"),
+		os.Getenv("CODEXGO_SMTP_PASSWORD"),
+		os.Getenv("CODEXGO_SERVER_URL"),
 	)
 
 	suite.sut = &mail.Confirmation{

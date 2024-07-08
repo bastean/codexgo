@@ -39,9 +39,9 @@ func OpenSMTP() {
 
 func OpenRabbitMQ() error {
 	RabbitMQ, err = rabbitmq.New(
-		env.Broker.URI,
+		env.RabbitMQ.URI,
 		logger.Logger,
-		rabbitmq.Exchange("codexgo"),
+		rabbitmq.Exchange(env.RabbitMQ.Name),
 		rabbitmq.Queues{
 			user.QueueSendConfirmation,
 		},
@@ -59,8 +59,8 @@ func OpenRabbitMQ() error {
 
 func OpenMongoDB() error {
 	MongoDB, err = mongodb.New(
-		env.Database.URI,
-		"codexgo",
+		env.Mongo.URI,
+		env.Mongo.Name,
 	)
 
 	if err != nil {

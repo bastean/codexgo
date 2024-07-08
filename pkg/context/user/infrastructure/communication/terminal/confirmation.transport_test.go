@@ -23,7 +23,7 @@ type TerminalConfirmationTransportTestSuite struct {
 func (suite *TerminalConfirmationTransportTestSuite) SetupTest() {
 	suite.logger = new(loggers.LoggerMock)
 
-	suite.serverURL = os.Getenv("URL")
+	suite.serverURL = os.Getenv("CODEXGO_SERVER_URL")
 
 	suite.sut = &terminal.Confirmation{
 		Logger:    suite.logger,
