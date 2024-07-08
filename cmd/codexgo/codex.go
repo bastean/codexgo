@@ -64,19 +64,19 @@ func main() {
 
 	defer cancel()
 
-	logger.Stopping("services")
-
-	errService := service.Stop(ctx)
-
-	logger.Stopped("services")
-
 	logger.Stopping("server")
 
 	errServer := server.Stop(ctx)
 
 	logger.Stopped("server")
 
-	if err := errors.Join(errService, errServer); err != nil {
+	logger.Stopping("services")
+
+	errService := service.Stop(ctx)
+
+	logger.Stopped("services")
+
+	if err := errors.Join(errServer, errService); err != nil {
 		logger.Error(err.Error())
 	}
 

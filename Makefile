@@ -28,8 +28,8 @@ git-reset-hard = git reset --hard HEAD
 
 #*______Docker______
 
-docker-rm-vol=docker volume rm -f
-docker-rm-img=docker rmi -f
+docker-rm-vol = docker volume rm -f
+docker-rm-img = docker rmi -f
 
 compose = cd deployments/ && docker compose
 compose-env = ${compose} --env-file
