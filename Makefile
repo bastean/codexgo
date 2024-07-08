@@ -146,7 +146,7 @@ test-integration: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log'
 
 test-acceptance-sync: 
-	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./pkg/cmd/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
+	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
 
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync

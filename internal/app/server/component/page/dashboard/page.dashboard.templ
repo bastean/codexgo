@@ -1,0 +1,112 @@
+package dashboard
+
+import (
+	"github.com/bastean/codexgo/internal/app/server/component/layout"
+	"github.com/bastean/codexgo/internal/app/server/component/scripts"
+	"github.com/bastean/codexgo/internal/pkg/service/user"
+)
+
+script PageInit() {
+    $(".ui.container")
+        .transition("fade in", "3s")
+    ;
+
+    $(".ui.menu .right .dropdown")
+        .dropdown()
+    ;
+
+    $(".ui.menu .right .header .icon")
+        .popup()
+    ;
+
+    $(".ui.blue.nag")
+        .nag({
+            key: "account-confirmation",
+            value: true
+        })
+    ;
+
+     $(".ui.green.nag")
+        .nag({
+            key: "account-confirmed",
+            value: true
+        })
+    ;
+}
+
+script Logout() {
+    Storage.ClearSession();
+    window.location.replace("/");
+}
+
+templ Page(user *user.ReadResponse) {
+	@layout.Index(scripts.Head{}, scripts.Body{}) {
+		<div class="ui centered grid container" style="height: 100%;">
+			<div class="sixteen wide column">
+				<div class="ui inverted secondary menu">
+					<div class="header item">
+						<a
+							href="https://github.com/bastean/codexgo"
+							rel="noopener noreferrer"
+							target="_blank"
+						><img class="ui small image" src="/public/static/assets/logo.png"/></a>
+					</div>
+					<div class="right menu">
+						<h4 class="ui inverted header">
+							<img class="ui avatar image" src="/public/static/assets/favicon.png"/>
+							<div class="content">
+								<div class="ui inverted dropdown">
+									<div class="text">{ user.Username }</div>
+									<i class="dropdown icon"></i>
+									<div class="menu">
+										<div class="header">
+											if !user.Verified {
+												<i class="inverted red times circle icon" data-variation="red" data-content="Unverified"></i>
+											} else {
+												<i class="inverted green check circle icon" data-variation="green" data-content="Verified"></i>
+											}
+											Account
+										</div>
+										<div class="divider"></div>
+										<div class="item" onclick={ DeleteFormShow() }>
+											<i class="trash icon"></i>
+											Delete
+										</div>
+										<div class="divider"></div>
+										<div class="item" onclick={ Logout() }>
+											<i class="sign out alt icon"></i>
+											Sign out
+										</div>
+									</div>
+								</div>
+							</div>
+						</h4>
+					</div>
+				</div>
+			</div>
+			<div class="sixteen wide mobile eight wide computer column">
+				@UpdateForm(user.Email, user.Username)
+				@DeleteForm()
+			</div>
+			if !user.Verified {
+				<div class="ui looping pulsating transition blue bottom fixed nag">
+					<div class="title">
+						<i class="check circle icon"></i>
+						Account Confirmation
+					</div>
+					<div>Link sent. Please check your inbox</div>
+					<i class="close icon"></i>
+				</div>
+			} else {
+				<div class="ui looping pulsating transition green bottom fixed nag">
+					<div class="title">
+						<i class="check circle icon"></i>
+						Account Confirmed
+					</div>
+					<i class="close icon"></i>
+				</div>
+			}
+		</div>
+		@PageInit()
+	}
+}

@@ -13,7 +13,7 @@ import (
 const regExpEveryMinFile = `^.+\.min\.(js|css)$`
 const regExpEveryWoff2File = `^.+\.woff2$`
 
-const staticPath = "pkg/cmd/server/static/dist"
+const staticPath = "internal/app/server/static/dist"
 
 const jquerySourcePath = "node_modules/jquery/dist"
 const jqueryStaticPath = staticPath + "/jquery.com"
