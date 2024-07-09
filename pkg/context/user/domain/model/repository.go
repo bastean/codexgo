@@ -1,18 +1,18 @@
 package model
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 )
 
 type RepositorySearchCriteria struct {
-	Id, Email models.ValueObject[string]
+	*user.Id
+	*user.Email
 }
 
 type Repository interface {
-	Save(user *aggregate.User) error
-	Verify(id models.ValueObject[string]) error
-	Update(user *aggregate.User) error
-	Delete(id models.ValueObject[string]) error
-	Search(criteria *RepositorySearchCriteria) (*aggregate.User, error)
+	Save(*user.User) error
+	Verify(*user.Id) error
+	Update(*user.User) error
+	Delete(*user.Id) error
+	Search(*RepositorySearchCriteria) (*user.User, error)
 }

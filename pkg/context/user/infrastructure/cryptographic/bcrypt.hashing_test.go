@@ -3,8 +3,8 @@ package cryptographic_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/stretchr/testify/suite"
 )
@@ -19,9 +19,9 @@ func (suite *BcryptHashingTestSuite) SetupTest() {
 }
 
 func (suite *BcryptHashingTestSuite) TestHash() {
-	password := valueobj.PasswordWithValidValue()
+	password := user.PasswordWithValidValue()
 
-	plain := password.Value()
+	plain := password.Value
 
 	hashed, err := suite.sut.Hash(plain)
 
@@ -31,9 +31,9 @@ func (suite *BcryptHashingTestSuite) TestHash() {
 }
 
 func (suite *BcryptHashingTestSuite) TestIsNotEqual() {
-	password := valueobj.PasswordWithValidValue()
+	password := user.PasswordWithValidValue()
 
-	plain := password.Value()
+	plain := password.Value
 
 	hashed, err := suite.sut.Hash(plain)
 

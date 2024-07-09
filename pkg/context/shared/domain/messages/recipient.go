@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
 )
 
@@ -25,14 +24,19 @@ func NewRecipientName(components *RecipientNameComponents) string {
 	entity, errEntity := valueobjs.NewEntity(components.Entity)
 	action, errAction := valueobjs.NewAction(components.Action)
 
-	var trigger models.ValueObject[string]
+	event, errEvent := valueobjs.NewEvent(components.Event)
+	command, errCommand := valueobjs.NewCommand(components.Command)
+
+	var trigger string
 	var errTrigger error
 
 	switch {
 	case components.Event != "":
-		trigger, errTrigger = valueobjs.NewEvent(components.Event)
+		trigger = event.Value
+		errTrigger = errEvent
 	case components.Command != "":
-		trigger, errTrigger = valueobjs.NewCommand(components.Command)
+		trigger = command.Value
+		errTrigger = errCommand
 	}
 
 	status, errStatus := valueobjs.NewStatus(components.Status)
@@ -43,7 +47,7 @@ func NewRecipientName(components *RecipientNameComponents) string {
 		errors.Panic(err.Error(), "NewRecipientName")
 	}
 
-	name := fmt.Sprintf("%s.%s.%s_on_%s_%s", service.Value(), entity.Value(), strings.ReplaceAll(action.Value(), " ", "_"), trigger.Value(), status.Value())
+	name := fmt.Sprintf("%s.%s.%s_on_%s_%s", service.Value, entity.Value, strings.ReplaceAll(action.Value, " ", "_"), trigger, status.Value)
 
 	name = strings.ToLower(name)
 

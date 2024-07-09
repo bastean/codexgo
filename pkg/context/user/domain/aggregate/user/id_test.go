@@ -1,10 +1,10 @@
-package valueobj_test
+package user_test
 
 import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -15,7 +15,7 @@ type IdValueObjectTestSuite struct {
 func (suite *IdValueObjectTestSuite) SetupTest() {}
 
 func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
-	value, err := valueobj.IdWithInvalidValue()
+	value, err := user.IdWithInvalidValue()
 
 	var actual *errors.InvalidValue
 

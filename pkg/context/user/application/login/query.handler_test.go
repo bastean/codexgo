@@ -3,10 +3,11 @@ package login_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
@@ -14,8 +15,8 @@ import (
 
 type LoginHandlerTestSuite struct {
 	suite.Suite
-	sut        models.QueryHandler[*login.Query, *login.Response]
-	usecase    models.UseCase[*login.Input, *aggregate.User]
+	sut        handlers.Query[*login.Query, *login.Response]
+	login      usecase.Login
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }
@@ -25,33 +26,33 @@ func (suite *LoginHandlerTestSuite) SetupTest() {
 
 	suite.hashing = new(cryptographic.HashingMock)
 
-	suite.usecase = &login.Login{
+	suite.login = &login.Login{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
 
 	suite.sut = &login.Handler{
-		UseCase: suite.usecase,
+		Login: suite.login,
 	}
 }
 
 func (suite *LoginHandlerTestSuite) TestLogin() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
 	query := &login.Query{
-		Email:    user.Email.Value(),
-		Password: user.Password.Value(),
+		Email:    random.Email.Value,
+		Password: random.Password.Value,
 	}
 
 	criteria := &model.RepositorySearchCriteria{
-		Email: user.Email,
+		Email: random.Email,
 	}
 
-	suite.repository.On("Search", criteria).Return(user)
+	suite.repository.On("Search", criteria).Return(random)
 
-	suite.hashing.On("IsNotEqual", user.Password.Value(), user.Password.Value()).Return(false)
+	suite.hashing.On("IsNotEqual", random.Password.Value, random.Password.Value).Return(false)
 
-	expected := user.ToPrimitives()
+	expected := random.ToPrimitive()
 
 	actual, err := suite.sut.Handle(query)
 

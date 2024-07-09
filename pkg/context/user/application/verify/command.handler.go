@@ -2,23 +2,22 @@ package verify
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 )
 
 type Handler struct {
-	models.UseCase[models.ValueObject[string], types.Empty]
+	usecase.Verify
 }
 
 func (handler *Handler) Handle(command *Command) error {
-	idVO, err := valueobj.NewId(command.Id)
+	id, err := user.NewId(command.Id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	_, err = handler.UseCase.Run(idVO)
+	err = handler.Verify.Run(id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

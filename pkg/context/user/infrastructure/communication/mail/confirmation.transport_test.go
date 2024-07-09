@@ -7,7 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
-	"github.com/bastean/codexgo/pkg/context/user/domain/event"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication/mail"
 	"github.com/stretchr/testify/suite"
 )
@@ -33,15 +33,15 @@ func (suite *MailConfirmationTransportTestSuite) SetupTest() {
 }
 
 func (suite *MailConfirmationTransportTestSuite) TestSubmit() {
-	message := event.RandomCreatedSucceeded()
+	message := user.RandomCreatedSucceeded()
 
-	user := new(event.CreatedSucceeded)
+	event := new(user.CreatedSucceeded)
 
-	user.Attributes = new(event.CreatedSucceededAttributes)
+	event.Attributes = new(user.CreatedSucceededAttributes)
 
-	suite.NoError(json.Unmarshal(message.Attributes, user.Attributes))
+	suite.NoError(json.Unmarshal(message.Attributes, event.Attributes))
 
-	suite.NoError(suite.sut.Submit(user.Attributes))
+	suite.NoError(suite.sut.Submit(event.Attributes))
 }
 
 func TestIntegrationMailConfirmationTransportSuite(t *testing.T) {

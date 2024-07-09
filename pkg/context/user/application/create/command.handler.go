@@ -3,18 +3,17 @@ package create
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 )
 
 type Handler struct {
-	models.UseCase[*aggregate.User, types.Empty]
+	usecase.Create
 	messages.Broker
 }
 
 func (handler *Handler) Handle(command *Command) error {
-	user, err := aggregate.NewUser(&aggregate.UserPrimitive{
+	new, err := user.New(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
@@ -25,13 +24,13 @@ func (handler *Handler) Handle(command *Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	_, err = handler.UseCase.Run(user)
+	err = handler.Create.Run(new)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	handler.Broker.PublishMessages(user.PullMessages())
+	handler.Broker.PublishMessages(new.PullMessages())
 
 	return nil
 }

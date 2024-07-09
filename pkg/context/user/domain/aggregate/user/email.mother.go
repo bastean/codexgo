@@ -1,12 +1,11 @@
-package valueobj
+package user
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func EmailWithValidValue() models.ValueObject[string] {
+func EmailWithValidValue() *Email {
 	value, err := NewEmail(services.Create.Email())
 
 	if err != nil {

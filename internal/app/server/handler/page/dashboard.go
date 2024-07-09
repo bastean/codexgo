@@ -25,7 +25,7 @@ func Dashboard() gin.HandlerFunc {
 
 		query.Id = id.(string)
 
-		user, err := user.Read.Handle(query)
+		found, err := user.Read.Handle(query)
 
 		if err != nil {
 			c.Error(err)
@@ -34,6 +34,6 @@ func Dashboard() gin.HandlerFunc {
 			return
 		}
 
-		dashboard.Page(user).Render(c.Request.Context(), c.Writer)
+		dashboard.Page(found).Render(c.Request.Context(), c.Writer)
 	}
 }

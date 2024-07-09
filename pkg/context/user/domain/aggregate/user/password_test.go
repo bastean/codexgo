@@ -1,10 +1,10 @@
-package valueobj_test
+package user_test
 
 import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -15,7 +15,7 @@ type PasswordValueObjectTestSuite struct {
 func (suite *PasswordValueObjectTestSuite) SetupTest() {}
 
 func (suite *PasswordValueObjectTestSuite) TestWithInvalidLength() {
-	value, err := valueobj.PasswordWithInvalidLength()
+	value, err := user.PasswordWithInvalidLength()
 
 	var actual *errors.InvalidValue
 

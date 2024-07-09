@@ -2,7 +2,7 @@ package update
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
 )
@@ -12,32 +12,32 @@ type Update struct {
 	model.Hashing
 }
 
-func (update *Update) Run(input *Input) (types.Empty, error) {
-	user, err := update.Repository.Search(&model.RepositorySearchCriteria{
-		Id: input.User.Id,
+func (update *Update) Run(new *user.User, password *user.Password) error {
+	found, err := update.Repository.Search(&model.RepositorySearchCriteria{
+		Id: new.Id,
 	})
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(update.Hashing, user.Password.Value(), input.User.Password.Value())
+	err = service.IsPasswordInvalid(update.Hashing, found.Password.Value, new.Password.Value)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Run")
 	}
 
-	if input.UpdatedPassword != nil {
-		input.User.Password = input.UpdatedPassword
+	if password != nil {
+		new.Password = password
 	}
 
-	input.User.Verified = user.Verified
+	new.Verified = found.Verified
 
-	err = update.Repository.Update(input.User)
+	err = update.Repository.Update(new)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Run")
 	}
 
-	return nil, nil
+	return nil
 }

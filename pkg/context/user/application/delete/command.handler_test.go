@@ -3,11 +3,11 @@ package delete_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
@@ -15,8 +15,8 @@ import (
 
 type DeleteHandlerTestSuite struct {
 	suite.Suite
-	sut        models.CommandHandler[*delete.Command]
-	usecase    models.UseCase[*delete.Input, types.Empty]
+	sut        handlers.Command[*delete.Command]
+	delete     usecase.Delete
 	hashing    *cryptographic.HashingMock
 	repository *persistence.RepositoryMock
 }
@@ -26,33 +26,33 @@ func (suite *DeleteHandlerTestSuite) SetupTest() {
 
 	suite.hashing = new(cryptographic.HashingMock)
 
-	suite.usecase = &delete.Delete{
+	suite.delete = &delete.Delete{
 		Repository: suite.repository,
 		Hashing:    suite.hashing,
 	}
 
 	suite.sut = &delete.Handler{
-		UseCase: suite.usecase,
+		Delete: suite.delete,
 	}
 }
 
 func (suite *DeleteHandlerTestSuite) TestDelete() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
 	command := &delete.Command{
-		Id:       user.Id.Value(),
-		Password: user.Password.Value(),
+		Id:       random.Id.Value,
+		Password: random.Password.Value,
 	}
 
 	criteria := &model.RepositorySearchCriteria{
-		Id: user.Id,
+		Id: random.Id,
 	}
 
-	suite.repository.On("Search", criteria).Return(user)
+	suite.repository.On("Search", criteria).Return(random)
 
-	suite.hashing.On("IsNotEqual", user.Password.Value(), user.Password.Value()).Return(false)
+	suite.hashing.On("IsNotEqual", random.Password.Value, random.Password.Value).Return(false)
 
-	suite.repository.On("Delete", user.Id)
+	suite.repository.On("Delete", random.Id)
 
 	suite.NoError(suite.sut.Handle(command))
 

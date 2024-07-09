@@ -8,7 +8,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
-	"github.com/bastean/codexgo/pkg/context/user/domain/event"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication/terminal"
 	"github.com/stretchr/testify/suite"
 )
@@ -32,19 +32,19 @@ func (suite *TerminalConfirmationTransportTestSuite) SetupTest() {
 }
 
 func (suite *TerminalConfirmationTransportTestSuite) TestSubmit() {
-	message := event.RandomCreatedSucceeded()
+	message := user.RandomCreatedSucceeded()
 
-	user := new(event.CreatedSucceeded)
+	event := new(user.CreatedSucceeded)
 
-	user.Attributes = new(event.CreatedSucceededAttributes)
+	event.Attributes = new(user.CreatedSucceededAttributes)
 
-	suite.NoError(json.Unmarshal(message.Attributes, user.Attributes))
+	suite.NoError(json.Unmarshal(message.Attributes, event.Attributes))
 
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", user.Attributes.Username, suite.serverURL, user.Attributes.Id)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", event.Attributes.Username, suite.serverURL, event.Attributes.Id)
 
 	suite.logger.Mock.On("Info", link)
 
-	suite.NoError(suite.sut.Submit(user.Attributes))
+	suite.NoError(suite.sut.Submit(event.Attributes))
 
 	suite.logger.AssertExpectations(suite.T())
 }

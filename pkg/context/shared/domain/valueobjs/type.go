@@ -4,33 +4,23 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/go-playground/validator/v10"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
 var TypeOneOf = []string{"event", "command"}
 
 type Type struct {
-	Type string `validate:"oneof=event command"`
+	Value string `validate:"oneof=event command"`
 }
 
-func (value *Type) Value() string {
-	return value.Type
-}
-
-func (value *Type) IsValid() error {
-	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(value)
-}
-
-func NewType(value string) (models.ValueObject[string], error) {
+func NewType(value string) (*Type, error) {
 	value = strings.TrimSpace(value)
 
 	valueObj := &Type{
-		Type: value,
+		Value: value,
 	}
 
-	if valueObj.IsValid() != nil {
+	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewType",
 			What:  "type must be only one of these values: " + strings.Join(TypeOneOf, ", "),

@@ -1,21 +1,20 @@
-package event
+package user
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 )
 
 func RandomCreatedSucceeded() *messages.Message {
-	id := valueobj.IdWithValidValue()
-	email := valueobj.EmailWithValidValue()
-	username := valueobj.UsernameWithValidValue()
+	id := IdWithValidValue()
+	email := EmailWithValidValue()
+	username := UsernameWithValidValue()
 
 	event, err := NewCreatedSucceeded(&CreatedSucceeded{
 		Attributes: &CreatedSucceededAttributes{
-			Id:       id.Value(),
-			Email:    email.Value(),
-			Username: username.Value(),
+			Id:       id.Value,
+			Email:    email.Value,
+			Username: username.Value,
 		},
 	})
 

@@ -4,34 +4,24 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/go-playground/validator/v10"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
 const EntityMinCharactersLength = "1"
 const EntityMaxCharactersLength = "20"
 
 type Entity struct {
-	Entity string `validate:"gte=1,lte=20,alpha"`
+	Value string `validate:"gte=1,lte=20,alpha"`
 }
 
-func (value *Entity) Value() string {
-	return value.Entity
-}
-
-func (value *Entity) IsValid() error {
-	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(value)
-}
-
-func NewEntity(value string) (models.ValueObject[string], error) {
+func NewEntity(value string) (*Entity, error) {
 	value = strings.TrimSpace(value)
 
 	valueObj := &Entity{
-		Entity: value,
+		Value: value,
 	}
 
-	if valueObj.IsValid() != nil {
+	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewEntity",
 			What:  "entity must be between " + EntityMinCharactersLength + " to " + EntityMaxCharactersLength + " characters and be alpha only",

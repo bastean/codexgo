@@ -5,13 +5,12 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	"github.com/bastean/codexgo/pkg/context/user/domain/event"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 )
 
 type Consumer struct {
-	models.UseCase[*event.CreatedSucceeded, types.Empty]
+	usecase.Created
 	Queues []*messages.Queue
 }
 
@@ -20,11 +19,11 @@ func (consumer *Consumer) SubscribedTo() []*messages.Queue {
 }
 
 func (consumer *Consumer) On(message *messages.Message) error {
-	user := new(event.CreatedSucceeded)
+	event := new(user.CreatedSucceeded)
 
-	user.Attributes = new(event.CreatedSucceededAttributes)
+	event.Attributes = new(user.CreatedSucceededAttributes)
 
-	err := json.Unmarshal(message.Attributes, user.Attributes)
+	err := json.Unmarshal(message.Attributes, event.Attributes)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -39,7 +38,7 @@ func (consumer *Consumer) On(message *messages.Message) error {
 		})
 	}
 
-	_, err = consumer.UseCase.Run(user)
+	err = consumer.Created.Run(event)
 
 	if err != nil {
 		return errors.BubbleUp(err, "On")

@@ -2,22 +2,17 @@ package delete
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 )
 
-type Input struct {
-	Id, Password models.ValueObject[string]
-}
-
 type Handler struct {
-	models.UseCase[*Input, types.Empty]
+	usecase.Delete
 }
 
 func (handler *Handler) Handle(command *Command) error {
-	id, errId := valueobj.NewId(command.Id)
-	password, errPassword := valueobj.NewPassword(command.Password)
+	id, errId := user.NewId(command.Id)
+	password, errPassword := user.NewPassword(command.Password)
 
 	err := errors.Join(errId, errPassword)
 
@@ -25,10 +20,7 @@ func (handler *Handler) Handle(command *Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	_, err = handler.UseCase.Run(&Input{
-		Id:       id,
-		Password: password,
-	})
+	err = handler.Delete.Run(id, password)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

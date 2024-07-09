@@ -1,19 +1,19 @@
 package create
 
 import (
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 )
 
 func RandomCommand() *Command {
-	id := valueobj.IdWithValidValue()
-	email := valueobj.EmailWithValidValue()
-	username := valueobj.UsernameWithValidValue()
-	password := valueobj.PasswordWithValidValue()
+	id := user.IdWithValidValue()
+	email := user.EmailWithValidValue()
+	username := user.UsernameWithValidValue()
+	password := user.PasswordWithValidValue()
 
 	return &Command{
-		Id:       id.Value(),
-		Email:    email.Value(),
-		Username: username.Value(),
-		Password: password.Value(),
+		Id:       id.Value,
+		Email:    email.Value,
+		Username: username.Value,
+		Password: password.Value,
 	}
 }

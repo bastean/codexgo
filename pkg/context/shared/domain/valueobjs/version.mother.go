@@ -2,11 +2,10 @@ package valueobjs
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func VersionWithValidValue() models.ValueObject[string] {
+func VersionWithValidValue() *Version {
 	value, err := NewVersion(services.Create.Regex(`^[0-9]{1,2}$`))
 
 	if err != nil {

@@ -3,47 +3,48 @@ package read_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/read"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type ReadHandlerTestSuite struct {
 	suite.Suite
-	sut        models.QueryHandler[*read.Query, *read.Response]
-	usecase    models.UseCase[models.ValueObject[string], *aggregate.User]
+	sut        handlers.Query[*read.Query, *read.Response]
+	read       usecase.Read
 	repository *persistence.RepositoryMock
 }
 
 func (suite *ReadHandlerTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
 
-	suite.usecase = &read.Read{
+	suite.read = &read.Read{
 		Repository: suite.repository,
 	}
 
 	suite.sut = &read.Handler{
-		UseCase: suite.usecase,
+		Read: suite.read,
 	}
 }
 
 func (suite *ReadHandlerTestSuite) TestLogin() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
 	query := &read.Query{
-		Id: user.Id.Value(),
+		Id: random.Id.Value,
 	}
 
 	criteria := &model.RepositorySearchCriteria{
-		Id: user.Id,
+		Id: random.Id,
 	}
 
-	suite.repository.On("Search", criteria).Return(user)
+	suite.repository.On("Search", criteria).Return(random)
 
-	expected := user.ToPrimitives()
+	expected := random.ToPrimitive()
 
 	actual, err := suite.sut.Handle(query)
 

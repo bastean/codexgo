@@ -1,4 +1,4 @@
-package valueobjs
+package user
 
 import (
 	"strings"
@@ -7,23 +7,23 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-type Email struct {
-	Value string `validate:"email"`
+type Id struct {
+	Value string `validate:"uuid4"`
 }
 
-func NewEmail(value string) (*Email, error) {
+func NewId(value string) (*Id, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Email{
+	valueObj := &Id{
 		Value: value,
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
-			Where: "NewEmail",
-			What:  "invalid email format",
+			Where: "NewId",
+			What:  "invalid uuid4 format",
 			Why: errors.Meta{
-				"Email": value,
+				"Id": value,
 			},
 		})
 	}

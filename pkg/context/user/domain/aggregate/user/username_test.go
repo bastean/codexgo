@@ -1,10 +1,10 @@
-package valueobj_test
+package user_test
 
 import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -15,7 +15,7 @@ type UsernameValueObjectTestSuite struct {
 func (suite *UsernameValueObjectTestSuite) SetupTest() {}
 
 func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
-	value, err := valueobj.UsernameWithInvalidLength()
+	value, err := user.UsernameWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -34,7 +34,7 @@ func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
 }
 
 func (suite *UsernameValueObjectTestSuite) TestWithInvalidAlphanumeric() {
-	value, err := valueobj.UsernameWithInvalidAlphanumeric()
+	value, err := user.UsernameWithInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
 

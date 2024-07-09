@@ -1,12 +1,11 @@
-package valueobj
+package user
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func PasswordWithValidValue() models.ValueObject[string] {
+func PasswordWithValidValue() *Password {
 	value, err := NewPassword(services.Create.Regex(`^[\W\w]{8,64}$`))
 
 	if err != nil {

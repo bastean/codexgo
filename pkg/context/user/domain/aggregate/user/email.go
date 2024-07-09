@@ -1,4 +1,4 @@
-package valueobjs
+package user
 
 import (
 	"strings"

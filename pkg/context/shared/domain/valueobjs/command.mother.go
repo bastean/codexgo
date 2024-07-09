@@ -2,11 +2,10 @@ package valueobjs
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func CommandWithValidValue() models.ValueObject[string] {
+func CommandWithValidValue() *Command {
 	value, err := NewCommand(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {

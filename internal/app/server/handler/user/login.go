@@ -25,7 +25,7 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		user, err := user.Login.Handle(query)
+		found, err := user.Login.Handle(query)
 
 		if err != nil {
 			c.Error(err)
@@ -35,7 +35,7 @@ func Login() gin.HandlerFunc {
 
 		token, err := jwt.Generate(jwt.Payload{
 			key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
-			key.UserId: user.Id,
+			key.UserId: found.Id,
 		})
 
 		if err != nil {

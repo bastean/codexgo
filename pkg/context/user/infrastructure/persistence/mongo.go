@@ -4,9 +4,8 @@ import (
 	"context"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,18 +25,18 @@ type UserCollection struct {
 	hashing    model.Hashing
 }
 
-func (db *UserCollection) Save(user *aggregate.User) error {
-	newUser := UserDocument(*user.ToPrimitives())
+func (db *UserCollection) Save(user *user.User) error {
+	new := UserDocument(*user.ToPrimitive())
 
-	hashed, err := db.hashing.Hash(newUser.Password)
+	hashed, err := db.hashing.Hash(new.Password)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Save")
 	}
 
-	newUser.Password = hashed
+	new.Password = hashed
 
-	_, err = db.collection.InsertOne(context.Background(), &newUser)
+	_, err = db.collection.InsertOne(context.Background(), &new)
 
 	if mongo.IsDuplicateKeyError(err) {
 		return errors.BubbleUp(persistences.HandleMongoDuplicateKeyError(err), "Save")
@@ -48,7 +47,7 @@ func (db *UserCollection) Save(user *aggregate.User) error {
 			Where: "Save",
 			What:  "failure to save a user",
 			Why: errors.Meta{
-				"Id": user.Id.Value(),
+				"Id": user.Id.Value,
 			},
 			Who: err,
 		})
@@ -57,8 +56,8 @@ func (db *UserCollection) Save(user *aggregate.User) error {
 	return nil
 }
 
-func (db *UserCollection) Verify(id models.ValueObject[string]) error {
-	filter := bson.D{{Key: "id", Value: id.Value()}}
+func (db *UserCollection) Verify(id *user.Id) error {
+	filter := bson.D{{Key: "id", Value: id.Value}}
 
 	_, err := db.collection.UpdateOne(context.Background(), filter, bson.D{
 		{Key: "$set", Value: bson.D{
@@ -71,7 +70,7 @@ func (db *UserCollection) Verify(id models.ValueObject[string]) error {
 			Where: "Verify",
 			What:  "failure to verify a user",
 			Why: errors.Meta{
-				"Id": id.Value(),
+				"Id": id.Value,
 			},
 			Who: err,
 		})
@@ -80,27 +79,27 @@ func (db *UserCollection) Verify(id models.ValueObject[string]) error {
 	return nil
 }
 
-func (db *UserCollection) Update(user *aggregate.User) error {
-	updatedUser := UserDocument(*user.ToPrimitives())
+func (db *UserCollection) Update(user *user.User) error {
+	updated := UserDocument(*user.ToPrimitive())
 
-	filter := bson.D{{Key: "id", Value: user.Id.Value()}}
+	filter := bson.D{{Key: "id", Value: user.Id.Value}}
 
-	hashed, err := db.hashing.Hash(user.Password.Value())
+	hashed, err := db.hashing.Hash(user.Password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Update")
 	}
 
-	updatedUser.Password = hashed
+	updated.Password = hashed
 
-	_, err = db.collection.ReplaceOne(context.Background(), filter, &updatedUser)
+	_, err = db.collection.ReplaceOne(context.Background(), filter, &updated)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Update",
 			What:  "failure to update a user",
 			Why: errors.Meta{
-				"Id": user.Id.Value(),
+				"Id": user.Id.Value,
 			},
 			Who: err,
 		})
@@ -109,8 +108,8 @@ func (db *UserCollection) Update(user *aggregate.User) error {
 	return nil
 }
 
-func (db *UserCollection) Delete(id models.ValueObject[string]) error {
-	filter := bson.D{{Key: "id", Value: id.Value()}}
+func (db *UserCollection) Delete(id *user.Id) error {
+	filter := bson.D{{Key: "id", Value: id.Value}}
 
 	_, err := db.collection.DeleteOne(context.Background(), filter)
 
@@ -119,7 +118,7 @@ func (db *UserCollection) Delete(id models.ValueObject[string]) error {
 			Where: "Delete",
 			What:  "failure to delete a user",
 			Why: errors.Meta{
-				"Id": id.Value(),
+				"Id": id.Value,
 			},
 			Who: err,
 		})
@@ -128,17 +127,17 @@ func (db *UserCollection) Delete(id models.ValueObject[string]) error {
 	return nil
 }
 
-func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*aggregate.User, error) {
+func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*user.User, error) {
 	var filter bson.D
 	var index string
 
 	switch {
 	case criteria.Id != nil:
-		filter = bson.D{{Key: "id", Value: criteria.Id.Value()}}
-		index = criteria.Id.Value()
+		filter = bson.D{{Key: "id", Value: criteria.Id.Value}}
+		index = criteria.Id.Value
 	case criteria.Email != nil:
-		filter = bson.D{{Key: "email", Value: criteria.Email.Value()}}
-		index = criteria.Email.Value()
+		filter = bson.D{{Key: "email", Value: criteria.Email.Value}}
+		index = criteria.Email.Value
 	}
 
 	result := db.collection.FindOne(context.Background(), filter)
@@ -147,7 +146,7 @@ func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*agg
 		return nil, persistences.HandleMongoDocumentNotFound(index, err)
 	}
 
-	primitive := new(aggregate.UserPrimitive)
+	primitive := new(user.Primitive)
 
 	err := result.Decode(primitive)
 
@@ -162,12 +161,12 @@ func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*agg
 		})
 	}
 
-	user, err := aggregate.FromPrimitives(primitive)
+	found, err := user.FromPrimitive(primitive)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "failure to create an aggregate from a primitive",
+			What:  "failure to create an user from a primitive",
 			Why: errors.Meta{
 				"Primitive": primitive,
 				"Index":     index,
@@ -176,7 +175,7 @@ func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*agg
 		})
 	}
 
-	return user, nil
+	return found, nil
 }
 
 func NewMongoCollection(mdb *persistences.MongoDB, collectionName string, hashing model.Hashing) (model.Repository, error) {

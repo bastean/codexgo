@@ -2,11 +2,10 @@ package valueobjs
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func EntityWithValidValue() models.ValueObject[string] {
+func EntityWithValidValue() *Entity {
 	value, err := NewEntity(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {

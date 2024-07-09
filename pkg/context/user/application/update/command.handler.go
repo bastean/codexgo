@@ -2,23 +2,16 @@ package update
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 )
 
-type Input struct {
-	User            *aggregate.User
-	UpdatedPassword models.ValueObject[string]
-}
-
 type Handler struct {
-	models.UseCase[*Input, types.Empty]
+	usecase.Update
 }
 
 func (handler *Handler) Handle(command *Command) error {
-	user, err := aggregate.NewUser(&aggregate.UserPrimitive{
+	new, err := user.New(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
@@ -29,20 +22,17 @@ func (handler *Handler) Handle(command *Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	var updatedPassword models.ValueObject[string]
+	var password *user.Password
 
 	if command.UpdatedPassword != "" {
-		updatedPassword, err = valueobj.NewPassword(command.UpdatedPassword)
+		password, err = user.NewPassword(command.UpdatedPassword)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Handle")
 		}
 	}
 
-	_, err = handler.UseCase.Run(&Input{
-		User:            user,
-		UpdatedPassword: updatedPassword,
-	})
+	err = handler.Update.Run(new, password)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

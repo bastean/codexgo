@@ -4,31 +4,21 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/go-playground/validator/v10"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
 type Id struct {
-	Id string `validate:"uuid4"`
+	Value string `validate:"uuid4"`
 }
 
-func (value *Id) Value() string {
-	return value.Id
-}
-
-func (value *Id) IsValid() error {
-	validate := validator.New(validator.WithRequiredStructEnabled())
-	return validate.Struct(value)
-}
-
-func NewId(value string) (models.ValueObject[string], error) {
+func NewId(value string) (*Id, error) {
 	value = strings.TrimSpace(value)
 
 	valueObj := &Id{
-		Id: value,
+		Value: value,
 	}
 
-	if valueObj.IsValid() != nil {
+	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewId",
 			What:  "invalid uuid4 format",

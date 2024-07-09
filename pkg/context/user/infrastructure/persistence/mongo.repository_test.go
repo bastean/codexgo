@@ -6,9 +6,8 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
@@ -35,23 +34,23 @@ func (suite *MongoRepositoryTestSuite) SetupTest() {
 }
 
 func (suite *MongoRepositoryTestSuite) TestSave() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
-	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
+	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(random))
 
 	suite.hashing.AssertExpectations(suite.T())
 }
 
 func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
-	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
+	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(random))
 
-	err := suite.sut.Save(user)
+	err := suite.sut.Save(random)
 
 	suite.hashing.AssertExpectations(suite.T())
 
@@ -73,49 +72,47 @@ func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
 }
 
 func (suite *MongoRepositoryTestSuite) TestVerify() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
-	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
+	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(random))
 
-	suite.NoError(suite.sut.Verify(user.Id))
+	suite.NoError(suite.sut.Verify(random.Id))
 }
 
 func (suite *MongoRepositoryTestSuite) TestUpdate() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
-	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
+	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(random))
 
-	password := valueobj.PasswordWithValidValue()
+	random.Password = user.PasswordWithValidValue()
 
-	user.Password = password
+	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
-
-	suite.NoError(suite.sut.Update(user))
+	suite.NoError(suite.sut.Update(random))
 
 	suite.hashing.AssertExpectations(suite.T())
 }
 
 func (suite *MongoRepositoryTestSuite) TestDelete() {
-	user := aggregate.RandomUser()
+	random := user.Random()
 
-	suite.hashing.On("Hash", user.Password.Value()).Return(user.Password.Value())
+	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(user))
+	suite.NoError(suite.sut.Save(random))
 
-	suite.NoError(suite.sut.Delete(user.Id))
+	suite.NoError(suite.sut.Delete(random.Id))
 }
 
 func (suite *MongoRepositoryTestSuite) TestSearch() {
-	expected := aggregate.RandomUser()
+	expected := user.Random()
 
 	expected.PullMessages()
 
-	suite.hashing.On("Hash", expected.Password.Value()).Return(expected.Password.Value())
+	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
 	suite.NoError(suite.sut.Save(expected))
 
@@ -123,11 +120,9 @@ func (suite *MongoRepositoryTestSuite) TestSearch() {
 		Id: expected.Id,
 	}
 
-	user, err := suite.sut.Search(criteria)
+	actual, err := suite.sut.Search(criteria)
 
 	suite.NoError(err)
-
-	actual := user
 
 	suite.Equal(expected, actual)
 }

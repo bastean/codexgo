@@ -1,15 +1,15 @@
 package delete
 
 import (
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 )
 
 func RandomCommand() *Command {
-	id := valueobj.IdWithValidValue()
-	password := valueobj.PasswordWithValidValue()
+	id := user.IdWithValidValue()
+	password := user.PasswordWithValidValue()
 
 	return &Command{
-		Id:       id.Value(),
-		Password: password.Value(),
+		Id:       id.Value,
+		Password: password.Value,
 	}
 }

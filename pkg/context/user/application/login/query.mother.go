@@ -1,15 +1,15 @@
 package login
 
 import (
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 )
 
 func RandomQuery() *Query {
-	email := valueobj.EmailWithValidValue()
-	password := valueobj.PasswordWithValidValue()
+	email := user.EmailWithValidValue()
+	password := user.PasswordWithValidValue()
 
 	return &Query{
-		Email:    email.Value(),
-		Password: password.Value(),
+		Email:    email.Value,
+		Password: password.Value,
 	}
 }

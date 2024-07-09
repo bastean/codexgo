@@ -2,22 +2,17 @@ package login
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 )
 
-type Input struct {
-	Email, Password models.ValueObject[string]
-}
-
 type Handler struct {
-	models.UseCase[*Input, *aggregate.User]
+	usecase.Login
 }
 
 func (handler *Handler) Handle(query *Query) (*Response, error) {
-	email, errEmail := valueobj.NewEmail(query.Email)
-	password, errPassword := valueobj.NewPassword(query.Password)
+	email, errEmail := user.NewEmail(query.Email)
+	password, errPassword := user.NewPassword(query.Password)
 
 	err := errors.Join(errEmail, errPassword)
 
@@ -25,16 +20,13 @@ func (handler *Handler) Handle(query *Query) (*Response, error) {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	user, err := handler.UseCase.Run(&Input{
-		Email:    email,
-		Password: password,
-	})
+	found, err := handler.Login.Run(email, password)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	response := Response(*user.ToPrimitives())
+	response := Response(*found.ToPrimitive())
 
 	return &response, nil
 }

@@ -1,12 +1,11 @@
-package valueobj
+package user
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-func IdWithValidValue() models.ValueObject[string] {
+func IdWithValidValue() *Id {
 	value, err := NewId(services.Create.UUID())
 
 	if err != nil {
@@ -14,7 +13,6 @@ func IdWithValidValue() models.ValueObject[string] {
 	}
 
 	return value
-
 }
 
 func IdWithInvalidValue() (string, error) {

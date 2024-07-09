@@ -5,10 +5,9 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
 	"github.com/bastean/codexgo/pkg/context/user/application/created"
-	"github.com/bastean/codexgo/pkg/context/user/domain/event"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication"
 	"github.com/stretchr/testify/suite"
 )
@@ -16,7 +15,7 @@ import (
 type CreatedConsumerTestSuite struct {
 	suite.Suite
 	sut       messages.Consumer
-	usecase   models.UseCase[*event.CreatedSucceeded, types.Empty]
+	created   usecase.Created
 	transport *communication.TransportMock
 	queues    []*messages.Queue
 }
@@ -36,26 +35,26 @@ func (suite *CreatedConsumerTestSuite) SetupTest() {
 
 	suite.transport = new(communication.TransportMock)
 
-	suite.usecase = &created.Created{
+	suite.created = &created.Created{
 		Transport: suite.transport,
 	}
 
 	suite.sut = &created.Consumer{
-		UseCase: suite.usecase,
+		Created: suite.created,
 		Queues:  suite.queues,
 	}
 }
 
 func (suite *CreatedConsumerTestSuite) TestCreatedSucceeded() {
-	message := event.RandomCreatedSucceeded()
+	message := user.RandomCreatedSucceeded()
 
-	user := new(event.CreatedSucceeded)
+	event := new(user.CreatedSucceeded)
 
-	user.Attributes = new(event.CreatedSucceededAttributes)
+	event.Attributes = new(user.CreatedSucceededAttributes)
 
-	suite.NoError(json.Unmarshal(message.Attributes, user.Attributes))
+	suite.NoError(json.Unmarshal(message.Attributes, event.Attributes))
 
-	suite.transport.On("Submit", user.Attributes)
+	suite.transport.On("Submit", event.Attributes)
 
 	suite.NoError(suite.sut.On(message))
 

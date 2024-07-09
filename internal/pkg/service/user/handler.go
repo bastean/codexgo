@@ -28,65 +28,53 @@ type (
 )
 
 func NewCreate(repository model.Repository, broker messages.Broker) *create.Handler {
-	usecase := &create.Create{
-		Repository: repository,
-	}
-
 	return &create.Handler{
-		UseCase: usecase,
-		Broker:  broker,
+		Create: &create.Create{
+			Repository: repository,
+		},
+		Broker: broker,
 	}
 }
 
 func NewRead(repository model.Repository) *read.Handler {
-	usecase := &read.Read{
-		Repository: repository,
-	}
-
 	return &read.Handler{
-		UseCase: usecase,
+		Read: &read.Read{
+			Repository: repository,
+		},
 	}
 }
 
 func NewUpdate(repository model.Repository, hashing model.Hashing) *update.Handler {
-	usecase := &update.Update{
-		Repository: repository,
-		Hashing:    hashing,
-	}
-
 	return &update.Handler{
-		UseCase: usecase,
+		Update: &update.Update{
+			Repository: repository,
+			Hashing:    hashing,
+		},
 	}
 }
 
 func NewDelete(repository model.Repository, hashing model.Hashing) *delete.Handler {
-	usecase := &delete.Delete{
-		Repository: repository,
-		Hashing:    hashing,
-	}
-
 	return &delete.Handler{
-		UseCase: usecase,
+		Delete: &delete.Delete{
+			Repository: repository,
+			Hashing:    hashing,
+		},
 	}
 }
 
 func NewVerify(repository model.Repository) *verify.Handler {
-	usecase := &verify.Verify{
-		Repository: repository,
-	}
-
 	return &verify.Handler{
-		UseCase: usecase,
+		Verify: &verify.Verify{
+			Repository: repository,
+		},
 	}
 }
 
 func NewLogin(repository model.Repository, hashing model.Hashing) *login.Handler {
-	usecase := &login.Login{
-		Repository: repository,
-		Hashing:    hashing,
-	}
-
 	return &login.Handler{
-		UseCase: usecase,
+		Login: &login.Login{
+			Repository: repository,
+			Hashing:    hashing,
+		},
 	}
 }

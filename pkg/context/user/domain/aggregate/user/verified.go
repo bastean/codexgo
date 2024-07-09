@@ -1,30 +1,22 @@
-package valueobj
+package user
 
 import (
 	"fmt"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
 type Verified struct {
-	Verified bool
+	Value bool
 }
 
-func (value *Verified) Value() bool {
-	return value.Verified
-}
-
-func (value *Verified) IsValid() error {
-	return nil
-}
-
-func NewVerified(value bool) (models.ValueObject[bool], error) {
+func NewVerified(value bool) (*Verified, error) {
 	valueObj := &Verified{
-		Verified: value,
+		Value: value,
 	}
 
-	if valueObj.IsValid() != nil {
+	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewVerified",
 			What:  "invalid verified value",

@@ -11,12 +11,10 @@ var (
 )
 
 func InitCreated(transport models.Transport, queue *messages.Queue) {
-	usecase := &created.Created{
-		Transport: transport,
-	}
-
 	Created = &created.Consumer{
-		UseCase: usecase,
-		Queues:  []*messages.Queue{queue},
+		Created: &created.Created{
+			Transport: transport,
+		},
+		Queues: []*messages.Queue{queue},
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
 )
 
@@ -48,14 +47,19 @@ func NewRoutingKey(components *RoutingKeyComponents) string {
 	types, errType := valueobjs.NewType(components.Type)
 	entity, errEntity := valueobjs.NewEntity(components.Entity)
 
-	var action models.ValueObject[string]
+	event, errEvent := valueobjs.NewEvent(components.Event)
+	command, errCommand := valueobjs.NewCommand(components.Command)
+
+	var action string
 	var errAction error
 
 	switch components.Type {
 	case Type.Event:
-		action, errAction = valueobjs.NewEvent(components.Event)
+		action = event.Value
+		errAction = errEvent
 	case Type.Command:
-		action, errAction = valueobjs.NewCommand(components.Command)
+		action = command.Value
+		errAction = errCommand
 	}
 
 	status, errStatus := valueobjs.NewStatus(components.Status)
@@ -66,7 +70,7 @@ func NewRoutingKey(components *RoutingKeyComponents) string {
 		errors.Panic(err.Error(), "NewRoutingKey")
 	}
 
-	key := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s", organization.Value(), service.Value(), version.Value(), types.Value(), entity.Value(), action.Value(), status.Value())
+	key := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s", organization.Value, service.Value, version.Value, types.Value, entity.Value, action, status.Value)
 
 	key = strings.ToLower(key)
 

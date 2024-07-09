@@ -3,51 +3,50 @@ package verify_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/types"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate"
+	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/domain/valueobj"
+	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 
 type VerifyHandlerTestSuite struct {
 	suite.Suite
-	sut        models.CommandHandler[*verify.Command]
-	usecase    models.UseCase[models.ValueObject[string], types.Empty]
+	sut        handlers.Command[*verify.Command]
+	verify     usecase.Verify
 	repository *persistence.RepositoryMock
 }
 
 func (suite *VerifyHandlerTestSuite) SetupTest() {
 	suite.repository = new(persistence.RepositoryMock)
 
-	suite.usecase = &verify.Verify{
+	suite.verify = &verify.Verify{
 		Repository: suite.repository,
 	}
 
 	suite.sut = &verify.Handler{
-		UseCase: suite.usecase,
+		Verify: suite.verify,
 	}
 }
 
 func (suite *VerifyHandlerTestSuite) TestVerify() {
 	command := verify.RandomCommand()
 
-	user := aggregate.RandomUser()
+	random := user.Random()
 
-	idVO, _ := valueobj.NewId(command.Id)
+	id, _ := user.NewId(command.Id)
 
-	user.Id = idVO
+	random.Id = id
 
 	criteria := &model.RepositorySearchCriteria{
-		Id: idVO,
+		Id: id,
 	}
 
-	suite.repository.On("Search", criteria).Return(user)
+	suite.repository.On("Search", criteria).Return(random)
 
-	suite.repository.On("Verify", idVO)
+	suite.repository.On("Verify", id)
 
 	suite.NoError(suite.sut.Handle(command))
 
