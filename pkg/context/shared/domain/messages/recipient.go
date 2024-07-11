@@ -41,9 +41,7 @@ func NewRecipientName(components *RecipientNameComponents) string {
 
 	status, errStatus := valueobjs.NewStatus(components.Status)
 
-	err := errors.Join(errService, errEntity, errAction, errTrigger, errStatus)
-
-	if err != nil {
+	if err := errors.Join(errService, errEntity, errAction, errTrigger, errStatus); err != nil {
 		errors.Panic(err.Error(), "NewRecipientName")
 	}
 

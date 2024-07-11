@@ -1,17 +1,17 @@
-package logger
+package log
 
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers/log"
 )
 
 var (
-	Logger = new(loggers.Logger)
-	Debug  = Logger.Debug
-	Error  = Logger.Error
-	Fatal  = Logger.Fatal
-	Info   = Logger.Info
+	Log   = new(log.Log)
+	Debug = Log.Debug
+	Error = Log.Error
+	Fatal = Log.Fatal
+	Info  = Log.Info
 )
 
 func Starting(service string) {

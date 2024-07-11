@@ -2,13 +2,13 @@ package jwt
 
 import (
 	"github.com/bastean/codexgo/internal/pkg/service/env"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/authentications"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/authentications/jwt"
 )
 
-type Payload = authentications.Payload
+type Payload = jwt.Payload
 
 var (
-	jwt      = authentications.NewJWT(env.JWT.SecretKey)
-	Generate = jwt.Generate
-	Validate = jwt.Validate
+	JWT      = jwt.New(env.JWT.SecretKey)
+	Generate = JWT.Generate
+	Validate = JWT.Validate
 )

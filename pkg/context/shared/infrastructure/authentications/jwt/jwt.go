@@ -1,4 +1,4 @@
-package authentications
+package jwt
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
@@ -45,7 +45,7 @@ func (auth *JWT) Validate(signature string) (jwt.MapClaims, error) {
 	})
 }
 
-func NewJWT(secretKey string) *JWT {
+func New(secretKey string) *JWT {
 	return &JWT{
 		secretKey: []byte(secretKey),
 	}

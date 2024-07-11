@@ -28,9 +28,7 @@ func create(primitive *Primitive) (*User, error) {
 	password, errPassword := NewPassword(primitive.Password)
 	verified, errVerified := NewVerified(primitive.Verified)
 
-	err := errors.Join(errId, errEmail, errUsername, errPassword, errVerified)
-
-	if err != nil {
+	if err := errors.Join(errId, errEmail, errUsername, errPassword, errVerified); err != nil {
 		return nil, errors.BubbleUp(err, "create")
 	}
 

@@ -1,10 +1,10 @@
-package persistence
+package collection
 
 import (
 	"context"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,15 +20,15 @@ type UserDocument struct {
 	Verified bool   `bson:"verified,omitempty"`
 }
 
-type UserCollection struct {
-	collection *mongo.Collection
-	hashing    model.Hashing
+type User struct {
+	*mongo.Collection
+	model.Hashing
 }
 
-func (db *UserCollection) Save(user *user.User) error {
+func (mongoDB *User) Save(user *user.User) error {
 	new := UserDocument(*user.ToPrimitive())
 
-	hashed, err := db.hashing.Hash(new.Password)
+	hashed, err := mongoDB.Hashing.Hash(new.Password)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Save")
@@ -36,10 +36,10 @@ func (db *UserCollection) Save(user *user.User) error {
 
 	new.Password = hashed
 
-	_, err = db.collection.InsertOne(context.Background(), &new)
+	_, err = mongoDB.Collection.InsertOne(context.Background(), &new)
 
 	if mongo.IsDuplicateKeyError(err) {
-		return errors.BubbleUp(persistences.HandleMongoDuplicateKeyError(err), "Save")
+		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Save")
 	}
 
 	if err != nil {
@@ -56,10 +56,10 @@ func (db *UserCollection) Save(user *user.User) error {
 	return nil
 }
 
-func (db *UserCollection) Verify(id *user.Id) error {
+func (mongoDB *User) Verify(id *user.Id) error {
 	filter := bson.D{{Key: "id", Value: id.Value}}
 
-	_, err := db.collection.UpdateOne(context.Background(), filter, bson.D{
+	_, err := mongoDB.Collection.UpdateOne(context.Background(), filter, bson.D{
 		{Key: "$set", Value: bson.D{
 			{Key: "verified", Value: true},
 		}},
@@ -79,12 +79,12 @@ func (db *UserCollection) Verify(id *user.Id) error {
 	return nil
 }
 
-func (db *UserCollection) Update(user *user.User) error {
+func (mongoDB *User) Update(user *user.User) error {
 	updated := UserDocument(*user.ToPrimitive())
 
 	filter := bson.D{{Key: "id", Value: user.Id.Value}}
 
-	hashed, err := db.hashing.Hash(user.Password.Value)
+	hashed, err := mongoDB.Hashing.Hash(user.Password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Update")
@@ -92,7 +92,7 @@ func (db *UserCollection) Update(user *user.User) error {
 
 	updated.Password = hashed
 
-	_, err = db.collection.ReplaceOne(context.Background(), filter, &updated)
+	_, err = mongoDB.Collection.ReplaceOne(context.Background(), filter, &updated)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -108,10 +108,10 @@ func (db *UserCollection) Update(user *user.User) error {
 	return nil
 }
 
-func (db *UserCollection) Delete(id *user.Id) error {
+func (mongoDB *User) Delete(id *user.Id) error {
 	filter := bson.D{{Key: "id", Value: id.Value}}
 
-	_, err := db.collection.DeleteOne(context.Background(), filter)
+	_, err := mongoDB.Collection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -127,7 +127,7 @@ func (db *UserCollection) Delete(id *user.Id) error {
 	return nil
 }
 
-func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*user.User, error) {
+func (mongoDB *User) Search(criteria *model.RepositorySearchCriteria) (*user.User, error) {
 	var filter bson.D
 	var index string
 
@@ -140,10 +140,10 @@ func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*use
 		index = criteria.Email.Value
 	}
 
-	result := db.collection.FindOne(context.Background(), filter)
+	result := mongoDB.Collection.FindOne(context.Background(), filter)
 
 	if err := result.Err(); err != nil {
-		return nil, persistences.HandleMongoDocumentNotFound(index, err)
+		return nil, mongodb.HandleDocumentNotFound(index, err)
 	}
 
 	primitive := new(user.Primitive)
@@ -178,8 +178,8 @@ func (db *UserCollection) Search(criteria *model.RepositorySearchCriteria) (*use
 	return found, nil
 }
 
-func NewMongoCollection(mdb *persistences.MongoDB, collectionName string, hashing model.Hashing) (model.Repository, error) {
-	collection := mdb.Database.Collection(collectionName)
+func NewUser(mongoDB *mongodb.MongoDB, name string, hashing model.Hashing) (model.Repository, error) {
+	collection := mongoDB.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
 		{
@@ -198,17 +198,17 @@ func NewMongoCollection(mdb *persistences.MongoDB, collectionName string, hashin
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewMongoCollection",
+			Where: "NewUserCollection",
 			What:  "failure to create indexes for user collection",
 			Why: errors.Meta{
-				"Collection": collectionName,
+				"Collection": name,
 			},
 			Who: err,
 		})
 	}
 
-	return &UserCollection{
-		collection: collection,
-		hashing:    hashing,
+	return &User{
+		Collection: collection,
+		Hashing:    hashing,
 	}, nil
 }

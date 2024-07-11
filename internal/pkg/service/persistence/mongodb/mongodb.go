@@ -4,13 +4,13 @@ import (
 	"context"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
 )
 
-type MongoDB = *persistences.MongoDB
+type MongoDB = *mongodb.MongoDB
 
-func New(uri, name string) (*persistences.MongoDB, error) {
-	mongoDB, err := persistences.NewMongoDatabase(uri, name)
+func New(uri, name string) (*mongodb.MongoDB, error) {
+	mongoDB, err := mongodb.New(uri, name)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "New")
@@ -19,8 +19,8 @@ func New(uri, name string) (*persistences.MongoDB, error) {
 	return mongoDB, nil
 }
 
-func Close(mongoDB *persistences.MongoDB, ctx context.Context) error {
-	err := persistences.CloseMongoDatabase(ctx, mongoDB)
+func Close(ctx context.Context, connection *mongodb.MongoDB) error {
+	err := mongodb.Close(ctx, connection)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Close")

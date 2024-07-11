@@ -1,4 +1,4 @@
-package persistences
+package mongodb
 
 import (
 	"context"
@@ -17,16 +17,14 @@ type MongoDB struct {
 	*mongo.Database
 }
 
-func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
-	var err error
+func New(uri, name string) (*MongoDB, error) {
+	options := options.Client().ApplyURI(uri)
 
-	clientOptions := options.Client().ApplyURI(uri)
-
-	client, err := mongo.Connect(context.Background(), clientOptions)
+	client, err := mongo.Connect(context.Background(), options)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewMongoDatabase",
+			Where: "New",
 			What:  "failure to create a mongodb client",
 			Who:   err,
 		})
@@ -36,7 +34,7 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewMongoDatabase",
+			Where: "New",
 			What:  "failure connecting to mongodb",
 			Who:   err,
 		})
@@ -44,11 +42,23 @@ func NewMongoDatabase(uri, databaseName string) (*MongoDB, error) {
 
 	return &MongoDB{
 		Client:   client,
-		Database: client.Database(databaseName),
+		Database: client.Database(name),
 	}, nil
 }
 
-func HandleMongoDuplicateKeyError(err error) error {
+func Close(ctx context.Context, mongoDB *MongoDB) error {
+	if err := mongoDB.Client.Disconnect(ctx); err != nil {
+		return errors.NewInternal(&errors.Bubble{
+			Where: "Close",
+			What:  "failure to close connection with mongodb",
+			Who:   err,
+		})
+	}
+
+	return nil
+}
+
+func HandleDuplicateKeyError(err error) error {
 	re := regexp.MustCompile(`{ [A-Za-z0-9]+:`)
 
 	rawField := re.FindString(err.Error())
@@ -58,7 +68,7 @@ func HandleMongoDuplicateKeyError(err error) error {
 	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
 	return errors.NewAlreadyExist(&errors.Bubble{
-		Where: "HandleMongoDuplicateKeyError",
+		Where: "HandleDuplicateKeyError",
 		What:  "already registered",
 		Why: errors.Meta{
 			"Field": field,
@@ -67,27 +77,13 @@ func HandleMongoDuplicateKeyError(err error) error {
 	})
 }
 
-func HandleMongoDocumentNotFound(index string, err error) error {
+func HandleDocumentNotFound(index string, err error) error {
 	return errors.NewNotExist(&errors.Bubble{
-		Where: "HandleMongoDocumentNotFound",
+		Where: "HandleDocumentNotFound",
 		What:  "not found",
 		Why: errors.Meta{
 			"Index": index,
 		},
 		Who: err,
 	})
-}
-
-func CloseMongoDatabase(ctx context.Context, mdb *MongoDB) error {
-	err := mdb.Client.Disconnect(ctx)
-
-	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
-			Where: "CloseMongoDatabase",
-			What:  "failure to close connection with mongodb",
-			Who:   err,
-		})
-	}
-
-	return nil
 }

@@ -64,9 +64,7 @@ func NewRoutingKey(components *RoutingKeyComponents) string {
 
 	status, errStatus := valueobjs.NewStatus(components.Status)
 
-	err := errors.Join(errOrganization, errService, errVersion, errType, errEntity, errAction, errStatus)
-
-	if err != nil {
+	if err := errors.Join(errOrganization, errService, errVersion, errType, errEntity, errAction, errStatus); err != nil {
 		errors.Panic(err.Error(), "NewRoutingKey")
 	}
 

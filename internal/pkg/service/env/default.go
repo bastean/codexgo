@@ -9,15 +9,15 @@ var ServerURL = os.Getenv("CODEXGO_SERVER_URL")
 var RabbitMQ = &struct {
 	URI, Name string
 }{
-	URI:  os.Getenv("BROKER_RABBIT_URI"),
-	Name: os.Getenv("BROKER_RABBIT_NAME"),
+	URI:  os.Getenv("BROKER_RABBITMQ_URI"),
+	Name: os.Getenv("BROKER_RABBITMQ_NAME"),
 }
 
-var Mongo = &struct {
+var MongoDB = &struct {
 	URI, Name string
 }{
-	URI:  os.Getenv("DATABASE_MONGO_URI"),
-	Name: os.Getenv("DATABASE_MONGO_NAME"),
+	URI:  os.Getenv("DATABASE_MONGODB_URI"),
+	Name: os.Getenv("DATABASE_MONGODB_NAME"),
 }
 
 var SMTP = &struct {

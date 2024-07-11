@@ -7,7 +7,7 @@ import (
 	"github.com/bastean/codexgo/internal/pkg/service/communication/rabbitmq"
 	"github.com/bastean/codexgo/internal/pkg/service/env"
 	"github.com/bastean/codexgo/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/internal/pkg/service/logger"
+	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
 	"github.com/bastean/codexgo/internal/pkg/service/persistence/mongodb"
 	"github.com/bastean/codexgo/internal/pkg/service/transport/smtp"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
@@ -22,7 +22,7 @@ var (
 
 func OpenSMTP() {
 	if env.SMTP.Host == "" {
-		user.InitCreated(user.TerminalConfirmation(logger.Logger, env.ServerURL), user.QueueSendConfirmation)
+		user.InitCreated(user.TerminalConfirmation(log.Log, env.ServerURL), user.QueueSendConfirmation)
 		return
 	}
 
@@ -40,7 +40,7 @@ func OpenSMTP() {
 func OpenRabbitMQ() error {
 	RabbitMQ, err = rabbitmq.New(
 		env.RabbitMQ.URI,
-		logger.Logger,
+		log.Log,
 		rabbitmq.Exchange(env.RabbitMQ.Name),
 		rabbitmq.Queues{
 			user.QueueSendConfirmation,
@@ -59,8 +59,8 @@ func OpenRabbitMQ() error {
 
 func OpenMongoDB() error {
 	MongoDB, err = mongodb.New(
-		env.Mongo.URI,
-		env.Mongo.Name,
+		env.MongoDB.URI,
+		env.MongoDB.Name,
 	)
 
 	if err != nil {
@@ -71,7 +71,7 @@ func OpenMongoDB() error {
 }
 
 func StartUser() error {
-	collection, err := user.MongoCollection(
+	collection, err := user.UserCollection(
 		MongoDB,
 		"users",
 		user.Bcrypt,
@@ -91,13 +91,13 @@ func StartUser() error {
 }
 
 func Run() error {
-	logger.EstablishingConnectionWith("smtp")
+	log.EstablishingConnectionWith("smtp")
 
 	OpenSMTP()
 
-	logger.ConnectionEstablishedWith("smtp")
+	log.ConnectionEstablishedWith("smtp")
 
-	logger.EstablishingConnectionWith("rabbitmq")
+	log.EstablishingConnectionWith("rabbitmq")
 
 	err = OpenRabbitMQ()
 
@@ -105,9 +105,9 @@ func Run() error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	logger.ConnectionEstablishedWith("rabbitmq")
+	log.ConnectionEstablishedWith("rabbitmq")
 
-	logger.EstablishingConnectionWith("mongodb")
+	log.EstablishingConnectionWith("mongodb")
 
 	err = OpenMongoDB()
 
@@ -115,9 +115,9 @@ func Run() error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	logger.ConnectionEstablishedWith("mongodb")
+	log.ConnectionEstablishedWith("mongodb")
 
-	logger.StartingModule("user")
+	log.StartingModule("user")
 
 	err = StartUser()
 
@@ -125,7 +125,7 @@ func Run() error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	logger.StartedModule("user")
+	log.StartedModule("user")
 
 	return nil
 }
@@ -141,7 +141,7 @@ func CloseRabbitMQ() error {
 }
 
 func CloseMongoDB(ctx context.Context) error {
-	err = mongodb.Close(MongoDB, ctx)
+	err = mongodb.Close(ctx, MongoDB)
 
 	if err != nil {
 		return errors.BubbleUp(err, "CloseMongoDB")
@@ -151,7 +151,7 @@ func CloseMongoDB(ctx context.Context) error {
 }
 
 func Stop(ctx context.Context) error {
-	logger.ClosingConnectionWith("rabbitmq")
+	log.ClosingConnectionWith("rabbitmq")
 
 	err = CloseRabbitMQ()
 
@@ -159,9 +159,9 @@ func Stop(ctx context.Context) error {
 		return errors.BubbleUp(err, "Stop")
 	}
 
-	logger.ConnectionClosedWith("rabbitmq")
+	log.ConnectionClosedWith("rabbitmq")
 
-	logger.ClosingConnectionWith("mongodb")
+	log.ClosingConnectionWith("mongodb")
 
 	err = CloseMongoDB(ctx)
 
@@ -169,7 +169,7 @@ func Stop(ctx context.Context) error {
 		return errors.BubbleUp(err, "Stop")
 	}
 
-	logger.ConnectionClosedWith("mongodb")
+	log.ConnectionClosedWith("mongodb")
 
 	return nil
 }

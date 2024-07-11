@@ -5,7 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/internal/pkg/service/logger"
+	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -33,7 +33,7 @@ func ErrorHandler() gin.HandlerFunc {
 				c.JSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
 				fallthrough
 			default:
-				logger.Error(err.Error())
+				log.Error(err.Error())
 			}
 		}
 	}

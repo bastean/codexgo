@@ -1,11 +1,11 @@
-package cryptographic_test
+package bcrypt_test
 
 import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/bcrypt"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -15,7 +15,7 @@ type BcryptHashingTestSuite struct {
 }
 
 func (suite *BcryptHashingTestSuite) SetupTest() {
-	suite.sut = new(cryptographic.Bcrypt)
+	suite.sut = new(bcrypt.Bcrypt)
 }
 
 func (suite *BcryptHashingTestSuite) TestHash() {

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports/smtp"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication/mail"
 	"github.com/stretchr/testify/suite"
@@ -15,11 +15,11 @@ import (
 type MailConfirmationTransportTestSuite struct {
 	suite.Suite
 	sut  models.Transport
-	smtp *transports.SMTP
+	smtp *smtp.SMTP
 }
 
 func (suite *MailConfirmationTransportTestSuite) SetupTest() {
-	suite.smtp = transports.NewSMTP(
+	suite.smtp = smtp.New(
 		os.Getenv("CODEXGO_SMTP_HOST"),
 		os.Getenv("CODEXGO_SMTP_PORT"),
 		os.Getenv("CODEXGO_SMTP_USERNAME"),

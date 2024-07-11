@@ -12,7 +12,7 @@ import (
 
 	"github.com/bastean/codexgo/internal/app/server"
 	"github.com/bastean/codexgo/internal/pkg/service"
-	"github.com/bastean/codexgo/internal/pkg/service/logger"
+	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
 )
 
 const cli = "codexgo"
@@ -32,27 +32,27 @@ func main() {
 
 	flag.Parse()
 
-	logger.Starting("services")
+	log.Starting("services")
 
 	if err := service.Run(); err != nil {
-		logger.Fatal(err.Error())
+		log.Fatal(err.Error())
 	}
 
-	logger.Started("services")
+	log.Started("services")
 
-	logger.Starting("server")
+	log.Starting("server")
 
 	go func() {
 		if err := server.Run(port); err != nil {
-			logger.Fatal(err.Error())
+			log.Fatal(err.Error())
 		}
 	}()
 
-	logger.Started("server")
+	log.Started("server")
 
-	logger.Info("server listening on :" + port)
+	log.Info("server listening on :" + port)
 
-	logger.Info("press ctrl+c to exit")
+	log.Info("press ctrl+c to exit")
 
 	shutdown := make(chan os.Signal, 1)
 
@@ -64,23 +64,23 @@ func main() {
 
 	defer cancel()
 
-	logger.Stopping("server")
+	log.Stopping("server")
 
 	errServer := server.Stop(ctx)
 
-	logger.Stopped("server")
+	log.Stopped("server")
 
-	logger.Stopping("services")
+	log.Stopping("services")
 
 	errService := service.Stop(ctx)
 
-	logger.Stopped("services")
+	log.Stopped("services")
 
 	if err := errors.Join(errServer, errService); err != nil {
-		logger.Error(err.Error())
+		log.Error(err.Error())
 	}
 
 	<-ctx.Done()
 
-	logger.Info("exiting...")
+	log.Info("exiting...")
 }

@@ -1,15 +1,15 @@
-package persistence_test
+package collection_test
 
 import (
 	"os"
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/model"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/collection"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -20,17 +20,17 @@ type MongoRepositoryTestSuite struct {
 }
 
 func (suite *MongoRepositoryTestSuite) SetupTest() {
-	uri := os.Getenv("DATABASE_MONGO_URI")
+	uri := os.Getenv("DATABASE_MONGODB_URI")
 
-	databaseName := os.Getenv("DATABASE_MONGO_NAME")
+	name := os.Getenv("DATABASE_MONGODB_NAME")
 
-	database, _ := persistences.NewMongoDatabase(uri, databaseName)
+	database, _ := mongodb.New(uri, name)
 
-	collectionName := "users-test"
+	name = "users-test"
 
 	suite.hashing = new(cryptographic.HashingMock)
 
-	suite.sut, _ = persistence.NewMongoCollection(database, collectionName, suite.hashing)
+	suite.sut, _ = collection.NewUser(database, name, suite.hashing)
 }
 
 func (suite *MongoRepositoryTestSuite) TestSave() {
@@ -60,7 +60,7 @@ func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
 
 	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleMongoDuplicateKeyError",
+		Where: "HandleDuplicateKeyError",
 		What:  "already registered",
 		Why: errors.Meta{
 			"Field": "Id",

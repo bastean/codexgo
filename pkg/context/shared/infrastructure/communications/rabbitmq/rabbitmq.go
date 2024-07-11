@@ -1,4 +1,4 @@
-package communications
+package rabbitmq
 
 import (
 	"context"
@@ -21,8 +21,8 @@ type RabbitMQ struct {
 	exchange string
 }
 
-func (rmq *RabbitMQ) AddRouter(router *messages.Router) error {
-	err := rmq.Channel.ExchangeDeclare(
+func (rabbitMQ *RabbitMQ) AddRouter(router *messages.Router) error {
+	err := rabbitMQ.Channel.ExchangeDeclare(
 		router.Name,
 		"topic",
 		true,
@@ -31,8 +31,6 @@ func (rmq *RabbitMQ) AddRouter(router *messages.Router) error {
 		false,
 		nil,
 	)
-
-	rmq.exchange = router.Name
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -45,11 +43,13 @@ func (rmq *RabbitMQ) AddRouter(router *messages.Router) error {
 		})
 	}
 
+	rabbitMQ.exchange = router.Name
+
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueue(queue *messages.Queue) error {
-	_, err := rmq.Channel.QueueDeclare(
+func (rabbitMQ *RabbitMQ) AddQueue(queue *messages.Queue) error {
+	_, err := rabbitMQ.Channel.QueueDeclare(
 		queue.Name,
 		true,
 		false,
@@ -72,18 +72,19 @@ func (rmq *RabbitMQ) AddQueue(queue *messages.Queue) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys []string) error {
+func (rabbitMQ *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys []string) error {
 	var errWrap error
 
 	for _, bindingKey := range bindingKeys {
-		rmq.Logger.Info(fmt.Sprintf("binding queue [%s] to exchange [%s] with binding key [%s]", queue.Name, rmq.exchange, bindingKey))
+		rabbitMQ.Logger.Info(fmt.Sprintf("binding queue [%s] to exchange [%s] with binding key [%s]", queue.Name, rabbitMQ.exchange, bindingKey))
 
-		err := rmq.Channel.QueueBind(
+		err := rabbitMQ.Channel.QueueBind(
 			queue.Name,
 			bindingKey,
-			rmq.exchange,
+			rabbitMQ.exchange,
 			false,
-			nil)
+			nil,
+		)
 
 		if err != nil {
 			errToWrap := errors.NewInternal(&errors.Bubble{
@@ -92,7 +93,7 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys []st
 				Why: errors.Meta{
 					"Queue":       queue.Name,
 					"Binding Key": bindingKey,
-					"Exchange":    rmq.exchange,
+					"Exchange":    rabbitMQ.exchange,
 				},
 				Who: err,
 			})
@@ -108,11 +109,11 @@ func (rmq *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys []st
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
+func (rabbitMQ *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 	var errWrap error
 
 	for _, queue := range consumer.SubscribedTo() {
-		deliveries, err := rmq.Channel.Consume(
+		deliveries, err := rabbitMQ.Channel.Consume(
 			queue.Name,
 			"",
 			false,
@@ -128,7 +129,7 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 				What:  "failure to register a consumer",
 				Why: errors.Meta{
 					"Queue":    queue.Name,
-					"Exchange": rmq.exchange,
+					"Exchange": rabbitMQ.exchange,
 				},
 				Who: err,
 			})
@@ -145,14 +146,14 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 				err := json.Unmarshal(delivery.Body, message)
 
 				if err != nil {
-					rmq.Logger.Error(fmt.Sprintf("failed to deliver a message with id [%s] from queue [%s]", message.Id, queue.Name))
+					rabbitMQ.Logger.Error(fmt.Sprintf("failed to deliver a message with id [%s] from queue [%s]", message.Id, queue.Name))
 					continue
 				}
 
 				err = consumer.On(message)
 
 				if err != nil {
-					rmq.Logger.Error(fmt.Sprintf("failed to consume a message with id [%s] from queue [%s]", message.Id, queue.Name))
+					rabbitMQ.Logger.Error(fmt.Sprintf("failed to consume a message with id [%s] from queue [%s]", message.Id, queue.Name))
 					continue
 				}
 
@@ -168,7 +169,7 @@ func (rmq *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
+func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 	var errWrap error
 
 	for _, message := range messages {
@@ -187,7 +188,7 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 				Where: "PublishMessages",
 				What:  "cannot encode message to json",
 				Why: errors.Meta{
-					"Exchange": rmq.exchange,
+					"Exchange": rabbitMQ.exchange,
 					"Message":  message.Id,
 				},
 				Who: err,
@@ -202,8 +203,8 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 
 		defer cancel()
 
-		err = rmq.Channel.PublishWithContext(ctx,
-			rmq.exchange,
+		err = rabbitMQ.Channel.PublishWithContext(ctx,
+			rabbitMQ.exchange,
 			message.Type,
 			false,
 			false,
@@ -211,14 +212,15 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 				DeliveryMode: amqp.Persistent,
 				ContentType:  "application/json",
 				Body:         body,
-			})
+			},
+		)
 
 		if err != nil {
 			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "PublishMessages",
 				What:  "failure to publish a message",
 				Why: errors.Meta{
-					"Exchange": rmq.exchange,
+					"Exchange": rabbitMQ.exchange,
 					"Message":  message.Id,
 				},
 				Who: err,
@@ -235,54 +237,54 @@ func (rmq *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 	return nil
 }
 
-func CloseRabbitMQ(rmq *RabbitMQ) error {
-	err := rmq.Channel.Close()
-
-	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
-			Where: "CloseRabbitMQ",
-			What:  "failure to close channel",
-			Who:   err,
-		})
-	}
-
-	err = rmq.Connection.Close()
-
-	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
-			Where: "CloseRabbitMQ",
-			What:  "failure to close rabbitmq connection",
-			Who:   err,
-		})
-	}
-
-	return nil
-}
-
-func NewRabbitMQ(uri string, logger models.Logger) (messages.Broker, error) {
-	conn, err := amqp.Dial(uri)
+func New(uri string, logger models.Logger) (messages.Broker, error) {
+	connection, err := amqp.Dial(uri)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewRabbitMQ",
+			Where: "New",
 			What:  "failure connecting to rabbitmq",
 			Who:   err,
 		})
 	}
 
-	ch, err := conn.Channel()
+	channel, err := connection.Channel()
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewRabbitMQ",
+			Where: "New",
 			What:  "failure to open a channel",
 			Who:   err,
 		})
 	}
 
 	return &RabbitMQ{
-		Connection: conn,
-		Channel:    ch,
+		Connection: connection,
+		Channel:    channel,
 		Logger:     logger,
 	}, nil
+}
+
+func Close(rabbitMQ *RabbitMQ) error {
+	err := rabbitMQ.Channel.Close()
+
+	if err != nil {
+		return errors.NewInternal(&errors.Bubble{
+			Where: "Close",
+			What:  "failure to close channel",
+			Who:   err,
+		})
+	}
+
+	err = rabbitMQ.Connection.Close()
+
+	if err != nil {
+		return errors.NewInternal(&errors.Bubble{
+			Where: "Close",
+			What:  "failure to close rabbitmq connection",
+			Who:   err,
+		})
+	}
+
+	return nil
 }

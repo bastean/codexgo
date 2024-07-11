@@ -1,4 +1,4 @@
-package communications_test
+package rabbitmq_test
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications/rabbitmq"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
 	"github.com/stretchr/testify/suite"
 )
@@ -24,38 +25,38 @@ type RabbitMQBrokerTestSuite struct {
 func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 	suite.logger = new(loggers.LoggerMock)
 
-	uri := os.Getenv("BROKER_RABBIT_URI")
+	uri := os.Getenv("BROKER_RABBITMQ_URI")
 
-	suite.sut, _ = communications.NewRabbitMQ(uri, suite.logger)
+	suite.sut, _ = rabbitmq.New(uri, suite.logger)
 
-	suite.router = &messages.Router{Name: os.Getenv("BROKER_RABBIT_NAME")}
+	suite.router = &messages.Router{
+		Name: os.Getenv("BROKER_RABBITMQ_NAME"),
+	}
 
-	queueName := messages.NewRecipientName(&messages.RecipientNameComponents{
-		Service: "queue",
-		Entity:  "queue",
-		Action:  "assert",
-		Event:   "test",
-		Status:  "succeeded",
-	})
-
-	suite.queue = &messages.Queue{Name: queueName}
+	suite.queue = &messages.Queue{
+		Name: messages.NewRecipientName(&messages.RecipientNameComponents{
+			Service: "queue",
+			Entity:  "queue",
+			Action:  "assert",
+			Event:   "test",
+			Status:  "succeeded",
+		}),
+	}
 
 	suite.consumer = new(communications.ConsumerMock)
 
-	messageRoutingKey := messages.NewRoutingKey(&messages.RoutingKeyComponents{
-		Service: "publisher",
-		Version: "1",
-		Type:    messages.Type.Event,
-		Entity:  "publisher",
-		Event:   "test",
-		Status:  messages.Status.Succeeded,
-	})
-
-	messageAttributes := messages.Attributes{}
-
-	messageMeta := messages.Meta{}
-
-	message := messages.NewMessage(messageRoutingKey, messageAttributes, messageMeta)
+	message := messages.NewMessage(
+		messages.NewRoutingKey(&messages.RoutingKeyComponents{
+			Service: "publisher",
+			Version: "1",
+			Type:    messages.Type.Event,
+			Entity:  "publisher",
+			Event:   "test",
+			Status:  messages.Status.Succeeded,
+		}),
+		messages.Attributes{},
+		messages.Meta{},
+	)
 
 	message.Id = "0"
 
