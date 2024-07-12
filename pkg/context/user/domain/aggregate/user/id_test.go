@@ -17,11 +17,11 @@ func (suite *IdValueObjectTestSuite) SetupTest() {}
 func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
 	value, err := user.IdWithInvalidValue()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewId",
 		What:  "invalid uuid4 format",

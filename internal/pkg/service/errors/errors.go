@@ -5,11 +5,11 @@ import (
 )
 
 type (
-	InvalidValue = errors.InvalidValue
-	AlreadyExist = errors.AlreadyExist
-	NotExist     = errors.NotExist
-	Failure      = errors.Failure
-	Internal     = errors.Internal
+	ErrInvalidValue = errors.ErrInvalidValue
+	ErrAlreadyExist = errors.ErrAlreadyExist
+	ErrNotExist     = errors.ErrNotExist
+	ErrFailure      = errors.ErrFailure
+	ErrInternal     = errors.ErrInternal
 )
 
 var (
@@ -18,16 +18,16 @@ var (
 	Is       = errors.Is
 )
 
-func NewInternal(where, what string, who error) error {
-	return errors.NewInternal(&errors.Bubble{
+func NewFailure(where, what string, who error) error {
+	return errors.NewFailure(&errors.Bubble{
 		Where: where,
 		What:  what,
 		Who:   who,
 	})
 }
 
-func NewFailure(where, what string, who error) error {
-	return errors.NewFailure(&errors.Bubble{
+func NewInternal(where, what string, who error) error {
+	return errors.NewInternal(&errors.Bubble{
 		Where: where,
 		What:  what,
 		Who:   who,

@@ -17,11 +17,11 @@ func (suite *EmailValueObjectTestSuite) SetupTest() {}
 func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
 	value, err := user.EmailWithInvalidValue()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEmail",
 		What:  "invalid email format",

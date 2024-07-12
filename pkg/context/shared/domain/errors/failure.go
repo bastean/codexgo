@@ -1,11 +1,11 @@
 package errors
 
-type Failure struct {
+type ErrFailure struct {
 	*Bubble
 }
 
 func NewFailure(bubble *Bubble) error {
-	return &Failure{
+	return &ErrFailure{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

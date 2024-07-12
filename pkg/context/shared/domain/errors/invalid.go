@@ -1,11 +1,11 @@
 package errors
 
-type InvalidValue struct {
+type ErrInvalidValue struct {
 	*Bubble
 }
 
 func NewInvalidValue(bubble *Bubble) error {
-	return &InvalidValue{
+	return &ErrInvalidValue{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

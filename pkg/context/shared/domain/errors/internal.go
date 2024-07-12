@@ -1,11 +1,11 @@
 package errors
 
-type Internal struct {
+type ErrInternal struct {
 	*Bubble
 }
 
 func NewInternal(bubble *Bubble) error {
-	return &Internal{
+	return &ErrInternal{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

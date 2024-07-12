@@ -17,11 +17,11 @@ func (suite *StatusValueObjectTestSuite) SetupTest() {}
 func (suite *StatusValueObjectTestSuite) TestWithInvalidValue() {
 	value, err := valueobjs.StatusWithInvalidValue()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewStatus",
 		What:  "status must be only one of these values: queued, succeeded, failed, done",

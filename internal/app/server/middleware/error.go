@@ -13,11 +13,11 @@ func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		var invalidValue *errors.InvalidValue
-		var alreadyExist *errors.AlreadyExist
-		var notExist *errors.NotExist
-		var failure *errors.Failure
-		var internal *errors.Internal
+		var invalidValue *errors.ErrInvalidValue
+		var alreadyExist *errors.ErrAlreadyExist
+		var notExist *errors.ErrNotExist
+		var failure *errors.ErrFailure
+		var internal *errors.ErrInternal
 
 		for _, err := range c.Errors {
 			switch {

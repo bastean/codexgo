@@ -71,7 +71,7 @@ func OpenMongoDB() error {
 }
 
 func StartUser() error {
-	collection, err := user.UserCollection(
+	collection, err := user.Collection(
 		MongoDB,
 		"users",
 		user.Bcrypt,

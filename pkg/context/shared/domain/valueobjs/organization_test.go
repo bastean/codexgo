@@ -17,11 +17,11 @@ func (suite *OrganizationValueObjectTestSuite) SetupTest() {}
 func (suite *OrganizationValueObjectTestSuite) TestWithInvalidLength() {
 	value, err := valueobjs.OrganizationWithInvalidLength()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewOrganization",
 		What:  "organization must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
@@ -36,11 +36,11 @@ func (suite *OrganizationValueObjectTestSuite) TestWithInvalidLength() {
 func (suite *OrganizationValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	value, err := valueobjs.OrganizationWithInvalidAlphanumeric()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewOrganization",
 		What:  "organization must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",

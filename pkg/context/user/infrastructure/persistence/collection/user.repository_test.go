@@ -54,11 +54,11 @@ func (suite *MongoRepositoryTestSuite) TestSaveDuplicate() {
 
 	suite.hashing.AssertExpectations(suite.T())
 
-	var actual *errors.AlreadyExist
+	var actual *errors.ErrAlreadyExist
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
+	expected := &errors.ErrAlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDuplicateKeyError",
 		What:  "already registered",

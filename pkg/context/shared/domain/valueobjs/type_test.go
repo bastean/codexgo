@@ -17,11 +17,11 @@ func (suite *TypeValueObjectTestSuite) SetupTest() {}
 func (suite *TypeValueObjectTestSuite) TestWithInvalidValue() {
 	value, err := valueobjs.TypeWithInvalidValue()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewType",
 		What:  "type must be only one of these values: event, command",

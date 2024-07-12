@@ -17,11 +17,11 @@ func (suite *VersionValueObjectTestSuite) SetupTest() {}
 func (suite *VersionValueObjectTestSuite) TestWithInvalidValue() {
 	value, err := valueobjs.VersionWithInvalidValue()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewVersion",
 		What:  "version must be numeric only",

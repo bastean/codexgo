@@ -17,11 +17,11 @@ func (suite *EntityValueObjectTestSuite) SetupTest() {}
 func (suite *EntityValueObjectTestSuite) TestWithInvalidLength() {
 	value, err := valueobjs.EntityWithInvalidLength()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEntity",
 		What:  "entity must be between " + "1" + " to " + "20" + " characters and be alpha only",
@@ -36,11 +36,11 @@ func (suite *EntityValueObjectTestSuite) TestWithInvalidLength() {
 func (suite *EntityValueObjectTestSuite) TestWithInvalidAlpha() {
 	value, err := valueobjs.EntityWithInvalidAlpha()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEntity",
 		What:  "entity must be between " + "1" + " to " + "20" + " characters and be alpha only",

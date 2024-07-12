@@ -1,15 +1,15 @@
 package errors
 
-type AlreadyExist struct {
+type ErrAlreadyExist struct {
 	*Bubble
 }
 
-type NotExist struct {
+type ErrNotExist struct {
 	*Bubble
 }
 
 func NewAlreadyExist(bubble *Bubble) error {
-	return &AlreadyExist{
+	return &ErrAlreadyExist{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,
@@ -20,7 +20,7 @@ func NewAlreadyExist(bubble *Bubble) error {
 }
 
 func NewNotExist(bubble *Bubble) error {
-	return &NotExist{
+	return &ErrNotExist{
 		Bubble: NewBubble(
 			bubble.Where,
 			bubble.What,

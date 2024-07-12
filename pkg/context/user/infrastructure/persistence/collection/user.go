@@ -198,7 +198,7 @@ func NewUser(mongoDB *mongodb.MongoDB, name string, hashing model.Hashing) (mode
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewUserCollection",
+			Where: "NewUser",
 			What:  "failure to create indexes for user collection",
 			Why: errors.Meta{
 				"Collection": name,

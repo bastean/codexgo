@@ -17,11 +17,11 @@ func (suite *ServiceValueObjectTestSuite) SetupTest() {}
 func (suite *ServiceValueObjectTestSuite) TestWithInvalidLength() {
 	value, err := valueobjs.ServiceWithInvalidLength()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewService",
 		What:  "service must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
@@ -36,11 +36,11 @@ func (suite *ServiceValueObjectTestSuite) TestWithInvalidLength() {
 func (suite *ServiceValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	value, err := valueobjs.ServiceWithInvalidAlphanumeric()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewService",
 		What:  "service must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",

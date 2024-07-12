@@ -17,11 +17,11 @@ func (suite *ActionValueObjectTestSuite) SetupTest() {}
 func (suite *ActionValueObjectTestSuite) TestWithInvalidLength() {
 	value, err := valueobjs.ActionWithInvalidLength()
 
-	var actual *errors.InvalidValue
+	var actual *errors.ErrInvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewAction",
 		What:  "action must be between " + "1" + " to " + "20" + " characters",
