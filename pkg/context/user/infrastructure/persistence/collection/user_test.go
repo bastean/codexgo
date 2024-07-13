@@ -34,16 +34,28 @@ func (suite *UserTestSuite) SetupTest() {
 }
 
 func (suite *UserTestSuite) TestSave() {
-	random := user.Random()
+	expected := user.Random()
 
-	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
+	expected.PullMessages()
 
-	suite.NoError(suite.sut.Save(random))
+	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+
+	suite.NoError(suite.sut.Save(expected))
 
 	suite.hashing.AssertExpectations(suite.T())
+
+	criteria := &repository.UserSearchCriteria{
+		Id: expected.Id,
+	}
+
+	actual, err := suite.sut.Search(criteria)
+
+	suite.NoError(err)
+
+	suite.Equal(expected, actual)
 }
 
-func (suite *UserTestSuite) TestSaveDuplicate() {
+func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
 	random := user.Random()
 
 	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
@@ -79,22 +91,44 @@ func (suite *UserTestSuite) TestVerify() {
 	suite.NoError(suite.sut.Save(random))
 
 	suite.NoError(suite.sut.Verify(random.Id))
+
+	criteria := &repository.UserSearchCriteria{
+		Id: random.Id,
+	}
+
+	actual, err := suite.sut.Search(criteria)
+
+	suite.NoError(err)
+
+	suite.True(actual.Verified.Value)
 }
 
 func (suite *UserTestSuite) TestUpdate() {
-	random := user.Random()
+	expected := user.Random()
 
-	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
+	expected.PullMessages()
 
-	suite.NoError(suite.sut.Save(random))
+	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
-	random.Password = user.PasswordWithValidValue()
+	suite.NoError(suite.sut.Save(expected))
 
-	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
+	expected.Password = user.PasswordWithValidValue()
 
-	suite.NoError(suite.sut.Update(random))
+	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+
+	suite.NoError(suite.sut.Update(expected))
 
 	suite.hashing.AssertExpectations(suite.T())
+
+	criteria := &repository.UserSearchCriteria{
+		Id: expected.Id,
+	}
+
+	actual, err := suite.sut.Search(criteria)
+
+	suite.NoError(err)
+
+	suite.Equal(expected, actual)
 }
 
 func (suite *UserTestSuite) TestDelete() {
@@ -105,6 +139,14 @@ func (suite *UserTestSuite) TestDelete() {
 	suite.NoError(suite.sut.Save(random))
 
 	suite.NoError(suite.sut.Delete(random.Id))
+
+	criteria := &repository.UserSearchCriteria{
+		Id: random.Id,
+	}
+
+	_, err := suite.sut.Search(criteria)
+
+	suite.Error(err)
 }
 
 func (suite *UserTestSuite) TestSearch() {
@@ -125,6 +167,32 @@ func (suite *UserTestSuite) TestSearch() {
 	suite.NoError(err)
 
 	suite.Equal(expected, actual)
+}
+
+func (suite *UserTestSuite) TestSearchErrDocumentNotFound() {
+	random := user.Random()
+
+	criteria := &repository.UserSearchCriteria{
+		Id: random.Id,
+	}
+
+	_, err := suite.sut.Search(criteria)
+
+	var actual *errors.ErrNotExist
+
+	suite.ErrorAs(err, &actual)
+
+	expected := &errors.ErrNotExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "HandleDocumentNotFound",
+		What:  "not found",
+		Why: errors.Meta{
+			"Index": random.Id.Value,
+		},
+		Who: actual.Who,
+	}}
+
+	suite.EqualError(expected, actual.Error())
 }
 
 func TestIntegrationUserSuite(t *testing.T) {

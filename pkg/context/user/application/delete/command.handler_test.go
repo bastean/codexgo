@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type DeleteHandlerTestSuite struct {
+type DeleteTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*delete.Command]
 	delete     usecase.Delete
@@ -21,7 +21,7 @@ type DeleteHandlerTestSuite struct {
 	repository *persistence.UserMock
 }
 
-func (suite *DeleteHandlerTestSuite) SetupTest() {
+func (suite *DeleteTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
 
 	suite.hashing = new(cryptographic.HashingMock)
@@ -36,7 +36,7 @@ func (suite *DeleteHandlerTestSuite) SetupTest() {
 	}
 }
 
-func (suite *DeleteHandlerTestSuite) TestDelete() {
+func (suite *DeleteTestSuite) TestDelete() {
 	random := user.Random()
 
 	command := &delete.Command{
@@ -59,6 +59,6 @@ func (suite *DeleteHandlerTestSuite) TestDelete() {
 	suite.repository.AssertExpectations(suite.T())
 }
 
-func TestUnitDeleteHandlerSuite(t *testing.T) {
-	suite.Run(t, new(DeleteHandlerTestSuite))
+func TestUnitDeleteSuite(t *testing.T) {
+	suite.Run(t, new(DeleteTestSuite))
 }

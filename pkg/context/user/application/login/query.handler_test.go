@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type LoginHandlerTestSuite struct {
+type LoginTestSuite struct {
 	suite.Suite
 	sut        handlers.Query[*login.Query, *login.Response]
 	login      usecase.Login
@@ -21,7 +21,7 @@ type LoginHandlerTestSuite struct {
 	repository *persistence.UserMock
 }
 
-func (suite *LoginHandlerTestSuite) SetupTest() {
+func (suite *LoginTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
 
 	suite.hashing = new(cryptographic.HashingMock)
@@ -36,7 +36,7 @@ func (suite *LoginHandlerTestSuite) SetupTest() {
 	}
 }
 
-func (suite *LoginHandlerTestSuite) TestLogin() {
+func (suite *LoginTestSuite) TestLogin() {
 	random := user.Random()
 
 	query := &login.Query{
@@ -65,6 +65,6 @@ func (suite *LoginHandlerTestSuite) TestLogin() {
 	suite.EqualValues(expected, actual)
 }
 
-func TestUnitLoginHandlerSuite(t *testing.T) {
-	suite.Run(t, new(LoginHandlerTestSuite))
+func TestUnitLoginSuite(t *testing.T) {
+	suite.Run(t, new(LoginTestSuite))
 }

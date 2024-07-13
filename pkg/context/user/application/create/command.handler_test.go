@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type CreateHandlerTestSuite struct {
+type CreateTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*create.Command]
 	create     usecase.Create
@@ -20,7 +20,7 @@ type CreateHandlerTestSuite struct {
 	broker     *communications.BrokerMock
 }
 
-func (suite *CreateHandlerTestSuite) SetupTest() {
+func (suite *CreateTestSuite) SetupTest() {
 	suite.broker = new(communications.BrokerMock)
 
 	suite.repository = new(persistence.UserMock)
@@ -35,7 +35,7 @@ func (suite *CreateHandlerTestSuite) SetupTest() {
 	}
 }
 
-func (suite *CreateHandlerTestSuite) TestCreate() {
+func (suite *CreateTestSuite) TestCreate() {
 	command := create.RandomCommand()
 
 	new, _ := user.New(&user.Primitive{
@@ -58,6 +58,6 @@ func (suite *CreateHandlerTestSuite) TestCreate() {
 	suite.broker.AssertExpectations(suite.T())
 }
 
-func TestUnitCreateHandlerSuite(t *testing.T) {
-	suite.Run(t, new(CreateHandlerTestSuite))
+func TestUnitCreateSuite(t *testing.T) {
+	suite.Run(t, new(CreateTestSuite))
 }
