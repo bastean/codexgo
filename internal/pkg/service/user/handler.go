@@ -8,7 +8,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 )
 
 type (
@@ -27,54 +28,54 @@ type (
 	ReadResponse = read.Response
 )
 
-func NewCreate(repository model.Repository, broker messages.Broker) *create.Handler {
+func NewCreate(repository repository.User, broker messages.Broker) *create.Handler {
 	return &create.Handler{
 		Create: &create.Create{
-			Repository: repository,
+			User: repository,
 		},
 		Broker: broker,
 	}
 }
 
-func NewRead(repository model.Repository) *read.Handler {
+func NewRead(repository repository.User) *read.Handler {
 	return &read.Handler{
 		Read: &read.Read{
-			Repository: repository,
+			User: repository,
 		},
 	}
 }
 
-func NewUpdate(repository model.Repository, hashing model.Hashing) *update.Handler {
+func NewUpdate(repository repository.User, hashing hashing.Hashing) *update.Handler {
 	return &update.Handler{
 		Update: &update.Update{
-			Repository: repository,
-			Hashing:    hashing,
+			User:    repository,
+			Hashing: hashing,
 		},
 	}
 }
 
-func NewDelete(repository model.Repository, hashing model.Hashing) *delete.Handler {
+func NewDelete(repository repository.User, hashing hashing.Hashing) *delete.Handler {
 	return &delete.Handler{
 		Delete: &delete.Delete{
-			Repository: repository,
-			Hashing:    hashing,
+			User:    repository,
+			Hashing: hashing,
 		},
 	}
 }
 
-func NewVerify(repository model.Repository) *verify.Handler {
+func NewVerify(repository repository.User) *verify.Handler {
 	return &verify.Handler{
 		Verify: &verify.Verify{
-			Repository: repository,
+			User: repository,
 		},
 	}
 }
 
-func NewLogin(repository model.Repository, hashing model.Hashing) *login.Handler {
+func NewLogin(repository repository.User, hashing hashing.Hashing) *login.Handler {
 	return &login.Handler{
 		Login: &login.Login{
-			Repository: repository,
-			Hashing:    hashing,
+			User:    repository,
+			Hashing: hashing,
 		},
 	}
 }

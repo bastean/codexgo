@@ -6,22 +6,22 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/transfers"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/records"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication/terminal"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/transport/terminal"
 	"github.com/stretchr/testify/suite"
 )
 
-type TerminalConfirmationTransportTestSuite struct {
+type ConfirmationTestSuite struct {
 	suite.Suite
-	sut       models.Transport
-	logger    *loggers.LoggerMock
+	sut       transfers.Transfer
+	logger    *records.LoggerMock
 	serverURL string
 }
 
-func (suite *TerminalConfirmationTransportTestSuite) SetupTest() {
-	suite.logger = new(loggers.LoggerMock)
+func (suite *ConfirmationTestSuite) SetupTest() {
+	suite.logger = new(records.LoggerMock)
 
 	suite.serverURL = os.Getenv("CODEXGO_SERVER_URL")
 
@@ -31,7 +31,7 @@ func (suite *TerminalConfirmationTransportTestSuite) SetupTest() {
 	}
 }
 
-func (suite *TerminalConfirmationTransportTestSuite) TestSubmit() {
+func (suite *ConfirmationTestSuite) TestSubmit() {
 	message := user.RandomCreatedSucceeded()
 
 	event := new(user.CreatedSucceeded)
@@ -49,6 +49,6 @@ func (suite *TerminalConfirmationTransportTestSuite) TestSubmit() {
 	suite.logger.AssertExpectations(suite.T())
 }
 
-func TestIntegrationTerminalConfirmationTransportSuite(t *testing.T) {
-	suite.Run(t, new(TerminalConfirmationTransportTestSuite))
+func TestIntegrationConfirmationSuite(t *testing.T) {
+	suite.Run(t, new(ConfirmationTestSuite))
 }

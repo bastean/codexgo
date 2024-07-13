@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
@@ -16,14 +16,14 @@ type VerifyHandlerTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*verify.Command]
 	verify     usecase.Verify
-	repository *persistence.RepositoryMock
+	repository *persistence.UserMock
 }
 
 func (suite *VerifyHandlerTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserMock)
 
 	suite.verify = &verify.Verify{
-		Repository: suite.repository,
+		User: suite.repository,
 	}
 
 	suite.sut = &verify.Handler{
@@ -40,7 +40,7 @@ func (suite *VerifyHandlerTestSuite) TestVerify() {
 
 	random.Id = id
 
-	criteria := &model.RepositorySearchCriteria{
+	criteria := &repository.UserSearchCriteria{
 		Id: id,
 	}
 

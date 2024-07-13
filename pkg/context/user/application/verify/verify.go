@@ -3,15 +3,15 @@ package verify
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 )
 
 type Verify struct {
-	model.Repository
+	repository.User
 }
 
 func (verify *Verify) Run(id *user.Id) error {
-	found, err := verify.Repository.Search(&model.RepositorySearchCriteria{
+	found, err := verify.User.Search(&repository.UserSearchCriteria{
 		Id: id,
 	})
 
@@ -23,7 +23,7 @@ func (verify *Verify) Run(id *user.Id) error {
 		return nil
 	}
 
-	err = verify.Repository.Verify(id)
+	err = verify.User.Verify(id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

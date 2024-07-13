@@ -5,19 +5,19 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports"
 	"github.com/bastean/codexgo/pkg/context/user/application/created"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication"
 	"github.com/stretchr/testify/suite"
 )
 
 type CreatedConsumerTestSuite struct {
 	suite.Suite
-	sut       messages.Consumer
-	created   usecase.Created
-	transport *communication.TransportMock
-	queues    []*messages.Queue
+	sut      messages.Consumer
+	created  usecase.Created
+	transfer *transports.TransferMock
+	queues   []*messages.Queue
 }
 
 func (suite *CreatedConsumerTestSuite) SetupTest() {
@@ -33,10 +33,10 @@ func (suite *CreatedConsumerTestSuite) SetupTest() {
 		Name: queueName,
 	})
 
-	suite.transport = new(communication.TransportMock)
+	suite.transfer = new(transports.TransferMock)
 
 	suite.created = &created.Created{
-		Transport: suite.transport,
+		Transfer: suite.transfer,
 	}
 
 	suite.sut = &created.Consumer{
@@ -54,11 +54,11 @@ func (suite *CreatedConsumerTestSuite) TestCreatedSucceeded() {
 
 	suite.NoError(json.Unmarshal(message.Attributes, event.Attributes))
 
-	suite.transport.On("Submit", event.Attributes)
+	suite.transfer.On("Submit", event.Attributes)
 
 	suite.NoError(suite.sut.On(message))
 
-	suite.transport.AssertExpectations(suite.T())
+	suite.transfer.AssertExpectations(suite.T())
 }
 
 func TestUnitCreatedConsumerSuite(t *testing.T) {

@@ -3,17 +3,18 @@ package update
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
 )
 
 type Update struct {
-	model.Repository
-	model.Hashing
+	repository.User
+	hashing.Hashing
 }
 
 func (update *Update) Run(new *user.User, password *user.Password) error {
-	found, err := update.Repository.Search(&model.RepositorySearchCriteria{
+	found, err := update.User.Search(&repository.UserSearchCriteria{
 		Id: new.Id,
 	})
 
@@ -33,7 +34,7 @@ func (update *Update) Run(new *user.User, password *user.Password) error {
 
 	new.Verified = found.Verified
 
-	err = update.Repository.Update(new)
+	err = update.User.Update(new)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

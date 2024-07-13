@@ -10,14 +10,14 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/loggers"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 )
 
 type RabbitMQ struct {
 	*amqp.Connection
 	*amqp.Channel
-	models.Logger
+	loggers.Logger
 	exchange string
 }
 
@@ -237,7 +237,7 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 	return nil
 }
 
-func New(uri string, logger models.Logger) (messages.Broker, error) {
+func New(uri string, logger loggers.Logger) (messages.Broker, error) {
 	connection, err := amqp.Dial(uri)
 
 	if err != nil {

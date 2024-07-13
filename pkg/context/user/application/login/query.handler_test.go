@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
@@ -18,17 +18,17 @@ type LoginHandlerTestSuite struct {
 	sut        handlers.Query[*login.Query, *login.Response]
 	login      usecase.Login
 	hashing    *cryptographic.HashingMock
-	repository *persistence.RepositoryMock
+	repository *persistence.UserMock
 }
 
 func (suite *LoginHandlerTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserMock)
 
 	suite.hashing = new(cryptographic.HashingMock)
 
 	suite.login = &login.Login{
-		Repository: suite.repository,
-		Hashing:    suite.hashing,
+		User:    suite.repository,
+		Hashing: suite.hashing,
 	}
 
 	suite.sut = &login.Handler{
@@ -44,7 +44,7 @@ func (suite *LoginHandlerTestSuite) TestLogin() {
 		Password: random.Password.Value,
 	}
 
-	criteria := &model.RepositorySearchCriteria{
+	criteria := &repository.UserSearchCriteria{
 		Email: random.Email,
 	}
 

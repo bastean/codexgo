@@ -5,20 +5,20 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/transfers"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports/smtp"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/communication/mail"
+	"github.com/bastean/codexgo/pkg/context/user/infrastructure/transport/mail"
 	"github.com/stretchr/testify/suite"
 )
 
-type MailConfirmationTransportTestSuite struct {
+type ConfirmationTestSuite struct {
 	suite.Suite
-	sut  models.Transport
+	sut  transfers.Transfer
 	smtp *smtp.SMTP
 }
 
-func (suite *MailConfirmationTransportTestSuite) SetupTest() {
+func (suite *ConfirmationTestSuite) SetupTest() {
 	suite.smtp = smtp.New(
 		os.Getenv("CODEXGO_SMTP_HOST"),
 		os.Getenv("CODEXGO_SMTP_PORT"),
@@ -32,7 +32,7 @@ func (suite *MailConfirmationTransportTestSuite) SetupTest() {
 	}
 }
 
-func (suite *MailConfirmationTransportTestSuite) TestSubmit() {
+func (suite *ConfirmationTestSuite) TestSubmit() {
 	message := user.RandomCreatedSucceeded()
 
 	event := new(user.CreatedSucceeded)
@@ -44,6 +44,6 @@ func (suite *MailConfirmationTransportTestSuite) TestSubmit() {
 	suite.NoError(suite.sut.Submit(event.Attributes))
 }
 
-func TestIntegrationMailConfirmationTransportSuite(t *testing.T) {
-	suite.Run(t, new(MailConfirmationTransportTestSuite))
+func TestIntegrationConfirmationSuite(t *testing.T) {
+	suite.Run(t, new(ConfirmationTestSuite))
 }

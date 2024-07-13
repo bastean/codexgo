@@ -6,7 +6,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -22,7 +23,7 @@ type UserDocument struct {
 
 type User struct {
 	*mongo.Collection
-	model.Hashing
+	hashing.Hashing
 }
 
 func (mongoDB *User) Save(user *user.User) error {
@@ -127,7 +128,7 @@ func (mongoDB *User) Delete(id *user.Id) error {
 	return nil
 }
 
-func (mongoDB *User) Search(criteria *model.RepositorySearchCriteria) (*user.User, error) {
+func (mongoDB *User) Search(criteria *repository.UserSearchCriteria) (*user.User, error) {
 	var filter bson.D
 	var index string
 
@@ -178,7 +179,7 @@ func (mongoDB *User) Search(criteria *model.RepositorySearchCriteria) (*user.Use
 	return found, nil
 }
 
-func NewUser(mongoDB *mongodb.MongoDB, name string, hashing model.Hashing) (model.Repository, error) {
+func NewUser(mongoDB *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
 	collection := mongoDB.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{

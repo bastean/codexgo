@@ -1,9 +1,9 @@
 package messages
 
 type Broker interface {
-	AddRouter(router *Router) error
-	AddQueue(queue *Queue) error
-	AddQueueMessageBind(queue *Queue, bindingKeys []string) error
-	AddQueueConsumer(consumer Consumer) error
-	PublishMessages(messages []*Message) error
+	AddRouter(*Router) error
+	AddQueue(*Queue) error
+	AddQueueMessageBind(*Queue, BindingKeys) error
+	AddQueueConsumer(Consumer) error
+	PublishMessages([]*Message) error
 }

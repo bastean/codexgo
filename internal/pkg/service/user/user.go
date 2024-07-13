@@ -8,7 +8,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/application/verify"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 )
 
 var (
@@ -20,7 +21,7 @@ var (
 	Login  *login.Handler
 )
 
-func Init(repository model.Repository, broker messages.Broker, hashing model.Hashing) {
+func Init(repository repository.User, broker messages.Broker, hashing hashing.Hashing) {
 	Create = NewCreate(repository, broker)
 
 	Read = NewRead(repository)

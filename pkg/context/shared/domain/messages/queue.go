@@ -1,8 +1,10 @@
 package messages
 
+type BindingKeys = []string
+
 type Queue struct {
 	Name     string
-	Bindings []string
+	Bindings BindingKeys
 }
 
 func HasNoQueue(queues []Queue, queue *Queue) bool {

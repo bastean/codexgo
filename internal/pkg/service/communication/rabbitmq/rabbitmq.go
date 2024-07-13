@@ -2,12 +2,12 @@ package rabbitmq
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/loggers"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications/rabbitmq"
 )
 
-func New(uri string, logger models.Logger, exchange *messages.Router, queues []*messages.Queue, consumers []messages.Consumer) (messages.Broker, error) {
+func New(uri string, logger loggers.Logger, exchange *messages.Router, queues []*messages.Queue, consumers []messages.Consumer) (messages.Broker, error) {
 	rabbitMQ, err := rabbitmq.New(uri, logger)
 
 	if err != nil {

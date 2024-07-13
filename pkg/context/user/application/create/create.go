@@ -3,15 +3,15 @@ package create
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 )
 
 type Create struct {
-	model.Repository
+	repository.User
 }
 
 func (create *Create) Run(user *user.User) error {
-	err := create.Repository.Save(user)
+	err := create.User.Save(user)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

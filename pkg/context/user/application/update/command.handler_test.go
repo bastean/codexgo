@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
@@ -18,17 +18,17 @@ type UpdateHandlerTestSuite struct {
 	sut        handlers.Command[*update.Command]
 	update     usecase.Update
 	hashing    *cryptographic.HashingMock
-	repository *persistence.RepositoryMock
+	repository *persistence.UserMock
 }
 
 func (suite *UpdateHandlerTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserMock)
 
 	suite.hashing = new(cryptographic.HashingMock)
 
 	suite.update = &update.Update{
-		Repository: suite.repository,
-		Hashing:    suite.hashing,
+		User:    suite.repository,
+		Hashing: suite.hashing,
 	}
 
 	suite.sut = &update.Handler{
@@ -48,7 +48,7 @@ func (suite *UpdateHandlerTestSuite) TestUpdate() {
 
 	id, _ := user.NewId(command.Id)
 
-	criteria := &model.RepositorySearchCriteria{
+	criteria := &repository.UserSearchCriteria{
 		Id: id,
 	}
 

@@ -3,7 +3,7 @@ package log
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers/log"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/records/log"
 )
 
 var (

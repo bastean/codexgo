@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
@@ -18,17 +18,17 @@ type DeleteHandlerTestSuite struct {
 	sut        handlers.Command[*delete.Command]
 	delete     usecase.Delete
 	hashing    *cryptographic.HashingMock
-	repository *persistence.RepositoryMock
+	repository *persistence.UserMock
 }
 
 func (suite *DeleteHandlerTestSuite) SetupTest() {
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserMock)
 
 	suite.hashing = new(cryptographic.HashingMock)
 
 	suite.delete = &delete.Delete{
-		Repository: suite.repository,
-		Hashing:    suite.hashing,
+		User:    suite.repository,
+		Hashing: suite.hashing,
 	}
 
 	suite.sut = &delete.Handler{
@@ -44,7 +44,7 @@ func (suite *DeleteHandlerTestSuite) TestDelete() {
 		Password: random.Password.Value,
 	}
 
-	criteria := &model.RepositorySearchCriteria{
+	criteria := &repository.UserSearchCriteria{
 		Id: random.Id,
 	}
 

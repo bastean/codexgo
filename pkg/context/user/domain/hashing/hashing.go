@@ -1,4 +1,4 @@
-package model
+package hashing
 
 type Hashing interface {
 	Hash(plain string) (string, error)

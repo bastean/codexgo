@@ -2,10 +2,10 @@ package service
 
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
 )
 
-func IsPasswordInvalid(hashing model.Hashing, hashed, plain string) error {
+func IsPasswordInvalid(hashing hashing.Hashing, hashed, plain string) error {
 	if hashing.IsNotEqual(hashed, plain) {
 		return errors.NewFailure(&errors.Bubble{
 			Where: "IsPasswordInvalid",

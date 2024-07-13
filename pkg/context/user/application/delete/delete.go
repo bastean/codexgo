@@ -3,17 +3,18 @@ package delete
 import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/model"
+	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/domain/service"
 )
 
 type Delete struct {
-	model.Repository
-	model.Hashing
+	repository.User
+	hashing.Hashing
 }
 
 func (delete *Delete) Run(id *user.Id, password *user.Password) error {
-	found, err := delete.Repository.Search(&model.RepositorySearchCriteria{
+	found, err := delete.User.Search(&repository.UserSearchCriteria{
 		Id: id,
 	})
 
@@ -27,7 +28,7 @@ func (delete *Delete) Run(id *user.Id, password *user.Password) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = delete.Repository.Delete(found.Id)
+	err = delete.User.Delete(found.Id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

@@ -38,5 +38,5 @@ func NewCreatedSucceeded(event *CreatedSucceeded) (*messages.Message, error) {
 		})
 	}
 
-	return messages.NewMessage(CreatedSucceededTypeRoutingKey, attributes, messages.Meta{}), nil
+	return messages.New(CreatedSucceededTypeRoutingKey, attributes, messages.Meta{}), nil
 }

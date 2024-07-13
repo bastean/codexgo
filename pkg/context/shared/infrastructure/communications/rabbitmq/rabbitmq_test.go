@@ -8,22 +8,22 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications/rabbitmq"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/loggers"
+	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/records"
 	"github.com/stretchr/testify/suite"
 )
 
-type RabbitMQBrokerTestSuite struct {
+type RabbitMQTestSuite struct {
 	suite.Suite
 	sut      messages.Broker
-	logger   *loggers.LoggerMock
+	logger   *records.LoggerMock
 	router   *messages.Router
 	queue    *messages.Queue
 	consumer *communications.ConsumerMock
 	messages []*messages.Message
 }
 
-func (suite *RabbitMQBrokerTestSuite) SetupTest() {
-	suite.logger = new(loggers.LoggerMock)
+func (suite *RabbitMQTestSuite) SetupTest() {
+	suite.logger = new(records.LoggerMock)
 
 	uri := os.Getenv("BROKER_RABBITMQ_URI")
 
@@ -45,7 +45,7 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 
 	suite.consumer = new(communications.ConsumerMock)
 
-	message := messages.NewMessage(
+	message := messages.New(
 		messages.NewRoutingKey(&messages.RoutingKeyComponents{
 			Service: "publisher",
 			Version: "1",
@@ -65,7 +65,7 @@ func (suite *RabbitMQBrokerTestSuite) SetupTest() {
 	suite.messages = append(suite.messages, message)
 }
 
-func (suite *RabbitMQBrokerTestSuite) TestBroker() {
+func (suite *RabbitMQTestSuite) TestBroker() {
 	suite.NoError(suite.sut.AddRouter(suite.router))
 
 	suite.NoError(suite.sut.AddQueue(suite.queue))
@@ -91,6 +91,6 @@ func (suite *RabbitMQBrokerTestSuite) TestBroker() {
 	suite.consumer.AssertExpectations(suite.T())
 }
 
-func TestIntegrationRabbitMQBrokerSuite(t *testing.T) {
-	suite.Run(t, new(RabbitMQBrokerTestSuite))
+func TestIntegrationRabbitMQSuite(t *testing.T) {
+	suite.Run(t, new(RabbitMQTestSuite))
 }

@@ -9,7 +9,7 @@ type Message struct {
 	Attributes, Meta     []byte
 }
 
-func NewMessage(routingKey string, attributes, meta []byte) *Message {
+func New(routingKey string, attributes, meta []byte) *Message {
 	return &Message{
 		Type:       routingKey,
 		Attributes: attributes,

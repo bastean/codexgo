@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/valueobjs"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/messages/valueobjs"
 )
 
 var Type = struct {

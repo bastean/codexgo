@@ -16,17 +16,17 @@ type CreateHandlerTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*create.Command]
 	create     usecase.Create
-	repository *persistence.RepositoryMock
+	repository *persistence.UserMock
 	broker     *communications.BrokerMock
 }
 
 func (suite *CreateHandlerTestSuite) SetupTest() {
 	suite.broker = new(communications.BrokerMock)
 
-	suite.repository = new(persistence.RepositoryMock)
+	suite.repository = new(persistence.UserMock)
 
 	suite.create = &create.Create{
-		Repository: suite.repository,
+		User: suite.repository,
 	}
 
 	suite.sut = &create.Handler{

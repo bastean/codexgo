@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/models"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/loggers"
 	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
 )
 
 type Confirmation struct {
-	models.Logger
+	loggers.Logger
 	ServerURL string
 }
 
