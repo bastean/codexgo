@@ -61,7 +61,7 @@
 > - [System Requirements](#locally)
 > - In the Demo version, the link to confirm the account is sent through the Terminal.
 >   - _"Hi \<username\>, please confirm your account through this link: \<link\>"_
-> - You can define your own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the **SERVER_SMTP\_\*** variables, then you will receive the links by mail.
+> - We can define our own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
 
 ```bash
 make demo
@@ -191,43 +191,49 @@ make demo
 
 ## Basic Workflow (Domain > (Infrastructure | Application) > Presentation)
 
-### Context (Domain, Infrastructure & Application) > (Modules)
+### Bounded Context (App/Business/Department) > Modules (Troubleshooting) > Layers (Domain, Infrastructure & Application)
 
-- Domain
-  - Value Objects
+- Domain (Logic Core)
+  - Value Objects (Entities)
     - Mother Creators
     - Unit Tests
   - Messages (Event/Command)
     - Mother Creators
-  - Aggregates
-    - Aggregate Root
+  - Aggregates (Sets of Entities)
+    - Aggregate Root (Core Set)
     - Mother Creators
-  - Models (Ports)
+  - Role Interfaces (Ports)
     - Repository
     - Broker
-- Infrastructure
+  - Model Interfaces
+    - Use Cases
+    - Handlers/Consumers
+  - Services (Abstract Logic)
+  - Errors (Management)
+- Infrastructure (Port Adapters)
   - Persistence
     - Repository Mocks
-    - Adapters
+    - Implementations (Adapters)
     - Integration Tests
   - Communication
     - Broker Mocks
-    - Adapters
+    - Implementations (Adapters)
     - Integration Tests
-- Application
+- Application (Orchestration of Domain Logic)
+  - Use Cases
+    - Implementations
   - Commands
     - Mother Creators
-  - Querys/Responses
+  - Queries/Responses
     - Mother Creators
   - Handlers/Consumers
-    - Inputs & Outputs
-      - Uses Cases
+    - Implementations
     - Unit Tests
 
-### App (Presentation) > (Server)
+### App > Server > (Presentation)
 
-- Presentation
-  - Services (Modules)
+- Presentation (Consumers of Bounded Context Modules)
+  - Services Mapping (Modules)
   - Templates
   - Handlers
   - Routes
@@ -303,7 +309,10 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 ### GitHub Repository
 
-#### Settings
+> [!IMPORTANT]
+> These settings are necessary to be able to execute the Actions Workflows.
+
+#### Settings tab
 
 ##### Actions
 
@@ -332,14 +341,18 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 #### ENVs
 
 > [!IMPORTANT]
-> Before running it, you must set the following environment variables and rename the file to **.env.(dev|test|prod)**.
+> Before running it, we must initialize the following environment variable files:
 >
 > - [.env.example](deployments/.env.example)
-
-> [!TIP]
-> You can check the demo file to see which values you can use.
+>   - We will have to create a `.env.(dev|test|prod)` for each runtime environment.
+>   - In the [.env.example.demo](deployments/.env.example.demo) file, we can see the values that can be used.
 >
-> - [.env.example.demo](deployments/.env.example.demo)
+> In case we only want to run the **Integration** or **Acceptance** tests, in addition to having the `.env.test` file, we must have the following files created:
+>
+> - [.env.example.test.integration](deployments/.env.example.test.integration)
+>   - Rename the file to `.env.test.integration`.
+> - [.env.example.test.acceptance](deployments/.env.example.test.acceptance)
+>   - Rename the file to `.env.test.acceptance`.
 
 #### Development
 
