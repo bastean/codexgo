@@ -1,5 +1,40 @@
 # Changelog
 
+## [4.4.0](https://github.com/bastean/codexgo/compare/v4.3.1...v4.4.0) (2024-07-14)
+
+### ⚠ BREAKING CHANGES
+
+- **context:** rename packages
+- **infrastructure:** rename packages
+- rename envs
+- add internal folder to manage apps and services
+
+### Chores
+
+- **deps:** upgrade dependencies ([dd29c51](https://github.com/bastean/codexgo/commit/dd29c5141e6f43b8fc9c4cb52806074d64cd6c5a))
+
+### Documentation
+
+- **readme:** add more details about the interaction between layers ([99476ba](https://github.com/bastean/codexgo/commit/99476ba7c1d9f01bc8d42d59f5a417c1c43b59c2))
+
+### New Features
+
+- **server:** show proxy port when running ([42c84ed](https://github.com/bastean/codexgo/commit/42c84edb2a2d4f37245b31da512e8e4f924a9fd8))
+
+### Refactors
+
+- add internal folder to manage apps and services ([6081521](https://github.com/bastean/codexgo/commit/6081521f2f4496fcc4b3e162c31e5f9bb8b8c265))
+- **cmd:** stop apps before services ([0b52af7](https://github.com/bastean/codexgo/commit/0b52af71e25e7d0c2e98c0fb7c42cdd9f0148b66))
+- **context:** rename packages ([07f39eb](https://github.com/bastean/codexgo/commit/07f39eb8b477460c3ba15ee99fd893e8e9384232))
+- **context:** replace use of generic models with specific ones ([6ee85b2](https://github.com/bastean/codexgo/commit/6ee85b2aeb12d037e639cdd20c6696b38ae72349))
+- **domain:** add err prefix to bubble errors ([814a73b](https://github.com/bastean/codexgo/commit/814a73b55118751a5d3c7db77a3aa3fd364c57cb))
+- **infrastructure:** rename packages ([aa6b04d](https://github.com/bastean/codexgo/commit/aa6b04d42348cec42425eea5375b63328854eac1))
+- rename envs ([12ab31d](https://github.com/bastean/codexgo/commit/12ab31d7aeadb6129df463f558add5896b519a8b))
+
+### Tests
+
+- **infrastructure:** add assertions for missing mongo errors ([d42e73e](https://github.com/bastean/codexgo/commit/d42e73e45d8b781b9b88c52edf6d7528e4effe4e))
+
 ## [4.3.1](https://github.com/bastean/codexgo/compare/v4.3.0...v4.3.1) (2024-07-01)
 
 ### Chores
