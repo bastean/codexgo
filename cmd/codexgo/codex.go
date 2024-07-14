@@ -12,6 +12,7 @@ import (
 
 	"github.com/bastean/codexgo/internal/app/server"
 	"github.com/bastean/codexgo/internal/pkg/service"
+	"github.com/bastean/codexgo/internal/pkg/service/env"
 	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
 )
 
@@ -26,7 +27,7 @@ func usage() {
 }
 
 func main() {
-	flag.StringVar(&port, "p", os.Getenv("CODEXGO_SERVER_GIN_PORT"), "Port")
+	flag.StringVar(&port, "p", env.Server.Port, "Port")
 
 	flag.Usage = usage
 
@@ -51,6 +52,10 @@ func main() {
 	log.Started("server")
 
 	log.Info("server listening on :" + port)
+
+	if proxy, ok := env.Server.HasProxy(); ok {
+		log.Info("server proxy listening on :" + proxy)
+	}
 
 	log.Info("press ctrl+c to exit")
 

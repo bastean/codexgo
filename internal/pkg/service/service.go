@@ -15,14 +15,14 @@ import (
 
 var (
 	err      error
+	SMTP     smtp.SMTP
 	RabbitMQ communication.Broker
 	MongoDB  mongodb.MongoDB
-	SMTP     smtp.SMTP
 )
 
 func OpenSMTP() {
 	if env.SMTP.Host == "" {
-		user.InitCreated(user.TerminalConfirmation(log.Log, env.ServerURL), user.QueueSendConfirmation)
+		user.InitCreated(user.TerminalConfirmation(log.Log, env.Server.URL), user.QueueSendConfirmation)
 		return
 	}
 
@@ -31,7 +31,7 @@ func OpenSMTP() {
 		env.SMTP.Port,
 		env.SMTP.Username,
 		env.SMTP.Password,
-		env.SMTP.ServerURL,
+		env.Server.URL,
 	)
 
 	user.InitCreated(user.MailConfirmation(SMTP), user.QueueSendConfirmation)

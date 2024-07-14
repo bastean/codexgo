@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var allowedHosts = env.Security.AllowedHosts
+var allowedHosts = env.Server.Security.AllowedHosts
 
 func getAllowedHosts() []string {
 	return strings.Split(allowedHosts, ", ")

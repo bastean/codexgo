@@ -18,6 +18,7 @@ testdata_dir = "testdata"
   ]
   exclude_dir = []
   include_dir = [
+    "cmd",
     "internal",
     "pkg"
   ]
