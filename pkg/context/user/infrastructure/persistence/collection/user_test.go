@@ -21,17 +21,16 @@ type UserTestSuite struct {
 }
 
 func (suite *UserTestSuite) SetupTest() {
-	uri := os.Getenv("DATABASE_MONGODB_URI")
+	session, _ := mongodb.Open(
+		os.Getenv("DATABASE_MONGODB_URI"),
+		os.Getenv("DATABASE_MONGODB_NAME"),
+	)
 
-	name := os.Getenv("DATABASE_MONGODB_NAME")
-
-	database, _ := mongodb.New(uri, name)
-
-	name = "users-test"
+	name := "users-test"
 
 	suite.hashing = new(cryptographic.HashingMock)
 
-	suite.sut, _ = collection.NewUser(database, name, suite.hashing)
+	suite.sut, _ = collection.OpenUser(session, name, suite.hashing)
 }
 
 func (suite *UserTestSuite) TestSave() {

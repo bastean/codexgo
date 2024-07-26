@@ -237,36 +237,36 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 	return nil
 }
 
-func New(uri string, logger loggers.Logger) (messages.Broker, error) {
-	connection, err := amqp.Dial(uri)
+func Open(uri string, logger loggers.Logger) (messages.Broker, error) {
+	session, err := amqp.Dial(uri)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "New",
+			Where: "Open",
 			What:  "Failure connecting to RabbitMQ",
 			Who:   err,
 		})
 	}
 
-	channel, err := connection.Channel()
+	channel, err := session.Channel()
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "New",
+			Where: "Open",
 			What:  "Failure to open a channel",
 			Who:   err,
 		})
 	}
 
 	return &RabbitMQ{
-		Connection: connection,
+		Connection: session,
 		Channel:    channel,
 		Logger:     logger,
 	}, nil
 }
 
-func Close(rabbitMQ *RabbitMQ) error {
-	err := rabbitMQ.Channel.Close()
+func Close(session *RabbitMQ) error {
+	err := session.Channel.Close()
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
@@ -276,7 +276,7 @@ func Close(rabbitMQ *RabbitMQ) error {
 		})
 	}
 
-	err = rabbitMQ.Connection.Close()
+	err = session.Connection.Close()
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{

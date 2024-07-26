@@ -35,7 +35,7 @@ func main() {
 
 	log.Starting("services")
 
-	if err := service.Run(); err != nil {
+	if err := service.Up(); err != nil {
 		log.Fatal(err.Error())
 	}
 
@@ -44,7 +44,7 @@ func main() {
 	log.Starting("server")
 
 	go func() {
-		if err := server.Run(port); err != nil {
+		if err := server.Up(port); err != nil {
 			log.Fatal(err.Error())
 		}
 	}()
@@ -71,13 +71,13 @@ func main() {
 
 	log.Stopping("server")
 
-	errServer := server.Stop(ctx)
+	errServer := server.Down(ctx)
 
 	log.Stopped("server")
 
 	log.Stopping("services")
 
-	errService := service.Stop(ctx)
+	errService := service.Down(ctx)
 
 	log.Stopped("services")
 

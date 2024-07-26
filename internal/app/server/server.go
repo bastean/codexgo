@@ -13,7 +13,7 @@ var Files embed.FS
 
 var Server *http.Server
 
-func Run(port string) error {
+func Up(port string) error {
 	Server := &http.Server{
 		Addr:    ":" + port,
 		Handler: router.New(&Files),
@@ -22,6 +22,6 @@ func Run(port string) error {
 	return Server.ListenAndServe()
 }
 
-func Stop(ctx context.Context) error {
+func Down(ctx context.Context) error {
 	return Server.Shutdown(ctx)
 }

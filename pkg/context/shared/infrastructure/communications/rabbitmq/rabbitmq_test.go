@@ -25,9 +25,10 @@ type RabbitMQTestSuite struct {
 func (suite *RabbitMQTestSuite) SetupTest() {
 	suite.logger = new(records.LoggerMock)
 
-	uri := os.Getenv("BROKER_RABBITMQ_URI")
-
-	suite.sut, _ = rabbitmq.New(uri, suite.logger)
+	suite.sut, _ = rabbitmq.Open(
+		os.Getenv("BROKER_RABBITMQ_URI"),
+		suite.logger,
+	)
 
 	suite.router = &messages.Router{
 		Name: os.Getenv("BROKER_RABBITMQ_NAME"),

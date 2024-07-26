@@ -13,5 +13,5 @@ var QueueSendConfirmation = &messages.Queue{
 		Event:   "created",
 		Status:  "succeeded",
 	}),
-	Bindings: []string{rabbitmq.Binding.Event.CreatedSucceeded},
+	Bindings: []string{rabbitmq.BindingEventCreatedSucceeded},
 }

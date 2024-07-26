@@ -26,7 +26,7 @@ func OpenSMTP() {
 		return
 	}
 
-	SMTP = smtp.New(
+	SMTP = smtp.Open(
 		env.SMTP.Host,
 		env.SMTP.Port,
 		env.SMTP.Username,
@@ -38,7 +38,7 @@ func OpenSMTP() {
 }
 
 func OpenRabbitMQ() error {
-	RabbitMQ, err = rabbitmq.New(
+	RabbitMQ, err = rabbitmq.Open(
 		env.RabbitMQ.URI,
 		log.Log,
 		rabbitmq.Exchange(env.RabbitMQ.Name),
@@ -58,7 +58,7 @@ func OpenRabbitMQ() error {
 }
 
 func OpenMongoDB() error {
-	MongoDB, err = mongodb.New(
+	MongoDB, err = mongodb.Open(
 		env.MongoDB.URI,
 		env.MongoDB.Name,
 	)
@@ -81,7 +81,7 @@ func StartUser() error {
 		return errors.BubbleUp(err, "StartUser")
 	}
 
-	user.Init(
+	user.Start(
 		collection,
 		RabbitMQ,
 		user.Bcrypt,
@@ -90,7 +90,7 @@ func StartUser() error {
 	return nil
 }
 
-func Run() error {
+func Up() error {
 	log.EstablishingConnectionWith("smtp")
 
 	OpenSMTP()
@@ -102,7 +102,7 @@ func Run() error {
 	err = OpenRabbitMQ()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Up")
 	}
 
 	log.ConnectionEstablishedWith("rabbitmq")
@@ -112,7 +112,7 @@ func Run() error {
 	err = OpenMongoDB()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Up")
 	}
 
 	log.ConnectionEstablishedWith("mongodb")
@@ -122,7 +122,7 @@ func Run() error {
 	err = StartUser()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err, "Up")
 	}
 
 	log.StartedModule("user")
@@ -150,13 +150,13 @@ func CloseMongoDB(ctx context.Context) error {
 	return nil
 }
 
-func Stop(ctx context.Context) error {
+func Down(ctx context.Context) error {
 	log.ClosingConnectionWith("rabbitmq")
 
 	err = CloseRabbitMQ()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Stop")
+		return errors.BubbleUp(err, "Down")
 	}
 
 	log.ConnectionClosedWith("rabbitmq")
@@ -166,7 +166,7 @@ func Stop(ctx context.Context) error {
 	err = CloseMongoDB(ctx)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Stop")
+		return errors.BubbleUp(err, "Down")
 	}
 
 	log.ConnectionClosedWith("mongodb")

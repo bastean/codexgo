@@ -9,18 +9,18 @@ import (
 
 type MongoDB = *mongodb.MongoDB
 
-func New(uri, name string) (*mongodb.MongoDB, error) {
-	mongoDB, err := mongodb.New(uri, name)
+func Open(uri, name string) (*mongodb.MongoDB, error) {
+	session, err := mongodb.Open(uri, name)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "New")
+		return nil, errors.BubbleUp(err, "Open")
 	}
 
-	return mongoDB, nil
+	return session, nil
 }
 
-func Close(ctx context.Context, connection *mongodb.MongoDB) error {
-	err := mongodb.Close(ctx, connection)
+func Close(ctx context.Context, session *mongodb.MongoDB) error {
+	err := mongodb.Close(ctx, session)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Close")

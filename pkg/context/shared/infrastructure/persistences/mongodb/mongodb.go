@@ -18,37 +18,37 @@ type MongoDB struct {
 	*mongo.Database
 }
 
-func New(uri, name string) (*MongoDB, error) {
+func Open(uri, name string) (*MongoDB, error) {
 	options := options.Client().ApplyURI(uri)
 
-	client, err := mongo.Connect(context.Background(), options)
+	session, err := mongo.Connect(context.Background(), options)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "New",
+			Where: "Open",
 			What:  "Failure to create a MongoDB client",
 			Who:   err,
 		})
 	}
 
-	err = client.Ping(context.Background(), nil)
+	err = session.Ping(context.Background(), nil)
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "New",
+			Where: "Open",
 			What:  "Failure connecting to MongoDB",
 			Who:   err,
 		})
 	}
 
 	return &MongoDB{
-		Client:   client,
-		Database: client.Database(name),
+		Client:   session,
+		Database: session.Database(name),
 	}, nil
 }
 
-func Close(ctx context.Context, mongoDB *MongoDB) error {
-	if err := mongoDB.Client.Disconnect(ctx); err != nil {
+func Close(ctx context.Context, session *MongoDB) error {
+	if err := session.Client.Disconnect(ctx); err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Close",
 			What:  "Failure to close connection with MongoDB",

@@ -8,8 +8,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/collection"
 )
 
-func Collection(mongoDB *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
-	collection, err := collection.NewUser(mongoDB, name, hashing)
+func Collection(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
+	collection, err := collection.OpenUser(session, name, hashing)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Collection")

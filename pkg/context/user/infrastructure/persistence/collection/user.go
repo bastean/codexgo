@@ -179,8 +179,8 @@ func (mongoDB *User) Search(criteria *repository.UserSearchCriteria) (*user.User
 	return found, nil
 }
 
-func NewUser(mongoDB *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
-	collection := mongoDB.Database.Collection(name)
+func OpenUser(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
+	collection := session.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
 		{
@@ -199,7 +199,7 @@ func NewUser(mongoDB *mongodb.MongoDB, name string, hashing hashing.Hashing) (re
 
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
-			Where: "NewUser",
+			Where: "OpenUser",
 			What:  "Failure to create indexes for user collection",
 			Why: errors.Meta{
 				"Collection": name,

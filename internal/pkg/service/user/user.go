@@ -21,7 +21,7 @@ var (
 	Login  *login.Handler
 )
 
-func Init(repository repository.User, broker messages.Broker, hashing hashing.Hashing) {
+func Start(repository repository.User, broker messages.Broker, hashing hashing.Hashing) {
 	Create = NewCreate(repository, broker)
 
 	Read = NewRead(repository)

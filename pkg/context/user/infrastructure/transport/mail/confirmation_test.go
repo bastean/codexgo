@@ -19,7 +19,7 @@ type ConfirmationTestSuite struct {
 }
 
 func (suite *ConfirmationTestSuite) SetupTest() {
-	suite.smtp = smtp.New(
+	suite.smtp = smtp.Open(
 		os.Getenv("CODEXGO_SMTP_HOST"),
 		os.Getenv("CODEXGO_SMTP_PORT"),
 		os.Getenv("CODEXGO_SMTP_USERNAME"),
