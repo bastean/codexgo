@@ -42,9 +42,9 @@ type cookie struct {
 }
 
 type server struct {
-	URL, Port, Mode string
-	Security        *security
-	Cookie          *cookie
+	Hostname, Port, URL, Mode string
+	Security                  *security
+	Cookie                    *cookie
 }
 
 func (server *server) HasProxy() (string, bool) {
@@ -58,14 +58,15 @@ func (server *server) HasProxy() (string, bool) {
 }
 
 var Server = &server{
-	URL:  os.Getenv("CODEXGO_SERVER_URL"),
-	Port: os.Getenv("CODEXGO_SERVER_GIN_PORT"),
-	Mode: os.Getenv("CODEXGO_SERVER_GIN_MODE"),
+	Hostname: os.Getenv("CODEXGO_SERVER_GIN_HOSTNAME"),
+	Port:     os.Getenv("CODEXGO_SERVER_GIN_PORT"),
+	URL:      os.Getenv("CODEXGO_SERVER_GIN_URL"),
+	Mode:     os.Getenv("CODEXGO_SERVER_GIN_MODE"),
 	Security: &security{
 		AllowedHosts: os.Getenv("CODEXGO_SERVER_GIN_ALLOWED_HOSTS"),
 	},
 	Cookie: &cookie{
-		SecretKey:   os.Getenv("CODEXGO_SERVER_COOKIE_SECRET_KEY"),
-		SessionName: os.Getenv("CODEXGO_SERVER_COOKIE_SESSION_NAME"),
+		SecretKey:   os.Getenv("CODEXGO_SERVER_GIN_COOKIE_SECRET_KEY"),
+		SessionName: os.Getenv("CODEXGO_SERVER_GIN_COOKIE_SESSION_NAME"),
 	},
 }

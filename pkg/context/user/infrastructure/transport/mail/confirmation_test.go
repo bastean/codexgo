@@ -24,7 +24,7 @@ func (suite *ConfirmationTestSuite) SetupTest() {
 		os.Getenv("CODEXGO_SMTP_PORT"),
 		os.Getenv("CODEXGO_SMTP_USERNAME"),
 		os.Getenv("CODEXGO_SMTP_PASSWORD"),
-		os.Getenv("CODEXGO_SERVER_URL"),
+		os.Getenv("CODEXGO_SERVER_GIN_URL"),
 	)
 
 	suite.sut = &mail.Confirmation{
