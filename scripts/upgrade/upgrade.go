@@ -13,60 +13,39 @@ func Panic(who error, where string) {
 	log.Panicf("Error: (%s): [%s]", where, who)
 }
 
-func UpgradeGo() {
-	if err := exec.Command("make", "upgrade-go").Run(); err != nil {
-		Panic(err, "UpgradeGo")
+func Run(name string, args ...string) {
+	if err := exec.Command(name, args...).Run(); err != nil {
+		Panic(err, "Run")
 	}
 }
 
-func UpgradeNode() {
-	if err := exec.Command("make", "upgrade-node").Run(); err != nil {
-		Panic(err, "UpgradeNode")
-	}
-}
-
-func RunLint() {
-	if err := exec.Command("make", "lint-check").Run(); err != nil {
-		Panic(err, "RunLint")
-	}
-}
-
-func RunTest() {
-	if err := exec.Command("make", "test-unit").Run(); err != nil {
-		Panic(err, "RunTest")
-	}
-}
-
-func Commit() {
-	if err := exec.Command("git", "add", ".", "--update").Run(); err != nil {
-		Panic(err, "Commit")
-	}
-
-	if err := exec.Command("git", "commit", "-m", "chore(deps): upgrade dependencies").Run(); err != nil {
-		Panic(err, "Commit")
-	}
+func Lint() {
+	log.Println("Linting...")
+	Run("make", "lint")
 }
 
 func main() {
-	log.Println("Upgrading dependencies")
+	log.Println("Starting upgrades...")
 
-	log.Println("Running Go Tidy")
-	RunLint()
+	Lint()
 
-	log.Println("Upgrading Go dependencies")
-	UpgradeGo()
+	log.Println("Upgrading Go")
+	Run("make", "upgrade-go")
 
-	log.Println("Upgrading Node dependencies")
-	UpgradeNode()
+	log.Println("Upgrading Node")
+	Run("make", "upgrade-node")
 
-	log.Println("Running Lint")
-	RunLint()
+	log.Println("Upgrading Tooling")
+	Run("make", "install-tooling")
 
-	log.Println("Running Test")
-	RunTest()
+	Lint()
 
-	log.Println("Commit changes")
-	Commit()
+	log.Println("Testing...")
+	Run("make", "test-unit")
+
+	log.Println("Committing upgrades")
+	Run("git", "add", ".", "--update")
+	Run("git", "commit", "-m", "chore(deps): upgrade")
 
 	log.Println("Upgrade completed!")
 }
