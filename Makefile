@@ -4,6 +4,7 @@
 
 #*______URL______
 
+server = http://localhost:8080
 github = https://github.com/bastean/codexgo
 
 #*______Go______
@@ -57,16 +58,30 @@ upgrade-reset:
 upgrade:
 	go run ./scripts/upgrade
 
-#*______Dependencies______
+#*______Tooling______
 
-install-tools:
+scan-tools:
 	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 	curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
 	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
-	go install honnef.co/go/tools/cmd/staticcheck@latest
-	go install github.com/a-h/templ/cmd/templ@latest
 
-install-deps:
+lint-tools:
+	go install honnef.co/go/tools/cmd/staticcheck@latest
+
+dev-tools:
+	go install github.com/air-verse/air@latest
+	go install github.com/a-h/templ/cmd/templ@latest
+	npm i -g prettier
+
+test-tools:
+	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
+	npm i -g concurrently wait-on
+
+install-tooling: scan-tools lint-tools dev-tools test-tools
+
+#*______Dependencies______
+
+download-deps:
 	go mod download
 	${npm-ci}
 
@@ -82,7 +97,7 @@ generate-required:
 
 #*______Initializations______
 
-init: upgrade-managers install-tools install-deps copy-deps generate-required
+init: upgrade-managers install-tooling download-deps copy-deps generate-required
 
 init-zero:
 	git init
@@ -137,10 +152,10 @@ test-clean: generate-required
 	cd test/ && mkdir -p report
 
 test-codegen:
-	${npx} playwright codegen http://localhost:8080
+	${npx} playwright codegen ${server}
 
-test-sync: upgrade-go
-	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l http-get://localhost:8080 && $(TEST_SYNC)'
+test-sync:
+	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${server} && $(TEST_SYNC)'
 
 test-unit: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log'
@@ -149,13 +164,13 @@ test-integration: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log'
 
 test-acceptance-sync: 
-	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
+	${bash} 'TEST_URL="${server}" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
 
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
 
 tests-sync:
-	${bash} 'TEST_URL="http://localhost:8080" go test -v -cover ./... |& tee test/report/report.log'
+	${bash} 'TEST_URL="${server}" go test -v -cover ./... |& tee test/report/report.log'
 
 tests: test-clean
 	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
@@ -172,7 +187,7 @@ release-beta:
 	${release-it} --preRelease=beta
 
 release-ci:
-	${release-it} --ci $(OPTIONS)
+	${release-it} --ci --no-git.requireCleanWorkingDir $(OPTIONS)
 
 release-dry:
 	${release-it-dry}
@@ -189,7 +204,7 @@ build: lint
 	rm -rf build/
 	go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
 
-#*______ENVs______
+#*______ENV______
 
 sync-env-reset:
 	${git-reset-hard}
@@ -266,6 +281,4 @@ WARNING-docker-prune-hard:
 
 #*______Fixes______
 
-fix-local-playwright:
-	go get -u github.com/playwright-community/playwright-go
-	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
+fix-playwright: upgrade-go test-tools
