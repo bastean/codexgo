@@ -29,11 +29,15 @@ pnpm-debug.log*
 lerna-debug.log*
 
 #* ENV
-.env*
-.env.*
-!.env.demo*
-!.env.example*
-.npmrc
+*.env*
+!*.env.demo*
+!*.env.example*
+*.npmrc*
+
+#* Database
+*.db*
+!*.db.demo*
+!*.db.example*
 
 #* Production
 dist
