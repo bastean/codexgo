@@ -155,7 +155,7 @@ test-codegen:
 	${npx} playwright codegen ${server}
 
 test-sync:
-	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${server} && $(TEST_SYNC)'
+	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${server}/health && $(TEST_SYNC)'
 
 test-unit: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log'

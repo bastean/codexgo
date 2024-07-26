@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/bastean/codexgo/internal/app/server/handler/health"
 	"github.com/bastean/codexgo/internal/app/server/handler/page"
 	"github.com/bastean/codexgo/internal/app/server/handler/user"
 	"github.com/bastean/codexgo/internal/app/server/middleware"
@@ -10,6 +11,8 @@ func InitRoutes() {
 	router.NoRoute(page.Default())
 
 	public := router.Group("/")
+
+	public.HEAD("/", health.Check())
 
 	public.GET("/", page.Home())
 	public.PUT("/", user.Create())
