@@ -40,6 +40,6 @@ func Delete() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "account deleted", reply.Payload{}))
+		c.JSON(http.StatusOK, reply.JSON(true, "Account deleted", reply.Payload{}))
 	}
 }

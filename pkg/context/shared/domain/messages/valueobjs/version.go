@@ -21,7 +21,7 @@ func NewVersion(value string) (*Version, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewVersion",
-			What:  "version must be numeric only",
+			What:  "Version must be numeric only",
 			Why: errors.Meta{
 				"Version": value,
 			},

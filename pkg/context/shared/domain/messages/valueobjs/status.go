@@ -1,13 +1,14 @@
 package valueobjs
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
 
-var StatusOneOf = []string{"queued", "succeeded", "failed", "done"}
+var StatusOneOf = []string{"Queued", "Succeeded", "Failed", "Done"}
 
 type Status struct {
 	Value string `validate:"oneof=queued succeeded failed done"`
@@ -16,6 +17,8 @@ type Status struct {
 func NewStatus(value string) (*Status, error) {
 	value = strings.TrimSpace(value)
 
+	value = strings.ToLower(value)
+
 	valueObj := &Status{
 		Value: value,
 	}
@@ -23,7 +26,7 @@ func NewStatus(value string) (*Status, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewStatus",
-			What:  "status must be only one of these values: " + strings.Join(StatusOneOf, ", "),
+			What:  fmt.Sprintf("Status must be only one of these values: %s", strings.Join(StatusOneOf, ", ")),
 			Why: errors.Meta{
 				"Status": value,
 			},

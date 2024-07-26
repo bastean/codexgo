@@ -21,7 +21,7 @@ func NewId(value string) (*Id, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewId",
-			What:  "invalid uuid4 format",
+			What:  "Invalid UUID4 format",
 			Why: errors.Meta{
 				"Id": value,
 			},

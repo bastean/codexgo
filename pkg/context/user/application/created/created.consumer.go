@@ -28,7 +28,7 @@ func (consumer *Consumer) On(message *messages.Message) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "On",
-			What:  "failure to obtain message attributes",
+			What:  "Failure to obtain message attributes",
 			Why: errors.Meta{
 				"Id":          message.Id,
 				"Routing Key": message.Type,

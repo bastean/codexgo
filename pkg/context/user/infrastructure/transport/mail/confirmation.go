@@ -20,7 +20,7 @@ func (client *Confirmation) Submit(data any) error {
 	if !ok {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Submit",
-			What:  "failure in type assertion",
+			What:  "Failure in type assertion",
 			Why: errors.Meta{
 				"Expected": new(user.CreatedSucceededAttributes),
 				"Actual":   data,
@@ -37,7 +37,7 @@ func (client *Confirmation) Submit(data any) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Submit",
-			What:  "failure to write message headers",
+			What:  "Failure to write message headers",
 			Why: errors.Meta{
 				"Headers": headers,
 				"User Id": attributes.Id,
@@ -55,7 +55,7 @@ func (client *Confirmation) Submit(data any) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Submit",
-			What:  "failure to send an account confirmation mail",
+			What:  "Failure to send an account confirmation mail",
 			Why: errors.Meta{
 				"User Id":         attributes.Id,
 				"SMTP Server URL": client.SMTPServerURL,

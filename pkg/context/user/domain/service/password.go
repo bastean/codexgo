@@ -9,7 +9,7 @@ func IsPasswordInvalid(hashing hashing.Hashing, hashed, plain string) error {
 	if hashing.IsNotEqual(hashed, plain) {
 		return errors.NewFailure(&errors.Bubble{
 			Where: "IsPasswordInvalid",
-			What:  "passwords do not match",
+			What:  "Invalid password",
 		})
 	}
 

@@ -1,6 +1,7 @@
 package valueobjs
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
@@ -24,7 +25,7 @@ func NewCommand(value string) (*Command, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewCommand",
-			What:  "command must be between " + CommandMinCharactersLength + " to " + CommandMaxCharactersLength + " characters and be alpha only",
+			What:  fmt.Sprintf("Command must be between %s to %s characters and be alpha only", CommandMinCharactersLength, CommandMaxCharactersLength),
 			Why: errors.Meta{
 				"Command": value,
 			},

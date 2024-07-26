@@ -24,7 +24,7 @@ func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewId",
-		What:  "invalid uuid4 format",
+		What:  "Invalid UUID4 format",
 		Why: errors.Meta{
 			"Id": value,
 		},

@@ -1,6 +1,7 @@
 package valueobjs
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
@@ -24,7 +25,7 @@ func NewOrganization(value string) (*Organization, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewOrganization",
-			What:  "organization must be between " + OrganizationMinCharactersLength + " to " + OrganizationMaxCharactersLength + " characters and be alphanumeric only",
+			What:  fmt.Sprintf("Organization must be between %s to %s characters and be alphanumeric only", OrganizationMinCharactersLength, OrganizationMaxCharactersLength),
 			Why: errors.Meta{
 				"Organization": value,
 			},

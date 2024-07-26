@@ -35,7 +35,7 @@ func (rabbitMQ *RabbitMQ) AddRouter(router *messages.Router) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "AddRouter",
-			What:  "failure to declare a router",
+			What:  "Failure to declare a router",
 			Why: errors.Meta{
 				"Router": router.Name,
 			},
@@ -61,7 +61,7 @@ func (rabbitMQ *RabbitMQ) AddQueue(queue *messages.Queue) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "AddQueue",
-			What:  "failure to declare a queue",
+			What:  "Failure to declare a queue",
 			Why: errors.Meta{
 				"Queue": queue.Name,
 			},
@@ -89,7 +89,7 @@ func (rabbitMQ *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys
 		if err != nil {
 			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "AddQueueMessageBind",
-				What:  "failure to bind a queue",
+				What:  "Failure to bind a queue",
 				Why: errors.Meta{
 					"Queue":       queue.Name,
 					"Binding Key": bindingKey,
@@ -126,7 +126,7 @@ func (rabbitMQ *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 		if err != nil {
 			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "AddQueueConsumer",
-				What:  "failure to register a consumer",
+				What:  "Failure to register a consumer",
 				Why: errors.Meta{
 					"Queue":    queue.Name,
 					"Exchange": rabbitMQ.exchange,
@@ -186,7 +186,7 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 		if err != nil {
 			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "PublishMessages",
-				What:  "cannot encode message to json",
+				What:  "Cannot encode message to JSON",
 				Why: errors.Meta{
 					"Exchange": rabbitMQ.exchange,
 					"Message":  message.Id,
@@ -218,7 +218,7 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 		if err != nil {
 			errToWrap := errors.NewInternal(&errors.Bubble{
 				Where: "PublishMessages",
-				What:  "failure to publish a message",
+				What:  "Failure to publish a message",
 				Why: errors.Meta{
 					"Exchange": rabbitMQ.exchange,
 					"Message":  message.Id,
@@ -243,7 +243,7 @@ func New(uri string, logger loggers.Logger) (messages.Broker, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "New",
-			What:  "failure connecting to rabbitmq",
+			What:  "Failure connecting to RabbitMQ",
 			Who:   err,
 		})
 	}
@@ -253,7 +253,7 @@ func New(uri string, logger loggers.Logger) (messages.Broker, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "New",
-			What:  "failure to open a channel",
+			What:  "Failure to open a channel",
 			Who:   err,
 		})
 	}
@@ -271,7 +271,7 @@ func Close(rabbitMQ *RabbitMQ) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Close",
-			What:  "failure to close channel",
+			What:  "Failure to close channel",
 			Who:   err,
 		})
 	}
@@ -281,7 +281,7 @@ func Close(rabbitMQ *RabbitMQ) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Close",
-			What:  "failure to close rabbitmq connection",
+			What:  "Failure to close RabbitMQ connection",
 			Who:   err,
 		})
 	}

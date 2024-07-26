@@ -50,6 +50,6 @@ func Login() gin.HandlerFunc {
 
 		session.Save()
 
-		c.JSON(http.StatusOK, reply.JSON(true, "logged in", reply.Payload{}))
+		c.JSON(http.StatusOK, reply.JSON(true, "Logged in", reply.Payload{}))
 	}
 }

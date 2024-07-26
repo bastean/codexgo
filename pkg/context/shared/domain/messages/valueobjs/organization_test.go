@@ -24,7 +24,7 @@ func (suite *OrganizationValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewOrganization",
-		What:  "organization must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "Organization must be between 1 to 20 characters and be alphanumeric only",
 		Why: errors.Meta{
 			"Organization": value,
 		},
@@ -43,7 +43,7 @@ func (suite *OrganizationValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewOrganization",
-		What:  "organization must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "Organization must be between 1 to 20 characters and be alphanumeric only",
 		Why: errors.Meta{
 			"Organization": value,
 		},

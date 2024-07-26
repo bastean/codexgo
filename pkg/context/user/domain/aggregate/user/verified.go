@@ -19,7 +19,7 @@ func NewVerified(value bool) (*Verified, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewVerified",
-			What:  "invalid verified value",
+			What:  "Invalid verified value",
 			Why: errors.Meta{
 				"Verified": fmt.Sprintf("%t", value),
 			},

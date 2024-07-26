@@ -24,7 +24,7 @@ func (suite *StatusValueObjectTestSuite) TestWithInvalidValue() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewStatus",
-		What:  "status must be only one of these values: queued, succeeded, failed, done",
+		What:  "Status must be only one of these values: Queued, Succeeded, Failed, Done",
 		Why: errors.Meta{
 			"Status": value,
 		},

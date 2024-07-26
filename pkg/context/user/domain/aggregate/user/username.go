@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
@@ -24,7 +25,7 @@ func NewUsername(value string) (*Username, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewUsername",
-			What:  "username must be between " + UsernameMinCharactersLength + " to " + UsernameMaxCharactersLength + " characters and be alphanumeric only",
+			What:  fmt.Sprintf("Username must be between %s to %s characters and be alphanumeric only", UsernameMinCharactersLength, UsernameMaxCharactersLength),
 			Why: errors.Meta{
 				"Username": value,
 			},

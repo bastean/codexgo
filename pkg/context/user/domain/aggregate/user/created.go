@@ -30,7 +30,7 @@ func NewCreatedSucceeded(event *CreatedSucceeded) (*messages.Message, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewCreatedSucceeded",
-			What:  "failure to create event message attributes",
+			What:  "Failure to create event message attributes",
 			Why: errors.Meta{
 				"Routing Key": CreatedSucceededTypeRoutingKey,
 			},

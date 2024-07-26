@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -25,7 +26,7 @@ func New(uri, name string) (*MongoDB, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "New",
-			What:  "failure to create a mongodb client",
+			What:  "Failure to create a MongoDB client",
 			Who:   err,
 		})
 	}
@@ -35,7 +36,7 @@ func New(uri, name string) (*MongoDB, error) {
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "New",
-			What:  "failure connecting to mongodb",
+			What:  "Failure connecting to MongoDB",
 			Who:   err,
 		})
 	}
@@ -50,7 +51,7 @@ func Close(ctx context.Context, mongoDB *MongoDB) error {
 	if err := mongoDB.Client.Disconnect(ctx); err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Close",
-			What:  "failure to close connection with mongodb",
+			What:  "Failure to close connection with MongoDB",
 			Who:   err,
 		})
 	}
@@ -69,7 +70,7 @@ func HandleDuplicateKeyError(err error) error {
 
 	return errors.NewAlreadyExist(&errors.Bubble{
 		Where: "HandleDuplicateKeyError",
-		What:  "already registered",
+		What:  fmt.Sprintf("%s already registered", field),
 		Why: errors.Meta{
 			"Field": field,
 		},
@@ -80,7 +81,7 @@ func HandleDuplicateKeyError(err error) error {
 func HandleDocumentNotFound(index string, err error) error {
 	return errors.NewNotExist(&errors.Bubble{
 		Where: "HandleDocumentNotFound",
-		What:  "not found",
+		What:  fmt.Sprintf("%s not found", index),
 		Why: errors.Meta{
 			"Index": index,
 		},

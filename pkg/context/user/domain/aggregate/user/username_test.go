@@ -24,7 +24,7 @@ func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewUsername",
-		What:  "username must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "Username must be between 2 to 20 characters and be alphanumeric only",
 		Why: errors.Meta{
 			"Username": value,
 		},
@@ -43,7 +43,7 @@ func (suite *UsernameValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewUsername",
-		What:  "username must be between " + "2" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "Username must be between 2 to 20 characters and be alphanumeric only",
 		Why: errors.Meta{
 			"Username": value,
 		},

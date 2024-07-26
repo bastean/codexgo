@@ -40,6 +40,6 @@ func Update() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "account updated", reply.Payload{}))
+		c.JSON(http.StatusOK, reply.JSON(true, "Account updated", reply.Payload{}))
 	}
 }

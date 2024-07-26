@@ -46,7 +46,7 @@ func (mongoDB *User) Save(user *user.User) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Save",
-			What:  "failure to save a user",
+			What:  "Failure to save a user",
 			Why: errors.Meta{
 				"Id": user.Id.Value,
 			},
@@ -69,7 +69,7 @@ func (mongoDB *User) Verify(id *user.Id) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Verify",
-			What:  "failure to verify a user",
+			What:  "Failure to verify a user",
 			Why: errors.Meta{
 				"Id": id.Value,
 			},
@@ -98,7 +98,7 @@ func (mongoDB *User) Update(user *user.User) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Update",
-			What:  "failure to update a user",
+			What:  "Failure to update a user",
 			Why: errors.Meta{
 				"Id": user.Id.Value,
 			},
@@ -117,7 +117,7 @@ func (mongoDB *User) Delete(id *user.Id) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Delete",
-			What:  "failure to delete a user",
+			What:  "Failure to delete a user",
 			Why: errors.Meta{
 				"Id": id.Value,
 			},
@@ -154,7 +154,7 @@ func (mongoDB *User) Search(criteria *repository.UserSearchCriteria) (*user.User
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "failure to decode a result",
+			What:  "Failure to decode a result",
 			Why: errors.Meta{
 				"Index": index,
 			},
@@ -167,7 +167,7 @@ func (mongoDB *User) Search(criteria *repository.UserSearchCriteria) (*user.User
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "failure to create an user from a primitive",
+			What:  "Failure to create an user from a primitive",
 			Why: errors.Meta{
 				"Primitive": primitive,
 				"Index":     index,
@@ -200,7 +200,7 @@ func NewUser(mongoDB *mongodb.MongoDB, name string, hashing hashing.Hashing) (re
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "NewUser",
-			What:  "failure to create indexes for user collection",
+			What:  "Failure to create indexes for user collection",
 			Why: errors.Meta{
 				"Collection": name,
 			},

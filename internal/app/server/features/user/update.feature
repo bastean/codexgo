@@ -1,4 +1,4 @@
-Feature: Update a User account
+Feature: Update a user account
 
   Scenario: Create a valid non existing account
     Given I am on / page
@@ -8,7 +8,7 @@ Feature: Update a User account
     * I fill the Confirm Password with update@example
     * I check the I agree to the terms and conditions
     * I click the Sign up button
-    And I see account created notification
+    And I see Account created notification
 
   Scenario: Login a valid existing account
     Given I am on / page
@@ -16,7 +16,7 @@ Feature: Update a User account
     * I fill the Email with update@example.com
     * I fill the Password with update@example
     * I click the Sign in button
-    * I see logged in notification
+    * I see Logged in notification
     And redirect me to /dashboard page
 
   Scenario: Update a valid existing account
@@ -27,4 +27,4 @@ Feature: Update a User account
     * I fill the Confirm Password with updated@example
     * I fill the Current Password with update@example
     * I click the Update button
-    And I see account updated notification
+    And I see Account updated notification

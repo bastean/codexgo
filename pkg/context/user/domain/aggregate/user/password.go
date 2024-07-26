@@ -1,6 +1,8 @@
 package user
 
 import (
+	"fmt"
+
 	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/domain/services"
 )
@@ -20,7 +22,7 @@ func NewPassword(value string) (*Password, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewPassword",
-			What:  "password must be between " + PasswordMinCharactersLength + " to " + PasswordMaxCharactersLength + " characters",
+			What:  fmt.Sprintf("Password must be between %s to %s characters", PasswordMinCharactersLength, PasswordMaxCharactersLength),
 			Why: errors.Meta{
 				"Password": value,
 			},

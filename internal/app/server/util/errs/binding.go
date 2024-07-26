@@ -13,14 +13,14 @@ func BindingJSON(who error, where string) error {
 	if errors.As(who, &err) {
 		return errors.NewFailure(
 			where,
-			fmt.Sprintf("invalid type field [%s] required type is [%s] and [%s] was obtained", err.Field, err.Type, err.Value),
+			fmt.Sprintf("Invalid type field [%s] required type is [%s] and [%s] was obtained", err.Field, err.Type, err.Value),
 			who,
 		)
 	}
 
 	return errors.NewInternal(
 		where,
-		"cannot bind a json to a struct",
+		"Cannot bind a JSON to a struct",
 		who,
 	)
 }

@@ -24,7 +24,7 @@ func (suite *EntityValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEntity",
-		What:  "entity must be between " + "1" + " to " + "20" + " characters and be alpha only",
+		What:  "Entity must be between 1 to 20 characters and be alpha only",
 		Why: errors.Meta{
 			"Entity": value,
 		},
@@ -43,7 +43,7 @@ func (suite *EntityValueObjectTestSuite) TestWithInvalidAlpha() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEntity",
-		What:  "entity must be between " + "1" + " to " + "20" + " characters and be alpha only",
+		What:  "Entity must be between 1 to 20 characters and be alpha only",
 		Why: errors.Meta{
 			"Entity": value,
 		},

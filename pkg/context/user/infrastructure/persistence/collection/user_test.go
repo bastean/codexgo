@@ -1,6 +1,7 @@
 package collection_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -73,7 +74,7 @@ func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
 	expected := &errors.ErrAlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDuplicateKeyError",
-		What:  "already registered",
+		What:  "Id already registered",
 		Why: errors.Meta{
 			"Field": "Id",
 		},
@@ -185,7 +186,7 @@ func (suite *UserTestSuite) TestSearchErrDocumentNotFound() {
 	expected := &errors.ErrNotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDocumentNotFound",
-		What:  "not found",
+		What:  fmt.Sprintf("%s not found", random.Id.Value),
 		Why: errors.Meta{
 			"Index": random.Id.Value,
 		},

@@ -24,7 +24,7 @@ func (suite *CommandValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCommand",
-		What:  "command must be between " + "1" + " to " + "20" + " characters and be alpha only",
+		What:  "Command must be between 1 to 20 characters and be alpha only",
 		Why: errors.Meta{
 			"Command": value,
 		},
@@ -43,7 +43,7 @@ func (suite *CommandValueObjectTestSuite) TestWithInvalidAlpha() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCommand",
-		What:  "command must be between " + "1" + " to " + "20" + " characters and be alpha only",
+		What:  "Command must be between 1 to 20 characters and be alpha only",
 		Why: errors.Meta{
 			"Command": value,
 		},

@@ -21,7 +21,7 @@ func NewEmail(value string) (*Email, error) {
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
 			Where: "NewEmail",
-			What:  "invalid email format",
+			What:  "Invalid email format",
 			Why: errors.Meta{
 				"Email": value,
 			},

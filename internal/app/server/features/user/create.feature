@@ -1,4 +1,4 @@
-Feature: Create a new User account
+Feature: Create a new user account
 
   Scenario: Create a valid non existing account
     Given I am on / page
@@ -8,7 +8,7 @@ Feature: Create a new User account
     * I fill the Confirm Password with create@example
     * I check the I agree to the terms and conditions
     * I click the Sign up button
-    And I see account created notification
+    And I see Account created notification
 
   Scenario: Create already existing account
     Given I am on / page
@@ -18,4 +18,4 @@ Feature: Create a new User account
     * I fill the Confirm Password with create@example
     * I check the I agree to the terms and conditions
     * I click the Sign up button
-    But I see already registered notification
+    But I see Email already registered notification

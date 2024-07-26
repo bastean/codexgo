@@ -29,6 +29,6 @@ func Create() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusCreated, reply.JSON(true, "account created", reply.Payload{}))
+		c.JSON(http.StatusCreated, reply.JSON(true, "Account created", reply.Payload{}))
 	}
 }

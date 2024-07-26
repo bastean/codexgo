@@ -24,7 +24,7 @@ func (suite *EventValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEvent",
-		What:  "event must be between " + "1" + " to " + "20" + " characters and be alpha only",
+		What:  "Event must be between 1 to 20 characters and be alpha only",
 		Why: errors.Meta{
 			"Event": value,
 		},
@@ -43,7 +43,7 @@ func (suite *EventValueObjectTestSuite) TestWithInvalidAlpha() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEvent",
-		What:  "event must be between " + "1" + " to " + "20" + " characters and be alpha only",
+		What:  "Event must be between 1 to 20 characters and be alpha only",
 		Why: errors.Meta{
 			"Event": value,
 		},

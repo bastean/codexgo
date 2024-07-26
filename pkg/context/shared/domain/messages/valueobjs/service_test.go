@@ -24,7 +24,7 @@ func (suite *ServiceValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewService",
-		What:  "service must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "Service must be between 1 to 20 characters and be alphanumeric only",
 		Why: errors.Meta{
 			"Service": value,
 		},
@@ -43,7 +43,7 @@ func (suite *ServiceValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewService",
-		What:  "service must be between " + "1" + " to " + "20" + " characters and be alphanumeric only",
+		What:  "Service must be between 1 to 20 characters and be alphanumeric only",
 		Why: errors.Meta{
 			"Service": value,
 		},

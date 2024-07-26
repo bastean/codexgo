@@ -1,4 +1,4 @@
-Feature: Delete a User account
+Feature: Delete a user account
 
   Scenario: Create a valid non existing account
     Given I am on / page
@@ -8,7 +8,7 @@ Feature: Delete a User account
     * I fill the Confirm Password with delete@example
     * I check the I agree to the terms and conditions
     * I click the Sign up button
-    And I see account created notification
+    And I see Account created notification
 
   Scenario: Login a valid existing account
     Given I am on / page
@@ -16,7 +16,7 @@ Feature: Delete a User account
     * I fill the Email with delete@example.com
     * I fill the Password with delete@example
     * I click the Sign in button
-    * I see logged in notification
+    * I see Logged in notification
     And redirect me to /dashboard page
 
   Scenario: Delete a valid existing account
@@ -26,5 +26,5 @@ Feature: Delete a User account
     * I fill the Password with delete@example
     * I fill the Confirm Password with delete@example
     * I click the Approve button
-    * I see account deleted notification
+    * I see Account deleted notification
     And redirect me to / page

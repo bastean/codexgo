@@ -9,7 +9,7 @@ import (
 func MissingKey(what, where string) error {
 	return errors.NewInternal(
 		where,
-		fmt.Sprintf("failure to obtain the value of the key [%s]", what),
+		fmt.Sprintf("Failure to obtain the value of the key [%s]", what),
 		nil,
 	)
 }

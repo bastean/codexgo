@@ -24,7 +24,7 @@ func (suite *ActionValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewAction",
-		What:  "action must be between " + "1" + " to " + "20" + " characters",
+		What:  "Action must be between 1 to 20 characters",
 		Why: errors.Meta{
 			"Action": value,
 		},

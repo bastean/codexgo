@@ -24,7 +24,7 @@ func (suite *VersionValueObjectTestSuite) TestWithInvalidValue() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewVersion",
-		What:  "version must be numeric only",
+		What:  "Version must be numeric only",
 		Why: errors.Meta{
 			"Version": value,
 		},

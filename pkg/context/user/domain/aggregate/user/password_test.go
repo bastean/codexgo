@@ -24,7 +24,7 @@ func (suite *PasswordValueObjectTestSuite) TestWithInvalidLength() {
 	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewPassword",
-		What:  "password must be between " + "8" + " to " + "64" + " characters",
+		What:  "Password must be between 8 to 64 characters",
 		Why: errors.Meta{
 			"Password": value,
 		},

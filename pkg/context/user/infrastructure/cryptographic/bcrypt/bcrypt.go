@@ -14,7 +14,7 @@ func (*Bcrypt) Hash(plain string) (string, error) {
 	if err != nil {
 		return "", errors.NewInternal(&errors.Bubble{
 			Where: "Hash",
-			What:  "failure to generate a hash",
+			What:  "Failure to generate a hash",
 			Who:   err,
 		})
 	}
