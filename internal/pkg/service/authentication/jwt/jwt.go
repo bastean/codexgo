@@ -8,7 +8,7 @@ import (
 type Payload = jwt.Payload
 
 var (
-	JWT      = jwt.New(env.JWT.SecretKey)
+	JWT      = jwt.New(env.JWTSecretKey)
 	Generate = JWT.Generate
 	Validate = JWT.Validate
 )

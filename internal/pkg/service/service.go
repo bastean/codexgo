@@ -35,17 +35,17 @@ var (
 )
 
 func OpenSMTP() {
-	if env.SMTP.Host == "" {
-		user.InitCreated(user.TerminalConfirmation(log.Log, env.Server.URL), user.QueueSendConfirmation)
+	if env.SMTPHost == "" {
+		user.InitCreated(user.TerminalConfirmation(log.Log, env.ServerGinURL), user.QueueSendConfirmation)
 		return
 	}
 
 	SMTP = smtp.Open(
-		env.SMTP.Host,
-		env.SMTP.Port,
-		env.SMTP.Username,
-		env.SMTP.Password,
-		env.Server.URL,
+		env.SMTPHost,
+		env.SMTPPort,
+		env.SMTPUsername,
+		env.SMTPPassword,
+		env.ServerGinURL,
 	)
 
 	user.InitCreated(user.MailConfirmation(SMTP), user.QueueSendConfirmation)
@@ -53,9 +53,9 @@ func OpenSMTP() {
 
 func OpenRabbitMQ() error {
 	RabbitMQ, err = rabbitmq.Open(
-		env.RabbitMQ.URI,
+		env.BrokerRabbitMQURI,
 		log.Log,
-		rabbitmq.Exchange(env.RabbitMQ.Name),
+		rabbitmq.Exchange(env.BrokerRabbitMQName),
 		rabbitmq.Queues{
 			user.QueueSendConfirmation,
 		},
@@ -73,8 +73,8 @@ func OpenRabbitMQ() error {
 
 func OpenMongoDB() error {
 	MongoDB, err = mongodb.Open(
-		env.MongoDB.URI,
-		env.MongoDB.Name,
+		env.DatabaseMongoDBURI,
+		env.DatabaseMongoDBName,
 	)
 
 	if err != nil {

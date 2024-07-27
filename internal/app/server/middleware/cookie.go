@@ -7,9 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var secretKey = env.Server.Cookie.SecretKey
+var secretKey = env.ServerGinCookieSecretKey
 
-var sessionName = env.Server.Cookie.SessionName
+var sessionName = env.ServerGinCookieSessionName
 
 func CookieSession() gin.HandlerFunc {
 	store := cookie.NewStore([]byte(secretKey))

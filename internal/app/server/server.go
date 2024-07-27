@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/internal/app/server/router"
+	"github.com/bastean/codexgo/internal/pkg/service/env"
 	"github.com/bastean/codexgo/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
 )
@@ -23,11 +24,11 @@ var Files embed.FS
 
 var App *http.Server
 
-func Up(port string) error {
+func Up() error {
 	log.Starting(Server.Gin)
 
 	App = &http.Server{
-		Addr:    ":" + port,
+		Addr:    ":" + env.ServerGinPort,
 		Handler: router.New(&Files),
 	}
 

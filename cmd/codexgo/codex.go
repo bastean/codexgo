@@ -26,16 +26,13 @@ var (
 	Apps     = "Apps"
 )
 
-var port string
-
 func usage() {
-	fmt.Printf("Usage: %s [OPTIONS]\n", cli)
-	fmt.Printf("\nE.g.: %s -p 8080\n\n", cli)
+	fmt.Printf("Usage: %s [OPTIONS]\n\n", cli)
 	flag.PrintDefaults()
 }
 
 func main() {
-	flag.StringVar(&port, "p", env.Server.Port, "Port")
+	flag.StringVar(&env.ServerGinPort, "port", env.ServerGinPort, "Gin Server Port (optional)")
 
 	flag.Usage = usage
 
@@ -54,7 +51,7 @@ func main() {
 	log.Starting(Apps)
 
 	go func() {
-		if err := server.Up(port); err != nil {
+		if err := server.Up(); err != nil {
 			log.Fatal(err.Error())
 		}
 	}()

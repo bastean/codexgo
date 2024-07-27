@@ -12,7 +12,7 @@ import (
 var router *gin.Engine
 
 func New(files *embed.FS) *gin.Engine {
-	gin.SetMode(env.Server.Mode)
+	gin.SetMode(env.ServerGinMode)
 
 	router = gin.Default()
 
