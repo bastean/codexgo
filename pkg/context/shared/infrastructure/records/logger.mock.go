@@ -23,3 +23,7 @@ func (logger *LoggerMock) Fatal(message string) {
 func (logger *LoggerMock) Info(message string) {
 	logger.Called(message)
 }
+
+func (logger *LoggerMock) Success(message string) {
+	logger.Called(message)
+}

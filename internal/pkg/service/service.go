@@ -13,6 +13,21 @@ import (
 )
 
 var (
+	Service = &struct {
+		SMTP, RabbitMQ, MongoDB string
+	}{
+		SMTP:     log.Service("SMTP"),
+		RabbitMQ: log.Service("RabbitMQ"),
+		MongoDB:  log.Service("MongoDB"),
+	}
+	Module = &struct {
+		User string
+	}{
+		User: log.Module("User"),
+	}
+)
+
+var (
 	err      error
 	SMTP     *smtp.SMTP
 	RabbitMQ *rabbitmq.RabbitMQ
@@ -90,35 +105,38 @@ func StartUser() error {
 }
 
 func Up() error {
-	log.EstablishingConnectionWith("smtp")
+	log.EstablishingConnectionWith(Service.SMTP)
 
 	OpenSMTP()
 
-	log.ConnectionEstablishedWith("smtp")
+	log.ConnectionEstablishedWith(Service.SMTP)
 
-	log.EstablishingConnectionWith("rabbitmq")
+	log.EstablishingConnectionWith(Service.RabbitMQ)
 
 	if err = OpenRabbitMQ(); err != nil {
+		log.ConnectionFailedWith(Service.RabbitMQ)
 		return errors.BubbleUp(err, "Up")
 	}
 
-	log.ConnectionEstablishedWith("rabbitmq")
+	log.ConnectionEstablishedWith(Service.RabbitMQ)
 
-	log.EstablishingConnectionWith("mongodb")
+	log.EstablishingConnectionWith(Service.MongoDB)
 
 	if err = OpenMongoDB(); err != nil {
+		log.ConnectionFailedWith(Service.MongoDB)
 		return errors.BubbleUp(err, "Up")
 	}
 
-	log.ConnectionEstablishedWith("mongodb")
+	log.ConnectionEstablishedWith(Service.MongoDB)
 
-	log.StartingModule("user")
+	log.Starting(Module.User)
 
 	if err = StartUser(); err != nil {
+		log.CannotBeStarted(Module.User)
 		return errors.BubbleUp(err, "Up")
 	}
 
-	log.StartedModule("user")
+	log.Started(Module.User)
 
 	return nil
 }
@@ -140,21 +158,23 @@ func CloseMongoDB(ctx context.Context) error {
 }
 
 func Down(ctx context.Context) error {
-	log.ClosingConnectionWith("rabbitmq")
+	log.ClosingConnectionWith(Service.RabbitMQ)
 
 	if err = CloseRabbitMQ(); err != nil {
+		log.DisconnectionFailedWith(Service.RabbitMQ)
 		return errors.BubbleUp(err, "Down")
 	}
 
-	log.ConnectionClosedWith("rabbitmq")
+	log.ConnectionClosedWith(Service.RabbitMQ)
 
-	log.ClosingConnectionWith("mongodb")
+	log.ClosingConnectionWith(Service.MongoDB)
 
 	if err = CloseMongoDB(ctx); err != nil {
+		log.DisconnectionFailedWith(Service.MongoDB)
 		return errors.BubbleUp(err, "Down")
 	}
 
-	log.ConnectionClosedWith("mongodb")
+	log.ConnectionClosedWith(Service.MongoDB)
 
 	return nil
 }

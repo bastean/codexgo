@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -17,6 +16,15 @@ import (
 )
 
 const cli = "codexgo"
+
+var (
+	err error
+)
+
+var (
+	Services = "Services"
+	Apps     = "Apps"
+)
 
 var port string
 
@@ -33,15 +41,17 @@ func main() {
 
 	flag.Parse()
 
-	log.Starting("services")
+	log.Logo()
 
-	if err := service.Up(); err != nil {
+	log.Starting(Services)
+
+	if err = service.Up(); err != nil {
 		log.Fatal(err.Error())
 	}
 
-	log.Started("services")
+	log.Started(Services)
 
-	log.Starting("server")
+	log.Starting(Apps)
 
 	go func() {
 		if err := server.Up(port); err != nil {
@@ -49,15 +59,9 @@ func main() {
 		}
 	}()
 
-	log.Started("server")
+	log.Started(Apps)
 
-	log.Info("server listening on :" + port)
-
-	if proxy, ok := env.Server.HasProxy(); ok {
-		log.Info("server proxy listening on :" + proxy)
-	}
-
-	log.Info("press ctrl+c to exit")
+	log.Info("Press Ctrl+C to exit")
 
 	shutdown := make(chan os.Signal, 1)
 
@@ -69,23 +73,23 @@ func main() {
 
 	defer cancel()
 
-	log.Stopping("server")
+	log.Stopping(Apps)
 
-	errServer := server.Down(ctx)
-
-	log.Stopped("server")
-
-	log.Stopping("services")
-
-	errService := service.Down(ctx)
-
-	log.Stopped("services")
-
-	if err := errors.Join(errServer, errService); err != nil {
+	if err = server.Down(ctx); err != nil {
 		log.Error(err.Error())
 	}
 
+	log.Stopped(Apps)
+
+	log.Stopping(Services)
+
+	if err = service.Down(ctx); err != nil {
+		log.Error(err.Error())
+	}
+
+	log.Stopped(Services)
+
 	<-ctx.Done()
 
-	log.Info("exiting...")
+	log.Info("Exiting...")
 }

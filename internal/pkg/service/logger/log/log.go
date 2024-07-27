@@ -2,54 +2,111 @@ package log
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/records/log"
+	"github.com/common-nighthawk/go-figure"
+	"github.com/fatih/color"
 )
 
 var (
-	Log   = new(log.Log)
-	Debug = Log.Debug
-	Error = Log.Error
-	Fatal = Log.Fatal
-	Info  = Log.Info
+	White = color.New(color.FgWhite, color.Bold).Sprint
+	Cyan  = color.New(color.FgCyan, color.Bold).Sprint
 )
 
-func Starting(service string) {
-	Info(fmt.Sprintf("starting %s...", service))
+var (
+	Log     = log.New()
+	Debug   = Log.Debug
+	Error   = Log.Error
+	Fatal   = Log.Fatal
+	Info    = Log.Info
+	Success = Log.Success
+)
+
+func Logo() {
+	figureCodex := figure.NewFigure("codex", "speed", true).Slicify()
+	figureGo := figure.NewFigure("GO", "speed", true).Slicify()
+
+	width := 0
+	fixedWidth := 0
+
+	for _, line := range figureCodex {
+		width = len(line)
+
+		if width > fixedWidth {
+			fixedWidth = width
+		}
+	}
+
+	for i, line := range figureCodex {
+		width = len(line)
+
+		if width < fixedWidth {
+			line += strings.Repeat(" ", (fixedWidth - width))
+		}
+
+		fmt.Println(White(line), Cyan(figureGo[i]))
+	}
+
+	fmt.Println()
 }
 
-func StartingModule(module string) {
-	Starting("module:" + module)
+func Service(service string) string {
+	return fmt.Sprintf("Service:%s", service)
+}
+
+func Module(module string) string {
+	return fmt.Sprintf("Module:%s", module)
+}
+
+func Server(app string) string {
+	return fmt.Sprintf("Server:%s", app)
+}
+
+func Starting(service string) {
+	Info(fmt.Sprintf("Starting %s...", service))
 }
 
 func Started(service string) {
-	Info(fmt.Sprintf("%s started", service))
+	Success(fmt.Sprintf("%s started", service))
 }
 
-func StartedModule(module string) {
-	Started("module:" + module)
+func CannotBeStarted(service string) {
+	Error(fmt.Sprintf("%s cannot be started", service))
 }
 
 func Stopping(service string) {
-	Info(fmt.Sprintf("stopping %s...", service))
+	Info(fmt.Sprintf("Stopping %s...", service))
 }
 
 func Stopped(service string) {
-	Info(fmt.Sprintf("%s stopped", service))
+	Success(fmt.Sprintf("%s stopped", service))
+}
+
+func CannotBeStopped(service string) {
+	Error(fmt.Sprintf("%s cannot be stopped", service))
 }
 
 func EstablishingConnectionWith(service string) {
-	Info(fmt.Sprintf("establishing connection with %s...", service))
+	Info(fmt.Sprintf("Establishing connection with %s...", service))
 }
 
 func ConnectionEstablishedWith(service string) {
-	Info(fmt.Sprintf("connection established with %s", service))
+	Success(fmt.Sprintf("Connection established with %s", service))
+}
+
+func ConnectionFailedWith(service string) {
+	Error(fmt.Sprintf("Connection failed with %s", service))
 }
 
 func ClosingConnectionWith(service string) {
-	Info(fmt.Sprintf("closing connection with %s...", service))
+	Info(fmt.Sprintf("Closing connection with %s...", service))
 }
 
 func ConnectionClosedWith(service string) {
-	Info(fmt.Sprintf("connection closed with %s", service))
+	Success(fmt.Sprintf("Connection closed with %s", service))
+}
+
+func DisconnectionFailedWith(service string) {
+	Error(fmt.Sprintf("Disconnection failed with %s", service))
 }

@@ -2,22 +2,39 @@ package log
 
 import (
 	"log"
+
+	"github.com/fatih/color"
 )
 
-type Log struct{}
-
-func (*Log) Debug(message string) {
-	log.Println(message)
+type Log struct {
+	Cyan, Red, Blue, Green *color.Color
 }
 
-func (*Log) Error(message string) {
-	log.Println(message)
+func (color *Log) Debug(message string) {
+	log.Println(color.Cyan.Sprint(message))
 }
 
-func (*Log) Fatal(message string) {
-	log.Fatal(message)
+func (color *Log) Error(message string) {
+	log.Println(color.Red.Sprint(message))
 }
 
-func (*Log) Info(message string) {
-	log.Println(message)
+func (color *Log) Fatal(message string) {
+	log.Fatal(color.Red.Sprint(message))
+}
+
+func (color *Log) Info(message string) {
+	log.Println(color.Blue.Sprint(message))
+}
+
+func (color *Log) Success(message string) {
+	log.Println(color.Green.Sprint(message))
+}
+
+func New() *Log {
+	return &Log{
+		Cyan:  color.New(color.FgCyan, color.Bold),
+		Red:   color.New(color.FgRed, color.Bold),
+		Blue:  color.New(color.FgBlue, color.Bold),
+		Green: color.New(color.FgGreen, color.Bold),
+	}
 }

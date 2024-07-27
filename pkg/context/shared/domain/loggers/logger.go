@@ -5,4 +5,5 @@ type Logger interface {
 	Error(string)
 	Fatal(string)
 	Info(string)
+	Success(string)
 }
