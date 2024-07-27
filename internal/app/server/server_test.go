@@ -13,19 +13,29 @@ import (
 	testify "github.com/stretchr/testify/assert"
 )
 
-var testURL = os.Getenv("TEST_URL")
+var (
+	sut = os.Getenv("SUT_URL")
+)
 
-var pw *playwright.Playwright
-var browser playwright.Browser
-var browserCtx playwright.BrowserContext
-var page playwright.Page
+var (
+	pw         *playwright.Playwright
+	browser    playwright.Browser
+	browserCtx playwright.BrowserContext
+	page       playwright.Page
+	element    playwright.Locator
+)
 
-var headless = true
-var exact = true
-var sleep = 4 * time.Second
-var err error
+var (
+	headless         = true
+	timeout  float64 = 10000
+	exact            = true
+	sleep            = 4 * time.Second
+)
 
-var assert *testify.Assertions
+var (
+	err    error
+	assert *testify.Assertions
+)
 
 func InitializeAssert(t *testing.T) {
 	assert = testify.New(t)
@@ -38,13 +48,16 @@ func InitializePlaywright() {
 		log.Fatalf("could not start playwright: %s", err)
 	}
 
-	browser, err = pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{Headless: &headless})
+	browser, err = pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
+		Headless: &headless,
+		Timeout:  &timeout,
+	})
 
 	if err != nil {
 		log.Fatalf("could not launch browser: %s", err)
 	}
 
-	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &testURL})
+	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &sut})
 
 	if err != nil {
 		log.Fatalf("could not create context: %s", err)
@@ -81,52 +94,40 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	})
 
 	sc.Then(`^the page title should be (.+)$`, func(expected string) {
-		actual, _ := page.Title()
+		actual, err := page.Title()
+
+		assert.NoError(err)
+
 		assert.Equal(expected, actual)
 	})
 
 	sc.Then(`^I click on the (.+) button$`, func(name string) {
-		element := page.GetByText(name, playwright.PageGetByTextOptions{Exact: &exact}).First()
-
-		err = element.Click()
-
-		assert.NoError(err)
+		element = page.GetByText(name, playwright.PageGetByTextOptions{Exact: &exact}).First()
+		assert.NoError(element.Click())
 	})
 
 	sc.Then(`^I open the (.+) menu$`, func(name string) {
-		element := page.GetByRole("heading").First()
-
-		err = element.Click()
-
-		assert.NoError(err)
+		element = page.GetByRole("heading").First()
+		assert.NoError(element.Click())
 	})
 
 	sc.Then(`^I fill the (.+) with (.+)$`, func(placeholder, value string) {
-		element := page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact}).Last()
-
-		err = element.Fill(value)
-
-		assert.NoError(err)
+		element = page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact}).Last()
+		assert.NoError(element.Fill(value))
 	})
 
 	sc.Then(`^I click the (.+) button$`, func(name string) {
-		element := page.GetByRole("button", playwright.PageGetByRoleOptions{Name: name})
-
-		err = element.Click()
-
-		assert.NoError(err)
+		element = page.GetByRole("button", playwright.PageGetByRoleOptions{Name: name})
+		assert.NoError(element.Click())
 	})
 
 	sc.Then(`^I check the (.+)$`, func(name string) {
-		element := page.GetByRole("checkbox")
-
-		err = element.Check()
-
-		assert.NoError(err)
+		element = page.GetByRole("checkbox")
+		assert.NoError(element.Check())
 	})
 
 	sc.Then(`^I see (.+) notification$`, func(expected string) {
-		element := page.GetByRole("alert")
+		element = page.GetByRole("alert")
 
 		actual, err := element.InnerText()
 
