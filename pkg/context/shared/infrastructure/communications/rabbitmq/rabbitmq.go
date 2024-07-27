@@ -237,7 +237,7 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 	return nil
 }
 
-func Open(uri string, logger loggers.Logger) (messages.Broker, error) {
+func Open(uri string, logger loggers.Logger) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {

@@ -4,8 +4,8 @@ import (
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/transports/smtp"
 )
 
-type SMTP = *smtp.SMTP
+type SMTP = smtp.SMTP
 
-func Open(host, port, username, password, serverURL string) *smtp.SMTP {
+func Open(host, port, username, password, serverURL string) *SMTP {
 	return smtp.Open(host, port, username, password, serverURL)
 }

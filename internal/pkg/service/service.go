@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 
-	"github.com/bastean/codexgo/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/internal/pkg/service/communication/rabbitmq"
 	"github.com/bastean/codexgo/internal/pkg/service/env"
 	"github.com/bastean/codexgo/internal/pkg/service/errors"
@@ -15,9 +14,9 @@ import (
 
 var (
 	err      error
-	SMTP     smtp.SMTP
-	RabbitMQ communication.Broker
-	MongoDB  mongodb.MongoDB
+	SMTP     *smtp.SMTP
+	RabbitMQ *rabbitmq.RabbitMQ
+	MongoDB  *mongodb.MongoDB
 )
 
 func OpenSMTP() {
@@ -99,9 +98,7 @@ func Up() error {
 
 	log.EstablishingConnectionWith("rabbitmq")
 
-	err = OpenRabbitMQ()
-
-	if err != nil {
+	if err = OpenRabbitMQ(); err != nil {
 		return errors.BubbleUp(err, "Up")
 	}
 
@@ -109,9 +106,7 @@ func Up() error {
 
 	log.EstablishingConnectionWith("mongodb")
 
-	err = OpenMongoDB()
-
-	if err != nil {
+	if err = OpenMongoDB(); err != nil {
 		return errors.BubbleUp(err, "Up")
 	}
 
@@ -119,9 +114,7 @@ func Up() error {
 
 	log.StartingModule("user")
 
-	err = StartUser()
-
-	if err != nil {
+	if err = StartUser(); err != nil {
 		return errors.BubbleUp(err, "Up")
 	}
 
@@ -131,9 +124,7 @@ func Up() error {
 }
 
 func CloseRabbitMQ() error {
-	err = rabbitmq.Close(RabbitMQ)
-
-	if err != nil {
+	if err = rabbitmq.Close(RabbitMQ); err != nil {
 		return errors.BubbleUp(err, "CloseRabbitMQ")
 	}
 
@@ -141,9 +132,7 @@ func CloseRabbitMQ() error {
 }
 
 func CloseMongoDB(ctx context.Context) error {
-	err = mongodb.Close(ctx, MongoDB)
-
-	if err != nil {
+	if err = mongodb.Close(ctx, MongoDB); err != nil {
 		return errors.BubbleUp(err, "CloseMongoDB")
 	}
 
@@ -153,9 +142,7 @@ func CloseMongoDB(ctx context.Context) error {
 func Down(ctx context.Context) error {
 	log.ClosingConnectionWith("rabbitmq")
 
-	err = CloseRabbitMQ()
-
-	if err != nil {
+	if err = CloseRabbitMQ(); err != nil {
 		return errors.BubbleUp(err, "Down")
 	}
 
@@ -163,9 +150,7 @@ func Down(ctx context.Context) error {
 
 	log.ClosingConnectionWith("mongodb")
 
-	err = CloseMongoDB(ctx)
-
-	if err != nil {
+	if err = CloseMongoDB(ctx); err != nil {
 		return errors.BubbleUp(err, "Down")
 	}
 

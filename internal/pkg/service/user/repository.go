@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
 	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
