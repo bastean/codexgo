@@ -3,12 +3,12 @@ package create_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/handlers"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications"
-	"github.com/bastean/codexgo/pkg/context/user/application/create"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/usecase"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
+	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 	"github.com/stretchr/testify/suite"
 )
 

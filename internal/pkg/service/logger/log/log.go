@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/records/log"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records/log"
 	"github.com/common-nighthawk/go-figure"
 	"github.com/fatih/color"
 )

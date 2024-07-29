@@ -9,9 +9,9 @@ import (
 	"github.com/google/uuid"
 	amqp "github.com/rabbitmq/amqp091-go"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/loggers"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
 type RabbitMQ struct {

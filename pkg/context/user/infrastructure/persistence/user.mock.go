@@ -1,8 +1,8 @@
 package persistence
 
 import (
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/stretchr/testify/mock"
 )
 

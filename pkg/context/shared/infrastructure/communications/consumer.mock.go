@@ -1,7 +1,7 @@
 package communications
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/stretchr/testify/mock"
 )
 

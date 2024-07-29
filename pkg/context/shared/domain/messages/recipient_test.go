@@ -3,7 +3,7 @@ package messages_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/stretchr/testify/suite"
 )
 

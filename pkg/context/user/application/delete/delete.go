@@ -1,11 +1,11 @@
 package delete
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/pkg/context/user/domain/service"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
 type Delete struct {

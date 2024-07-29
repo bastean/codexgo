@@ -1,9 +1,9 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/transfers"
-	"github.com/bastean/codexgo/pkg/context/user/application/created"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/created"
 )
 
 var (

@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/collection"
+	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/collection"
 )
 
 var (

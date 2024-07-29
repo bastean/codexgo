@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/internal/pkg/service/communication/rabbitmq"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/rabbitmq"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
 var QueueSendConfirmation = &messages.Queue{

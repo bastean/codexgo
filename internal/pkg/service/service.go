@@ -3,13 +3,13 @@ package service
 import (
 	"context"
 
-	"github.com/bastean/codexgo/internal/pkg/service/communication/rabbitmq"
-	"github.com/bastean/codexgo/internal/pkg/service/env"
-	"github.com/bastean/codexgo/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
-	"github.com/bastean/codexgo/internal/pkg/service/persistence/mongodb"
-	"github.com/bastean/codexgo/internal/pkg/service/transport/smtp"
-	"github.com/bastean/codexgo/internal/pkg/service/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/rabbitmq"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/persistence/mongodb"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/transport/smtp"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/user"
 )
 
 var (

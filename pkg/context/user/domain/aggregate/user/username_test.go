@@ -3,8 +3,8 @@ package user_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/stretchr/testify/suite"
 )
 

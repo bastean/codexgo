@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/bastean/codexgo/internal/app/server/util/reply"
-	"github.com/bastean/codexgo/internal/pkg/service/logger/log"
+	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
 	"github.com/gin-gonic/gin"
 )
 

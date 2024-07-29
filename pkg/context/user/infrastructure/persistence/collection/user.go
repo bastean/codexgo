@@ -3,11 +3,11 @@ package collection
 import (
 	"context"
 
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

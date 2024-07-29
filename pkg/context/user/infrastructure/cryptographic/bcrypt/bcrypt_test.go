@@ -3,9 +3,9 @@ package bcrypt_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
-	"github.com/bastean/codexgo/pkg/context/user/infrastructure/cryptographic/bcrypt"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/hashing"
+	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic/bcrypt"
 	"github.com/stretchr/testify/suite"
 )
 

@@ -4,8 +4,8 @@ import (
 	"embed"
 	"net/http"
 
-	"github.com/bastean/codexgo/internal/app/server/middleware"
-	"github.com/bastean/codexgo/internal/pkg/service/env"
+	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/gin-gonic/gin"
 )
 

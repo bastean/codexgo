@@ -1,10 +1,10 @@
 package router
 
 import (
-	"github.com/bastean/codexgo/internal/app/server/handler/health"
-	"github.com/bastean/codexgo/internal/app/server/handler/page"
-	"github.com/bastean/codexgo/internal/app/server/handler/user"
-	"github.com/bastean/codexgo/internal/app/server/middleware"
+	"github.com/bastean/codexgo/v4/internal/app/server/handler/health"
+	"github.com/bastean/codexgo/v4/internal/app/server/handler/page"
+	"github.com/bastean/codexgo/v4/internal/app/server/handler/user"
+	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
 )
 
 func Routes() {

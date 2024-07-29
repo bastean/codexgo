@@ -1,10 +1,10 @@
 package rabbitmq
 
 import (
-	"github.com/bastean/codexgo/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/loggers"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/communications/rabbitmq"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
 )
 
 type RabbitMQ = rabbitmq.RabbitMQ
