@@ -5,8 +5,8 @@ import (
 
 	"github.com/bastean/codexgo/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/internal/app/server/util/reply"
+	"github.com/bastean/codexgo/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
-	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
 

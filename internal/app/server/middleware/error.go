@@ -24,13 +24,13 @@ func Error() gin.HandlerFunc {
 		for _, err := range c.Errors {
 			switch {
 			case errors.As(err, &errInvalidValue):
-				c.JSON(http.StatusUnprocessableEntity, reply.JSON{Message: errInvalidValue.What, Data: errInvalidValue.Why})
+				c.JSON(http.StatusUnprocessableEntity, &reply.JSON{Message: errInvalidValue.What, Data: errInvalidValue.Why})
 			case errors.As(err, &errAlreadyExist):
-				c.JSON(http.StatusConflict, reply.JSON{Message: errAlreadyExist.What, Data: errAlreadyExist.Why})
+				c.JSON(http.StatusConflict, &reply.JSON{Message: errAlreadyExist.What, Data: errAlreadyExist.Why})
 			case errors.As(err, &errNotExist):
-				c.JSON(http.StatusNotFound, reply.JSON{Message: errNotExist.What, Data: errNotExist.Why})
+				c.JSON(http.StatusNotFound, &reply.JSON{Message: errNotExist.What, Data: errNotExist.Why})
 			case errors.As(err, &errFailure):
-				c.JSON(http.StatusBadRequest, reply.JSON{Message: errFailure.What, Data: errFailure.Why})
+				c.JSON(http.StatusBadRequest, &reply.JSON{Message: errFailure.What, Data: errFailure.Why})
 			case errors.As(err, &errInternal):
 				c.JSON(http.StatusInternalServerError, &reply.JSON{Message: "Internal server error"})
 				fallthrough

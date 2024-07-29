@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"embed"
+	"fmt"
 	"net/http"
 
 	"github.com/bastean/codexgo/internal/app/server/router"
@@ -38,6 +39,12 @@ func Up() error {
 	}
 
 	log.Started(Server.Gin)
+
+	log.Info(fmt.Sprintf("%s listening on :%s", Server.Gin, env.ServerGinPort))
+
+	if proxy, ok := env.HasServerGinProxy(); ok {
+		log.Info(fmt.Sprintf("%s proxy listening on :%s", Server.Gin, proxy))
+	}
 
 	return nil
 }
