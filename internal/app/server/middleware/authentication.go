@@ -1,28 +1,24 @@
 package middleware
 
 import (
-	"net/http"
 	"strings"
 
+	"github.com/bastean/codexgo/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/internal/app/server/util/key"
 	"github.com/bastean/codexgo/internal/pkg/service/authentication/jwt"
+	"github.com/bastean/codexgo/internal/pkg/service/errors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-func abort(c *gin.Context) {
-	c.Redirect(http.StatusFound, "/")
-	c.Abort()
-}
-
-func VerifyAuthentication() gin.HandlerFunc {
+func Authentication() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 
 		token := session.Get(key.Authorization)
 
 		if token == nil {
-			abort(c)
+			errs.AbortWithRedirect(c, errs.MissingKey(key.Authorization, "Authentication"), "/")
 			return
 		}
 
@@ -31,8 +27,7 @@ func VerifyAuthentication() gin.HandlerFunc {
 		claims, err := jwt.Validate(signature)
 
 		if err != nil {
-			c.Error(err)
-			abort(c)
+			errs.AbortWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
 			return
 		}
 
@@ -40,7 +35,7 @@ func VerifyAuthentication() gin.HandlerFunc {
 			c.Set(key.UserId, value)
 			c.Next()
 		} else {
-			abort(c)
+			errs.AbortWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
 		}
 	}
 }

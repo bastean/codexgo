@@ -5,6 +5,10 @@ import (
 )
 
 type (
+	Bubble = errors.Bubble
+)
+
+type (
 	ErrInvalidValue = errors.ErrInvalidValue
 	ErrAlreadyExist = errors.ErrAlreadyExist
 	ErrNotExist     = errors.ErrNotExist
@@ -18,18 +22,7 @@ var (
 	Is       = errors.Is
 )
 
-func NewFailure(where, what string, who error) error {
-	return errors.NewFailure(&errors.Bubble{
-		Where: where,
-		What:  what,
-		Who:   who,
-	})
-}
-
-func NewInternal(where, what string, who error) error {
-	return errors.NewInternal(&errors.Bubble{
-		Where: where,
-		What:  what,
-		Who:   who,
-	})
-}
+var (
+	NewFailure  = errors.NewFailure
+	NewInternal = errors.NewInternal
+)

@@ -12,25 +12,44 @@ import (
 	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 )
 
-var (
-	Create *create.Handler
-	Read   *read.Handler
-	Update *update.Handler
-	Delete *delete.Handler
-	Verify *verify.Handler
-	Login  *login.Handler
-)
-
 func Start(repository repository.User, broker messages.Broker, hashing hashing.Hashing) {
-	Create = NewCreate(repository, broker)
+	Create = &create.Handler{
+		Create: &create.Create{
+			User: repository,
+		},
+		Broker: broker,
+	}
 
-	Read = NewRead(repository)
+	Read = &read.Handler{
+		Read: &read.Read{
+			User: repository,
+		},
+	}
 
-	Update = NewUpdate(repository, hashing)
+	Update = &update.Handler{
+		Update: &update.Update{
+			User:    repository,
+			Hashing: hashing,
+		},
+	}
 
-	Delete = NewDelete(repository, hashing)
+	Delete = &delete.Handler{
+		Delete: &delete.Delete{
+			User:    repository,
+			Hashing: hashing,
+		},
+	}
 
-	Verify = NewVerify(repository)
+	Verify = &verify.Handler{
+		Verify: &verify.Verify{
+			User: repository,
+		},
+	}
 
-	Login = NewLogin(repository, hashing)
+	Login = &login.Handler{
+		Login: &login.Login{
+			User:    repository,
+			Hashing: hashing,
+		},
+	}
 }

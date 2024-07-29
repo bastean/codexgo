@@ -1,14 +1,13 @@
 package errs
 
 import (
-	"fmt"
-
 	"github.com/bastean/codexgo/internal/pkg/service/errors"
 )
 
-func MissingKey(what, where string) error {
+func Render(who error, where string) error {
 	return errors.NewInternal(&errors.Bubble{
 		Where: where,
-		What:  fmt.Sprintf("Failure to obtain the value of the key [%s]", what),
+		What:  "Cannot render a page",
+		Who:   who,
 	})
 }

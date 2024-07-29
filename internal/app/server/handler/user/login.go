@@ -9,6 +9,7 @@ import (
 	"github.com/bastean/codexgo/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/internal/pkg/service/authentication/jwt"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -20,16 +21,14 @@ func Login() gin.HandlerFunc {
 		err := c.BindJSON(query)
 
 		if err != nil {
-			c.Error(errs.BindingJSON(err, "Login"))
-			c.Abort()
+			errs.Abort(c, errs.BindingJSON(err, "Login"))
 			return
 		}
 
 		found, err := user.Login.Handle(query)
 
 		if err != nil {
-			c.Error(err)
-			c.Abort()
+			errs.Abort(c, errors.BubbleUp(err, "Login"))
 			return
 		}
 
@@ -39,8 +38,7 @@ func Login() gin.HandlerFunc {
 		})
 
 		if err != nil {
-			c.Error(err)
-			c.Abort()
+			errs.Abort(c, errors.BubbleUp(err, "Login"))
 			return
 		}
 
@@ -50,6 +48,9 @@ func Login() gin.HandlerFunc {
 
 		session.Save()
 
-		c.JSON(http.StatusOK, reply.JSON(true, "Logged in", reply.Payload{}))
+		c.JSON(http.StatusOK, &reply.JSON{
+			Success: true,
+			Message: "Logged in",
+		})
 	}
 }

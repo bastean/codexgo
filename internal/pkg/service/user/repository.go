@@ -1,19 +1,9 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/pkg/context/shared/infrastructure/persistences/mongodb"
-	"github.com/bastean/codexgo/pkg/context/user/domain/hashing"
-	"github.com/bastean/codexgo/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/pkg/context/user/infrastructure/persistence/collection"
 )
 
-func Collection(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
-	collection, err := collection.OpenUser(session, name, hashing)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err, "Collection")
-	}
-
-	return collection, nil
-}
+var (
+	OpenCollection = collection.OpenUser
+)

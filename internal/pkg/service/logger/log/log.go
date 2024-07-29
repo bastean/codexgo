@@ -10,17 +10,17 @@ import (
 )
 
 var (
-	White = color.New(color.FgWhite, color.Bold).Sprint
-	Cyan  = color.New(color.FgCyan, color.Bold).Sprint
-)
-
-var (
 	Log     = log.New()
 	Debug   = Log.Debug
 	Error   = Log.Error
 	Fatal   = Log.Fatal
 	Info    = Log.Info
 	Success = Log.Success
+)
+
+var (
+	White = color.New(color.FgWhite, color.Bold).Sprint
+	Cyan  = color.New(color.FgCyan, color.Bold).Sprint
 )
 
 func Logo() {

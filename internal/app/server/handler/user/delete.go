@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/codexgo/internal/app/server/util/key"
 	"github.com/bastean/codexgo/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,8 +16,7 @@ func Delete() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			c.Error(errs.MissingKey(key.UserId, "Delete"))
-			c.Abort()
+			errs.Abort(c, errs.MissingKey(key.UserId, "Delete"))
 			return
 		}
 
@@ -25,8 +25,7 @@ func Delete() gin.HandlerFunc {
 		err := c.BindJSON(command)
 
 		if err != nil {
-			c.Error(errs.BindingJSON(err, "Delete"))
-			c.Abort()
+			errs.Abort(c, errs.BindingJSON(err, "Delete"))
 			return
 		}
 
@@ -35,11 +34,13 @@ func Delete() gin.HandlerFunc {
 		err = user.Delete.Handle(command)
 
 		if err != nil {
-			c.Error(err)
-			c.Abort()
+			errs.Abort(c, errors.BubbleUp(err, "Delete"))
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "Account deleted", reply.Payload{}))
+		c.JSON(http.StatusOK, &reply.JSON{
+			Success: true,
+			Message: "Account deleted",
+		})
 	}
 }

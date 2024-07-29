@@ -6,6 +6,6 @@ import (
 
 type SMTP = smtp.SMTP
 
-func Open(host, port, username, password, serverURL string) *SMTP {
-	return smtp.Open(host, port, username, password, serverURL)
-}
+var (
+	Open = smtp.Open
+)

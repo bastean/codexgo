@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/codexgo/internal/app/server/util/key"
 	"github.com/bastean/codexgo/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,8 +16,7 @@ func Update() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			c.Error(errs.MissingKey(key.UserId, "Update"))
-			c.Abort()
+			errs.Abort(c, errs.MissingKey(key.UserId, "Update"))
 			return
 		}
 
@@ -25,8 +25,7 @@ func Update() gin.HandlerFunc {
 		err := c.BindJSON(command)
 
 		if err != nil {
-			c.Error(errs.BindingJSON(err, "Update"))
-			c.Abort()
+			errs.Abort(c, errs.BindingJSON(err, "Update"))
 			return
 		}
 
@@ -35,11 +34,13 @@ func Update() gin.HandlerFunc {
 		err = user.Update.Handle(command)
 
 		if err != nil {
-			c.Error(err)
-			c.Abort()
+			errs.Abort(c, errors.BubbleUp(err, "Update"))
 			return
 		}
 
-		c.JSON(http.StatusOK, reply.JSON(true, "Account updated", reply.Payload{}))
+		c.JSON(http.StatusOK, &reply.JSON{
+			Success: true,
+			Message: "Account updated",
+		})
 	}
 }

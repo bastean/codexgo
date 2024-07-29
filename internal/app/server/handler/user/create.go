@@ -6,6 +6,7 @@ import (
 	"github.com/bastean/codexgo/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,19 +17,20 @@ func Create() gin.HandlerFunc {
 		err := c.BindJSON(command)
 
 		if err != nil {
-			c.Error(errs.BindingJSON(err, "Create"))
-			c.Abort()
+			errs.Abort(c, errs.BindingJSON(err, "Create"))
 			return
 		}
 
 		err = user.Create.Handle(command)
 
 		if err != nil {
-			c.Error(err)
-			c.Abort()
+			errs.Abort(c, errors.BubbleUp(err, "Create"))
 			return
 		}
 
-		c.JSON(http.StatusCreated, reply.JSON(true, "Account created", reply.Payload{}))
+		c.JSON(http.StatusCreated, &reply.JSON{
+			Success: true,
+			Message: "Account created",
+		})
 	}
 }

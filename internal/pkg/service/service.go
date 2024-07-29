@@ -34,24 +34,32 @@ var (
 	MongoDB  *mongodb.MongoDB
 )
 
-func OpenSMTP() {
-	if env.SMTPHost == "" {
-		user.InitCreated(user.TerminalConfirmation(log.Log, env.ServerGinURL), user.QueueSendConfirmation)
-		return
-	}
+func Up() error {
+	log.EstablishingConnectionWith(Service.SMTP)
 
-	SMTP = smtp.Open(
-		env.SMTPHost,
-		env.SMTPPort,
-		env.SMTPUsername,
-		env.SMTPPassword,
-		env.ServerGinURL,
+	user.InitCreated(&user.TerminalConfirmation{
+		Logger:    log.Log,
+		ServerURL: env.ServerGinURL,
+	},
+		user.QueueSendConfirmation,
 	)
 
-	user.InitCreated(user.MailConfirmation(SMTP), user.QueueSendConfirmation)
-}
+	if env.SMTPHost != "" {
+		SMTP = smtp.Open(
+			env.SMTPHost,
+			env.SMTPPort,
+			env.SMTPUsername,
+			env.SMTPPassword,
+			env.ServerGinURL,
+		)
 
-func OpenRabbitMQ() error {
+		user.InitCreated(&user.MailConfirmation{SMTP: SMTP}, user.QueueSendConfirmation)
+	}
+
+	log.ConnectionEstablishedWith(Service.SMTP)
+
+	log.EstablishingConnectionWith(Service.RabbitMQ)
+
 	RabbitMQ, err = rabbitmq.Open(
 		env.BrokerRabbitMQURI,
 		log.Log,
@@ -65,55 +73,6 @@ func OpenRabbitMQ() error {
 	)
 
 	if err != nil {
-		return errors.BubbleUp(err, "OpenRabbitMQ")
-	}
-
-	return nil
-}
-
-func OpenMongoDB() error {
-	MongoDB, err = mongodb.Open(
-		env.DatabaseMongoDBURI,
-		env.DatabaseMongoDBName,
-	)
-
-	if err != nil {
-		return errors.BubbleUp(err, "OpenMongoDB")
-	}
-
-	return nil
-}
-
-func StartUser() error {
-	collection, err := user.Collection(
-		MongoDB,
-		"users",
-		user.Bcrypt,
-	)
-
-	if err != nil {
-		return errors.BubbleUp(err, "StartUser")
-	}
-
-	user.Start(
-		collection,
-		RabbitMQ,
-		user.Bcrypt,
-	)
-
-	return nil
-}
-
-func Up() error {
-	log.EstablishingConnectionWith(Service.SMTP)
-
-	OpenSMTP()
-
-	log.ConnectionEstablishedWith(Service.SMTP)
-
-	log.EstablishingConnectionWith(Service.RabbitMQ)
-
-	if err = OpenRabbitMQ(); err != nil {
 		log.ConnectionFailedWith(Service.RabbitMQ)
 		return errors.BubbleUp(err, "Up")
 	}
@@ -122,7 +81,12 @@ func Up() error {
 
 	log.EstablishingConnectionWith(Service.MongoDB)
 
-	if err = OpenMongoDB(); err != nil {
+	MongoDB, err = mongodb.Open(
+		env.DatabaseMongoDBURI,
+		env.DatabaseMongoDBName,
+	)
+
+	if err != nil {
 		log.ConnectionFailedWith(Service.MongoDB)
 		return errors.BubbleUp(err, "Up")
 	}
@@ -131,28 +95,23 @@ func Up() error {
 
 	log.Starting(Module.User)
 
-	if err = StartUser(); err != nil {
-		log.CannotBeStarted(Module.User)
+	collection, err := user.OpenCollection(
+		MongoDB,
+		"users",
+		user.Bcrypt,
+	)
+
+	if err != nil {
 		return errors.BubbleUp(err, "Up")
 	}
 
+	user.Start(
+		collection,
+		RabbitMQ,
+		user.Bcrypt,
+	)
+
 	log.Started(Module.User)
-
-	return nil
-}
-
-func CloseRabbitMQ() error {
-	if err = rabbitmq.Close(RabbitMQ); err != nil {
-		return errors.BubbleUp(err, "CloseRabbitMQ")
-	}
-
-	return nil
-}
-
-func CloseMongoDB(ctx context.Context) error {
-	if err = mongodb.Close(ctx, MongoDB); err != nil {
-		return errors.BubbleUp(err, "CloseMongoDB")
-	}
 
 	return nil
 }
@@ -160,7 +119,7 @@ func CloseMongoDB(ctx context.Context) error {
 func Down(ctx context.Context) error {
 	log.ClosingConnectionWith(Service.RabbitMQ)
 
-	if err = CloseRabbitMQ(); err != nil {
+	if err = rabbitmq.Close(RabbitMQ); err != nil {
 		log.DisconnectionFailedWith(Service.RabbitMQ)
 		return errors.BubbleUp(err, "Down")
 	}
@@ -169,7 +128,7 @@ func Down(ctx context.Context) error {
 
 	log.ClosingConnectionWith(Service.MongoDB)
 
-	if err = CloseMongoDB(ctx); err != nil {
+	if err = mongodb.Close(ctx, MongoDB); err != nil {
 		log.DisconnectionFailedWith(Service.MongoDB)
 		return errors.BubbleUp(err, "Down")
 	}

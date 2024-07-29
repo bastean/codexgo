@@ -1,11 +1,10 @@
 package page
 
 import (
-	"net/http"
-
 	"github.com/bastean/codexgo/internal/app/server/component/page/dashboard"
 	"github.com/bastean/codexgo/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/internal/app/server/util/key"
+	"github.com/bastean/codexgo/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
 	"github.com/gin-gonic/gin"
 )
@@ -15,9 +14,7 @@ func Dashboard() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			c.Error(errs.MissingKey(key.UserId, "Dashboard"))
-			c.Redirect(http.StatusFound, "/")
-			c.Abort()
+			errs.AbortWithRedirect(c, errs.MissingKey(key.UserId, "Dashboard"), "/")
 			return
 		}
 
@@ -28,12 +25,14 @@ func Dashboard() gin.HandlerFunc {
 		found, err := user.Read.Handle(query)
 
 		if err != nil {
-			c.Error(err)
-			c.Redirect(http.StatusFound, "/")
-			c.Abort()
+			errs.AbortWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
 			return
 		}
 
-		dashboard.Page(found).Render(c.Request.Context(), c.Writer)
+		err = dashboard.Page(found).Render(c.Request.Context(), c.Writer)
+
+		if err != nil {
+			errs.Abort(c, errs.Render(err, "Dashboard"))
+		}
 	}
 }

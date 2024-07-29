@@ -1,9 +1,8 @@
 package key
 
-var Authorization = "Authorization"
-
-var Exp = "exp"
-
-var Id = "id"
-
-var UserId = "userId"
+var (
+	Authorization = "Authorization"
+	Exp           = "exp"
+	Id            = "id"
+	UserId        = "userId"
+)

@@ -9,6 +9,10 @@ import (
 
 type RabbitMQ = rabbitmq.RabbitMQ
 
+var (
+	Close = rabbitmq.Close
+)
+
 func Open(uri string, logger loggers.Logger, exchange *messages.Router, queues []*messages.Queue, consumers []messages.Consumer) (*RabbitMQ, error) {
 	session, err := rabbitmq.Open(uri, logger)
 
@@ -37,12 +41,4 @@ func Open(uri string, logger loggers.Logger, exchange *messages.Router, queues [
 	}
 
 	return session, nil
-}
-
-func Close(session *RabbitMQ) error {
-	if err := rabbitmq.Close(session); err != nil {
-		return errors.BubbleUp(err, "Close")
-	}
-
-	return nil
 }

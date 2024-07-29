@@ -8,15 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var allowedHosts = env.ServerGinAllowedHosts
-
-func getAllowedHosts() []string {
-	return strings.Split(allowedHosts, ", ")
-}
-
-func SecurityConfig() gin.HandlerFunc {
+func Headers() gin.HandlerFunc {
 	return secure.New(secure.Config{
-		AllowedHosts:         getAllowedHosts(),
+		AllowedHosts:         strings.Split(env.ServerGinAllowedHosts, ", "),
 		STSSeconds:           315360000,
 		STSIncludeSubdomains: true,
 		FrameDeny:            true,

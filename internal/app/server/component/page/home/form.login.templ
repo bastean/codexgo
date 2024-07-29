@@ -36,7 +36,7 @@ script LoginFormInit(formTagId string) {
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
-                    message: response.message,
+                    message: response.Message,
                     showProgress: "top",
                 });
 
@@ -47,7 +47,7 @@ script LoginFormInit(formTagId string) {
             onFailure: function(response, element, xhr) {
                 $.toast({
                     class: "error",
-                    message: response.message,
+                    message: response.Message,
                     showProgress: "top"
                 });
             }

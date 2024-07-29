@@ -6,6 +6,7 @@ import (
 	"github.com/bastean/codexgo/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/internal/app/server/util/key"
 	"github.com/bastean/codexgo/internal/pkg/service/user"
+	"github.com/bastean/codexgo/pkg/context/shared/domain/errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,9 +15,7 @@ func Verify() gin.HandlerFunc {
 		id := c.Param(key.Id)
 
 		if id == "" {
-			c.Error(errs.MissingKey(key.Id, "Verify"))
-			c.Redirect(http.StatusFound, "/")
-			c.Abort()
+			errs.AbortWithRedirect(c, errs.MissingKey(key.Id, "Verify"), "/")
 			return
 		}
 
@@ -27,8 +26,7 @@ func Verify() gin.HandlerFunc {
 		err := user.Verify.Handle(command)
 
 		if err != nil {
-			c.Error(err)
-			c.Abort()
+			errs.Abort(c, errors.BubbleUp(err, "Verify"))
 			return
 		}
 

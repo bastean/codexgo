@@ -73,7 +73,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
-                    message: response.message,
+                    message: response.Message,
                     showProgress: "top",
                 });
 
@@ -85,7 +85,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
             onFailure: function(response, element, xhr) {
                 $.toast({
                     class: "error",
-                    message: response.message,
+                    message: response.Message,
                     showProgress: "top"
                 });
             }

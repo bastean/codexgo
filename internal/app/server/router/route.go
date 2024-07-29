@@ -7,10 +7,10 @@ import (
 	"github.com/bastean/codexgo/internal/app/server/middleware"
 )
 
-func InitRoutes() {
-	router.NoRoute(page.Default())
+func Routes() {
+	Router.NoRoute(page.Default())
 
-	public := router.Group("/")
+	public := Router.Group("/")
 
 	public.HEAD("/", health.Check())
 
@@ -20,7 +20,7 @@ func InitRoutes() {
 
 	public.GET("/verify/:id", user.Verify())
 
-	auth := public.Group("/dashboard", middleware.VerifyAuthentication())
+	auth := public.Group("/dashboard", middleware.Authentication())
 
 	auth.GET("/", page.Dashboard())
 	auth.PATCH("/", user.Update())

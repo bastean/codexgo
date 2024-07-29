@@ -9,28 +9,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ErrorHandler() gin.HandlerFunc {
+func Error() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		var invalidValue *errors.ErrInvalidValue
-		var alreadyExist *errors.ErrAlreadyExist
-		var notExist *errors.ErrNotExist
-		var failure *errors.ErrFailure
-		var internal *errors.ErrInternal
+		var (
+			errInvalidValue *errors.ErrInvalidValue
+			errAlreadyExist *errors.ErrAlreadyExist
+			errNotExist     *errors.ErrNotExist
+			errFailure      *errors.ErrFailure
+			errInternal     *errors.ErrInternal
+		)
 
 		for _, err := range c.Errors {
 			switch {
-			case errors.As(err, &invalidValue):
-				c.JSON(http.StatusUnprocessableEntity, reply.JSON(false, invalidValue.What, invalidValue.Why))
-			case errors.As(err, &alreadyExist):
-				c.JSON(http.StatusConflict, reply.JSON(false, alreadyExist.What, alreadyExist.Why))
-			case errors.As(err, &notExist):
-				c.JSON(http.StatusNotFound, reply.JSON(false, notExist.What, notExist.Why))
-			case errors.As(err, &failure):
-				c.JSON(http.StatusBadRequest, reply.JSON(false, failure.What, failure.Why))
-			case errors.As(err, &internal):
-				c.JSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
+			case errors.As(err, &errInvalidValue):
+				c.JSON(http.StatusUnprocessableEntity, reply.JSON{Message: errInvalidValue.What, Data: errInvalidValue.Why})
+			case errors.As(err, &errAlreadyExist):
+				c.JSON(http.StatusConflict, reply.JSON{Message: errAlreadyExist.What, Data: errAlreadyExist.Why})
+			case errors.As(err, &errNotExist):
+				c.JSON(http.StatusNotFound, reply.JSON{Message: errNotExist.What, Data: errNotExist.Why})
+			case errors.As(err, &errFailure):
+				c.JSON(http.StatusBadRequest, reply.JSON{Message: errFailure.What, Data: errFailure.Why})
+			case errors.As(err, &errInternal):
+				c.JSON(http.StatusInternalServerError, &reply.JSON{Message: "Internal server error"})
 				fallthrough
 			default:
 				log.Error(err.Error())

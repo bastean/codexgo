@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func PanicHandler(c *gin.Context, err any) {
+func Recover(c *gin.Context, err any) {
 	log.Error(err.(error).Error())
-	c.AbortWithStatusJSON(http.StatusInternalServerError, reply.JSON(false, "internal server error", reply.Payload{}))
+	c.AbortWithStatusJSON(http.StatusInternalServerError, &reply.JSON{Message: "Internal server error"})
 }

@@ -36,7 +36,7 @@ script DeleteFormInit(formTagId string) {
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
-                    message: response.message,
+                    message: response.Message,
                     showProgress: "top",
                 });
 
@@ -48,7 +48,7 @@ script DeleteFormInit(formTagId string) {
             onFailure: function(response, element, xhr) {
                 $.toast({
                     class: "error",
-                    message: response.message,
+                    message: response.Message,
                     showProgress: "top"
                 });
             }

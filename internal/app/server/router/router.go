@@ -9,30 +9,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var router *gin.Engine
+var Router *gin.Engine
 
 func New(files *embed.FS) *gin.Engine {
 	gin.SetMode(env.ServerGinMode)
 
-	router = gin.Default()
+	Router = gin.Default()
 
-	router.Use(gin.CustomRecovery(middleware.PanicHandler))
+	Router.Use(gin.CustomRecovery(middleware.Recover))
 
-	router.Use(middleware.ErrorHandler())
+	Router.Use(middleware.Error())
 
-	router.Use(middleware.SecurityConfig())
+	Router.Use(middleware.Headers())
 
-	router.Use(middleware.RateLimiter())
+	Router.Use(middleware.RateLimiter())
 
-	router.Use(middleware.CookieSession())
+	Router.Use(middleware.CookieSession())
 
 	fs := http.FS(files)
 
-	router.StaticFS("/public", fs)
+	Router.StaticFS("/public", fs)
 
-	router.StaticFileFS("/robots.txt", "static/robots.txt", fs)
+	Router.StaticFileFS("/robots.txt", "static/robots.txt", fs)
 
-	InitRoutes()
+	Routes()
 
-	return router
+	return Router
 }
