@@ -281,4 +281,6 @@ WARNING-docker-prune-hard:
 
 #*______Fixes______
 
-fix-playwright: upgrade-go test-tools
+fix-dev: upgrade-go dev-tools
+
+fix-test: upgrade-go test-tools
