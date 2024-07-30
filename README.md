@@ -54,7 +54,9 @@
 
 </div>
 
-## Usage (Demo)
+## Usage
+
+### Docker (Demo)
 
 > [!NOTE]
 >
@@ -182,9 +184,9 @@ make demo
   - Copies the files required by the browser dependencies from the **node_modules** folder and places them inside the **static** folder on the server.
 - [upgrade](scripts/upgrade/upgrade.go)
   - Perform the following steps to upgrade the project:
-    1. Upgrade Go and Node dependencies.
-    2. Linting and Testing.
-    3. Commit changes.
+    - Upgrade Go, Node and Tools.
+    - Linting and Testing.
+    - Commit upgrades.
 - [run](deployments/run.sh)
   - Display the logs and redirect them to a file whose name depends on the time at which the service was run.
   - Used in Production Image.
@@ -193,7 +195,7 @@ make demo
 
 ### Bounded Context (App/Business/Department) > Modules (Troubleshooting) > Layers (Domain, Infrastructure & Application)
 
-- Domain (Logic Core)
+- **Domain (Logic Core)**
   - Value Objects (Entities)
     - Mother Creators
     - Unit Tests
@@ -210,7 +212,7 @@ make demo
     - Handlers/Consumers
   - Services (Abstract Logic)
   - Errors (Management)
-- Infrastructure (Port Adapters)
+- **Infrastructure (Port Adapters)**
   - Persistence
     - Repository Mocks
     - Implementations (Adapters)
@@ -219,7 +221,7 @@ make demo
     - Broker Mocks
     - Implementations (Adapters)
     - Integration Tests
-- Application (Orchestration of Domain Logic)
+- **Application (Orchestration of Domain Logic)**
   - Use Cases
     - Implementations
   - Commands
@@ -232,13 +234,41 @@ make demo
 
 ### App > Server > (Presentation)
 
-- Presentation (Consumers of Bounded Context Modules)
-  - Services Mapping (Modules)
-  - Templates
-  - Handlers
-  - Routes
-  - Features (Gherkin)
-    - Acceptance Tests
+- **Presentation (Consumers of Bounded Context Modules)**
+  - Services (Mapping)
+    - Centralize Imports
+  - Server
+    - Templates
+    - Handlers
+    - Routes
+    - Features (Gherkin)
+      - Acceptance Tests
+
+### Idiomatic
+
+- **Domain**
+  - `errors.New*()`, `errors.BubbleUp()` & `errors.Panic()`
+    - Only in the "Domain" can we throw a `panic()`.
+- **Infrastructure**
+  - `Open()` & `Close()`
+    - `session`
+  - `errors.New*()` & `errors.BubbleUp()`
+- **Application**
+  - `Run()`, `Handle()` & `On()`
+  - `errors.New*()` & `errors.BubbleUp()`
+- **Modules**
+  - `Start()` & `Stop()`
+  - `errors.BubbleUp()`
+- **Services / Apps**
+  - `Up()` & `Down()`
+    - `log.[Wrap]()`
+  - `errors.New*()` & `errors.BubbleUp()`
+- **Main**
+  - `log.Fatal()` & `log.[Wrap]()`
+    - Only `main()` can use `log.Fatal()`.
+- **Logs**
+  - `[embed]`
+    - We use `[]` to "embed" external values such as error messages, fields, etc... inside our messages.
 
 ## First Steps
 
@@ -397,6 +427,7 @@ make compose-prod
 #### Base
 
 - [Go](https://go.dev)
+- [Gin](https://gin-gonic.com)
 - [templ](https://templ.guide)
   - [Fomantic-UI](https://fomantic-ui.com)
 - [RabbitMQ](https://www.rabbitmq.com/tutorials/tutorial-one-go)
