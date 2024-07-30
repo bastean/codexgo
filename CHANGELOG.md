@@ -1,5 +1,44 @@
 # Changelog
 
+## [4.5.0](https://github.com/bastean/codexgo/compare/v4.4.0...v4.5.0) (2024-07-30)
+
+### ⚠ BREAKING CHANGES
+
+- **deployments:** rename envs
+
+### Chores
+
+- change git ignore list ([f93dea2](https://github.com/bastean/codexgo/commit/f93dea2bb31c4a1d1dda834a832533a18ba44612))
+- **deps:** upgrade ([df92fda](https://github.com/bastean/codexgo/commit/df92fda92b054363249a9ef86440ad5910fff812))
+- **deps:** upgrade ([c994a97](https://github.com/bastean/codexgo/commit/c994a97ee5e635b37aa7181a22d97010ae22aaa0))
+- **makefile:** add set of rules to install tools ([94f0b8f](https://github.com/bastean/codexgo/commit/94f0b8fb8dcc7241bdd6c94013503bb9a9eed74a))
+- **mod:** upgrade ([31e32d2](https://github.com/bastean/codexgo/commit/31e32d2e250e58d5b1c5c93507ba33fe55bf33ab))
+
+### Documentation
+
+- **readme:** add basic idiomatic ([1af2146](https://github.com/bastean/codexgo/commit/1af2146739b07d3f4682ea56bbefb914b1415d7b))
+
+### New Features
+
+- **logger:** add colored outputs ([9e9d041](https://github.com/bastean/codexgo/commit/9e9d0415dfe982294405f5d5323ddc1fa8d7c22b))
+- **server:** add initial health check endpoint ([95f2117](https://github.com/bastean/codexgo/commit/95f2117797593780f2c77e6cd5900beb1be650b3))
+- **server:** add proxy check ([367773c](https://github.com/bastean/codexgo/commit/367773ce8ea859fe62c81b05e148be2dcb99101d))
+
+### Refactors
+
+- change format of messages in errors ([dda8c9a](https://github.com/bastean/codexgo/commit/dda8c9ae2dfd919a15cfce597356e8026a20b8ce))
+- **deployments:** rename envs ([a3186bd](https://github.com/bastean/codexgo/commit/a3186bd899904d237a20e347940115796e22702f))
+- **dockerfile:** use makefile targets to install the tools ([c77f092](https://github.com/bastean/codexgo/commit/c77f0926af64ec0dc9b6240c61f1a05d27dbdb9e))
+- rename functions according to their layer ([e37b64c](https://github.com/bastean/codexgo/commit/e37b64c6a7744c81f995f821dbbed91b87085dc1))
+- **scripts:** reuse command execution in upgrade ([c48eec6](https://github.com/bastean/codexgo/commit/c48eec66c1143917cfc750fc628407d416246479))
+- **server:** change error handling ([a789393](https://github.com/bastean/codexgo/commit/a789393f07ce92914c27096cdaee7a745de2aba3))
+- **service:** organize envs ([71f4f4c](https://github.com/bastean/codexgo/commit/71f4f4ca29b9c6449612be18c990d8a6592cdece))
+- **service:** use aliases of context types ([51d7701](https://github.com/bastean/codexgo/commit/51d770172f757a4283bed9434d3c13cb8f89dabb))
+
+### Tests
+
+- **acceptance:** assert errors directly ([6471fe2](https://github.com/bastean/codexgo/commit/6471fe2a71f6ec9c235c53fb880bb422e9724b20))
+
 ## [4.4.0](https://github.com/bastean/codexgo/compare/v4.3.1...v4.4.0) (2024-07-14)
 
 ### ⚠ BREAKING CHANGES
