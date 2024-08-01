@@ -29,7 +29,7 @@
     "cz-conventional-changelog": "3.3.0",
     "husky": "9.1.4",
     "lint-staged": "15.2.7",
-    "npm-check-updates": "16.14.20",
+    "npm-check-updates": "17.0.0",
     "prettier": "3.3.3",
     "release-it": "17.6.0"
   },

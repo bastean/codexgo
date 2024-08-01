@@ -4,8 +4,8 @@
 
 #*______URL______
 
-server = http://localhost:8080
-github = https://github.com/bastean/codexgo
+url-server = http://localhost:8080
+url-github = https://github.com/bastean/codexgo
 
 #*______Go______
 
@@ -46,10 +46,13 @@ upgrade-managers:
 upgrade-go:
 	go get -t -u ./...
 
+copydeps:
+	go run ./scripts/copydeps
+
 upgrade-node:
-	${npx} ncu --root -ws -u
-	rm -f package-lock.json
+	${npx} ncu -ws -u
 	npm i --legacy-peer-deps
+	$(MAKE) copydeps
 
 upgrade-reset:
 	${git-reset-hard}
@@ -58,35 +61,34 @@ upgrade-reset:
 upgrade:
 	go run ./scripts/upgrade
 
-#*______Tooling______
+#*______Installations______
 
-scan-tools:
+install-scanners:
 	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 	curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
 	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
 
-lint-tools:
+install-linters:
 	go install honnef.co/go/tools/cmd/staticcheck@latest
-
-dev-tools:
-	go install github.com/air-verse/air@latest
-	go install github.com/a-h/templ/cmd/templ@latest
 	npm i -g prettier
 
-test-tools:
+install-tools-dev: install-scanners install-linters
+	go install github.com/air-verse/air@latest
+	go install github.com/a-h/templ/cmd/templ@latest
+
+install-tools-test:
 	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
 	npm i -g concurrently wait-on
 
-install-tooling: scan-tools lint-tools dev-tools test-tools
+install-tooling: install-tools-dev install-tools-test
 
-#*______Dependencies______
+install-tooling-ci: install-tools-dev
 
-download-deps:
+#*______Downloads______
+
+download-dependencies:
 	go mod download
 	${npm-ci}
-
-copy-deps:
-	go run ./scripts/copydeps
 
 #*______Generators______
 
@@ -97,13 +99,16 @@ generate-required:
 
 #*______Initializations______
 
-init: upgrade-managers install-tooling download-deps copy-deps generate-required
+init: upgrade-managers install-tooling download-dependencies generate-required
 
-init-zero:
+init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required
+
+genesis:
 	git init
 	git add .
 	$(MAKE) init
 	${npx} husky init
+	git restore .
 
 #*______Linters/Formatters______
 
@@ -119,26 +124,26 @@ lint-check:
 
 #*______Scanners______
 
-leak-check:
+scan-leaks-local:
 	sudo trufflehog git file://. --only-verified
 	trivy repo --scanners secret .
 
-leak-remote-check:
-	sudo trufflehog git ${github} --only-verified
-	trivy repo --scanners secret ${github}
+scan-leaks-remote:
+	sudo trufflehog git ${url-github} --only-verified
+	trivy repo --scanners secret ${url-github}
 
-vuln-check:
+scan-vulns-local:
 	osv-scanner --call-analysis=all -r .
 	trivy repo --scanners vuln .
 
-misconfig-check:
+scan-misconfigs-local:
 	trivy repo --scanners misconfig .
 
-scan-leaks: leak-check leak-remote-check
+scan-leaks: scan-leaks-local scan-leaks-remote
 
-scan-vulns: vuln-check
+scan-vulns: scan-vulns-local
 
-scan-misconfigs: misconfig-check
+scan-misconfigs: scan-misconfigs-local
 
 scans: scan-leaks scan-vulns scan-misconfigs
 
@@ -152,10 +157,10 @@ test-clean: generate-required
 	cd test/ && mkdir -p report
 
 test-codegen:
-	${npx} playwright codegen ${server}
+	${npx} playwright codegen ${url-server}
 
 test-sync:
-	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${server}/health && $(TEST_SYNC)'
+	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${url-server}/health && $(TEST_SYNC)'
 
 test-unit: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log'
@@ -164,13 +169,13 @@ test-integration: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log'
 
 test-acceptance-sync: 
-	${bash} 'SUT_URL="${server}" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
+	${bash} 'SUT_URL="${url-server}" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log'
 
 test-acceptance: test-clean
 	TEST_SYNC="$(MAKE) test-acceptance-sync" $(MAKE) test-sync
 
 tests-sync:
-	${bash} 'SUT_URL="${server}" go test -v -cover ./... |& tee test/report/report.log'
+	${bash} 'SUT_URL="${url-server}" go test -v -cover ./... |& tee test/report/report.log'
 
 tests: test-clean
 	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
@@ -206,10 +211,10 @@ build: lint
 
 #*______ENV______
 
-sync-env-reset:
+syncenv-reset:
 	${git-reset-hard}
 
-sync-env:
+syncenv:
 	cd deployments && go run ../scripts/syncenv
 
 #*______Git______
@@ -281,6 +286,6 @@ WARNING-docker-prune-hard:
 
 #*______Fixes______
 
-fix-dev: upgrade-go dev-tools
+fix-dev: upgrade-go install-tools-dev
 
-fix-test: upgrade-go test-tools
+fix-test: upgrade-go install-tools-test

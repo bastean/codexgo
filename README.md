@@ -334,7 +334,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 2. Run
 
    ```bash
-   make init-zero
+   make genesis
    ```
 
 ### GitHub Repository

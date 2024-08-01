@@ -18,6 +18,6 @@ runs:
         node-version-file: "package.json"
         cache: "npm"
 
-    - name: Install Dependencies
+    - name: Setup codexGO
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
-      run: make init
+      run: make init-ci

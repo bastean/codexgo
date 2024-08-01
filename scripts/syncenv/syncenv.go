@@ -38,7 +38,7 @@ func Panic(who error, where string) {
 	log.Println("Restoring .env* from backups")
 	RestoreEnvFilesBackup()
 
-	log.Println("Please, check 'Error' or undo changes with: make sync-env-reset")
+	log.Println("Please, check 'Error' or undo changes with: make syncenv-reset")
 
 	log.Panicf("Error: (%s): [%s]", where, who)
 }

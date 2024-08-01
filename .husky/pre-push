@@ -1,1 +1,1 @@
-make leak-check
+make scan-leaks-local

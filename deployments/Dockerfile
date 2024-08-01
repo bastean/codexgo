@@ -8,13 +8,13 @@ RUN apt install -y nodejs npm
 
 COPY Makefile .
 
-RUN make dev-tools
+RUN make install-tools-dev
 
 FROM dev AS test
 
 WORKDIR /app
 
-RUN make test-tools
+RUN make install-tools-test
 
 FROM dev AS build
 
