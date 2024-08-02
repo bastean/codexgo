@@ -284,6 +284,14 @@ WARNING-docker-prune-hard:
 	$(MAKE) compose-down
 	$(MAKE) docker-usage
 
+#*______Devcontainer______
+
+devcontainer:
+	${bash} 'echo -e "$(USER_PASSWORD)\n$(USER_PASSWORD)" | sudo passwd vscode'
+
+connect:
+	ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
+
 #*______Fixes______
 
 fix-dev: upgrade-go install-tools-dev
