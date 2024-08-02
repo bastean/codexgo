@@ -21,14 +21,14 @@ func Login() gin.HandlerFunc {
 		err := c.BindJSON(query)
 
 		if err != nil {
-			errs.Abort(c, errs.BindingJSON(err, "Login"))
+			errs.AbortErr(c, errs.BindingJSON(err, "Login"))
 			return
 		}
 
 		found, err := user.Login.Handle(query)
 
 		if err != nil {
-			errs.Abort(c, errors.BubbleUp(err, "Login"))
+			errs.AbortErr(c, errors.BubbleUp(err, "Login"))
 			return
 		}
 
@@ -38,7 +38,7 @@ func Login() gin.HandlerFunc {
 		})
 
 		if err != nil {
-			errs.Abort(c, errors.BubbleUp(err, "Login"))
+			errs.AbortErr(c, errors.BubbleUp(err, "Login"))
 			return
 		}
 
@@ -46,7 +46,12 @@ func Login() gin.HandlerFunc {
 
 		session.Set(key.Authorization, "Bearer "+token)
 
-		session.Save()
+		err = session.Save()
+
+		if err != nil {
+			errs.AbortErr(c, errs.SessionSave(err, "Login"))
+			return
+		}
 
 		c.JSON(http.StatusOK, &reply.JSON{
 			Success: true,

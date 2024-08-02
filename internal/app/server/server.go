@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/router"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
@@ -40,10 +41,10 @@ func Up() error {
 
 	log.Started(Server.Gin)
 
-	log.Info(fmt.Sprintf("%s listening on :%s", Server.Gin, env.ServerGinPort))
+	log.Info(fmt.Sprintf("%s listening on %s", Server.Gin, env.ServerGinURL))
 
 	if proxy, ok := env.HasServerGinProxy(); ok {
-		log.Info(fmt.Sprintf("%s proxy listening on :%s", Server.Gin, proxy))
+		log.Info(fmt.Sprintf("%s proxy listening on %s", Server.Gin, strings.Replace(env.ServerGinURL, env.ServerGinPort, proxy, 1)))
 	}
 
 	return nil

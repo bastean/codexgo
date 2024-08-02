@@ -6,12 +6,16 @@ script DeleteFormInit(formTagId string) {
     $(`#${formTagId}`)
         .form({
             on: "blur",
-            inline : true,
+            inline: true,
             preventLeaving: true,
             keyboardShortcuts: false,
             fields: {
                 Password: {
                     rules: [
+                        {
+                            type: "empty",
+                            prompt: "{name} is required to delete the account"
+                        },
                         {
                             type: "size[8..64]"
                         },

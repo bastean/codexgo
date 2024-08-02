@@ -18,7 +18,7 @@ func Authentication() gin.HandlerFunc {
 		token := session.Get(key.Authorization)
 
 		if token == nil {
-			errs.AbortWithRedirect(c, errs.MissingKey(key.Authorization, "Authentication"), "/")
+			errs.AbortWithRedirect(c, "/")
 			return
 		}
 
@@ -27,7 +27,7 @@ func Authentication() gin.HandlerFunc {
 		claims, err := jwt.Validate(signature)
 
 		if err != nil {
-			errs.AbortWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
+			errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
 			return
 		}
 
@@ -35,7 +35,7 @@ func Authentication() gin.HandlerFunc {
 			c.Set(key.UserId, value)
 			c.Next()
 		} else {
-			errs.AbortWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
+			errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
 		}
 	}
 }

@@ -40,7 +40,7 @@ func (suite *ConfirmationTestSuite) TestSubmit() {
 
 	suite.NoError(json.Unmarshal(message.Attributes, event.Attributes))
 
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/verify/%s", event.Attributes.Username, suite.serverURL, event.Attributes.Id)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", event.Attributes.Username, suite.serverURL, event.Attributes.Id)
 
 	suite.logger.Mock.On("Info", link)
 

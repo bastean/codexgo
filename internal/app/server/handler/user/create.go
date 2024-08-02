@@ -17,14 +17,14 @@ func Create() gin.HandlerFunc {
 		err := c.BindJSON(command)
 
 		if err != nil {
-			errs.Abort(c, errs.BindingJSON(err, "Create"))
+			errs.AbortErr(c, errs.BindingJSON(err, "Create"))
 			return
 		}
 
 		err = user.Create.Handle(command)
 
 		if err != nil {
-			errs.Abort(c, errors.BubbleUp(err, "Create"))
+			errs.AbortErr(c, errors.BubbleUp(err, "Create"))
 			return
 		}
 

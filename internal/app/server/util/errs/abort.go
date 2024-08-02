@@ -6,12 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Abort(c *gin.Context, err error) {
+func AbortErr(c *gin.Context, err error) {
 	c.Error(err)
 	c.Abort()
 }
 
-func AbortWithRedirect(c *gin.Context, err error, route string) {
-	Abort(c, err)
+func AbortErrWithRedirect(c *gin.Context, err error, route string) {
+	AbortErr(c, err)
+	c.Redirect(http.StatusFound, route)
+}
+
+func AbortWithRedirect(c *gin.Context, route string) {
+	c.Abort()
 	c.Redirect(http.StatusFound, route)
 }

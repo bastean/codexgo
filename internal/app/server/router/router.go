@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
+	"github.com/bastean/codexgo/v4/internal/app/server/router/api"
+	"github.com/bastean/codexgo/v4/internal/app/server/router/view"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/gin-gonic/gin"
 )
@@ -32,7 +34,9 @@ func New(files *embed.FS) *gin.Engine {
 
 	Router.StaticFileFS("/robots.txt", "static/robots.txt", fs)
 
-	Routes()
+	api.Use(Router)
+
+	view.Use(Router)
 
 	return Router
 }

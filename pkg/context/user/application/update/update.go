@@ -13,28 +13,28 @@ type Update struct {
 	hashing.Hashing
 }
 
-func (update *Update) Run(new *user.User, password *user.Password) error {
+func (update *Update) Run(account *user.User, updated *user.Password) error {
 	found, err := update.User.Search(&repository.UserSearchCriteria{
-		Id: new.Id,
+		Id: account.Id,
 	})
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(update.Hashing, found.Password.Value, new.Password.Value)
+	err = service.IsPasswordInvalid(update.Hashing, found.Password.Value, account.Password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	if password != nil {
-		new.Password = password
+	if updated != nil {
+		account.Password = updated
 	}
 
-	new.Verified = found.Verified
+	account.Verified = found.Verified
 
-	err = update.User.Update(new)
+	err = update.User.Update(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

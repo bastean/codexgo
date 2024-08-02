@@ -32,7 +32,7 @@ func Error() gin.HandlerFunc {
 			case errors.As(err, &errFailure):
 				c.JSON(http.StatusBadRequest, &reply.JSON{Message: errFailure.What, Data: errFailure.Why})
 			case errors.As(err, &errInternal):
-				c.JSON(http.StatusInternalServerError, &reply.JSON{Message: "Internal server error"})
+				c.JSON(http.StatusInternalServerError, &reply.JSON{Message: "Server error. Try again later."})
 				fallthrough
 			default:
 				log.Error(err.Error())

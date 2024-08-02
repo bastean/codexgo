@@ -14,7 +14,7 @@ func Dashboard() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			errs.AbortWithRedirect(c, errs.MissingKey(key.UserId, "Dashboard"), "/")
+			errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Dashboard"), "/")
 			return
 		}
 
@@ -25,14 +25,14 @@ func Dashboard() gin.HandlerFunc {
 		found, err := user.Read.Handle(query)
 
 		if err != nil {
-			errs.AbortWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
+			errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
 			return
 		}
 
 		err = dashboard.Page(found).Render(c.Request.Context(), c.Writer)
 
 		if err != nil {
-			errs.Abort(c, errs.Render(err, "Dashboard"))
+			errs.AbortErr(c, errs.Render(err, "Dashboard"))
 		}
 	}
 }

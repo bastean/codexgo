@@ -16,7 +16,7 @@ func Update() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			errs.Abort(c, errs.MissingKey(key.UserId, "Update"))
+			errs.AbortErr(c, errs.MissingKey(key.UserId, "Update"))
 			return
 		}
 
@@ -25,7 +25,7 @@ func Update() gin.HandlerFunc {
 		err := c.BindJSON(command)
 
 		if err != nil {
-			errs.Abort(c, errs.BindingJSON(err, "Update"))
+			errs.AbortErr(c, errs.BindingJSON(err, "Update"))
 			return
 		}
 
@@ -34,7 +34,7 @@ func Update() gin.HandlerFunc {
 		err = user.Update.Handle(command)
 
 		if err != nil {
-			errs.Abort(c, errors.BubbleUp(err, "Update"))
+			errs.AbortErr(c, errors.BubbleUp(err, "Update"))
 			return
 		}
 

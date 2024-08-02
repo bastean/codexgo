@@ -6,7 +6,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
     $(`#${formTagId}`)
         .form({
             on: "blur",
-            inline : true,
+            inline: true,
             preventLeaving: true,
             keyboardShortcuts: false,
             fields: {
@@ -94,7 +94,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
 }
 
 script ShowTerms(modalTagId string) {
-    $(`#${modalTagId}`).modal("show")
+    $(`#${modalTagId}`).modal("show");
 }
 
 templ RegisterForm() {

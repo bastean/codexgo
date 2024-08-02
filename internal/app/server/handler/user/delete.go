@@ -8,6 +8,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/user"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,7 @@ func Delete() gin.HandlerFunc {
 		id, exists := c.Get(key.UserId)
 
 		if !exists {
-			errs.Abort(c, errs.MissingKey(key.UserId, "Delete"))
+			errs.AbortErr(c, errs.MissingKey(key.UserId, "Delete"))
 			return
 		}
 
@@ -25,7 +26,7 @@ func Delete() gin.HandlerFunc {
 		err := c.BindJSON(command)
 
 		if err != nil {
-			errs.Abort(c, errs.BindingJSON(err, "Delete"))
+			errs.AbortErr(c, errs.BindingJSON(err, "Delete"))
 			return
 		}
 
@@ -34,7 +35,23 @@ func Delete() gin.HandlerFunc {
 		err = user.Delete.Handle(command)
 
 		if err != nil {
-			errs.Abort(c, errors.BubbleUp(err, "Delete"))
+			errs.AbortErr(c, errors.BubbleUp(err, "Delete"))
+			return
+		}
+
+		session := sessions.Default(c)
+
+		session.Clear()
+
+		session.Options(sessions.Options{
+			Path:   "/",
+			MaxAge: -1,
+		})
+
+		err = session.Save()
+
+		if err != nil {
+			errs.AbortErr(c, errs.SessionSave(err, "Delete"))
 			return
 		}
 

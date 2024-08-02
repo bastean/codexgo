@@ -9,7 +9,7 @@ import (
 func Home() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := home.Page().Render(c.Request.Context(), c.Writer); err != nil {
-			errs.Abort(c, errs.Render(err, "Home"))
+			errs.AbortErr(c, errs.Render(err, "Home"))
 		}
 	}
 }

@@ -6,12 +6,12 @@ script UpdateFormInit(formTagId string) {
     $(`#${formTagId}`)
         .form({
             on: "blur",
-            inline : true,
+            inline: true,
             preventLeaving: true,
             keyboardShortcuts: false,
             fields: {
                 Email: {
-                    optional   : true,
+                    optional: true,
                     rules: [
                         {
                             type: "email"
@@ -19,7 +19,7 @@ script UpdateFormInit(formTagId string) {
                     ]
                 },
                 Username: {
-                    optional   : true,
+                    optional: true,
                     rules: [
                         {
                             type: "size[2..20]"
@@ -35,7 +35,7 @@ script UpdateFormInit(formTagId string) {
                     ]
                 },
                 UpdatedPassword: {
-                    optional   : true,
+                    optional: true,
                     rules: [
                         {
                             type: "size[8..64]"
@@ -47,7 +47,7 @@ script UpdateFormInit(formTagId string) {
                     ]
                 },
                 ConfirmPassword: {
-                    depends    : "UpdatedPassword",
+                    depends: "UpdatedPassword",
                     rules: [
                         {
                             type: "match[UpdatedPassword]"
@@ -56,6 +56,10 @@ script UpdateFormInit(formTagId string) {
                 },
                 Password: {
                     rules: [
+                        {
+                            type: "empty",
+                            prompt: "{name} is required to update the account settings"
+                        },
                         {
                             type: "size[8..64]"
                         },

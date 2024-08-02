@@ -11,7 +11,7 @@ type Handler struct {
 }
 
 func (handler *Handler) Handle(command *Command) error {
-	new, err := user.New(&user.Primitive{
+	account, err := user.New(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
@@ -22,17 +22,17 @@ func (handler *Handler) Handle(command *Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	var password *user.Password
+	var updated *user.Password
 
 	if command.UpdatedPassword != "" {
-		password, err = user.NewPassword(command.UpdatedPassword)
+		updated, err = user.NewPassword(command.UpdatedPassword)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Handle")
 		}
 	}
 
-	err = handler.Update.Run(new, password)
+	err = handler.Update.Run(account, updated)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

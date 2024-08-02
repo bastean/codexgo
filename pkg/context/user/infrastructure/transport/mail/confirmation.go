@@ -46,7 +46,7 @@ func (client *Confirmation) Submit(data any) error {
 		})
 	}
 
-	link := fmt.Sprintf("%s/verify/%s", client.ServerURL, attributes.Id)
+	link := fmt.Sprintf("%s/v4/account/verify/%s", client.ServerURL, attributes.Id)
 
 	ConfirmationTemplate(attributes.Username, link).Render(context.Background(), &message)
 
