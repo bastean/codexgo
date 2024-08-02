@@ -1,8 +1,8 @@
 <h1 align="center">
 
-<!-- [![logo readme](https://raw.githubusercontent.com/bastean/codexgo/main/assets/readme/logo.png)](https://github.com/bastean) -->
+<!-- [![README Logo](https://raw.githubusercontent.com/bastean/codexgo/main/assets/readme/logo.png)](https://github.com/bastean) -->
 
-[![logo readme](assets/readme/logo.png)](https://github.com/bastean/codexgo)
+[![README Logo](assets/readme/logo.png)](https://github.com/bastean/codexgo)
 
 </h1>
 
@@ -16,25 +16,25 @@
 
 <div align="center">
 
-[![license MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![go report card](https://goreportcard.com/badge/github.com/bastean/codexgo)](https://goreportcard.com/report/github.com/bastean/codexgo)
-[![commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/commitizen/cz-cli)
-[![release it](https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80-release--it-orange.svg)](https://github.com/release-it/release-it)
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bastean/codexgo/v4)](https://goreportcard.com/report/github.com/bastean/codexgo/v4)
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](https://github.com/commitizen/cz-cli)
+[![Release It!](https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80-release--it-orange.svg)](https://github.com/release-it/release-it)
 
 </div>
 
 <div align="center">
 
-[![upgrade workflow](https://github.com/bastean/codexgo/actions/workflows/upgrade.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/upgrade.yml)
-[![ci workflow](https://github.com/bastean/codexgo/actions/workflows/ci.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/ci.yml)
-[![release workflow](https://github.com/bastean/codexgo/actions/workflows/release.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/release.yml)
+[![Upgrade workflow](https://github.com/bastean/codexgo/actions/workflows/upgrade.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/upgrade.yml)
+[![CI workflow](https://github.com/bastean/codexgo/actions/workflows/ci.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/ci.yml)
+[![Release workflow](https://github.com/bastean/codexgo/actions/workflows/release.yml/badge.svg)](https://github.com/bastean/codexgo/actions/workflows/release.yml)
 
 </div>
 
 <div align="center">
 
-[![go reference](https://pkg.go.dev/badge/github.com/bastean/codexgo.svg)](https://pkg.go.dev/github.com/bastean/codexgo)
-[![github release](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
+[![Go Reference](https://pkg.go.dev/badge/github.com/bastean/codexgo/v4.svg)](https://pkg.go.dev/github.com/bastean/codexgo/v4)
+[![GitHub Releases](https://img.shields.io/github/v/release/bastean/codexgo.svg)](https://github.com/bastean/codexgo/releases)
 
 </div>
 
@@ -327,15 +327,26 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    make init
    ```
 
-#### ZIP
+### ZIP
 
-1. [System Requirements](#locally)
+> [!NOTE]
+>
+> - [System Requirements](#locally)
+> - We need to change `<user>` and `<repository>` with our own values.
 
-2. Run
-
-   ```bash
-   make genesis
-   ```
+```bash
+curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
+&& unzip main.zip \
+&& mv codexgo-main <repository> \
+&& rm main.zip \
+&& cd <repository> \
+&& make genesis \
+&& git commit -m "chore: add codexgo" \
+&& git branch -M main \
+&& git remote add github https://github.com/<user>/<repository>.git \
+&& git push -u github main \
+&& git status
+```
 
 ### GitHub Repository
 
@@ -358,13 +369,13 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
   - New repository secret
 
-    - BOT_GPG_PRIVATE_KEY
+    - `BOT_GPG_PRIVATE_KEY`
 
       ```bash
       gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
       ```
 
-    - BOT_GPG_PASSPHRASE
+    - `BOT_GPG_PASSPHRASE`
 
 ### Run
 
