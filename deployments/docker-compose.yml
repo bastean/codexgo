@@ -79,3 +79,7 @@ volumes:
     name: codexgo-logs
   codexgo-modules:
     name: codexgo-modules
+
+networks:
+  default:
+    name: codexgo
