@@ -15,7 +15,7 @@ var (
 )
 
 func HasServerGinProxy() (string, bool) {
-	proxy := os.Getenv("DSGO_DEV_AIR_PROXY_PORT")
+	proxy := os.Getenv("CODEXGO_DEV_AIR_PROXY_PORT")
 
 	if proxy != "" && proxy != ServerGinPort {
 		return proxy, true

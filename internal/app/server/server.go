@@ -34,17 +34,17 @@ func Up() error {
 		Handler: router.New(&Files),
 	}
 
-	if err := App.ListenAndServe(); err != nil {
-		log.CannotBeStarted(Server.Gin)
-		return errors.BubbleUp(err, "Up")
-	}
-
 	log.Started(Server.Gin)
 
 	log.Info(fmt.Sprintf("%s listening on %s", Server.Gin, env.ServerGinURL))
 
 	if proxy, ok := env.HasServerGinProxy(); ok {
 		log.Info(fmt.Sprintf("%s proxy listening on %s", Server.Gin, strings.Replace(env.ServerGinURL, env.ServerGinPort, proxy, 1)))
+	}
+
+	if err := App.ListenAndServe(); err != nil {
+		log.CannotBeStarted(Server.Gin)
+		return errors.BubbleUp(err, "Up")
 	}
 
 	return nil
