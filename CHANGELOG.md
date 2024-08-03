@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.6.1](https://github.com/bastean/codexgo/compare/v4.6.0...v4.6.1) (2024-08-03)
+
+### Bug Fixes
+
+- **server:** relocate unreachable logs ([1f2df6a](https://github.com/bastean/codexgo/commit/1f2df6ab02ec362a27233344a9f2035e374bfa00))
+
 ## [4.6.0](https://github.com/bastean/codexgo/compare/v4.5.0...v4.6.0) (2024-08-03)
 
 ### Chores
