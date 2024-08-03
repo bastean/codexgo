@@ -1,5 +1,26 @@
 # Changelog
 
+## [4.6.0](https://github.com/bastean/codexgo/compare/v4.5.0...v4.6.0) (2024-08-03)
+
+### Chores
+
+- **deps:** upgrade ([240d8d4](https://github.com/bastean/codexgo/commit/240d8d4ed5334cb8b6561773752c9a83184101b4))
+- **docker:** add ignore file ([9bbaa59](https://github.com/bastean/codexgo/commit/9bbaa598143dfaabb69988a0c503c4550abe004e))
+
+### Documentation
+
+- **readme:** add script to initialize repository from zip file ([78c843b](https://github.com/bastean/codexgo/commit/78c843b12e9bde9870bc758eef2f47783d592171))
+
+### New Features
+
+- **devcontainer:** add ssh server ([5492305](https://github.com/bastean/codexgo/commit/54923055d13b4bde924b65dd10f7d8f95bfb6d49))
+
+### Refactors
+
+- **docker:** rename default network ([494b3b4](https://github.com/bastean/codexgo/commit/494b3b4ad5796f3757ea03bf943c592772e837bc))
+- **makefile:** rename targets ([9093e2d](https://github.com/bastean/codexgo/commit/9093e2db7ba1f0f4d1e3b4ceb5b2167fc8665906))
+- **server:** separate views from api endpoints ([5fdd1ea](https://github.com/bastean/codexgo/commit/5fdd1ea6897493c06bf62f9199ca35cb6454adff))
+
 ## [4.5.0](https://github.com/bastean/codexgo/compare/v4.4.0...v4.5.0) (2024-07-30)
 
 ### ⚠ BREAKING CHANGES
