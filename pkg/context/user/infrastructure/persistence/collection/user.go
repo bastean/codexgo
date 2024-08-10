@@ -13,21 +13,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type UserDocument struct {
-	Id       string `bson:"id,omitempty"`
-	Email    string `bson:"email,omitempty"`
-	Username string `bson:"username,omitempty"`
-	Password string `bson:"password,omitempty"`
-	Verified bool   `bson:"verified,omitempty"`
-}
-
 type User struct {
 	*mongo.Collection
 	hashing.Hashing
 }
 
 func (mongoDB *User) Save(user *user.User) error {
-	new := UserDocument(*user.ToPrimitive())
+	new := user.ToPrimitive()
 
 	hashed, err := mongoDB.Hashing.Hash(new.Password)
 
@@ -37,7 +29,7 @@ func (mongoDB *User) Save(user *user.User) error {
 
 	new.Password = hashed
 
-	_, err = mongoDB.Collection.InsertOne(context.Background(), &new)
+	_, err = mongoDB.Collection.InsertOne(context.Background(), new)
 
 	if mongo.IsDuplicateKeyError(err) {
 		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Save")
@@ -46,7 +38,7 @@ func (mongoDB *User) Save(user *user.User) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Save",
-			What:  "Failure to save a user",
+			What:  "Failure to save a User",
 			Why: errors.Meta{
 				"Id": user.Id.Value,
 			},
@@ -69,7 +61,7 @@ func (mongoDB *User) Verify(id *user.Id) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Verify",
-			What:  "Failure to verify a user",
+			What:  "Failure to verify a User",
 			Why: errors.Meta{
 				"Id": id.Value,
 			},
@@ -81,7 +73,7 @@ func (mongoDB *User) Verify(id *user.Id) error {
 }
 
 func (mongoDB *User) Update(user *user.User) error {
-	updated := UserDocument(*user.ToPrimitive())
+	updated := user.ToPrimitive()
 
 	filter := bson.D{{Key: "id", Value: user.Id.Value}}
 
@@ -93,12 +85,12 @@ func (mongoDB *User) Update(user *user.User) error {
 
 	updated.Password = hashed
 
-	_, err = mongoDB.Collection.ReplaceOne(context.Background(), filter, &updated)
+	_, err = mongoDB.Collection.ReplaceOne(context.Background(), filter, updated)
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Update",
-			What:  "Failure to update a user",
+			What:  "Failure to update a User",
 			Why: errors.Meta{
 				"Id": user.Id.Value,
 			},
@@ -117,7 +109,7 @@ func (mongoDB *User) Delete(id *user.Id) error {
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
 			Where: "Delete",
-			What:  "Failure to delete a user",
+			What:  "Failure to delete a User",
 			Why: errors.Meta{
 				"Id": id.Value,
 			},
@@ -167,10 +159,10 @@ func (mongoDB *User) Search(criteria *repository.SearchCriteria) (*user.User, er
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "Search",
-			What:  "Failure to create an user from a primitive",
+			What:  "Failure to create a User from a Primitive",
 			Why: errors.Meta{
-				"Primitive": primitive,
 				"Index":     index,
+				"Primitive": primitive,
 			},
 			Who: err,
 		})
@@ -200,7 +192,7 @@ func OpenUser(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (r
 	if err != nil {
 		return nil, errors.NewInternal(&errors.Bubble{
 			Where: "OpenUser",
-			What:  "Failure to create indexes for user collection",
+			What:  "Failure to create Indexes for User Collection",
 			Why: errors.Meta{
 				"Collection": name,
 			},
