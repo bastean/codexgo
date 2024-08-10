@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
@@ -23,12 +24,18 @@ type RabbitMQTestSuite struct {
 }
 
 func (suite *RabbitMQTestSuite) SetupTest() {
+	var err error
+
 	suite.logger = new(records.LoggerMock)
 
-	suite.sut, _ = rabbitmq.Open(
+	suite.sut, err = rabbitmq.Open(
 		os.Getenv("BROKER_RABBITMQ_URI"),
 		suite.logger,
 	)
+
+	if err != nil {
+		errors.Panic(err.Error(), "SetupTest")
+	}
 
 	suite.router = &messages.Router{
 		Name: os.Getenv("BROKER_RABBITMQ_NAME"),

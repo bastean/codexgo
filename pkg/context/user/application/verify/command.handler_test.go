@@ -36,7 +36,9 @@ func (suite *VerifyTestSuite) TestVerify() {
 
 	random := user.Random()
 
-	id, _ := user.NewId(command.Id)
+	id, err := user.NewId(command.Id)
+
+	suite.NoError(err)
 
 	random.Id = id
 

@@ -39,14 +39,18 @@ func (suite *UpdateTestSuite) SetupTest() {
 func (suite *UpdateTestSuite) TestUpdate() {
 	command := update.RandomCommand()
 
-	new, _ := user.New(&user.Primitive{
+	new, err := user.New(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
 		Password: command.UpdatedPassword,
 	})
 
-	id, _ := user.NewId(command.Id)
+	suite.NoError(err)
+
+	id, err := user.NewId(command.Id)
+
+	suite.NoError(err)
 
 	criteria := &repository.SearchCriteria{
 		Id: id,

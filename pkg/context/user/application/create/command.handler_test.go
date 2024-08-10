@@ -38,12 +38,14 @@ func (suite *CreateTestSuite) SetupTest() {
 func (suite *CreateTestSuite) TestCreate() {
 	command := create.RandomCommand()
 
-	new, _ := user.New(&user.Primitive{
+	new, err := user.New(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
 		Password: command.Password,
 	})
+
+	suite.NoError(err)
 
 	messages := new.Messages
 
