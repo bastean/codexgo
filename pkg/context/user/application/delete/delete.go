@@ -9,12 +9,12 @@ import (
 )
 
 type Delete struct {
-	repository.User
+	repository.Repository
 	hashing.Hashing
 }
 
 func (delete *Delete) Run(id *user.Id, password *user.Password) error {
-	found, err := delete.User.Search(&repository.UserSearchCriteria{
+	found, err := delete.Repository.Search(&repository.SearchCriteria{
 		Id: id,
 	})
 
@@ -28,7 +28,7 @@ func (delete *Delete) Run(id *user.Id, password *user.Password) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = delete.User.Delete(found.Id)
+	err = delete.Repository.Delete(found.Id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

@@ -18,7 +18,6 @@ type Type struct {
 
 func NewType(value string) (*Type, error) {
 	value = strings.TrimSpace(value)
-
 	value = strings.ToLower(value)
 
 	valueObj := &Type{

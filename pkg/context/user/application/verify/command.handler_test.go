@@ -23,7 +23,7 @@ func (suite *VerifyTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
 
 	suite.verify = &verify.Verify{
-		User: suite.repository,
+		Repository: suite.repository,
 	}
 
 	suite.sut = &verify.Handler{
@@ -40,7 +40,7 @@ func (suite *VerifyTestSuite) TestVerify() {
 
 	random.Id = id
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: id,
 	}
 

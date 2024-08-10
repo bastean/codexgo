@@ -26,7 +26,7 @@ func (suite *CreateTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
 
 	suite.create = &create.Create{
-		User: suite.repository,
+		Repository: suite.repository,
 	}
 
 	suite.sut = &create.Handler{

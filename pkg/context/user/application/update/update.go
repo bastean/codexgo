@@ -9,12 +9,12 @@ import (
 )
 
 type Update struct {
-	repository.User
+	repository.Repository
 	hashing.Hashing
 }
 
 func (update *Update) Run(account *user.User, updated *user.Password) error {
-	found, err := update.User.Search(&repository.UserSearchCriteria{
+	found, err := update.Repository.Search(&repository.SearchCriteria{
 		Id: account.Id,
 	})
 
@@ -34,7 +34,7 @@ func (update *Update) Run(account *user.User, updated *user.Password) error {
 
 	account.Verified = found.Verified
 
-	err = update.User.Update(account)
+	err = update.Repository.Update(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

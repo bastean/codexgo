@@ -27,8 +27,8 @@ func (suite *DeleteTestSuite) SetupTest() {
 	suite.hashing = new(cryptographic.HashingMock)
 
 	suite.delete = &delete.Delete{
-		User:    suite.repository,
-		Hashing: suite.hashing,
+		Repository: suite.repository,
+		Hashing:    suite.hashing,
 	}
 
 	suite.sut = &delete.Handler{
@@ -44,7 +44,7 @@ func (suite *DeleteTestSuite) TestDelete() {
 		Password: random.Password.Value,
 	}
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: random.Id,
 	}
 

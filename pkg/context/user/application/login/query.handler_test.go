@@ -27,8 +27,8 @@ func (suite *LoginTestSuite) SetupTest() {
 	suite.hashing = new(cryptographic.HashingMock)
 
 	suite.login = &login.Login{
-		User:    suite.repository,
-		Hashing: suite.hashing,
+		Repository: suite.repository,
+		Hashing:    suite.hashing,
 	}
 
 	suite.sut = &login.Handler{
@@ -44,7 +44,7 @@ func (suite *LoginTestSuite) TestLogin() {
 		Password: random.Password.Value,
 	}
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Email: random.Email,
 	}
 

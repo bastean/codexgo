@@ -7,11 +7,11 @@ import (
 )
 
 type Create struct {
-	repository.User
+	repository.Repository
 }
 
 func (create *Create) Run(user *user.User) error {
-	err := create.User.Save(user)
+	err := create.Repository.Save(user)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

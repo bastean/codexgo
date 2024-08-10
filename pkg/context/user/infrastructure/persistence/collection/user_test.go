@@ -16,7 +16,7 @@ import (
 
 type UserTestSuite struct {
 	suite.Suite
-	sut     repository.User
+	sut     repository.Repository
 	hashing *cryptographic.HashingMock
 }
 
@@ -44,7 +44,7 @@ func (suite *UserTestSuite) TestSave() {
 
 	suite.hashing.AssertExpectations(suite.T())
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: expected.Id,
 	}
 
@@ -92,7 +92,7 @@ func (suite *UserTestSuite) TestVerify() {
 
 	suite.NoError(suite.sut.Verify(random.Id))
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: random.Id,
 	}
 
@@ -120,7 +120,7 @@ func (suite *UserTestSuite) TestUpdate() {
 
 	suite.hashing.AssertExpectations(suite.T())
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: expected.Id,
 	}
 
@@ -140,7 +140,7 @@ func (suite *UserTestSuite) TestDelete() {
 
 	suite.NoError(suite.sut.Delete(random.Id))
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: random.Id,
 	}
 
@@ -158,7 +158,7 @@ func (suite *UserTestSuite) TestSearch() {
 
 	suite.NoError(suite.sut.Save(expected))
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: expected.Id,
 	}
 
@@ -172,7 +172,7 @@ func (suite *UserTestSuite) TestSearch() {
 func (suite *UserTestSuite) TestSearchErrDocumentNotFound() {
 	random := user.Random()
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: random.Id,
 	}
 

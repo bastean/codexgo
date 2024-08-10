@@ -30,7 +30,7 @@ func (repository *UserMock) Delete(id *user.Id) error {
 	return nil
 }
 
-func (repository *UserMock) Search(criteria *repository.UserSearchCriteria) (*user.User, error) {
+func (repository *UserMock) Search(criteria *repository.SearchCriteria) (*user.User, error) {
 	args := repository.Called(criteria)
 	return args.Get(0).(*user.User), nil
 }

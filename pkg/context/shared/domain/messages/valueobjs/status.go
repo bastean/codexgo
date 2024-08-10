@@ -18,7 +18,6 @@ type Status struct {
 
 func NewStatus(value string) (*Status, error) {
 	value = strings.TrimSpace(value)
-
 	value = strings.ToLower(value)
 
 	valueObj := &Status{

@@ -9,12 +9,12 @@ import (
 )
 
 type Login struct {
-	repository.User
+	repository.Repository
 	hashing.Hashing
 }
 
 func (login *Login) Run(email *user.Email, password *user.Password) (*user.User, error) {
-	found, err := login.User.Search(&repository.UserSearchCriteria{
+	found, err := login.Repository.Search(&repository.SearchCriteria{
 		Email: email,
 	})
 

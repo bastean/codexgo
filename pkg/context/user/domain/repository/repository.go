@@ -4,15 +4,15 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-type UserSearchCriteria struct {
+type SearchCriteria struct {
 	*user.Id
 	*user.Email
 }
 
-type User interface {
+type Repository interface {
 	Save(*user.User) error
 	Verify(*user.Id) error
 	Update(*user.User) error
 	Delete(*user.Id) error
-	Search(*UserSearchCriteria) (*user.User, error)
+	Search(*SearchCriteria) (*user.User, error)
 }

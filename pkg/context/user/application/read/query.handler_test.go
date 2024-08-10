@@ -23,7 +23,7 @@ func (suite *ReadTestSuite) SetupTest() {
 	suite.repository = new(persistence.UserMock)
 
 	suite.read = &read.Read{
-		User: suite.repository,
+		Repository: suite.repository,
 	}
 
 	suite.sut = &read.Handler{
@@ -38,7 +38,7 @@ func (suite *ReadTestSuite) TestRead() {
 		Id: random.Id.Value,
 	}
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: random.Id,
 	}
 

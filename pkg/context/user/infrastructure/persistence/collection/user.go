@@ -128,7 +128,7 @@ func (mongoDB *User) Delete(id *user.Id) error {
 	return nil
 }
 
-func (mongoDB *User) Search(criteria *repository.UserSearchCriteria) (*user.User, error) {
+func (mongoDB *User) Search(criteria *repository.SearchCriteria) (*user.User, error) {
 	var filter bson.D
 	var index string
 
@@ -179,7 +179,7 @@ func (mongoDB *User) Search(criteria *repository.UserSearchCriteria) (*user.User
 	return found, nil
 }
 
-func OpenUser(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.User, error) {
+func OpenUser(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (repository.Repository, error) {
 	collection := session.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{

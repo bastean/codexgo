@@ -7,11 +7,11 @@ import (
 )
 
 type Read struct {
-	repository.User
+	repository.Repository
 }
 
 func (read *Read) Run(id *user.Id) (*user.User, error) {
-	found, err := read.User.Search(&repository.UserSearchCriteria{
+	found, err := read.Repository.Search(&repository.SearchCriteria{
 		Id: id,
 	})
 

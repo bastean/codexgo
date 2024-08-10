@@ -27,8 +27,8 @@ func (suite *UpdateTestSuite) SetupTest() {
 	suite.hashing = new(cryptographic.HashingMock)
 
 	suite.update = &update.Update{
-		User:    suite.repository,
-		Hashing: suite.hashing,
+		Repository: suite.repository,
+		Hashing:    suite.hashing,
 	}
 
 	suite.sut = &update.Handler{
@@ -48,7 +48,7 @@ func (suite *UpdateTestSuite) TestUpdate() {
 
 	id, _ := user.NewId(command.Id)
 
-	criteria := &repository.UserSearchCriteria{
+	criteria := &repository.SearchCriteria{
 		Id: id,
 	}
 

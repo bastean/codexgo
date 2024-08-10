@@ -7,11 +7,11 @@ import (
 )
 
 type Verify struct {
-	repository.User
+	repository.Repository
 }
 
 func (verify *Verify) Run(id *user.Id) error {
-	found, err := verify.User.Search(&repository.UserSearchCriteria{
+	found, err := verify.Repository.Search(&repository.SearchCriteria{
 		Id: id,
 	})
 
@@ -23,7 +23,7 @@ func (verify *Verify) Run(id *user.Id) error {
 		return nil
 	}
 
-	err = verify.User.Verify(id)
+	err = verify.Repository.Verify(id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
