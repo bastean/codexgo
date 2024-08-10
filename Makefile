@@ -32,7 +32,7 @@ git-reset-hard = git reset --hard HEAD
 docker-rm-vol = docker volume rm -f
 docker-rm-img = docker rmi -f
 
-compose = cd deployments/ && docker compose
+compose = cd deployments && docker compose
 compose-env = ${compose} --env-file
 
 #*------------RULES------------
@@ -97,18 +97,22 @@ generate-required:
 	find . -name "*_templ.go" -type f -delete
 	templ generate
 
+#*______Restorations______
+
+restore:
+	${npx} husky init
+	git restore .
+
 #*______Initializations______
 
-init: upgrade-managers install-tooling download-dependencies generate-required
+init: upgrade-managers install-tooling download-dependencies generate-required restore
 
-init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required
+init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required restore
 
 genesis:
 	git init
 	git add .
 	$(MAKE) init
-	${npx} husky init
-	git restore .
 
 #*______Linters/Formatters______
 
@@ -154,7 +158,7 @@ test-sut:
 
 test-clean: generate-required
 	go clean -testcache
-	cd test/ && mkdir -p report
+	mkdir -p test/report
 
 test-codegen:
 	${npx} playwright codegen ${url-server}
