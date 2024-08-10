@@ -15,19 +15,19 @@ import (
 
 type ConfirmationTestSuite struct {
 	suite.Suite
-	sut       transfers.Transfer
-	logger    *records.LoggerMock
-	serverURL string
+	sut          transfers.Transfer
+	logger       *records.LoggerMock
+	appServerURL string
 }
 
 func (suite *ConfirmationTestSuite) SetupTest() {
 	suite.logger = new(records.LoggerMock)
 
-	suite.serverURL = os.Getenv("CODEXGO_SERVER_GIN_URL")
+	suite.appServerURL = os.Getenv("CODEXGO_SERVER_GIN_URL")
 
 	suite.sut = &terminal.Confirmation{
-		Logger:    suite.logger,
-		ServerURL: suite.serverURL,
+		Logger:       suite.logger,
+		AppServerURL: suite.appServerURL,
 	}
 }
 
@@ -40,7 +40,7 @@ func (suite *ConfirmationTestSuite) TestSubmit() {
 
 	suite.NoError(json.Unmarshal(message.Attributes, event.Attributes))
 
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", event.Attributes.Username, suite.serverURL, event.Attributes.Id)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", event.Attributes.Username, suite.appServerURL, event.Attributes.Id)
 
 	suite.logger.Mock.On("Info", link)
 

@@ -5,9 +5,13 @@ import (
 	"net/smtp"
 )
 
+type Auth struct {
+	Host, Port, Username, Password string
+}
+
 type SMTP struct {
 	smtp.Auth
-	SMTPServerURL, Username, Password, ServerURL string
+	ServerURL, Username string
 }
 
 func (*SMTP) SetHeader(key, value string) string {
@@ -31,15 +35,19 @@ func (client *SMTP) Headers(to, subject string) string {
 }
 
 func (client *SMTP) SendMail(to []string, message []byte) error {
-	return smtp.SendMail(client.SMTPServerURL, client.Auth, client.Username, to, message)
+	return smtp.SendMail(
+		client.ServerURL,
+		client.Auth,
+		client.Username,
+		to,
+		message,
+	)
 }
 
-func Open(host, port, username, password, serverURL string) *SMTP {
+func Open(auth *Auth) *SMTP {
 	return &SMTP{
-		Auth:          smtp.PlainAuth("", username, password, host),
-		SMTPServerURL: fmt.Sprintf("%s:%s", host, port),
-		Username:      username,
-		Password:      password,
-		ServerURL:     serverURL,
+		Auth:      smtp.PlainAuth("", auth.Username, auth.Password, auth.Host),
+		ServerURL: fmt.Sprintf("%s:%s", auth.Host, auth.Port),
+		Username:  auth.Username,
 	}
 }

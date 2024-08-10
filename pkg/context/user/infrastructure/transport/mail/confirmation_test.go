@@ -20,15 +20,17 @@ type ConfirmationTestSuite struct {
 
 func (suite *ConfirmationTestSuite) SetupTest() {
 	suite.smtp = smtp.Open(
-		os.Getenv("CODEXGO_SMTP_HOST"),
-		os.Getenv("CODEXGO_SMTP_PORT"),
-		os.Getenv("CODEXGO_SMTP_USERNAME"),
-		os.Getenv("CODEXGO_SMTP_PASSWORD"),
-		os.Getenv("CODEXGO_SERVER_GIN_URL"),
+		&smtp.Auth{
+			Host:     os.Getenv("CODEXGO_SMTP_HOST"),
+			Port:     os.Getenv("CODEXGO_SMTP_PORT"),
+			Username: os.Getenv("CODEXGO_SMTP_USERNAME"),
+			Password: os.Getenv("CODEXGO_SMTP_PASSWORD"),
+		},
 	)
 
 	suite.sut = &mail.Confirmation{
-		SMTP: suite.smtp,
+		SMTP:         suite.smtp,
+		AppServerURL: os.Getenv("CODEXGO_SERVER_GIN_URL"),
 	}
 }
 

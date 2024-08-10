@@ -12,20 +12,20 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/user"
 )
 
-var (
-	Service = &struct {
-		SMTP, RabbitMQ, MongoDB string
-	}{
-		SMTP:     log.Service("SMTP"),
-		RabbitMQ: log.Service("RabbitMQ"),
-		MongoDB:  log.Service("MongoDB"),
-	}
-	Module = &struct {
-		User string
-	}{
-		User: log.Module("User"),
-	}
-)
+var Service = &struct {
+	SMTP, RabbitMQ, MongoDB, Terminal string
+}{
+	SMTP:     log.Service("SMTP"),
+	RabbitMQ: log.Service("RabbitMQ"),
+	MongoDB:  log.Service("MongoDB"),
+	Terminal: log.Service("Terminal"),
+}
+
+var Module = &struct {
+	User string
+}{
+	User: log.Module("User"),
+}
 
 var (
 	err      error
@@ -35,28 +35,37 @@ var (
 )
 
 func Up() error {
-	log.EstablishingConnectionWith(Service.SMTP)
+	switch {
+	case env.SMTPHost != "":
+		log.EstablishingConnectionWith(Service.SMTP)
 
-	user.InitCreated(&user.TerminalConfirmation{
-		Logger:    log.Log,
-		ServerURL: env.ServerGinURL,
-	},
-		user.QueueSendConfirmation,
-	)
-
-	if env.SMTPHost != "" {
 		SMTP = smtp.Open(
-			env.SMTPHost,
-			env.SMTPPort,
-			env.SMTPUsername,
-			env.SMTPPassword,
-			env.ServerGinURL,
+			&smtp.Auth{
+				Host:     env.SMTPHost,
+				Port:     env.SMTPPort,
+				Username: env.SMTPUsername,
+				Password: env.SMTPPassword,
+			},
 		)
 
-		user.InitCreated(&user.MailConfirmation{SMTP: SMTP}, user.QueueSendConfirmation)
-	}
+		user.InitCreated(&user.MailConfirmation{
+			SMTP:         SMTP,
+			AppServerURL: env.ServerGinURL,
+		}, user.QueueSendConfirmation)
 
-	log.ConnectionEstablishedWith(Service.SMTP)
+		log.ConnectionEstablishedWith(Service.SMTP)
+	default:
+		log.Starting(Service.Terminal)
+
+		user.InitCreated(&user.TerminalConfirmation{
+			Logger:       log.Log,
+			AppServerURL: env.ServerGinURL,
+		},
+			user.QueueSendConfirmation,
+		)
+
+		log.Started(Service.Terminal)
+	}
 
 	log.EstablishingConnectionWith(Service.RabbitMQ)
 

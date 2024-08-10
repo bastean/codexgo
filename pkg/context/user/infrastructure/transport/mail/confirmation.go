@@ -12,6 +12,7 @@ import (
 
 type Confirmation struct {
 	*smtp.SMTP
+	AppServerURL string
 }
 
 func (client *Confirmation) Submit(data any) error {
@@ -46,7 +47,7 @@ func (client *Confirmation) Submit(data any) error {
 		})
 	}
 
-	link := fmt.Sprintf("%s/v4/account/verify/%s", client.ServerURL, attributes.Id)
+	link := fmt.Sprintf("%s/v4/account/verify/%s", client.AppServerURL, attributes.Id)
 
 	ConfirmationTemplate(attributes.Username, link).Render(context.Background(), &message)
 
@@ -58,7 +59,7 @@ func (client *Confirmation) Submit(data any) error {
 			What:  "Failure to send an account confirmation mail",
 			Why: errors.Meta{
 				"User Id":         attributes.Id,
-				"SMTP Server URL": client.SMTPServerURL,
+				"SMTP Server URL": client.ServerURL,
 			},
 			Who: err,
 		})

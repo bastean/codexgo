@@ -10,7 +10,7 @@ import (
 
 type Confirmation struct {
 	loggers.Logger
-	ServerURL string
+	AppServerURL string
 }
 
 func (client *Confirmation) Submit(data any) error {
@@ -27,7 +27,7 @@ func (client *Confirmation) Submit(data any) error {
 		})
 	}
 
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", attributes.Username, client.ServerURL, attributes.Id)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", attributes.Username, client.AppServerURL, attributes.Id)
 
 	client.Logger.Info(link)
 

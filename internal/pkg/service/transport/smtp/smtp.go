@@ -6,6 +6,7 @@ import (
 
 type (
 	SMTP = smtp.SMTP
+	Auth = smtp.Auth
 )
 
 var (
