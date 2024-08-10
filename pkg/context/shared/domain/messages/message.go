@@ -1,8 +1,9 @@
 package messages
 
-type Attributes = []byte
-
-type Meta = []byte
+type (
+	Attributes = []byte
+	Meta       = []byte
+)
 
 type Message struct {
 	Id, Type, OccurredOn string

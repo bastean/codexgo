@@ -13,18 +13,17 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
 )
 
+var Server = &struct {
+	Gin string
+}{
+	Gin: log.Server("Gin"),
+}
+
 var (
-	Server = &struct {
-		Gin string
-	}{
-		Gin: log.Server("Gin"),
-	}
+	//go:embed static
+	Files embed.FS
+	App   *http.Server
 )
-
-//go:embed static
-var Files embed.FS
-
-var App *http.Server
 
 func Up() error {
 	log.Starting(Server.Gin)

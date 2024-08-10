@@ -10,12 +10,18 @@ import (
 	"strings"
 )
 
-const cli = "syncenv"
+const (
+	cli = "syncenv"
+)
 
-var envFilesDir string
-var envFileModel string
+var (
+	envFilesDir  string
+	envFileModel string
+)
 
-var envFileBackupRegex = regexp.MustCompile(`\.env\..*\.tmp`)
+var (
+	envFileBackupRegex = regexp.MustCompile(`\.env\..*\.tmp`)
+)
 
 func RestoreEnvFilesBackup() {
 	files, err := os.ReadDir(envFilesDir)

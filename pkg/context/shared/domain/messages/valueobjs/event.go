@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const EventMinCharactersLength = "1"
-const EventMaxCharactersLength = "20"
+const (
+	EventMinCharactersLength = "1"
+	EventMaxCharactersLength = "20"
+)
 
 type Event struct {
 	Value string `validate:"gte=1,lte=20,alpha"`

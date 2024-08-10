@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const EntityMinCharactersLength = "1"
-const EntityMaxCharactersLength = "20"
+const (
+	EntityMinCharactersLength = "1"
+	EntityMaxCharactersLength = "20"
+)
 
 type Entity struct {
 	Value string `validate:"gte=1,lte=20,alpha"`

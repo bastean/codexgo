@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const ServiceMinCharactersLength = "1"
-const ServiceMaxCharactersLength = "20"
+const (
+	ServiceMinCharactersLength = "1"
+	ServiceMaxCharactersLength = "20"
+)
 
 type Service struct {
 	Value string `validate:"gte=1,lte=20,alphanum"`

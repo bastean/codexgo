@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const CommandMinCharactersLength = "1"
-const CommandMaxCharactersLength = "20"
+const (
+	CommandMinCharactersLength = "1"
+	CommandMaxCharactersLength = "20"
+)
 
 type Command struct {
 	Value string `validate:"gte=1,lte=20,alpha"`

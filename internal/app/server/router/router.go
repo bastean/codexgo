@@ -11,7 +11,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var Router *gin.Engine
+var (
+	Router *gin.Engine
+)
 
 func New(files *embed.FS) *gin.Engine {
 	gin.SetMode(env.ServerGinMode)

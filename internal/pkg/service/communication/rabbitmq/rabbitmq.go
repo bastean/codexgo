@@ -7,7 +7,9 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
 )
 
-type RabbitMQ = rabbitmq.RabbitMQ
+type (
+	RabbitMQ = rabbitmq.RabbitMQ
+)
 
 var (
 	Close = rabbitmq.Close

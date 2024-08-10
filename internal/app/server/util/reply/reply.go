@@ -1,6 +1,8 @@
 package reply
 
-type Payload = map[string]any
+type (
+	Payload = map[string]any
+)
 
 type JSON struct {
 	Success bool

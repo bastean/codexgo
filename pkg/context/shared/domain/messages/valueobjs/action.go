@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const ActionMinCharactersLength = "1"
-const ActionMaxCharactersLength = "20"
+const (
+	ActionMinCharactersLength = "1"
+	ActionMaxCharactersLength = "20"
+)
 
 type Action struct {
 	Value string `validate:"gte=1,lte=20"`

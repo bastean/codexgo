@@ -1,6 +1,8 @@
 package messages
 
-type BindingKeys = []string
+type (
+	BindingKeys = []string
+)
 
 type Queue struct {
 	Name     string

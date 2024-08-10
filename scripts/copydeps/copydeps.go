@@ -10,19 +10,29 @@ import (
 	"strings"
 )
 
-const regExpEveryMinFile = `^.+\.min\.(js|css)$`
-const regExpEveryWoff2File = `^.+\.woff2$`
+const (
+	regExpEveryMinFile   = `^.+\.min\.(js|css)$`
+	regExpEveryWoff2File = `^.+\.woff2$`
+)
 
-const staticPath = "internal/app/server/static/dist"
+const (
+	staticPath = "internal/app/server/static/dist"
+)
 
-const jquerySourcePath = "node_modules/jquery/dist"
-const jqueryStaticPath = staticPath + "/jquery.com"
+const (
+	jquerySourcePath = "node_modules/jquery/dist"
+	jqueryStaticPath = staticPath + "/jquery.com"
+)
 
-const fomanticSourcePath = "node_modules/fomantic-ui/dist"
-const fomanticStaticPath = staticPath + "/fomantic-ui.com"
+const (
+	fomanticSourcePath = "node_modules/fomantic-ui/dist"
+	fomanticStaticPath = staticPath + "/fomantic-ui.com"
+)
 
-const lodashSourcePath = "node_modules/lodash"
-const lodashStaticPath = staticPath + "/lodash.com"
+const (
+	lodashSourcePath = "node_modules/lodash"
+	lodashStaticPath = staticPath + "/lodash.com"
+)
 
 func Panic(who error, what, where string) {
 	log.Panicf("(%s): %s: [%s]", where, what, who)

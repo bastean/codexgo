@@ -4,9 +4,13 @@ import (
 	"context"
 )
 
-type CtxKey string
+type (
+	CtxKey string
+)
 
-const CtxDefaultKey CtxKey = "default"
+const (
+	CtxDefaultKey CtxKey = "default"
+)
 
 func SetDefaultContextValue(value any) context.Context {
 	return context.WithValue(context.Background(), CtxDefaultKey, value)

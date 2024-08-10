@@ -15,7 +15,9 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
 )
 
-const cli = "codexgo"
+const (
+	cli = "codexgo"
+)
 
 var (
 	err error

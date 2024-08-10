@@ -8,8 +8,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const OrganizationMinCharactersLength = "1"
-const OrganizationMaxCharactersLength = "20"
+const (
+	OrganizationMinCharactersLength = "1"
+	OrganizationMaxCharactersLength = "20"
+)
 
 type Organization struct {
 	Value string `validate:"gte=1,lte=20,alphanum"`

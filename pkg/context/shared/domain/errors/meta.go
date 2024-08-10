@@ -1,3 +1,5 @@
 package errors
 
-type Meta = map[string]any
+type (
+	Meta = map[string]any
+)

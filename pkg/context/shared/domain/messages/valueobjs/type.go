@@ -8,7 +8,9 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-var TypeOneOf = []string{"Event", "Command"}
+var (
+	TypeOneOf = []string{"Event", "Command"}
+)
 
 type Type struct {
 	Value string `validate:"oneof=event command"`

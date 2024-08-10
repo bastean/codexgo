@@ -7,8 +7,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-const PasswordMinCharactersLength = "8"
-const PasswordMaxCharactersLength = "64"
+const (
+	PasswordMinCharactersLength = "8"
+	PasswordMaxCharactersLength = "64"
+)
 
 type Password struct {
 	Value string `validate:"gte=8,lte=64"`

@@ -8,7 +8,9 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-var StatusOneOf = []string{"Queued", "Succeeded", "Failed", "Done"}
+var (
+	StatusOneOf = []string{"Queued", "Succeeded", "Failed", "Done"}
+)
 
 type Status struct {
 	Value string `validate:"oneof=queued succeeded failed done"`

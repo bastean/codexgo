@@ -5,7 +5,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type Payload = map[string]any
+type (
+	Payload = map[string]any
+)
 
 type JWT struct {
 	secretKey []byte
