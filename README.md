@@ -232,11 +232,12 @@ make demo
     - Implementations
     - Unit Tests
 
-### App > Server > (Presentation)
+### Services > App > (Presentation)
 
 - **Presentation (Consumers of Bounded Context Modules)**
   - Services (Mapping)
     - Centralize Imports
+    - Initializations
   - Server
     - Templates
     - Handlers
@@ -244,13 +245,27 @@ make demo
     - Features (Gherkin)
       - Acceptance Tests
 
+### Folders
+
+1. `pkg/context/(modules)`
+
+   - It is the logical core that contains all the necessary functionalities that are independent of any **presentation**.
+
+2. `internal/pkg/service`
+
+   - It is responsible for initializing all **context** functionalities so that they are ready for use, as well as for **“mapping”** certain values to centralize all imports required for **presentations** in a single place.
+
+3. `internal/app/(presentations)`
+
+   - These **applications** will be used as **presentations** in order to serve the functionalities to an end user.
+
 ### Idiomatic
 
 - **Domain**
   - `errors.New*()`, `errors.BubbleUp()` & `errors.Panic()`
-    - Only in the "Domain" can we throw a `panic()`.
+    - Only in the `Domain` layer and in the `*_test.go` files can we throw `errors.Panic()`.
 - **Infrastructure**
-  - `Open()` & `Close()`
+  - `New*()`, `Open()` & `Close()`
     - `session`
   - `errors.New*()` & `errors.BubbleUp()`
 - **Application**
@@ -268,7 +283,14 @@ make demo
     - Only `main()` can use `log.Fatal()`.
 - **Logs**
   - `[embed]`
-    - We use `[]` to "embed" external values such as error messages, fields, etc... inside our messages.
+    - We use `[]` to **"embed"** external values such as error messages, fields, etc... inside our messages.
+- **ENVs**
+  - `os.[Getenv/LookupEnv]()`
+    - Only handle `ENVs` directly in the `Presentation` layer and in the `*_test.go` files.
+      - At the `Infrastructure` layer, `ENVs` are received via arguments through function parameters.
+- **Blocks**
+  - `const`, `var`, & `type`
+    - We will group only those that are declared on a single line.
 
 ## First Steps
 
@@ -341,7 +363,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 && rm main.zip \
 && cd <repository> \
 && make genesis \
-&& git commit -m "chore: add codexgo" \
+&& git commit -m "feat(genesis): codexgo" \
 && git branch -M main \
 && git remote add github https://github.com/<user>/<repository>.git \
 && git push -u github main \
@@ -369,13 +391,13 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
   - New repository secret
 
+    - `BOT_GPG_PASSPHRASE`
+
     - `BOT_GPG_PRIVATE_KEY`
 
       ```bash
       gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
       ```
-
-    - `BOT_GPG_PASSPHRASE`
 
 ### Run
 
