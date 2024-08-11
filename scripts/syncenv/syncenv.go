@@ -20,7 +20,7 @@ var (
 )
 
 var (
-	envFileBackupRegex = regexp.MustCompile(`\.env\..*\.tmp`)
+	envFileBackupRegex = regexp.MustCompile(`^\.env\..*\.tmp$`)
 )
 
 func RestoreEnvFilesBackup() {
@@ -31,7 +31,7 @@ func RestoreEnvFilesBackup() {
 	}
 
 	for _, file := range files {
-		if envFileBackupRegex.Match([]byte(file.Name())) {
+		if envFileBackupRegex.MatchString(file.Name()) {
 			renamed, _ := strings.CutSuffix(file.Name(), ".tmp")
 			os.Rename(filepath.Join(envFilesDir, file.Name()), filepath.Join(envFilesDir, renamed))
 		}
