@@ -1,5 +1,36 @@
 # Changelog
 
+## [4.6.2](https://github.com/bastean/codexgo/compare/v4.6.1...v4.6.2) (2024-08-11)
+
+### Chores
+
+- **deps:** upgrade ([e6af62c](https://github.com/bastean/codexgo/commit/e6af62c36a5c3b93289fcc994ca726d5b835f7fb))
+
+### Documentation
+
+- **readme:** add description about folders ([a1b4f98](https://github.com/bastean/codexgo/commit/a1b4f98683e2038b9664c7202892cc38db2c9603))
+
+### Bug Fixes
+
+- **makefile:** register husky hooks on initialization ([50326c7](https://github.com/bastean/codexgo/commit/50326c7c828462a726a9d00e0998ebdc207e06bb))
+- **release-it:** update bumper out file ([ba534f0](https://github.com/bastean/codexgo/commit/ba534f0cc571c2d98f0c6918eb88946ea775345e))
+
+### Refactors
+
+- **dockerfile:** remove redundant layers ([3c61205](https://github.com/bastean/codexgo/commit/3c6120585fb2b9bfd22389b279bc55575eed78d9))
+- **domain:** rename user repository ([8781bd1](https://github.com/bastean/codexgo/commit/8781bd12127ef161eba75d9b8df63f50375a8ee4))
+- **infrastructure:** use a struct for auth values in smtp ([e0a703f](https://github.com/bastean/codexgo/commit/e0a703fb7413052302cbfd92491e2994311668b4))
+- **infrastructure:** use user primitive struct as collection schema in mongo ([ec07756](https://github.com/bastean/codexgo/commit/ec077560f9353711baa71811bf5fa8ff18138606))
+- **scripts:** add beginning and end of regexp in syncenv ([0483d25](https://github.com/bastean/codexgo/commit/0483d25d3a0e5dfda5d1918141a54e867a4a289e))
+
+### Styles
+
+- squash var, const and type in blocks ([23807d5](https://github.com/bastean/codexgo/commit/23807d5bfd35a9713176fb5fb32e0d9b80d68b94))
+
+### Tests
+
+- throw panic in setup to avoid flaky tests ([2046fae](https://github.com/bastean/codexgo/commit/2046fae5bef9d091755c22786ba44b6f8eed5b36))
+
 ## [4.6.1](https://github.com/bastean/codexgo/compare/v4.6.0...v4.6.1) (2024-08-03)
 
 ### Bug Fixes
