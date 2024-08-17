@@ -37,14 +37,14 @@ compose-env = ${compose} --env-file
 
 #*------------RULES------------
 
-#*______Upgrades______
+#*______Upgrade______
 
 upgrade-managers:
 	#? sudo apt update && sudo apt upgrade -y
 	npm upgrade -g
 
 upgrade-go:
-	go get -t -u ./...
+	go get -t -u ./cmd/... ./internal/... ./pkg/... ./scripts/...
 
 copydeps:
 	go run ./scripts/copydeps
@@ -61,7 +61,7 @@ upgrade-reset:
 upgrade:
 	go run ./scripts/upgrade
 
-#*______Installations______
+#*______Install______
 
 install-scanners:
 	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
@@ -84,28 +84,28 @@ install-tooling: install-tools-dev install-tools-test
 
 install-tooling-ci: install-tools-dev
 
-#*______Downloads______
+#*______Download______
 
 download-dependencies:
 	go mod download
 	${npm-ci}
 
-#*______Generators______
+#*______Generate______
 
 generate-required:
 	go generate ./...
 	find . -name "*_templ.go" -type f -delete
 	templ generate
 
-#*______Restorations______
+#*______Restore______
 
 restore:
 	${npx} husky init
 	git restore .
 
-#*______Initializations______
+#*______Init______
 
-init: upgrade-managers install-tooling download-dependencies generate-required restore
+init: upgrade-managers install-tooling download-dependencies copydeps generate-required restore
 
 init-ci: upgrade-managers install-tooling-ci download-dependencies generate-required restore
 
@@ -114,7 +114,7 @@ genesis:
 	git add .
 	$(MAKE) init
 
-#*______Linters/Formatters______
+#*______Lint/Format______
 
 lint: generate-required
 	go mod tidy
@@ -126,7 +126,7 @@ lint-check:
 	staticcheck ./...
 	${npx} prettier --check .
 
-#*______Scanners______
+#*______Scan______
 
 scan-leaks-local:
 	sudo trufflehog git file://. --only-verified
@@ -151,7 +151,7 @@ scan-misconfigs: scan-misconfigs-local
 
 scans: scan-leaks scan-vulns scan-misconfigs
 
-#*______Tests______
+#*______Test______
 
 test-sut:
 	air
@@ -184,7 +184,7 @@ tests-sync:
 tests: test-clean
 	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
 
-#*______Releases______
+#*______Release______
 
 release:
 	${release-it}
@@ -207,7 +207,7 @@ release-dry-version:
 release-dry-changelog:
 	${release-it-dry} --changelog
 
-#*______Builds______
+#*______Build______
 
 build: lint
 	rm -rf build/
@@ -296,7 +296,7 @@ devcontainer:
 connect:
 	ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
 
-#*______Fixes______
+#*______Fix______
 
 fix-dev: upgrade-go install-tools-dev
 
