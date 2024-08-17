@@ -1,6 +1,6 @@
 module github.com/bastean/codexgo/v4
 
-go 1.22
+go 1.23
 
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.4

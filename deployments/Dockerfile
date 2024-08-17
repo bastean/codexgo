@@ -1,4 +1,4 @@
-FROM golang:bookworm AS dev
+FROM golang:1.23-bookworm AS dev
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ COPY . .
 
 RUN make build
 
-FROM golang:bookworm AS prod
+FROM golang:1.23-bookworm AS prod
 
 WORKDIR /app
 

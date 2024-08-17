@@ -4,8 +4,10 @@
   "features": {
     "ghcr.io/devcontainers/features/sshd:1": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/go:1": {},
-    "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.23"
+    }
   },
   "forwardPorts": [2222],
   "postCreateCommand": "USER_PASSWORD=vscode make devcontainer && make init",

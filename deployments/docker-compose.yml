@@ -36,6 +36,7 @@ services:
   codexgo:
     container_name: ${CODEXGO_CONTAINER_NAME}
     image: ${CODEXGO_IMAGE_TAG}
+    pull_policy: never
     build:
       context: ..
       dockerfile: deployments/Dockerfile
