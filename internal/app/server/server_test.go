@@ -2,12 +2,13 @@ package server_test
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/cucumber/godog"
 	"github.com/playwright-community/playwright-go"
 	testify "github.com/stretchr/testify/assert"
@@ -33,19 +34,20 @@ var (
 )
 
 var (
-	err    error
-	assert *testify.Assertions
+	err              error
+	assert           *testify.Assertions
+	expected, actual string
 )
 
-func InitializeAssert(t *testing.T) {
+func SetupAssert(t *testing.T) {
 	assert = testify.New(t)
 }
 
-func InitializePlaywright() {
+func SetupPlaywright() {
 	pw, err = playwright.Run()
 
 	if err != nil {
-		log.Fatalf("could not start playwright: %s", err)
+		errors.Panic(err.Error(), "SetupPlaywright")
 	}
 
 	browser, err = pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
@@ -54,23 +56,23 @@ func InitializePlaywright() {
 	})
 
 	if err != nil {
-		log.Fatalf("could not launch browser: %s", err)
+		errors.Panic(err.Error(), "SetupPlaywright")
 	}
 
 	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &sut})
 
 	if err != nil {
-		log.Fatalf("could not create context: %s", err)
+		errors.Panic(err.Error(), "SetupPlaywright")
 	}
 
 	page, err = browserCtx.NewPage()
 
 	if err != nil {
-		log.Fatalf("could not create page: %s", err)
+		errors.Panic(err.Error(), "SetupPlaywright")
 	}
 }
 
-func InitializeScenario(sc *godog.ScenarioContext) {
+func SetupScenario(sc *godog.ScenarioContext) {
 	sc.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
 		//? browserCtx.ClearCookies()
 		return ctx, nil
@@ -88,13 +90,13 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 			actual = ""
 		}
 
-		expected := page.URL()
+		expected = page.URL()
 
 		assert.True(strings.Contains(expected, actual))
 	})
 
 	sc.Then(`^the page title should be (.+)$`, func(expected string) {
-		actual, err := page.Title()
+		actual, err = page.Title()
 
 		assert.NoError(err)
 
@@ -129,7 +131,7 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 	sc.Then(`^I see (.+) notification$`, func(expected string) {
 		element = page.GetByRole("alert")
 
-		actual, err := element.InnerText()
+		actual, err = element.InnerText()
 
 		assert.NoError(err)
 
@@ -138,12 +140,12 @@ func InitializeScenario(sc *godog.ScenarioContext) {
 }
 
 func TestAcceptanceServerFeatures(t *testing.T) {
-	InitializeAssert(t)
+	SetupAssert(t)
 
-	InitializePlaywright()
+	SetupPlaywright()
 
 	suite := godog.TestSuite{
-		ScenarioInitializer: InitializeScenario,
+		ScenarioInitializer: SetupScenario,
 		Options: &godog.Options{
 			Format:   "pretty",
 			Paths:    []string{"features"},
@@ -151,7 +153,7 @@ func TestAcceptanceServerFeatures(t *testing.T) {
 		},
 	}
 
-	if suite.Run() != 0 {
-		t.Fatal("non-zero status returned, failed to run feature tests")
+	if status := suite.Run(); status != 0 {
+		errors.Panic(fmt.Sprintf("Failure to run feature tests resulted in a non-zero status [%d]", status), "TestAcceptanceServerFeatures")
 	}
 }

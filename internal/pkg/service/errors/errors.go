@@ -17,12 +17,16 @@ type (
 )
 
 var (
-	BubbleUp = errors.BubbleUp
-	As       = errors.As
-	Is       = errors.Is
+	NewFailure  = errors.NewFailure
+	NewInternal = errors.NewInternal
 )
 
 var (
-	NewFailure  = errors.NewFailure
-	NewInternal = errors.NewInternal
+	Panic    = errors.Panic
+	BubbleUp = errors.BubbleUp
+)
+
+var (
+	As = errors.As
+	Is = errors.Is
 )
