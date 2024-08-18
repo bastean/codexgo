@@ -1,11 +1,15 @@
 package fomantic
 
 script Init() {
+    user = {
+        "user_create" : "/v4/account",
+        "user_login"  : "/v4/account",
+        "user_update" : "/v4/account",
+        "user_delete" : "/v4/account",
+    };
+
     $.api.settings.api = {
-        "create user" : "/v4/account",
-        "login user" : "/v4/account",
-        "update user" : "/v4/account",
-        "delete user" : "/v4/account",
+        ...user,
     };
     
     $.api.settings.serializeForm = true;

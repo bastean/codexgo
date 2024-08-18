@@ -41,7 +41,7 @@ func Up() error {
 		log.Info(fmt.Sprintf("%s proxy listening on %s", Server.Gin, strings.Replace(env.ServerGinURL, env.ServerGinPort, proxy, 1)))
 	}
 
-	if err := App.ListenAndServe(); err != nil {
+	if err := App.ListenAndServe(); errors.IsNot(err, http.ErrServerClosed) {
 		log.CannotBeStarted(Server.Gin)
 		return errors.BubbleUp(err, "Up")
 	}

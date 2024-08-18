@@ -1,6 +1,8 @@
 package home
 
-var RegisterFormTagId = "register"
+const (
+	RegisterFormTagId = "register"
+)
 
 script RegisterFormInit(formTagId, loginTabTagId string) {
     $(`#${formTagId}`)
@@ -61,7 +63,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
             }
         })
         .api({
-            action: "create user", 
+            action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
                 settings.data.Id = crypto.randomUUID();
@@ -74,7 +76,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
                 $.toast({
                     class: "success",
                     message: response.Message,
-                    showProgress: "top",
+                    showProgress: "top"
                 });
 
                 _.delay(function() {

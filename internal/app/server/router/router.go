@@ -4,6 +4,8 @@ import (
 	"embed"
 	"net/http"
 
+	"github.com/bastean/codexgo/v4/internal/app/server/handler/health"
+	"github.com/bastean/codexgo/v4/internal/app/server/handler/redirect"
 	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
 	"github.com/bastean/codexgo/v4/internal/app/server/router/api"
 	"github.com/bastean/codexgo/v4/internal/app/server/router/view"
@@ -22,13 +24,13 @@ func New(files *embed.FS) *gin.Engine {
 
 	Router.Use(gin.CustomRecovery(middleware.Recover))
 
-	Router.Use(middleware.Error())
+	Router.Use(middleware.ErrorHandler)
 
-	Router.Use(middleware.Headers())
+	Router.Use(middleware.SecureHeaders)
 
-	Router.Use(middleware.RateLimiter())
+	Router.Use(middleware.RateLimiter)
 
-	Router.Use(middleware.CookieSession())
+	Router.Use(middleware.CookieSession)
 
 	fs := http.FS(files)
 
@@ -36,9 +38,13 @@ func New(files *embed.FS) *gin.Engine {
 
 	Router.StaticFileFS("/robots.txt", "static/robots.txt", fs)
 
-	api.Use(Router)
+	api.Use(Router.Group("/v4"))
 
 	view.Use(Router)
+
+	Router.HEAD("/health", health.Check)
+
+	Router.NoRoute(redirect.Default)
 
 	return Router
 }

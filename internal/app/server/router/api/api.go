@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/bastean/codexgo/v4/internal/app/server/handler/health"
 	"github.com/bastean/codexgo/v4/internal/app/server/handler/user"
 	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
 	"github.com/gin-gonic/gin"
@@ -16,27 +15,25 @@ func (api *API) Public() {
 
 	account := public.Group("/account")
 
-	account.PUT("/", user.Create())
-	account.POST("/", user.Login())
+	account.PUT("/", user.Create)
+	account.POST("/", user.Login)
 
-	account.GET("/verify/:id", user.Verify())
+	account.GET("/verify/:id", user.Verify)
 }
 
 func (api *API) Private() {
-	private := api.Group("/", middleware.Authentication())
+	private := api.Group("/", middleware.Authentication)
 
 	account := private.Group("/account")
 
-	account.PATCH("/", user.Update())
-	account.DELETE("/", user.Delete())
+	account.PATCH("/", user.Update)
+	account.DELETE("/", user.Delete)
 }
 
-func Use(router *gin.Engine) {
+func Use(group *gin.RouterGroup) {
 	api := &API{
-		RouterGroup: router.Group("/v4"),
+		RouterGroup: group,
 	}
-
-	router.HEAD("/health", health.Check())
 
 	api.Public()
 

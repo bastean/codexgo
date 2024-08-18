@@ -30,3 +30,7 @@ var (
 	As = errors.As
 	Is = errors.Is
 )
+
+func IsNot(err error, target error) bool {
+	return err != nil && !Is(err, target)
+}

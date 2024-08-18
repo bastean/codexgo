@@ -9,30 +9,28 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Dashboard() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id, exists := c.Get(key.UserId)
+func Dashboard(c *gin.Context) {
+	id, exists := c.Get(key.UserId)
 
-		if !exists {
-			errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Dashboard"), "/")
-			return
-		}
+	if !exists {
+		errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Dashboard"), "/")
+		return
+	}
 
-		query := new(user.ReadQuery)
+	query := new(user.ReadQuery)
 
-		query.Id = id.(string)
+	query.Id = id.(string)
 
-		found, err := user.Read.Handle(query)
+	found, err := user.Read.Handle(query)
 
-		if err != nil {
-			errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
-			return
-		}
+	if err != nil {
+		errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
+		return
+	}
 
-		err = dashboard.Page(found).Render(c.Request.Context(), c.Writer)
+	err = dashboard.Page(found).Render(c.Request.Context(), c.Writer)
 
-		if err != nil {
-			errs.AbortErr(c, errs.Render(err, "Dashboard"))
-		}
+	if err != nil {
+		errs.AbortErr(c, errs.Render(err, "Dashboard"))
 	}
 }

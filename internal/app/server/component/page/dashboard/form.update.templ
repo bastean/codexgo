@@ -1,6 +1,8 @@
 package dashboard
 
-var UpdateFormTagId = "update"
+const (
+	UpdateFormTagId = "update"
+)
 
 script UpdateFormInit(formTagId string) {
     $(`#${formTagId}`)
@@ -72,13 +74,13 @@ script UpdateFormInit(formTagId string) {
             }
         })
         .api({
-            action: "update user", 
+            action: "user_update", 
             method: "PATCH",
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
                     message: response.Message,
-                    showProgress: "top",
+                    showProgress: "top"
                 });
 
                  _.delay(function() {

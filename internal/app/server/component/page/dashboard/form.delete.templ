@@ -1,6 +1,8 @@
 package dashboard
 
-var DeleteFormTagId = "delete"
+const (
+	DeleteFormTagId = "delete"
+)
 
 script DeleteFormInit(formTagId string) {
     $(`#${formTagId}`)
@@ -35,13 +37,13 @@ script DeleteFormInit(formTagId string) {
             }
         })
         .api({
-            action: "delete user", 
+            action: "user_delete", 
             method: "DELETE",
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
                     message: response.Message,
-                    showProgress: "top",
+                    showProgress: "top"
                 });
 
                  _.delay(function() {

@@ -111,6 +111,7 @@ func Up() error {
 	)
 
 	if err != nil {
+		log.CannotBeStarted(Module.User)
 		return errors.BubbleUp(err, "Up")
 	}
 

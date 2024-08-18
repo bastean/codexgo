@@ -10,27 +10,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Create() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		command := new(user.CreateCommand)
+func Create(c *gin.Context) {
+	command := new(user.CreateCommand)
 
-		err := c.BindJSON(command)
+	err := c.BindJSON(command)
 
-		if err != nil {
-			errs.AbortErr(c, errs.BindingJSON(err, "Create"))
-			return
-		}
-
-		err = user.Create.Handle(command)
-
-		if err != nil {
-			errs.AbortErr(c, errors.BubbleUp(err, "Create"))
-			return
-		}
-
-		c.JSON(http.StatusCreated, &reply.JSON{
-			Success: true,
-			Message: "Account created",
-		})
+	if err != nil {
+		errs.AbortErr(c, errs.BindingJSON(err, "Create"))
+		return
 	}
+
+	err = user.Create.Handle(command)
+
+	if err != nil {
+		errs.AbortErr(c, errors.BubbleUp(err, "Create"))
+		return
+	}
+
+	c.JSON(http.StatusCreated, &reply.JSON{
+		Success: true,
+		Message: "Account created",
+	})
 }

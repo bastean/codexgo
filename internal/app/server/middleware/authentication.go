@@ -11,31 +11,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Authentication() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		session := sessions.Default(c)
+func Authentication(c *gin.Context) {
+	session := sessions.Default(c)
 
-		token := session.Get(key.Authorization)
+	token := session.Get(key.Authorization)
 
-		if token == nil {
-			errs.AbortWithRedirect(c, "/")
-			return
-		}
+	if token == nil {
+		errs.AbortWithRedirect(c, "/")
+		return
+	}
 
-		signature := strings.Split(token.(string), " ")[1]
+	signature := strings.Split(token.(string), " ")[1]
 
-		claims, err := jwt.Validate(signature)
+	claims, err := jwt.Validate(signature)
 
-		if err != nil {
-			errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
-			return
-		}
+	if err != nil {
+		errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
+		return
+	}
 
-		if value, exists := claims[key.UserId]; exists {
-			c.Set(key.UserId, value)
-			c.Next()
-		} else {
-			errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
-		}
+	if value, exists := claims[key.UserId]; exists {
+		c.Set(key.UserId, value)
+		c.Next()
+	} else {
+		errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
 	}
 }

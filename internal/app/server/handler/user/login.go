@@ -14,48 +14,46 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Login() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		query := new(user.LoginQuery)
+func Login(c *gin.Context) {
+	query := new(user.LoginQuery)
 
-		err := c.BindJSON(query)
+	err := c.BindJSON(query)
 
-		if err != nil {
-			errs.AbortErr(c, errs.BindingJSON(err, "Login"))
-			return
-		}
-
-		found, err := user.Login.Handle(query)
-
-		if err != nil {
-			errs.AbortErr(c, errors.BubbleUp(err, "Login"))
-			return
-		}
-
-		token, err := jwt.Generate(jwt.Payload{
-			key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
-			key.UserId: found.Id,
-		})
-
-		if err != nil {
-			errs.AbortErr(c, errors.BubbleUp(err, "Login"))
-			return
-		}
-
-		session := sessions.Default(c)
-
-		session.Set(key.Authorization, "Bearer "+token)
-
-		err = session.Save()
-
-		if err != nil {
-			errs.AbortErr(c, errs.SessionSave(err, "Login"))
-			return
-		}
-
-		c.JSON(http.StatusOK, &reply.JSON{
-			Success: true,
-			Message: "Logged in",
-		})
+	if err != nil {
+		errs.AbortErr(c, errs.BindingJSON(err, "Login"))
+		return
 	}
+
+	found, err := user.Login.Handle(query)
+
+	if err != nil {
+		errs.AbortErr(c, errors.BubbleUp(err, "Login"))
+		return
+	}
+
+	token, err := jwt.Generate(jwt.Payload{
+		key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
+		key.UserId: found.Id,
+	})
+
+	if err != nil {
+		errs.AbortErr(c, errors.BubbleUp(err, "Login"))
+		return
+	}
+
+	session := sessions.Default(c)
+
+	session.Set(key.Authorization, "Bearer "+token)
+
+	err = session.Save()
+
+	if err != nil {
+		errs.AbortErr(c, errs.SessionSave(err, "Login"))
+		return
+	}
+
+	c.JSON(http.StatusOK, &reply.JSON{
+		Success: true,
+		Message: "Logged in",
+	})
 }

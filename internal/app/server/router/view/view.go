@@ -15,23 +15,21 @@ func (view *View) Public() {
 
 	home := public.Group("/")
 
-	home.GET("/", page.Home())
+	home.GET("/", page.Home)
 }
 
 func (view *View) Private() {
-	private := view.Group("/", middleware.Authentication())
+	private := view.Group("/", middleware.Authentication)
 
 	dashboard := private.Group("/dashboard")
 
-	dashboard.GET("/", page.Dashboard())
+	dashboard.GET("/", page.Dashboard)
 }
 
 func Use(router *gin.Engine) {
 	view := &View{
 		Engine: router,
 	}
-
-	router.NoRoute(page.Default())
 
 	view.Public()
 

@@ -1,6 +1,8 @@
 package home
 
-var LoginFormTagId = "login"
+const (
+	LoginFormTagId = "login"
+)
 
 script LoginFormInit(formTagId string) {
     $(`#${formTagId}`)
@@ -31,13 +33,13 @@ script LoginFormInit(formTagId string) {
             }
         })
         .api({
-            action: "login user", 
+            action: "user_login", 
             method: "POST",
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
                     message: response.Message,
-                    showProgress: "top",
+                    showProgress: "top"
                 });
 
                 _.delay(function() {

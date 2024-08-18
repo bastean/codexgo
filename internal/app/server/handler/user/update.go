@@ -11,36 +11,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Update() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		id, exists := c.Get(key.UserId)
+func Update(c *gin.Context) {
+	id, exists := c.Get(key.UserId)
 
-		if !exists {
-			errs.AbortErr(c, errs.MissingKey(key.UserId, "Update"))
-			return
-		}
-
-		command := new(user.UpdateCommand)
-
-		err := c.BindJSON(command)
-
-		if err != nil {
-			errs.AbortErr(c, errs.BindingJSON(err, "Update"))
-			return
-		}
-
-		command.Id = id.(string)
-
-		err = user.Update.Handle(command)
-
-		if err != nil {
-			errs.AbortErr(c, errors.BubbleUp(err, "Update"))
-			return
-		}
-
-		c.JSON(http.StatusOK, &reply.JSON{
-			Success: true,
-			Message: "Account updated",
-		})
+	if !exists {
+		errs.AbortErr(c, errs.MissingKey(key.UserId, "Update"))
+		return
 	}
+
+	command := new(user.UpdateCommand)
+
+	err := c.BindJSON(command)
+
+	if err != nil {
+		errs.AbortErr(c, errs.BindingJSON(err, "Update"))
+		return
+	}
+
+	command.Id = id.(string)
+
+	err = user.Update.Handle(command)
+
+	if err != nil {
+		errs.AbortErr(c, errors.BubbleUp(err, "Update"))
+		return
+	}
+
+	c.JSON(http.StatusOK, &reply.JSON{
+		Success: true,
+		Message: "Account updated",
+	})
 }
