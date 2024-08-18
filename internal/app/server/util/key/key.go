@@ -1,8 +1,9 @@
 package key
 
-var (
+const (
 	Authorization = "Authorization"
 	Exp           = "exp"
 	Id            = "id"
+	Redirect      = "Redirect"
 	UserId        = "userId"
 )
