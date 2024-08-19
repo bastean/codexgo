@@ -10,7 +10,7 @@ type UserMock struct {
 	mock.Mock
 }
 
-func (repository *UserMock) Save(user *user.User) error {
+func (repository *UserMock) Create(user *user.User) error {
 	repository.Called(user)
 	return nil
 }

@@ -10,7 +10,7 @@ type SearchCriteria struct {
 }
 
 type Repository interface {
-	Save(*user.User) error
+	Create(*user.User) error
 	Verify(*user.Id) error
 	Update(*user.User) error
 	Delete(*user.Id) error

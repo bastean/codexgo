@@ -49,7 +49,7 @@ func (suite *CreateTestSuite) TestCreate() {
 
 	messages := new.Messages
 
-	suite.repository.On("Save", new)
+	suite.repository.On("Create", new)
 
 	suite.broker.On("PublishMessages", messages)
 

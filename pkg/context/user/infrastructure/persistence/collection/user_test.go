@@ -41,14 +41,14 @@ func (suite *UserTestSuite) SetupTest() {
 	}
 }
 
-func (suite *UserTestSuite) TestSave() {
+func (suite *UserTestSuite) TestCreate() {
 	expected := user.Random()
 
 	expected.PullMessages()
 
 	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
-	suite.NoError(suite.sut.Save(expected))
+	suite.NoError(suite.sut.Create(expected))
 
 	suite.hashing.AssertExpectations(suite.T())
 
@@ -63,14 +63,14 @@ func (suite *UserTestSuite) TestSave() {
 	suite.Equal(expected, actual)
 }
 
-func (suite *UserTestSuite) TestSaveErrDuplicateKey() {
+func (suite *UserTestSuite) TestCreateErrDuplicateKey() {
 	random := user.Random()
 
 	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(random))
+	suite.NoError(suite.sut.Create(random))
 
-	err := suite.sut.Save(random)
+	err := suite.sut.Create(random)
 
 	suite.hashing.AssertExpectations(suite.T())
 
@@ -96,7 +96,7 @@ func (suite *UserTestSuite) TestVerify() {
 
 	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(random))
+	suite.NoError(suite.sut.Create(random))
 
 	suite.NoError(suite.sut.Verify(random.Id))
 
@@ -118,7 +118,7 @@ func (suite *UserTestSuite) TestUpdate() {
 
 	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
-	suite.NoError(suite.sut.Save(expected))
+	suite.NoError(suite.sut.Create(expected))
 
 	expected.Password = user.PasswordWithValidValue()
 
@@ -144,7 +144,7 @@ func (suite *UserTestSuite) TestDelete() {
 
 	suite.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
 
-	suite.NoError(suite.sut.Save(random))
+	suite.NoError(suite.sut.Create(random))
 
 	suite.NoError(suite.sut.Delete(random.Id))
 
@@ -164,7 +164,7 @@ func (suite *UserTestSuite) TestSearch() {
 
 	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
-	suite.NoError(suite.sut.Save(expected))
+	suite.NoError(suite.sut.Create(expected))
 
 	criteria := &repository.SearchCriteria{
 		Id: expected.Id,

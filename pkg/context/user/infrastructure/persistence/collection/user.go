@@ -18,13 +18,13 @@ type User struct {
 	hashing.Hashing
 }
 
-func (mongoDB *User) Save(user *user.User) error {
+func (mongoDB *User) Create(user *user.User) error {
 	new := user.ToPrimitive()
 
 	hashed, err := mongoDB.Hashing.Hash(new.Password)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Save")
+		return errors.BubbleUp(err, "Create")
 	}
 
 	new.Password = hashed
@@ -32,13 +32,13 @@ func (mongoDB *User) Save(user *user.User) error {
 	_, err = mongoDB.Collection.InsertOne(context.Background(), new)
 
 	if mongo.IsDuplicateKeyError(err) {
-		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Save")
+		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Create")
 	}
 
 	if err != nil {
 		return errors.NewInternal(&errors.Bubble{
-			Where: "Save",
-			What:  "Failure to save a User",
+			Where: "Create",
+			What:  "Failure to create a User",
 			Why: errors.Meta{
 				"Id": user.Id.Value,
 			},

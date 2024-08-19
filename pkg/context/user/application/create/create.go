@@ -11,7 +11,7 @@ type Create struct {
 }
 
 func (create *Create) Run(user *user.User) error {
-	err := create.Repository.Save(user)
+	err := create.Repository.Create(user)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
