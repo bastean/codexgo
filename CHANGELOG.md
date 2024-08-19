@@ -1,5 +1,33 @@
 # Changelog
 
+## [4.6.3](https://github.com/bastean/codexgo/compare/v4.6.2...v4.6.3) (2024-08-19)
+
+### Chores
+
+- **deps:** upgrade ([347f3d3](https://github.com/bastean/codexgo/commit/347f3d39f662ce1babe7bd43615d045bd56ca551))
+- **go:** upgrade to go1.23.0 ([4e2471a](https://github.com/bastean/codexgo/commit/4e2471a3f081569fdcc2e44ebdead833c9f38ea8))
+
+### Documentation
+
+- **readme:** add api and views in workflow section ([321f85d](https://github.com/bastean/codexgo/commit/321f85d6a0771ceaca843b1a44f81226d7223c25))
+
+### Bug Fixes
+
+- **cucumber:** add glob paths to match steps with features ([d903906](https://github.com/bastean/codexgo/commit/d903906d89d5771b5dd95749eb80a418f899e32f))
+- **dockerfile:** add syntax parser directive ([7248ef4](https://github.com/bastean/codexgo/commit/7248ef424a0f43db58213b6d1ea5efba51c3bcdf))
+- **makefile:** copy required dependencies on init ([d98384e](https://github.com/bastean/codexgo/commit/d98384ed9f64e1df7ef6d431efbc5136277bf43e))
+- **server:** change redirection to avoid status override error ([3cd8e14](https://github.com/bastean/codexgo/commit/3cd8e14f317788c32b25d7b621c099ac7dbff256))
+
+### Refactors
+
+- **domain:** rename save to create in user repository ([f4c52a0](https://github.com/bastean/codexgo/commit/f4c52a0ef0d19722d3ffb9d3252361daff9163ba))
+- **server:** add disclaimer about external links ([f958392](https://github.com/bastean/codexgo/commit/f9583923975afa9d87337828b4ebcd997af51835))
+- **server:** use a direct implementation of gin handlers ([19264a3](https://github.com/bastean/codexgo/commit/19264a3737e882fc0958dde70d7a2988b24b563d))
+
+### Tests
+
+- **acceptance:** use panic wrap instead of fatal in playwright setup ([fb32f20](https://github.com/bastean/codexgo/commit/fb32f20c72877605cfd0c38774a3e353cc32adcf))
+
 ## [4.6.2](https://github.com/bastean/codexgo/compare/v4.6.1...v4.6.2) (2024-08-11)
 
 ### Chores
