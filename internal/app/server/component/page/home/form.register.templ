@@ -56,7 +56,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
                     rules: [
                         {
                             type: "checked",
-                            prompt: "Terms & Conditions must be checked"
+                            prompt: "Terms and Conditions must be checked"
                         }
                     ]
                 }
@@ -139,7 +139,7 @@ templ RegisterForm() {
 				<div class="inline required field">
 					<div class="ui inverted checkbox">
 						<input type="checkbox" name="Terms"/>
-						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagId) }>I agree to the <a><b>terms and conditions</b></a></label>
+						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagId) }>I agree to the <a><b>Terms and Conditions</b></a></label>
 					</div>
 				</div>
 				<button class="ui fluid primary submit button">Sign up</button>
