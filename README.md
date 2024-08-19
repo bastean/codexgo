@@ -241,7 +241,11 @@ make demo
   - Server
     - Templates
     - Handlers
+      - API
+      - Views
     - Routes
+      - API `/v*`
+      - Views
     - Features (Gherkin)
       - Acceptance Tests
 
@@ -271,13 +275,15 @@ make demo
 - **Application**
   - `Run()`, `Handle()` & `On()`
   - `errors.New*()` & `errors.BubbleUp()`
-- **Modules**
-  - `Start()` & `Stop()`
-  - `errors.BubbleUp()`
-- **Services / Apps**
-  - `Up()` & `Down()`
-    - `log.[Wrap]()`
-  - `errors.New*()` & `errors.BubbleUp()`
+- **Presentation**
+  - **Modules**
+    - `Start()` & `Stop()`
+    - `errors.BubbleUp()`
+  - **Services / Apps**
+    - `Up()` & `Down()`
+      - `log.[Wrap]()`
+    - `errors.New*()` & `errors.BubbleUp()`
+      - In `Apps` we will handle `Bubble Errors`.
 - **Main**
   - `log.Fatal()` & `log.[Wrap]()`
     - Only `main()` can use `log.Fatal()`.
@@ -443,7 +449,7 @@ make compose-test-integration
 make compose-test-acceptance
 ```
 
-##### Unit/Integration/Acceptance
+##### Unit / Integration / Acceptance
 
 ```bash
 make compose-tests
