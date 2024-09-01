@@ -22,8 +22,8 @@ type UserTestSuite struct {
 
 func (suite *UserTestSuite) SetupTest() {
 	session, err := mongodb.Open(
-		os.Getenv("DATABASE_MONGODB_URI"),
-		os.Getenv("DATABASE_MONGODB_NAME"),
+		os.Getenv("CODEXGO_DATABASE_MONGODB_URI"),
+		os.Getenv("CODEXGO_DATABASE_MONGODB_NAME"),
 	)
 
 	if err != nil {

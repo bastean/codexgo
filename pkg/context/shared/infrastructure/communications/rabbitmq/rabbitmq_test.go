@@ -29,7 +29,7 @@ func (suite *RabbitMQTestSuite) SetupTest() {
 	suite.logger = new(records.LoggerMock)
 
 	suite.sut, err = rabbitmq.Open(
-		os.Getenv("BROKER_RABBITMQ_URI"),
+		os.Getenv("CODEXGO_BROKER_RABBITMQ_URI"),
 		suite.logger,
 	)
 
@@ -38,7 +38,7 @@ func (suite *RabbitMQTestSuite) SetupTest() {
 	}
 
 	suite.router = &messages.Router{
-		Name: os.Getenv("BROKER_RABBITMQ_NAME"),
+		Name: os.Getenv("CODEXGO_BROKER_RABBITMQ_NAME"),
 	}
 
 	suite.queue = &messages.Queue{

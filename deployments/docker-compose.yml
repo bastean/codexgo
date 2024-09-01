@@ -1,14 +1,14 @@
 services:
   broker-rabbitmq:
-    container_name: ${BROKER_RABBITMQ_CONTAINER_NAME}
+    container_name: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_NAME}
     image: rabbitmq:3-management
     environment:
-      RABBITMQ_DEFAULT_USER: ${BROKER_RABBITMQ_ADMIN_USERNAME}
-      RABBITMQ_DEFAULT_PASS: ${BROKER_RABBITMQ_ADMIN_PASSWORD}
+      RABBITMQ_DEFAULT_USER: ${CODEXGO_BROKER_RABBITMQ_ADMIN_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${CODEXGO_BROKER_RABBITMQ_ADMIN_PASSWORD}
     ports:
-      - ${BROKER_RABBITMQ_AMQP_PORT}:5672
-      - ${BROKER_RABBITMQ_ADMIN_PORT}:15672
-    restart: ${BROKER_RABBITMQ_CONTAINER_RESTART}
+      - ${CODEXGO_BROKER_RABBITMQ_AMQP_PORT}:5672
+      - ${CODEXGO_BROKER_RABBITMQ_ADMIN_PORT}:15672
+    restart: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_RESTART}
     healthcheck:
       test: rabbitmq-diagnostics -q status
       interval: 12s
@@ -16,36 +16,36 @@ services:
       retries: 12
 
   database-mongodb:
-    container_name: ${DATABASE_MONGODB_CONTAINER_NAME}
+    container_name: ${CODEXGO_DATABASE_MONGODB_CONTAINER_NAME}
     image: mongo:4.4
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${DATABASE_MONGODB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${DATABASE_MONGODB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD}
     command: mongod --quiet --logpath /dev/null
     ports:
-      - ${DATABASE_MONGODB_PORT}:27017
+      - ${CODEXGO_DATABASE_MONGODB_PORT}:27017
     volumes:
       - database-mongodb:/data/db
-    restart: ${DATABASE_MONGODB_CONTAINER_RESTART}
+    restart: ${CODEXGO_DATABASE_MONGODB_CONTAINER_RESTART}
     healthcheck:
-      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${DATABASE_MONGODB_ROOT_USERNAME} -p ${DATABASE_MONGODB_ROOT_PASSWORD} --quiet | grep 1
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME} -p ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD} --quiet | grep 1
       interval: 12s
       timeout: 12s
       retries: 12
 
   codexgo:
     container_name: ${CODEXGO_CONTAINER_NAME}
-    image: ${CODEXGO_IMAGE_TAG}
+    image: ${CODEXGO_CONTAINER_IMAGE_TAG}
     pull_policy: never
     build:
       context: ..
       dockerfile: deployments/Dockerfile
-      target: ${CODEXGO_IMAGE_BUILD_TARGET}
+      target: ${CODEXGO_CONTAINER_IMAGE_BUILD_TARGET}
     environment:
-      BROKER_RABBITMQ_URI: "amqp://${BROKER_RABBITMQ_ADMIN_USERNAME}:${BROKER_RABBITMQ_ADMIN_PASSWORD}@broker-rabbitmq:5672"
-      BROKER_RABBITMQ_NAME: ${BROKER_RABBITMQ_NAME}
-      DATABASE_MONGODB_URI: "mongodb://${DATABASE_MONGODB_ROOT_USERNAME}:${DATABASE_MONGODB_ROOT_PASSWORD}@database-mongodb:27017"
-      DATABASE_MONGODB_NAME: ${DATABASE_MONGODB_NAME}
+      CODEXGO_BROKER_RABBITMQ_URI: "amqp://${CODEXGO_BROKER_RABBITMQ_ADMIN_USERNAME}:${CODEXGO_BROKER_RABBITMQ_ADMIN_PASSWORD}@broker-rabbitmq:5672"
+      CODEXGO_BROKER_RABBITMQ_NAME: ${CODEXGO_BROKER_RABBITMQ_NAME}
+      CODEXGO_DATABASE_MONGODB_URI: "mongodb://${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME}:${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD}@database-mongodb:27017"
+      CODEXGO_DATABASE_MONGODB_NAME: ${CODEXGO_DATABASE_MONGODB_NAME}
       CODEXGO_SMTP_HOST: ${CODEXGO_SMTP_HOST}
       CODEXGO_SMTP_PORT: ${CODEXGO_SMTP_PORT}
       CODEXGO_SMTP_USERNAME: ${CODEXGO_SMTP_USERNAME}
@@ -75,7 +75,7 @@ services:
 
 volumes:
   database-mongodb:
-    name: ${DATABASE_MONGODB_CONTAINER_VOLUME}
+    name: ${CODEXGO_DATABASE_MONGODB_CONTAINER_VOLUME}
   codexgo-logs:
     name: codexgo-logs
   codexgo-modules:
