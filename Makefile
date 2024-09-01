@@ -268,13 +268,13 @@ compose-prod-down:
 	${docker-rm-img} codexgo
 
 compose-prod: compose-prod-down
-	${compose-env} .env.prod up
+	${compose-env} .env.prod up --exit-code-from codexgo
 
 demo-down:
 	${compose-env} .env.demo down
 
 demo: demo-down
-	${compose-env} .env.demo up
+	${compose-env} .env.demo up --exit-code-from codexgo
 
 compose-down: compose-dev-down compose-test-down compose-prod-down demo-down
 
