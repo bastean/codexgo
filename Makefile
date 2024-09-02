@@ -245,14 +245,14 @@ docker-it:
 
 compose-dev-down:
 	${compose-env} .env.dev down
-	${docker-rm-vol} codexgo-database-mongo-dev
+	${docker-rm-vol} codexgo-database-mongodb-dev
 
 compose-dev: compose-dev-down
 	${compose-env} .env.dev up
 
 compose-test-down:
 	${compose-env} .env.test down
-	${docker-rm-vol} codexgo-database-mongo-test
+	${docker-rm-vol} codexgo-database-mongodb-test
 
 compose-test-integration: compose-test-down
 	${compose-env} .env.test --env-file .env.test.integration up --exit-code-from codexgo

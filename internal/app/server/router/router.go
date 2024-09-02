@@ -22,15 +22,15 @@ func New(files *embed.FS) *gin.Engine {
 
 	Router = gin.Default()
 
-	Router.Use(gin.CustomRecovery(middleware.Recover))
+	Router.Use(gin.CustomRecovery(middleware.Recover()))
 
-	Router.Use(middleware.ErrorHandler)
+	Router.Use(middleware.ErrorHandler())
 
-	Router.Use(middleware.SecureHeaders)
+	Router.Use(middleware.SecureHeaders())
 
-	Router.Use(middleware.RateLimiter)
+	Router.Use(middleware.RateLimiter())
 
-	Router.Use(middleware.CookieSession)
+	Router.Use(middleware.CookieSession())
 
 	fs := http.FS(files)
 

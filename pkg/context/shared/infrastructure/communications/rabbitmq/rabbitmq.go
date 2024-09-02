@@ -76,7 +76,7 @@ func (rabbitMQ *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys
 	var errWrap error
 
 	for _, bindingKey := range bindingKeys {
-		rabbitMQ.Logger.Info(fmt.Sprintf("binding queue [%s] to exchange [%s] with binding key [%s]", queue.Name, rabbitMQ.exchange, bindingKey))
+		rabbitMQ.Logger.Info(fmt.Sprintf("Binding queue [%s] to exchange [%s] with binding key [%s]", queue.Name, rabbitMQ.exchange, bindingKey))
 
 		err := rabbitMQ.Channel.QueueBind(
 			queue.Name,
@@ -146,14 +146,14 @@ func (rabbitMQ *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 				err := json.Unmarshal(delivery.Body, message)
 
 				if err != nil {
-					rabbitMQ.Logger.Error(fmt.Sprintf("failed to deliver a message with id [%s] from queue [%s]", message.Id, queue.Name))
+					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to deliver a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err.Error()))
 					continue
 				}
 
 				err = consumer.On(message)
 
 				if err != nil {
-					rabbitMQ.Logger.Error(fmt.Sprintf("failed to consume a message with id [%s] from queue [%s]", message.Id, queue.Name))
+					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to consume a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err.Error()))
 					continue
 				}
 

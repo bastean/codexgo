@@ -2,21 +2,15 @@ package main
 
 import (
 	"context"
-	"flag"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/bastean/codexgo/v4/internal/app/cli"
 	"github.com/bastean/codexgo/v4/internal/app/server"
 	"github.com/bastean/codexgo/v4/internal/pkg/service"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
-)
-
-const (
-	cli = "codexgo"
 )
 
 var (
@@ -28,17 +22,10 @@ var (
 	Apps     = "Apps"
 )
 
-func usage() {
-	fmt.Printf("Usage: %s [OPTIONS]\n\n", cli)
-	flag.PrintDefaults()
-}
-
 func main() {
-	flag.StringVar(&env.ServerGinPort, "port", env.ServerGinPort, "Gin Server Port (optional)")
-
-	flag.Usage = usage
-
-	flag.Parse()
+	if err = cli.Up(); err != nil {
+		log.Fatal(err.Error())
+	}
 
 	log.Logo()
 

@@ -8,19 +8,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var RateLimiter = ratelimit.RateLimiter(
-	ratelimit.InMemoryStore(
-		&ratelimit.InMemoryOptions{
-			Rate:  time.Second,
-			Limit: 10,
+func RateLimiter() gin.HandlerFunc {
+	return ratelimit.RateLimiter(
+		ratelimit.InMemoryStore(
+			&ratelimit.InMemoryOptions{
+				Rate:  time.Second,
+				Limit: 10,
+			},
+		),
+		&ratelimit.Options{
+			ErrorHandler: func(c *gin.Context, info ratelimit.Info) {
+				c.Status(http.StatusTooManyRequests)
+			},
+			KeyFunc: func(c *gin.Context) string {
+				return c.ClientIP()
+			},
 		},
-	),
-	&ratelimit.Options{
-		ErrorHandler: func(c *gin.Context, info ratelimit.Info) {
-			c.Status(http.StatusTooManyRequests)
-		},
-		KeyFunc: func(c *gin.Context) string {
-			return c.ClientIP()
-		},
-	},
-)
+	)
+}

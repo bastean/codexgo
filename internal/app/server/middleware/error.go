@@ -15,58 +15,60 @@ type ErrorResponse struct {
 	*reply.JSON
 }
 
-func ErrorHandler(c *gin.Context) {
-	c.Next()
+func ErrorHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Next()
 
-	var (
-		errInvalidValue *errors.ErrInvalidValue
-		errAlreadyExist *errors.ErrAlreadyExist
-		errNotExist     *errors.ErrNotExist
-		errFailure      *errors.ErrFailure
-		errInternal     *errors.ErrInternal
-	)
+		var (
+			errInvalidValue *errors.ErrInvalidValue
+			errAlreadyExist *errors.ErrAlreadyExist
+			errNotExist     *errors.ErrNotExist
+			errFailure      *errors.ErrFailure
+			errInternal     *errors.ErrInternal
+		)
 
-	if len(c.Errors) == 0 {
-		return
-	}
+		if len(c.Errors) == 0 {
+			return
+		}
 
-	var response *ErrorResponse
+		var response *ErrorResponse
 
-	err := c.Errors[len(c.Errors)-1]
+		err := c.Errors[len(c.Errors)-1]
 
-	switch {
-	case errors.As(err, &errInvalidValue):
-		response = &ErrorResponse{http.StatusUnprocessableEntity, &reply.JSON{Message: errInvalidValue.What, Data: errInvalidValue.Why}}
-	case errors.As(err, &errAlreadyExist):
-		response = &ErrorResponse{http.StatusConflict, &reply.JSON{Message: errAlreadyExist.What, Data: errAlreadyExist.Why}}
-	case errors.As(err, &errNotExist):
-		response = &ErrorResponse{http.StatusNotFound, &reply.JSON{Message: errNotExist.What, Data: errNotExist.Why}}
-	case errors.As(err, &errFailure):
-		response = &ErrorResponse{http.StatusBadRequest, &reply.JSON{Message: errFailure.What, Data: errFailure.Why}}
-	case errors.As(err, &errInternal):
-		response = &ErrorResponse{http.StatusInternalServerError, &reply.JSON{Message: "Server error. Try again later."}}
-		fallthrough
-	case err != nil:
-		log.Error(err.Error())
-	}
-
-	if route, shouldRedirect := c.Get(key.Redirect); shouldRedirect {
-		if response != nil {
+		switch {
+		case errors.As(err, &errInvalidValue):
+			response = &ErrorResponse{http.StatusUnprocessableEntity, &reply.JSON{Message: errInvalidValue.What, Data: errInvalidValue.Why}}
+		case errors.As(err, &errAlreadyExist):
+			response = &ErrorResponse{http.StatusConflict, &reply.JSON{Message: errAlreadyExist.What, Data: errAlreadyExist.Why}}
+		case errors.As(err, &errNotExist):
+			response = &ErrorResponse{http.StatusNotFound, &reply.JSON{Message: errNotExist.What, Data: errNotExist.Why}}
+		case errors.As(err, &errFailure):
+			response = &ErrorResponse{http.StatusBadRequest, &reply.JSON{Message: errFailure.What, Data: errFailure.Why}}
+		case errors.As(err, &errInternal):
+			response = &ErrorResponse{http.StatusInternalServerError, &reply.JSON{Message: "Server error. Try again later."}}
+			fallthrough
+		case err != nil:
 			log.Error(err.Error())
 		}
 
-		route, ok := route.(string)
+		if route, shouldRedirect := c.Get(key.Redirect); shouldRedirect {
+			if response != nil {
+				log.Error(err.Error())
+			}
 
-		if !ok {
-			route = "/"
+			route, ok := route.(string)
+
+			if !ok {
+				route = "/"
+			}
+
+			c.Redirect(http.StatusFound, route)
+
+			return
 		}
 
-		c.Redirect(http.StatusFound, route)
-
-		return
-	}
-
-	if response != nil {
-		c.JSON(response.Status, response.JSON)
+		if response != nil {
+			c.JSON(response.Status, response.JSON)
+		}
 	}
 }

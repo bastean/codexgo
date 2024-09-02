@@ -5,6 +5,10 @@ import (
 )
 
 var (
-	BrokerRabbitMQURI  = os.Getenv("CODEXGO_BROKER_RABBITMQ_URI")
-	BrokerRabbitMQName = os.Getenv("CODEXGO_BROKER_RABBITMQ_NAME")
+	BrokerRabbitMQURI, BrokerRabbitMQName string
 )
+
+func Broker() {
+	BrokerRabbitMQURI = os.Getenv("CODEXGO_BROKER_RABBITMQ_URI")
+	BrokerRabbitMQName = os.Getenv("CODEXGO_BROKER_RABBITMQ_NAME")
+}

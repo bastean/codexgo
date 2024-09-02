@@ -35,6 +35,8 @@ var (
 )
 
 func Up() error {
+	env.Init()
+
 	switch {
 	case env.SMTPHost != "":
 		log.EstablishingConnectionWith(Service.SMTP)

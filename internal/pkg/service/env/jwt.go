@@ -5,5 +5,9 @@ import (
 )
 
 var (
-	JWTSecretKey = os.Getenv("CODEXGO_JWT_SECRET_KEY")
+	JWTSecretKey string
 )
+
+func JWT() {
+	JWTSecretKey = os.Getenv("CODEXGO_JWT_SECRET_KEY")
+}
