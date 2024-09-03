@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"github.com/bastean/codexgo/v4/internal/app/server/component/layout"
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
 
 func PageInit() templ.ComponentScript {

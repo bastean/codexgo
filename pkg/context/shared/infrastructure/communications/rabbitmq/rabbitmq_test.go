@@ -80,7 +80,7 @@ func (suite *RabbitMQTestSuite) TestBroker() {
 
 	bindingKeys := []string{"#.event.#.test.succeeded"}
 
-	bindingSucceeded := fmt.Sprintf("binding queue [%s] to exchange [%s] with binding key [%s]", suite.queue.Name, suite.router.Name, bindingKeys[0])
+	bindingSucceeded := fmt.Sprintf("Binding queue [%s] to exchange [%s] with binding key [%s]", suite.queue.Name, suite.router.Name, bindingKeys[0])
 
 	suite.logger.Mock.On("Info", bindingSucceeded)
 
