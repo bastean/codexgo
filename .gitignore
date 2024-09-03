@@ -40,7 +40,6 @@ lerna-debug.log*
 !*.db.example*
 
 #* Production
-dist
 dist-ssr
 build
 
@@ -48,7 +47,6 @@ build
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 *_templ.txt
-*_templ.go
 
 #* Misc
 ignore*
