@@ -13,8 +13,8 @@ type Login struct {
 	hashing.Hashing
 }
 
-func (login *Login) Run(email *user.Email, password *user.Password) (*user.User, error) {
-	found, err := login.Repository.Search(&repository.SearchCriteria{
+func (use *Login) Run(email *user.Email, password *user.Password) (*user.User, error) {
+	found, err := use.Repository.Search(&repository.SearchCriteria{
 		Email: email,
 	})
 
@@ -22,7 +22,7 @@ func (login *Login) Run(email *user.Email, password *user.Password) (*user.User,
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(login.Hashing, found.Password.Value, password.Value)
+	err = service.IsPasswordInvalid(use.Hashing, found.Password.Value, password.Value)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")

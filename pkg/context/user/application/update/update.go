@@ -13,8 +13,8 @@ type Update struct {
 	hashing.Hashing
 }
 
-func (update *Update) Run(account *user.User, updated *user.Password) error {
-	found, err := update.Repository.Search(&repository.SearchCriteria{
+func (use *Update) Run(account *user.User, updated *user.Password) error {
+	found, err := use.Repository.Search(&repository.SearchCriteria{
 		Id: account.Id,
 	})
 
@@ -22,7 +22,7 @@ func (update *Update) Run(account *user.User, updated *user.Password) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(update.Hashing, found.Password.Value, account.Password.Value)
+	err = service.IsPasswordInvalid(use.Hashing, found.Password.Value, account.Password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
@@ -34,7 +34,7 @@ func (update *Update) Run(account *user.User, updated *user.Password) error {
 
 	account.Verified = found.Verified
 
-	err = update.Repository.Update(account)
+	err = use.Repository.Update(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

@@ -10,8 +10,8 @@ type Created struct {
 	transfers.Transfer
 }
 
-func (created *Created) Run(event *user.CreatedSucceeded) error {
-	err := created.Transfer.Submit(event.Attributes)
+func (use *Created) Run(event *user.CreatedSucceeded) error {
+	err := use.Transfer.Submit(event.Attributes)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

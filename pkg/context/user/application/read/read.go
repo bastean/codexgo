@@ -10,8 +10,8 @@ type Read struct {
 	repository.Repository
 }
 
-func (read *Read) Run(id *user.Id) (*user.User, error) {
-	found, err := read.Repository.Search(&repository.SearchCriteria{
+func (use *Read) Run(id *user.Id) (*user.User, error) {
+	found, err := use.Repository.Search(&repository.SearchCriteria{
 		Id: id,
 	})
 

@@ -13,8 +13,8 @@ type Delete struct {
 	hashing.Hashing
 }
 
-func (delete *Delete) Run(id *user.Id, password *user.Password) error {
-	found, err := delete.Repository.Search(&repository.SearchCriteria{
+func (use *Delete) Run(id *user.Id, password *user.Password) error {
+	found, err := use.Repository.Search(&repository.SearchCriteria{
 		Id: id,
 	})
 
@@ -22,13 +22,13 @@ func (delete *Delete) Run(id *user.Id, password *user.Password) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(delete.Hashing, found.Password.Value, password.Value)
+	err = service.IsPasswordInvalid(use.Hashing, found.Password.Value, password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = delete.Repository.Delete(found.Id)
+	err = use.Repository.Delete(found.Id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

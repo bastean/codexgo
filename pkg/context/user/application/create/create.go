@@ -10,8 +10,8 @@ type Create struct {
 	repository.Repository
 }
 
-func (create *Create) Run(user *user.User) error {
-	err := create.Repository.Create(user)
+func (use *Create) Run(user *user.User) error {
+	err := use.Repository.Create(user)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

@@ -10,8 +10,8 @@ type Verify struct {
 	repository.Repository
 }
 
-func (verify *Verify) Run(id *user.Id) error {
-	found, err := verify.Repository.Search(&repository.SearchCriteria{
+func (use *Verify) Run(id *user.Id) error {
+	found, err := use.Repository.Search(&repository.SearchCriteria{
 		Id: id,
 	})
 
@@ -23,7 +23,7 @@ func (verify *Verify) Run(id *user.Id) error {
 		return nil
 	}
 
-	err = verify.Repository.Verify(id)
+	err = use.Repository.Verify(id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
