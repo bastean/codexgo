@@ -20,7 +20,7 @@ var (
 
 func Up() error {
 	switch {
-	case env.SMTPHost != "":
+	case env.HasSMTP():
 		log.EstablishingConnectionWith(Service.SMTP)
 
 		SMTP = smtp.Open(
@@ -44,9 +44,7 @@ func Up() error {
 		user.InitCreated(&user.TerminalConfirmation{
 			Logger:       log.Log,
 			AppServerURL: env.ServerGinURL,
-		},
-			user.QueueSendConfirmation,
-		)
+		}, user.QueueSendConfirmation)
 
 		log.Started(Service.Terminal)
 	}

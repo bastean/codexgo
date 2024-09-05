@@ -16,7 +16,9 @@ var (
 )
 
 func Up() error {
-	env.Init()
+	if err = env.Init(); err != nil {
+		return errors.BubbleUp(err, "Up")
+	}
 
 	if err = transport.Up(); err != nil {
 		return errors.BubbleUp(err, "Up")

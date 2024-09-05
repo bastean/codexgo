@@ -9,5 +9,5 @@ var (
 )
 
 func JWT() {
-	JWTSecretKey = os.Getenv("CODEXGO_JWT_SECRET_KEY")
+	JWTSecretKey = os.Getenv(JWT_SECRET_KEY)
 }

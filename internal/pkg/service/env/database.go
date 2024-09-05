@@ -9,6 +9,6 @@ var (
 )
 
 func Database() {
-	DatabaseMongoDBURI = os.Getenv("CODEXGO_DATABASE_MONGODB_URI")
-	DatabaseMongoDBName = os.Getenv("CODEXGO_DATABASE_MONGODB_NAME")
+	DatabaseMongoDBURI = os.Getenv(DATABASE_MONGODB_URI)
+	DatabaseMongoDBName = os.Getenv(DATABASE_MONGODB_NAME)
 }
