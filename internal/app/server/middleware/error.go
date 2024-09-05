@@ -59,6 +59,14 @@ func ErrorHandler() gin.HandlerFunc {
 			route, ok := route.(string)
 
 			if !ok {
+				log.Error(errors.NewInternal(&errors.Bubble{
+					Where: "ErrorHandler",
+					What:  "Invalid redirection Route",
+					Why: errors.Meta{
+						"Route": route,
+					},
+				}).Error())
+
 				route = "/"
 			}
 

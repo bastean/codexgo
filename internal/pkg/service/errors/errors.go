@@ -6,6 +6,7 @@ import (
 
 type (
 	Bubble = errors.Bubble
+	Meta   = errors.Meta
 )
 
 type (

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
+	"github.com/bastean/codexgo/v4/internal/app/server/util/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
@@ -29,7 +30,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	command.Id = id.(string)
+	command.Id = format.ToString(id)
 
 	err = user.Delete.Handle(command)
 

@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
+	"github.com/bastean/codexgo/v4/internal/app/server/util/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication/jwt"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
@@ -21,7 +22,7 @@ func Authentication(c *gin.Context) {
 		return
 	}
 
-	signature := strings.Split(token.(string), " ")[1]
+	signature := strings.Split(format.ToString(token), " ")[1]
 
 	claims, err := jwt.Validate(signature)
 

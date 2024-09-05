@@ -3,6 +3,7 @@ package page
 import (
 	"github.com/bastean/codexgo/v4/internal/app/server/component/page/dashboard"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
+	"github.com/bastean/codexgo/v4/internal/app/server/util/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
@@ -19,7 +20,7 @@ func Dashboard(c *gin.Context) {
 
 	query := new(user.ReadQuery)
 
-	query.Id = id.(string)
+	query.Id = format.ToString(id)
 
 	found, err := user.Read.Handle(query)
 

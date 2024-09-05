@@ -8,8 +8,8 @@ import (
 
 type (
 	key      = string
-	what     = any
 	required = bool
+	what     = any
 )
 
 const (
@@ -97,7 +97,7 @@ func Verify() error {
 
 func Init() error {
 	if err := Verify(); err != nil {
-		return errors.BubbleUp(err, "Up")
+		return errors.BubbleUp(err, "Init")
 	}
 
 	SMTP()
