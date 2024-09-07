@@ -1,5 +1,34 @@
 # Changelog
 
+## [4.7.0](https://github.com/bastean/codexgo/compare/v4.6.3...v4.7.0) (2024-09-07)
+
+### Chores
+
+- **deps:** upgrade ([40d014f](https://github.com/bastean/codexgo/commit/40d014fbcb24b9e4944294c628554959e1bfa4a3))
+- **deps:** upgrade ([2cdc473](https://github.com/bastean/codexgo/commit/2cdc47398b43d21a15e25ebc7787cf5a66b6e15d))
+
+### Documentation
+
+- **readme:** add cli app description ([d1722a4](https://github.com/bastean/codexgo/commit/d1722a439061a0ad4a0248da43aa65b1d14a30d8))
+
+### New Features
+
+- **presentation:** add cli app ([eec5814](https://github.com/bastean/codexgo/commit/eec5814bdf547b79269f470c9465378f8e067d4f))
+- **presentation:** add env verification ([2198845](https://github.com/bastean/codexgo/commit/219884556422356b02c7fba2fd28356a397f3ae5))
+- **presentation:** add files needed to use the standalone binary ([eafe041](https://github.com/bastean/codexgo/commit/eafe041e95a8f23fb1b71660a30bc3104f415469))
+
+### Bug Fixes
+
+- **makefile:** add compose exit code in prod and demo rules ([4d46bf4](https://github.com/bastean/codexgo/commit/4d46bf4caf18bd20eb1d61b2d19aabbb2f594f2d))
+
+### Refactors
+
+- **application:** rename use case receivers ([d0bd981](https://github.com/bastean/codexgo/commit/d0bd981c3390e20165be3ad2960030f9abd313dc))
+- **env:** add codexgo prefix ([b5f6f69](https://github.com/bastean/codexgo/commit/b5f6f6960c477be80731b17bda6ab6ff3577a646))
+- **presentation:** change services initialization ([6ef228b](https://github.com/bastean/codexgo/commit/6ef228b8a781afed2f8d643bc084431f17bfc304))
+- **presentation:** change type assertions ([b1d4e18](https://github.com/bastean/codexgo/commit/b1d4e18beefa5fa44289998b36bc93c34c34f671))
+- **presentation:** wrap third-party errors on the server ([03ea027](https://github.com/bastean/codexgo/commit/03ea027f4a9d2e426bada674f26438e8b896c78e))
+
 ## [4.6.3](https://github.com/bastean/codexgo/compare/v4.6.2...v4.6.3) (2024-08-19)
 
 ### Chores
