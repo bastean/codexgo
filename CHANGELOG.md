@@ -1,5 +1,11 @@
 # Changelog
 
+## [4.7.1](https://github.com/bastean/codexgo/compare/v4.7.0...v4.7.1) (2024-09-07)
+
+### Documentation
+
+- **readme:** change module version in cli installation ([b598963](https://github.com/bastean/codexgo/commit/b598963671980887578531b3ecafa85aae49235f))
+
 ## [4.7.0](https://github.com/bastean/codexgo/compare/v4.6.3...v4.7.0) (2024-09-07)
 
 ### Chores
