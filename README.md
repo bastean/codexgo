@@ -59,7 +59,7 @@
 ### Installation
 
 ```bash
-go install github.com/bastean/codexgo/cmd/codexgo@latest
+go install github.com/bastean/codexgo/v4/cmd/codexgo@latest
 ```
 
 ### Usage
