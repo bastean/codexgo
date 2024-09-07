@@ -54,9 +54,46 @@
 
 </div>
 
-## Usage
+## CLI
 
-### Docker (Demo)
+### Installation
+
+```bash
+go install github.com/bastean/codexgo/cmd/codexgo@latest
+```
+
+### Usage
+
+> [!NOTE]
+>
+> - We need to create an `.env` file where we have our own values defined.
+>   - In the [.env.example.cli](deployments/.env.example.cli) file, we can see the values that can be used.
+>     - By omitting `CODEXGO_SMTP_*`, the link to confirm the account is sent through the Terminal.
+>       - _"Hi \<username\>, please confirm your account through this link: \<link\>"_
+>     - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
+
+```bash
+codexgo -h
+```
+
+```text
+              _________               ________________
+_____________ ______  /_____ ____  __ __  ____/__  __ \
+_  ___/_  __ \_  __  / _  _ \__  |/_/ _  / __  _  / / /
+/ /__  / /_/ // /_/ /  /  __/__>  <   / /_/ /  / /_/ /
+\___/  \____/ \__,_/   \___/ /_/|_|   \____/   \____/
+
+Example CRUD project applying Hexagonal Architecture, DDD, EDA, CQRS, BDD, CI, and more... in Go.
+
+Usage: codexgo [flags]
+
+  -env string
+    	Path to ENV file (required)
+```
+
+## Docker
+
+### Usage (Demo)
 
 > [!NOTE]
 >
@@ -191,7 +228,7 @@ make demo
   - Display the logs and redirect them to a file whose name depends on the time at which the service was run.
   - Used in Production Image.
 
-## Basic Workflow (Domain > (Infrastructure | Application) > Presentation)
+## Domain > (Infrastructure | Application) > Presentation
 
 ### Bounded Context (App/Business/Department) > Modules (Troubleshooting) > Layers (Domain, Infrastructure & Application)
 
@@ -249,11 +286,21 @@ make demo
     - Features (Gherkin)
       - Acceptance Tests
 
+## Workflow
+
+### Idea
+
+The system allows users to register a new account, log in and update their data or permanently delete their account, as well as verify it through a link sent to their email.
+
+### Functionality
+
+It is a monolith where CRUD operations can be performed from different presentations to the same database, this allows us to manage users from the different presentations available, in addition to having a messaging system that allows to communicate the events occurred, thus avoiding a coupling to the source of the same.
+
 ### Folders
 
 1. `pkg/context/(modules)`
 
-   - It is the logical core that contains all the necessary functionalities that are independent of any **presentation**.
+   - It is the logical core that contains all the necessary functionalities that are agnostic of any **presentation**.
 
 2. `internal/pkg/service`
 
@@ -280,7 +327,7 @@ make demo
     - `Start()` & `Stop()`
     - `errors.BubbleUp()`
   - **Services / Apps**
-    - `Up()` & `Down()`
+    - `Init()`, `Up()` & `Down()`
       - `log.[Wrap]()`
     - `errors.New*()` & `errors.BubbleUp()`
       - In `Apps` we will handle `Bubble Errors`.
@@ -336,7 +383,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 4. Run
 
-   ```txt
+   ```text
    Dev Containers: Reopen in Container
    ```
 
