@@ -28,8 +28,8 @@
     "commitizen": "4.3.0",
     "cz-conventional-changelog": "3.3.0",
     "husky": "9.1.5",
-    "lint-staged": "15.2.9",
-    "npm-check-updates": "17.1.0",
+    "lint-staged": "15.2.10",
+    "npm-check-updates": "17.1.1",
     "prettier": "3.3.3",
     "release-it": "17.6.0"
   },
