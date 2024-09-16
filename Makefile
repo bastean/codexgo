@@ -59,7 +59,7 @@ upgrade-reset:
 	${npm-ci}
 
 upgrade:
-	go run ./scripts/upgrade
+	godo exec -c configs/upgrade.json
 
 #*______Install______
 
@@ -73,6 +73,7 @@ install-linters:
 	npm i -g prettier
 
 install-tools-dev: install-scanners install-linters
+	go install github.com/bastean/godo/cmd/godo@latest
 	go install github.com/air-verse/air@latest
 	go install github.com/a-h/templ/cmd/templ@latest
 
@@ -294,7 +295,7 @@ devcontainer:
 	${bash} 'echo -e "$(USER_PASSWORD)\n$(USER_PASSWORD)" | sudo passwd vscode'
 
 connect:
-	ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
+	ssh -p $(PORT) -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
 
 #*______Fix______
 
