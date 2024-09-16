@@ -16,6 +16,8 @@ go-tidy = go mod tidy -e
 npx = npx --no --
 npm-ci = npm ci --legacy-peer-deps
 
+ncu = ${npx} ncu -ws -u
+
 release-it = ${npx} release-it -V
 release-it-dry = ${npx} release-it -V -d --no-git.requireCleanWorkingDir
 
@@ -50,7 +52,8 @@ copydeps:
 	go run ./scripts/copydeps
 
 upgrade-node:
-	${npx} ncu -ws -u
+	${ncu}
+	${ncu} fomantic-ui -t @nightly
 	npm i --legacy-peer-deps
 	$(MAKE) copydeps
 
