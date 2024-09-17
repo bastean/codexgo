@@ -3,13 +3,14 @@ package user
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
-	"github.com/gin-gonic/gin"
 )
 
 func Update(c *gin.Context) {

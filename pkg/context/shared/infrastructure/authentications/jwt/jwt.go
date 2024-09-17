@@ -1,8 +1,9 @@
 package jwt
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/golang-jwt/jwt/v5"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type (

@@ -3,8 +3,9 @@ package errs
 import (
 	"net/http"
 
-	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/gin-gonic/gin"
+
+	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 )
 
 func AbortErr(c *gin.Context, err error) {

@@ -4,14 +4,15 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication/jwt"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 )
 
 func Login(c *gin.Context) {

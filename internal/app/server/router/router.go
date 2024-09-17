@@ -4,13 +4,14 @@ import (
 	"embed"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/handler/health"
 	"github.com/bastean/codexgo/v4/internal/app/server/handler/redirect"
 	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
 	"github.com/bastean/codexgo/v4/internal/app/server/router/api"
 	"github.com/bastean/codexgo/v4/internal/app/server/router/view"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
-	"github.com/gin-gonic/gin"
 )
 
 var (

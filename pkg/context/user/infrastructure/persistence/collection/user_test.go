@@ -5,13 +5,14 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/collection"
-	"github.com/stretchr/testify/suite"
 )
 
 type UserTestSuite struct {

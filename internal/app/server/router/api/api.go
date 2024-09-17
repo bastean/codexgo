@@ -1,9 +1,10 @@
 package api
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/handler/user"
 	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
-	"github.com/gin-gonic/gin"
 )
 
 type API struct {

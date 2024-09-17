@@ -1,9 +1,10 @@
 package page
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/component/page/home"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
-	"github.com/gin-gonic/gin"
 )
 
 func Home(c *gin.Context) {

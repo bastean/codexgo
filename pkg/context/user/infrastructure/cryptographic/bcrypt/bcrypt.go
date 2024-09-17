@@ -1,8 +1,9 @@
 package bcrypt
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type Bcrypt struct{}

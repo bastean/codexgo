@@ -8,10 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/cucumber/godog"
 	"github.com/playwright-community/playwright-go"
 	testify "github.com/stretchr/testify/assert"
+
+	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 )
 
 var (

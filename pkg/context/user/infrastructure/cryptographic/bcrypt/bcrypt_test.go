@@ -3,10 +3,11 @@ package bcrypt_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/hashing"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic/bcrypt"
-	"github.com/stretchr/testify/suite"
 )
 
 type BcryptTestSuite struct {

@@ -3,6 +3,8 @@ package delete_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -10,7 +12,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
-	"github.com/stretchr/testify/suite"
 )
 
 type DeleteTestSuite struct {

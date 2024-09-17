@@ -3,9 +3,10 @@ package middleware
 import (
 	"strings"
 
-	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/gin-contrib/secure"
 	"github.com/gin-gonic/gin"
+
+	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 )
 
 func SecureHeaders() gin.HandlerFunc {

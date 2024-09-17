@@ -9,6 +9,8 @@ url-github = https://github.com/bastean/codexgo
 
 #*______Go______
 
+module = github.com/bastean/codexgo/v4
+
 go-tidy = go mod tidy -e
 
 #*______Node______
@@ -67,11 +69,12 @@ upgrade:
 #*______Install______
 
 install-scanners:
+	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
 	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
 	curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
-	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
 
 install-linters:
+	go install golang.org/x/tools/cmd/goimports@latest
 	go install honnef.co/go/tools/cmd/staticcheck@latest
 	npm i -g prettier
 
@@ -120,11 +123,13 @@ genesis:
 
 #*______Lint/Format______
 
-lint: generate-required
+lint:
 	go mod tidy
+	goimports -l -w -local ${module} .
 	gofmt -l -s -w .
 	${npx} prettier --ignore-unknown --write .
 	templ fmt .
+	$(MAKE) generate-required
 
 lint-check:
 	staticcheck ./...

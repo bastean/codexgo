@@ -6,11 +6,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type MongoDB struct {

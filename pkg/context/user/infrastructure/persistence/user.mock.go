@@ -1,9 +1,10 @@
 package persistence
 
 import (
+	"github.com/stretchr/testify/mock"
+
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/stretchr/testify/mock"
 )
 
 type UserMock struct {

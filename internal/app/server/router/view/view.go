@@ -1,9 +1,10 @@
 package view
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/handler/page"
 	"github.com/bastean/codexgo/v4/internal/app/server/middleware"
-	"github.com/gin-gonic/gin"
 )
 
 type View struct {

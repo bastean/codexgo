@@ -1,13 +1,14 @@
 package page
 
 import (
+	"github.com/gin-gonic/gin"
+
 	"github.com/bastean/codexgo/v4/internal/app/server/component/page/dashboard"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
-	"github.com/gin-gonic/gin"
 )
 
 func Dashboard(c *gin.Context) {
