@@ -8,8 +8,8 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
@@ -17,7 +17,7 @@ import (
 type LoginTestSuite struct {
 	suite.Suite
 	sut        handlers.Query[*login.Query, *login.Response]
-	login      usecase.Login
+	login      cases.Login
 	hashing    *cryptographic.HashingMock
 	repository *persistence.UserMock
 }

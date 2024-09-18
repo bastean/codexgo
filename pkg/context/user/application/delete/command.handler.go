@@ -3,11 +3,11 @@ package delete
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 type Handler struct {
-	usecase.Delete
+	cases.Delete
 }
 
 func (handler *Handler) Handle(command *Command) error {

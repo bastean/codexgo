@@ -8,15 +8,15 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type ReadTestSuite struct {
 	suite.Suite
 	sut        handlers.Query[*read.Query, *read.Response]
-	read       usecase.Read
+	read       cases.Read
 	repository *persistence.UserMock
 }
 

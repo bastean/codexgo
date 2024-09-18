@@ -6,11 +6,11 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 type Consumer struct {
-	usecase.Created
+	cases.Created
 	Queues []*messages.Queue
 }
 

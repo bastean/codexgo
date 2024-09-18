@@ -10,13 +10,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/created"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 type CreatedConsumerTestSuite struct {
 	suite.Suite
 	sut      messages.Consumer
-	created  usecase.Created
+	created  cases.Created
 	transfer *transports.TransferMock
 	queues   []*messages.Queue
 }

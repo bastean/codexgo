@@ -1,4 +1,4 @@
-package usecase
+package cases
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"

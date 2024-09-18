@@ -8,8 +8,8 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
@@ -17,7 +17,7 @@ import (
 type UpdateTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*update.Command]
-	update     usecase.Update
+	update     cases.Update
 	hashing    *cryptographic.HashingMock
 	repository *persistence.UserMock
 }

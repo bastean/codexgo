@@ -9,13 +9,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-type EmailValueObjectTestSuite struct {
+type EmailTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EmailValueObjectTestSuite) SetupTest() {}
+func (suite *EmailTestSuite) SetupTest() {}
 
-func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
+func (suite *EmailTestSuite) TestWithInvalidValue() {
 	value, err := user.EmailWithInvalidValue()
 
 	var actual *errors.ErrInvalidValue
@@ -34,6 +34,6 @@ func (suite *EmailValueObjectTestSuite) TestWithInvalidValue() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitEmailValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(EmailValueObjectTestSuite))
+func TestUnitEmailSuite(t *testing.T) {
+	suite.Run(t, new(EmailTestSuite))
 }

@@ -1,4 +1,4 @@
-package valueobjs_test
+package components_test
 
 import (
 	"testing"
@@ -6,17 +6,17 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/valueobjs"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
 )
 
-type StatusValueObjectTestSuite struct {
+type StatusTestSuite struct {
 	suite.Suite
 }
 
-func (suite *StatusValueObjectTestSuite) SetupTest() {}
+func (suite *StatusTestSuite) SetupTest() {}
 
-func (suite *StatusValueObjectTestSuite) TestWithInvalidValue() {
-	value, err := valueobjs.StatusWithInvalidValue()
+func (suite *StatusTestSuite) TestWithInvalidValue() {
+	value, err := components.StatusWithInvalidValue()
 
 	var actual *errors.ErrInvalidValue
 
@@ -34,6 +34,6 @@ func (suite *StatusValueObjectTestSuite) TestWithInvalidValue() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitStatusValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(StatusValueObjectTestSuite))
+func TestUnitStatusSuite(t *testing.T) {
+	suite.Run(t, new(StatusTestSuite))
 }

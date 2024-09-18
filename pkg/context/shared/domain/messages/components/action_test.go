@@ -1,4 +1,4 @@
-package valueobjs_test
+package components_test
 
 import (
 	"testing"
@@ -6,17 +6,17 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/valueobjs"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
 )
 
-type ActionValueObjectTestSuite struct {
+type ActionTestSuite struct {
 	suite.Suite
 }
 
-func (suite *ActionValueObjectTestSuite) SetupTest() {}
+func (suite *ActionTestSuite) SetupTest() {}
 
-func (suite *ActionValueObjectTestSuite) TestWithInvalidLength() {
-	value, err := valueobjs.ActionWithInvalidLength()
+func (suite *ActionTestSuite) TestWithInvalidLength() {
+	value, err := components.ActionWithInvalidLength()
 
 	var actual *errors.ErrInvalidValue
 
@@ -34,6 +34,6 @@ func (suite *ActionValueObjectTestSuite) TestWithInvalidLength() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitActionValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(ActionValueObjectTestSuite))
+func TestUnitActionSuite(t *testing.T) {
+	suite.Run(t, new(ActionTestSuite))
 }

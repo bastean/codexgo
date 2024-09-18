@@ -9,13 +9,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-type PasswordValueObjectTestSuite struct {
+type PasswordTestSuite struct {
 	suite.Suite
 }
 
-func (suite *PasswordValueObjectTestSuite) SetupTest() {}
+func (suite *PasswordTestSuite) SetupTest() {}
 
-func (suite *PasswordValueObjectTestSuite) TestWithInvalidLength() {
+func (suite *PasswordTestSuite) TestWithInvalidLength() {
 	value, err := user.PasswordWithInvalidLength()
 
 	var actual *errors.ErrInvalidValue
@@ -34,6 +34,6 @@ func (suite *PasswordValueObjectTestSuite) TestWithInvalidLength() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitPasswordValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(PasswordValueObjectTestSuite))
+func TestUnitPasswordSuite(t *testing.T) {
+	suite.Run(t, new(PasswordTestSuite))
 }

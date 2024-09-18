@@ -8,15 +8,15 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type VerifyTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*verify.Command]
-	verify     usecase.Verify
+	verify     cases.Verify
 	repository *persistence.UserMock
 }
 

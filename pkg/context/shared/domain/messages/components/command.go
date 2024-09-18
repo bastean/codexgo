@@ -1,4 +1,4 @@
-package valueobjs
+package components
 
 import (
 	"fmt"
@@ -9,27 +9,27 @@ import (
 )
 
 const (
-	EntityMinCharactersLength = "1"
-	EntityMaxCharactersLength = "20"
+	CommandMinCharactersLength = "1"
+	CommandMaxCharactersLength = "20"
 )
 
-type Entity struct {
+type Command struct {
 	Value string `validate:"gte=1,lte=20,alpha"`
 }
 
-func NewEntity(value string) (*Entity, error) {
+func NewCommand(value string) (*Command, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Entity{
+	valueObj := &Command{
 		Value: value,
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.NewInvalidValue(&errors.Bubble{
-			Where: "NewEntity",
-			What:  fmt.Sprintf("Entity must be between %s to %s characters and be alpha only", EntityMinCharactersLength, EntityMaxCharactersLength),
+			Where: "NewCommand",
+			What:  fmt.Sprintf("Command must be between %s to %s characters and be alpha only", CommandMinCharactersLength, CommandMaxCharactersLength),
 			Why: errors.Meta{
-				"Entity": value,
+				"Command": value,
 			},
 		})
 	}

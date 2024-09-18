@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/valueobjs"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
 )
 
 var Type = struct {
@@ -36,24 +36,24 @@ type RoutingKeyComponents struct {
 	Organization, Service, Version, Type, Entity, Event, Command, Status string
 }
 
-func NewRoutingKey(components *RoutingKeyComponents) string {
-	if components.Organization == "" {
-		components.Organization = "codexgo"
+func NewRoutingKey(routing *RoutingKeyComponents) string {
+	if routing.Organization == "" {
+		routing.Organization = "codexgo"
 	}
 
-	organization, errOrganization := valueobjs.NewOrganization(components.Organization)
-	service, errService := valueobjs.NewService(components.Service)
-	version, errVersion := valueobjs.NewVersion(components.Version)
-	types, errType := valueobjs.NewType(components.Type)
-	entity, errEntity := valueobjs.NewEntity(components.Entity)
+	organization, errOrganization := components.NewOrganization(routing.Organization)
+	service, errService := components.NewService(routing.Service)
+	version, errVersion := components.NewVersion(routing.Version)
+	types, errType := components.NewType(routing.Type)
+	entity, errEntity := components.NewEntity(routing.Entity)
 
-	event, errEvent := valueobjs.NewEvent(components.Event)
-	command, errCommand := valueobjs.NewCommand(components.Command)
+	event, errEvent := components.NewEvent(routing.Event)
+	command, errCommand := components.NewCommand(routing.Command)
 
 	var action string
 	var errAction error
 
-	switch components.Type {
+	switch routing.Type {
 	case Type.Event:
 		action = event.Value
 		errAction = errEvent
@@ -62,7 +62,7 @@ func NewRoutingKey(components *RoutingKeyComponents) string {
 		errAction = errCommand
 	}
 
-	status, errStatus := valueobjs.NewStatus(components.Status)
+	status, errStatus := components.NewStatus(routing.Status)
 
 	if err := errors.Join(errOrganization, errService, errVersion, errType, errEntity, errAction, errStatus); err != nil {
 		errors.Panic(err.Error(), "NewRoutingKey")

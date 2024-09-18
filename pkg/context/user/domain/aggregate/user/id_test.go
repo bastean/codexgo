@@ -9,13 +9,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-type IdValueObjectTestSuite struct {
+type IdTestSuite struct {
 	suite.Suite
 }
 
-func (suite *IdValueObjectTestSuite) SetupTest() {}
+func (suite *IdTestSuite) SetupTest() {}
 
-func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
+func (suite *IdTestSuite) TestWithInvalidValue() {
 	value, err := user.IdWithInvalidValue()
 
 	var actual *errors.ErrInvalidValue
@@ -34,6 +34,6 @@ func (suite *IdValueObjectTestSuite) TestWithInvalidValue() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitIdValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(IdValueObjectTestSuite))
+func TestUnitIdSuite(t *testing.T) {
+	suite.Run(t, new(IdTestSuite))
 }

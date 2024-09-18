@@ -9,13 +9,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-type UsernameValueObjectTestSuite struct {
+type UsernameTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UsernameValueObjectTestSuite) SetupTest() {}
+func (suite *UsernameTestSuite) SetupTest() {}
 
-func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
+func (suite *UsernameTestSuite) TestWithInvalidLength() {
 	value, err := user.UsernameWithInvalidLength()
 
 	var actual *errors.ErrInvalidValue
@@ -34,7 +34,7 @@ func (suite *UsernameValueObjectTestSuite) TestWithInvalidLength() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func (suite *UsernameValueObjectTestSuite) TestWithInvalidAlphanumeric() {
+func (suite *UsernameTestSuite) TestWithInvalidAlphanumeric() {
 	value, err := user.UsernameWithInvalidAlphanumeric()
 
 	var actual *errors.ErrInvalidValue
@@ -53,6 +53,6 @@ func (suite *UsernameValueObjectTestSuite) TestWithInvalidAlphanumeric() {
 	suite.EqualError(expected, actual.Error())
 }
 
-func TestUnitUsernameValueObjectSuite(t *testing.T) {
-	suite.Run(t, new(UsernameValueObjectTestSuite))
+func TestUnitUsernameSuite(t *testing.T) {
+	suite.Run(t, new(UsernameTestSuite))
 }

@@ -9,14 +9,14 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/usecase"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type CreateTestSuite struct {
 	suite.Suite
 	sut        handlers.Command[*create.Command]
-	create     usecase.Create
+	create     cases.Create
 	repository *persistence.UserMock
 	broker     *communications.BrokerMock
 }

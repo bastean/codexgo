@@ -1,4 +1,4 @@
-package valueobjs
+package components
 
 import (
 	"fmt"
