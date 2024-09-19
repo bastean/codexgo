@@ -1,5 +1,5 @@
 package rabbitmq
 
-var (
+const (
 	BindingEventCreatedSucceeded = "#.event.#.created.succeeded"
 )

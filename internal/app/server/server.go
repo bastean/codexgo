@@ -10,7 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/router"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
 var Server = &struct {

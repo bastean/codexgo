@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
 const (

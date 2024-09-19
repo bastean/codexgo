@@ -9,6 +9,6 @@ import (
 
 func Home(c *gin.Context) {
 	if err := home.Page().Render(c.Request.Context(), c.Writer); err != nil {
-		errs.AbortErr(c, errs.Render(err, "Home"))
+		errs.AbortByErr(c, errs.Render(err, "Home"))
 	}
 }

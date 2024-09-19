@@ -15,7 +15,7 @@ func Verify(c *gin.Context) {
 	id := c.Param(key.Id)
 
 	if id == "" {
-		errs.AbortErrWithRedirect(c, errs.MissingKey(key.Id, "Verify"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.Id, "Verify"), "/")
 		return
 	}
 
@@ -26,7 +26,7 @@ func Verify(c *gin.Context) {
 	err := user.Verify.Handle(command)
 
 	if err != nil {
-		errs.AbortErr(c, errors.BubbleUp(err, "Verify"))
+		errs.AbortByErr(c, errors.BubbleUp(err, "Verify"))
 		return
 	}
 

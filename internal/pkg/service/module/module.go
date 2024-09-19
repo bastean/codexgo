@@ -3,9 +3,9 @@ package module
 import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/persistence"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
 var Module = &struct {
@@ -14,7 +14,7 @@ var Module = &struct {
 	User: log.Module("User"),
 }
 
-func Up() error {
+func Start() error {
 	log.Starting(Module.User)
 
 	collection, err := user.OpenCollection(
@@ -25,7 +25,7 @@ func Up() error {
 
 	if err != nil {
 		log.CannotBeStarted(Module.User)
-		return errors.BubbleUp(err, "Up")
+		return errors.BubbleUp(err, "Start")
 	}
 
 	user.Start(

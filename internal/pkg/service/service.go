@@ -32,7 +32,7 @@ func Up() error {
 		return errors.BubbleUp(err, "Up")
 	}
 
-	if err = module.Up(); err != nil {
+	if err = module.Start(); err != nil {
 		return errors.BubbleUp(err, "Up")
 	}
 

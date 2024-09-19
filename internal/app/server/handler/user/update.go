@@ -17,7 +17,7 @@ func Update(c *gin.Context) {
 	id, exists := c.Get(key.UserId)
 
 	if !exists {
-		errs.AbortErr(c, errs.MissingKey(key.UserId, "Update"))
+		errs.AbortByErr(c, errs.MissingKey(key.UserId, "Update"))
 		return
 	}
 
@@ -26,7 +26,7 @@ func Update(c *gin.Context) {
 	err := c.BindJSON(command)
 
 	if err != nil {
-		errs.AbortErr(c, errs.BindingJSON(err, "Update"))
+		errs.AbortByErr(c, errs.BindingJSON(err, "Update"))
 		return
 	}
 
@@ -35,7 +35,7 @@ func Update(c *gin.Context) {
 	err = user.Update.Handle(command)
 
 	if err != nil {
-		errs.AbortErr(c, errors.BubbleUp(err, "Update"))
+		errs.AbortByErr(c, errors.BubbleUp(err, "Update"))
 		return
 	}
 

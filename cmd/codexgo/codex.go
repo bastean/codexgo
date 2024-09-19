@@ -10,7 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/cli"
 	"github.com/bastean/codexgo/v4/internal/app/server"
 	"github.com/bastean/codexgo/v4/internal/pkg/service"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
 var (

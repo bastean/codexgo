@@ -28,14 +28,14 @@ func Authentication(c *gin.Context) {
 	claims, err := jwt.Validate(signature)
 
 	if err != nil {
-		errs.AbortErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
+		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
 		return
 	}
 
 	value, exists := claims[key.UserId]
 
 	if !exists {
-		errs.AbortErrWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
 		return
 	}
 

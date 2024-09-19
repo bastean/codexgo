@@ -17,14 +17,14 @@ func Create(c *gin.Context) {
 	err := c.BindJSON(command)
 
 	if err != nil {
-		errs.AbortErr(c, errs.BindingJSON(err, "Create"))
+		errs.AbortByErr(c, errs.BindingJSON(err, "Create"))
 		return
 	}
 
 	err = user.Create.Handle(command)
 
 	if err != nil {
-		errs.AbortErr(c, errors.BubbleUp(err, "Create"))
+		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))
 		return
 	}
 

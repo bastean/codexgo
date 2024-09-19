@@ -8,13 +8,13 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
 )
 
-func AbortErr(c *gin.Context, err error) {
+func AbortByErr(c *gin.Context, err error) {
 	c.Error(err)
 	c.Abort()
 }
 
-func AbortErrWithRedirect(c *gin.Context, err error, route string) {
-	AbortErr(c, err)
+func AbortByErrWithRedirect(c *gin.Context, err error, route string) {
+	AbortByErr(c, err)
 	c.Set(key.Redirect, route)
 }
 

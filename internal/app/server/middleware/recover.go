@@ -7,7 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/logger/log"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
 func Recover() gin.RecoveryFunc {

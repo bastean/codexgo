@@ -21,14 +21,14 @@ func Login(c *gin.Context) {
 	err := c.BindJSON(query)
 
 	if err != nil {
-		errs.AbortErr(c, errs.BindingJSON(err, "Login"))
+		errs.AbortByErr(c, errs.BindingJSON(err, "Login"))
 		return
 	}
 
 	found, err := user.Login.Handle(query)
 
 	if err != nil {
-		errs.AbortErr(c, errors.BubbleUp(err, "Login"))
+		errs.AbortByErr(c, errors.BubbleUp(err, "Login"))
 		return
 	}
 
@@ -38,7 +38,7 @@ func Login(c *gin.Context) {
 	})
 
 	if err != nil {
-		errs.AbortErr(c, errors.BubbleUp(err, "Login"))
+		errs.AbortByErr(c, errors.BubbleUp(err, "Login"))
 		return
 	}
 
@@ -49,7 +49,7 @@ func Login(c *gin.Context) {
 	err = session.Save()
 
 	if err != nil {
-		errs.AbortErr(c, errs.SessionSave(err, "Login"))
+		errs.AbortByErr(c, errs.SessionSave(err, "Login"))
 		return
 	}
 
