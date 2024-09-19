@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.7.2](https://github.com/bastean/codexgo/compare/v4.7.1...v4.7.2) (2024-09-19)
+
+### Chores
+
+- add godo ([e1c9297](https://github.com/bastean/codexgo/commit/e1c9297ce92b6ea3c444bc73ba9df08b4758ac6d))
+- add goimports ([8fec6d8](https://github.com/bastean/codexgo/commit/8fec6d861295b480c47b26158f2e903cf99e0fe4))
+- **deps:** upgrade ([1c04925](https://github.com/bastean/codexgo/commit/1c049251373b92c3fa867e8d17f14db25bbe9498))
+- **makefile:** add rules for debugging ([292d15b](https://github.com/bastean/codexgo/commit/292d15b17b1b75b30c937fef515352150c04418f))
+
+### Documentation
+
+- **readme:** add missing links to external resources ([2ff7253](https://github.com/bastean/codexgo/commit/2ff72533a0ca31b634aa3f19505bfd3bb23c82a9))
+
+### Refactors
+
+- **context:** rename multi-word packages to a single word ([00528ba](https://github.com/bastean/codexgo/commit/00528ba1480e3b6eb80af3edf0c56e24d6f392dc))
+- **presentation:** rename server abort functions ([a2be85e](https://github.com/bastean/codexgo/commit/a2be85e355c09769532126fa5b9702c38877cc62))
+
 ## [4.7.1](https://github.com/bastean/codexgo/compare/v4.7.0...v4.7.1) (2024-09-07)
 
 ### Documentation
