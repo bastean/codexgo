@@ -128,20 +128,24 @@ make demo
     make commit
     ```
 
-### Linting/Formatting Tools
-
-- Go: **staticcheck** and **gofmt**.
-- templ: **templ fmt**.
-- Gherkin: **Cucumber extension**.
-- Others: **Prettier cli/extension**.
-
 ### Scanners
 
 - [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog): Secrets.
 - [Trivy](https://github.com/aquasecurity/trivy): Secrets, Vulnerabilities and Misconfigurations.
 - [OSV-Scanner](https://github.com/google/osv-scanner): Vulnerabilities.
 
-### Testing Packages
+### Linters/Formatters
+
+- `*.go`: [gofmt](https://pkg.go.dev/cmd/gofmt), [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) and [staticcheck](https://staticcheck.dev/docs/getting-started).
+- `*.templ`: [templ fmt](https://templ.guide/commands-and-tools/cli#formatting-templ-files).
+- `*.feature` (Gherkin): [Cucumber extension](https://cucumber.io/docs/tools/general).
+- `*.*`: [Prettier cli/extension](https://prettier.io/docs/en/install).
+
+### Debuggers
+
+- `*.go`: [deadcode](https://pkg.go.dev/golang.org/x/tools/cmd/deadcode).
+
+### Tests
 
 - Random data generator: [Gofakeit](https://github.com/brianvoe/gofakeit).
 - Unit/Integration: [Testify](https://github.com/stretchr/testify).
@@ -199,9 +203,10 @@ make demo
 - Compose
   - Switched by ENVs.
 
-### Message Broker
+### Broker
 
-- Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
+- Message (Event/Command):
+  - Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
 
 ### Security
 
