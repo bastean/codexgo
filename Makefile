@@ -39,6 +39,10 @@ docker-rm-img = docker rmi -f
 compose = cd deployments && docker compose
 compose-env = ${compose} --env-file
 
+#*______cURL______
+
+curl = curl -sSfL
+
 #*------------RULES------------
 
 #*______Upgrade______
@@ -70,15 +74,18 @@ upgrade:
 
 install-scanners:
 	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
-	curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
-	curl -sSfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
+	${curl} https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
+	${curl} https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
 
 install-linters:
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install honnef.co/go/tools/cmd/staticcheck@latest
 	npm i -g prettier
 
-install-tools-dev: install-scanners install-linters
+install-debuggers:
+	go install golang.org/x/tools/cmd/deadcode@latest
+
+install-tools-dev: install-scanners install-linters install-debuggers
 	go install github.com/bastean/godo/cmd/godo@latest
 	go install github.com/air-verse/air@latest
 	go install github.com/a-h/templ/cmd/templ@latest
@@ -121,20 +128,6 @@ genesis:
 	git add .
 	$(MAKE) init
 
-#*______Lint/Format______
-
-lint:
-	go mod tidy
-	goimports -l -w -local ${module} .
-	gofmt -l -s -w .
-	${npx} prettier --ignore-unknown --write .
-	templ fmt .
-	$(MAKE) generate-required
-
-lint-check:
-	staticcheck ./...
-	${npx} prettier --check .
-
 #*______Scan______
 
 scan-leaks-local:
@@ -159,6 +152,27 @@ scan-vulns: scan-vulns-local
 scan-misconfigs: scan-misconfigs-local
 
 scans: scan-leaks scan-vulns scan-misconfigs
+
+#*______Lint/Format______
+
+lint:
+	go mod tidy
+	goimports -l -w -local ${module} .
+	gofmt -l -s -w .
+	${npx} prettier --ignore-unknown --write .
+	templ fmt .
+	$(MAKE) generate-required
+
+lint-check:
+	staticcheck ./...
+	${npx} prettier --check .
+
+#*______Debug______
+
+debug-unreachable:
+	deadcode -test ./...
+
+debugs: debug-unreachable
 
 #*______Test______
 
