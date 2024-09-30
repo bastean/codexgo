@@ -20,7 +20,7 @@ func (err *Bubble) Error() string {
 		why, err := json.Marshal(err.Why)
 
 		if err != nil {
-			Panic(fmt.Sprintf("cannot json encoding \"why\" from error bubble: %s: [%s]", message, err.Error()), "Error")
+			why = []byte(fmt.Sprintf("{\"Error\":\"Cannot JSON encoding \"Why\" from error Bubble: [%s]\"}", err))
 		}
 
 		message = fmt.Sprintf("%s: %s", message, why)
@@ -35,11 +35,11 @@ func (err *Bubble) Error() string {
 
 func NewBubble(where, what string, why Meta, who error) *Bubble {
 	if where == "" {
-		Panic("cannot create a error bubble if \"where\" is not defined", "NewBubble")
+		Panic("Cannot create a error Bubble if \"Where\" is not defined", "NewBubble")
 	}
 
 	if what == "" {
-		Panic("cannot create a error bubble if \"what\" is not defined", "NewBubble")
+		Panic("Cannot create a error Bubble if \"What\" is not defined", "NewBubble")
 	}
 
 	return &Bubble{
