@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.7.3](https://github.com/bastean/codexgo/compare/v4.7.2...v4.7.3) (2024-09-30)
+
+### Chores
+
+- **deps:** upgrade ([0082744](https://github.com/bastean/codexgo/commit/0082744e1ffe03b763e79fb4aafffe6687109119))
+- **makefile:** reorder rules ([3389449](https://github.com/bastean/codexgo/commit/3389449922b0372d73980ac356011f6d48db5a46))
+
+### Refactors
+
+- **domain:** remove panic from bubble error method ([0693e21](https://github.com/bastean/codexgo/commit/0693e2107c1cd2125bffa650b74614ecad7650a4))
+- rename util directory to service ([c47803b](https://github.com/bastean/codexgo/commit/c47803bc2a11576c5321c349d229fa73272393a7))
+
 ## [4.7.2](https://github.com/bastean/codexgo/compare/v4.7.1...v4.7.2) (2024-09-19)
 
 ### Chores
