@@ -148,9 +148,8 @@ func SyncEnv(envModelVars []string, envFile string) {
 		envFileVarsCleaned = append(envFileVarsCleaned, envFileVar)
 	}
 
-	envFileUpdatedVars := ""
-
-	updatedVar := false
+	var envFileUpdatedVars string
+	var updatedVar bool
 
 	for i, envModelVar := range envModelVars {
 		updatedVar = false

@@ -16,7 +16,7 @@ func ActionWithValidValue() *Action {
 }
 
 func ActionWithInvalidLength() (string, error) {
-	value := ""
+	var value string
 
 	_, err := NewAction(value)
 

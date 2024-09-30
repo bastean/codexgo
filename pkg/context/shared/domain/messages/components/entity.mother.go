@@ -16,7 +16,7 @@ func EntityWithValidValue() *Entity {
 }
 
 func EntityWithInvalidLength() (string, error) {
-	value := ""
+	var value string
 
 	_, err := NewEntity(value)
 

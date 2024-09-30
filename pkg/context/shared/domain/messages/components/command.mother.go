@@ -16,7 +16,7 @@ func CommandWithValidValue() *Command {
 }
 
 func CommandWithInvalidLength() (string, error) {
-	value := ""
+	var value string
 
 	_, err := NewCommand(value)
 

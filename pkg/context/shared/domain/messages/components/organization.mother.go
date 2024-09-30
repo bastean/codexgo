@@ -16,7 +16,7 @@ func OrganizationWithValidValue() *Organization {
 }
 
 func OrganizationWithInvalidLength() (string, error) {
-	value := ""
+	var value string
 
 	_, err := NewOrganization(value)
 

@@ -1,5 +1,5 @@
 package transfers
 
 type Transfer interface {
-	Submit(any) error
+	Submit(data any) error
 }

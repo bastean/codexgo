@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
 )
 
 func AbortByErr(c *gin.Context, err error) {

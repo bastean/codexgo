@@ -28,8 +28,7 @@ func Logo() {
 	figureCodex := figure.NewFigure("codex", "speed", true).Slicify()
 	figureGo := figure.NewFigure("GO", "speed", true).Slicify()
 
-	width := 0
-	fixedWidth := 0
+	var width, fixedWidth int
 
 	for _, line := range figureCodex {
 		width = len(line)

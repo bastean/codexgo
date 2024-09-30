@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )

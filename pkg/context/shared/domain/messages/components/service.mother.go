@@ -16,7 +16,7 @@ func ServiceWithValidValue() *Service {
 }
 
 func ServiceWithInvalidLength() (string, error) {
-	value := ""
+	var value string
 
 	_, err := NewService(value)
 

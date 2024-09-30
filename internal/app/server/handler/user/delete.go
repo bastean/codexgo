@@ -6,10 +6,10 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 
-	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/format"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/key"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/reply"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )

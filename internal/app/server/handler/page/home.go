@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/component/page/home"
-	"github.com/bastean/codexgo/v4/internal/app/server/util/errs"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 )
 
 func Home(c *gin.Context) {

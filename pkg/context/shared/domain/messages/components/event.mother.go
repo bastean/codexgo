@@ -16,7 +16,7 @@ func EventWithValidValue() *Event {
 }
 
 func EventWithInvalidLength() (string, error) {
-	value := ""
+	var value string
 
 	_, err := NewEvent(value)
 
