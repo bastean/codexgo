@@ -86,7 +86,7 @@ install-debuggers:
 	go install golang.org/x/tools/cmd/deadcode@latest
 
 install-tools-dev: install-scanners install-linters install-debuggers
-	go install github.com/bastean/godo/cmd/godo@latest
+	go install github.com/bastean/godo/cmd/godo@v0.1.0
 	go install github.com/air-verse/air@latest
 	go install github.com/a-h/templ/cmd/templ@latest
 
@@ -128,6 +128,14 @@ genesis:
 	git add .
 	$(MAKE) init
 
+#*______ENV______
+
+syncenv-reset:
+	${git-reset-hard}
+
+syncenv:
+	cd deployments && go run ../scripts/syncenv
+
 #*______Scan______
 
 scan-leaks-local:
@@ -159,7 +167,7 @@ lint:
 	go mod tidy
 	goimports -l -w -local ${module} .
 	gofmt -l -s -w .
-	${npx} prettier --ignore-unknown --write .
+	${npx} prettier --no-config --ignore-unknown --write .
 	templ fmt .
 	$(MAKE) generate-required
 
@@ -169,10 +177,10 @@ lint-check:
 
 #*______Debug______
 
-debug-unreachable:
+debug-dead:
 	deadcode -test ./...
 
-debugs: debug-unreachable
+debugs: debug-dead
 
 #*______Test______
 
@@ -207,6 +215,12 @@ tests-sync:
 tests: test-clean
 	TEST_SYNC="$(MAKE) tests-sync" $(MAKE) test-sync
 
+#*______Build______
+
+build: lint
+	rm -rf build/
+	go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
+
 #*______Release______
 
 release:
@@ -229,20 +243,6 @@ release-dry-version:
 
 release-dry-changelog:
 	${release-it-dry} --changelog
-
-#*______Build______
-
-build: lint
-	rm -rf build/
-	go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
-
-#*______ENV______
-
-syncenv-reset:
-	${git-reset-hard}
-
-syncenv:
-	cd deployments && go run ../scripts/syncenv
 
 #*______Git______
 

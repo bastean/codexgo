@@ -36,7 +36,7 @@
   "lint-staged": {
     "**/*": [
       "trufflehog filesystem --no-update",
-      "prettier --ignore-unknown --write"
+      "prettier --no-config --ignore-unknown --write"
     ],
     "**/*.go": [
       "gofmt -l -s -w"
