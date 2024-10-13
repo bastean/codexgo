@@ -1,3 +1,19 @@
 {
-  "recommendations": ["ms-vscode-remote.remote-containers"]
+  "recommendations": [
+    "ms-vscode-remote.remote-containers",
+
+    "a-h.templ",
+    "aaron-bond.better-comments",
+    "CucumberOpen.cucumber-official",
+    "esbenp.prettier-vscode",
+    "github.vscode-github-actions",
+    "golang.go",
+    "Gruntfuggly.todo-tree",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.makefile-tools",
+    "redhat.vscode-yaml",
+    "streetsidesoftware.code-spell-checker",
+    "tamasfe.even-better-toml",
+    "thejltres.fomantic-ui-snippets"
+  ]
 }

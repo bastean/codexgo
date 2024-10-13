@@ -1,0 +1,24 @@
+{
+  "[cucumber]": {
+    "editor.defaultFormatter": "CucumberOpen.cucumber-official"
+  },
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  },
+  "[templ]": {
+    "editor.defaultFormatter": "a-h.templ"
+  },
+  "cSpell.language": "en,lorem",
+  "cucumber.features": ["**/internal/app/**/*.feature"],
+  "cucumber.glue": ["**/internal/app/**/*_test.go"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "emmet.includeLanguages": {
+    "templ": "html"
+  },
+  "go.toolsManagement.autoUpdate": true,
+  "gopls": {
+    "ui.semanticTokens": true
+  }
+}
