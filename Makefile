@@ -86,7 +86,7 @@ install-debuggers:
 	go install golang.org/x/tools/cmd/deadcode@latest
 
 install-tools-dev: install-scanners install-linters install-debuggers
-	go install github.com/bastean/godo/cmd/godo@v0.1.0
+	go install github.com/bastean/godo/cmd/godo@v0.2.0
 	go install github.com/air-verse/air@latest
 	go install github.com/a-h/templ/cmd/templ@latest
 
