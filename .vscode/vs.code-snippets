@@ -1,0 +1,181 @@
+{
+  //* Test
+
+  "Test Unit/Integration": {
+    "prefix": ["go-test_unit/integration"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
+      "\nimport (\n\t\"testing\"\n\n\t\"github.com/stretchr/testify/suite\"\n\n\t$1\n)",
+      "\ntype ${2:Name}TestSuite struct {\n\t*suite.Suite\n\t${3:$LINE_COMMENT sut}\n}",
+      "\nfunc (suite *$2TestSuite) SetupTest() {\n\t$4\n}",
+      "\nfunc (suite *$2TestSuite) Test$2() {\n\t${5:$LINE_COMMENT expected | actual}\n}",
+      "\nfunc (suite *$2TestSuite) Test$2Err$6() {\n\t${7:$LINE_COMMENT expected | actual}\n}",
+      "\nfunc (suite *$2TestSuite) TestWith${8:Invalid}() {\n\t${9:$LINE_COMMENT expected | actual}\n}",
+      "\nfunc Test${10|Unit,Integration|}$2Suite(t *testing.T) {\n\tsuite.Run(t, new($2TestSuite))\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  "Test Acceptance": {
+    "prefix": ["go-test_acceptance"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
+      "\nimport (\n\t\"testing\"\n\n\ttestify \"github.com/stretchr/testify/assert\"\n\n\t$1\n)",
+      "\nvar (\n\terr              error\n\tassert           *testify.Assertions\n\texpected, actual string\n)",
+      "\nfunc SetupAssert(t *testing.T) {\n\tassert = testify.New(t)\n}",
+      "\nfunc TestAcceptance${2:Name}Features(t *testing.T) {\n\tSetupAssert(t)\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  "Mocks": {
+    "prefix": ["go-test_mock"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
+      "\nimport (\n\t\"github.com/stretchr/testify/mock\"\n\n\t$1\n)",
+      "\ntype ${2:Name}Mock struct {\n\t*mock.Mock\n}",
+      "\nfunc (${3:name} *$2Mock) ${4:Example}(${5:param int}) ${6:(string, error)} {\n\t${7:args := $3.Called(param)\n\treturn args.Get(0).(string), nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  //* Error
+
+  "Bubble": {
+    "prefix": ["go-error_bubble"],
+    "body": [
+      "errors.New$1(&errors.Bubble{\n\tWhere: \"$2\",\n\tWhat:  \"$3\",\n\tWhy: errors.Meta{\n\t\t$4\n\t},\n\tWho: $5,\n})",
+    ],
+    "scope": "go",
+  },
+
+  "BubbleUp": {
+    "prefix": ["go-error_bubble_up"],
+    "body": ["if err != nil {\n\treturn errors.BubbleUp(err, \"$1\")\n}"],
+    "scope": "go",
+  },
+
+  //* Aggregate
+
+  "Aggregate": {
+    "prefix": ["go-aggregate"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype ${2:Name} struct {\n\t${3:$LINE_COMMENT *aggregates.Root}\n}",
+      "\ntype Primitive struct {\n\t$4\n}",
+      "\nfunc create(primitive *Primitive) (*$2, error) {\n\t${5:return nil, nil}\n}",
+      "\nfunc (${6:name} *$2) ToPrimitive() *Primitive {\n\t${7:return nil}\n}",
+      "\nfunc FromPrimitive(primitive *Primitive) (*$2, error) {\n\t${8:return nil, nil}\n}",
+      "\nfunc New(primitive *Primitive) (*$2, error) {\n\t${9:return nil, nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  //* Value Object
+
+  "Value Object": {
+    "prefix": ["go-valueobject"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype ${2:Name} struct {\n\tValue ${3:any} `validate:\"$4\"`\n}",
+      "\nfunc New$2(value $3) (*$2, error) {\n\t${5:return nil, nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  "Value Object Mother": {
+    "prefix": ["go-valueobject_mother"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\nfunc ${2:Name}WithValidValue() *$2 {\n\t${3:return nil}\n}",
+      "\nfunc ${2:Name}WithInvalidValue() ${4:error} {\n\t${5:return nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  //* Use Case
+
+  "Use Case": {
+    "prefix": ["go-usecase"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype ${2:Name} struct {\n\t$3\n}",
+      "\nfunc (use *$2) Run($4) ${5:error} {\n\t${6:return nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  //* CQRS
+
+  "Command/Query/Response": {
+    "prefix": ["go-cqrs_command/query/response"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype ${2|Command,Query,Response|} struct {\n\t$3\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  "Command/Query Mother": {
+    "prefix": ["go-cqrs_command/query_mother"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\nfunc Random${2|Command,Query|}() *$2{\n\t${3:return nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  "Command Handler": {
+    "prefix": ["go-cqrs_command_handler"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype Handler struct {\n\t$2\n}",
+      "\nfunc (handler *Handler) Handle(command *Command) error {\n\t${3:return nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  "Query Handler": {
+    "prefix": ["go-cqrs_query_handler"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype Handler struct {\n\t$2\n}",
+      "\nfunc (handler *Handler) Handle(query *Query) (*Response, error) {\n\t${3:return nil, nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  //* EDA
+
+  "Consumer": {
+    "prefix": ["go-eda_consumer"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "\nimport (\n\t$1\n)",
+      "\ntype Consumer struct {\n\t$2\n\tQueues []*messages.Queue\n}",
+      "\nfunc (consumer *Consumer) SubscribedTo() []*messages.Queue {\n\treturn consumer.Queues\n}",
+      "\nfunc (consumer *Consumer) On(message *messages.Message) error {\n\t${3:return nil}\n}\n",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+}
