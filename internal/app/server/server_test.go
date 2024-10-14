@@ -40,6 +40,12 @@ var (
 	expected, actual string
 )
 
+var routes = map[string]string{
+	"Home":      "/",
+	"Dashboard": "/dashboard",
+	"Undefined": "/undefined",
+}
+
 func SetupAssert(t *testing.T) {
 	assert = testify.New(t)
 }
@@ -79,21 +85,42 @@ func SetupScenario(sc *godog.ScenarioContext) {
 		return ctx, nil
 	})
 
-	sc.Given(`^I am on (.+) page$`, func(route string) {
-		_, err = page.Goto(route)
+	sc.Given(`^I am on the (.+) page$`, func(route string) {
+		_, err = page.Goto(routes[route])
 		assert.NoError(err)
 	})
 
-	sc.Then(`^redirect me to (.+) page$`, func(actual string) {
-		time.Sleep(sleep)
+	sc.Given(`^I fill the (.+) with (.+)$`, func(placeholder, value string) {
+		element = page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact}).Last()
+		assert.NoError(element.Fill(value))
+	})
 
-		if actual == "/" {
-			actual = ""
-		}
+	sc.Given(`^I check the (.+)$`, func(name string) {
+		element = page.GetByRole("checkbox")
+		assert.NoError(element.Check())
+	})
+
+	sc.Given(`^I click on the (.+) button$`, func(name string) {
+		element = page.GetByText(name, playwright.PageGetByTextOptions{Exact: &exact}).First()
+		assert.NoError(element.Click())
+	})
+
+	sc.Given(`^I open the (.+) menu$`, func(name string) {
+		element = page.GetByRole("heading").First()
+		assert.NoError(element.Click())
+	})
+
+	sc.When(`^I click the (.+) button$`, func(name string) {
+		element = page.GetByRole("button", playwright.PageGetByRoleOptions{Name: name})
+		assert.NoError(element.Click())
+	})
+
+	sc.Then(`^I get redirected to the (.+) page$`, func(actual string) {
+		time.Sleep(sleep)
 
 		expected = page.URL()
 
-		assert.True(strings.Contains(expected, actual))
+		assert.True(strings.Contains(expected, routes[actual]))
 	})
 
 	sc.Then(`^the page title should be (.+)$`, func(expected string) {
@@ -102,31 +129,6 @@ func SetupScenario(sc *godog.ScenarioContext) {
 		assert.NoError(err)
 
 		assert.Equal(expected, actual)
-	})
-
-	sc.Then(`^I click on the (.+) button$`, func(name string) {
-		element = page.GetByText(name, playwright.PageGetByTextOptions{Exact: &exact}).First()
-		assert.NoError(element.Click())
-	})
-
-	sc.Then(`^I open the (.+) menu$`, func(name string) {
-		element = page.GetByRole("heading").First()
-		assert.NoError(element.Click())
-	})
-
-	sc.Then(`^I fill the (.+) with (.+)$`, func(placeholder, value string) {
-		element = page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact}).Last()
-		assert.NoError(element.Fill(value))
-	})
-
-	sc.Then(`^I click the (.+) button$`, func(name string) {
-		element = page.GetByRole("button", playwright.PageGetByRoleOptions{Name: name})
-		assert.NoError(element.Click())
-	})
-
-	sc.Then(`^I check the (.+)$`, func(name string) {
-		element = page.GetByRole("checkbox")
-		assert.NoError(element.Check())
 	})
 
 	sc.Then(`^I see (.+) notification$`, func(expected string) {
