@@ -18,11 +18,11 @@ func (suite *VersionTestSuite) SetupTest() {}
 func (suite *VersionTestSuite) TestWithInvalidValue() {
 	value, err := components.VersionWithInvalidValue()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewVersion",
 		What:  "Version must be numeric only",

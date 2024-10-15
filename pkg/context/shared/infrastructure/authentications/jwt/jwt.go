@@ -20,7 +20,7 @@ func (auth *JWT) Generate(payload map[string]any) (string, error) {
 	signature, err := token.SignedString(auth.secretKey)
 
 	if err != nil {
-		return "", errors.NewInternal(&errors.Bubble{
+		return "", errors.New[errors.Internal](&errors.Bubble{
 			Where: "Generate",
 			What:  "Failure to sign a JWT",
 			Who:   err,
@@ -39,7 +39,7 @@ func (auth *JWT) Validate(signature string) (jwt.MapClaims, error) {
 		return claims, nil
 	}
 
-	return nil, errors.NewFailure(&errors.Bubble{
+	return nil, errors.New[errors.Failure](&errors.Bubble{
 		Where: "Validate",
 		What:  "Invalid JWT signature",
 		Why: errors.Meta{

@@ -21,11 +21,11 @@ func ErrorHandler() gin.HandlerFunc {
 		c.Next()
 
 		var (
-			errInvalidValue *errors.ErrInvalidValue
-			errAlreadyExist *errors.ErrAlreadyExist
-			errNotExist     *errors.ErrNotExist
-			errFailure      *errors.ErrFailure
-			errInternal     *errors.ErrInternal
+			errInvalidValue *errors.InvalidValue
+			errAlreadyExist *errors.AlreadyExist
+			errNotExist     *errors.NotExist
+			errFailure      *errors.Failure
+			errInternal     *errors.Internal
 		)
 
 		if len(c.Errors) == 0 {
@@ -60,7 +60,7 @@ func ErrorHandler() gin.HandlerFunc {
 			route, ok := route.(string)
 
 			if !ok {
-				log.Error(errors.NewInternal(&errors.Bubble{
+				log.Error(errors.New[errors.Internal](&errors.Bubble{
 					Where: "ErrorHandler",
 					What:  "Invalid redirection Route",
 					Why: errors.Meta{

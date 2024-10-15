@@ -7,7 +7,7 @@ import (
 )
 
 func MissingKey(what, where string) error {
-	return errors.NewInternal(&errors.Bubble{
+	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,
 		What:  fmt.Sprintf("Failure to obtain the value of the key [%s]", what),
 	})

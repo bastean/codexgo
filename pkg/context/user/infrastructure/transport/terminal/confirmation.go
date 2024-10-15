@@ -17,7 +17,7 @@ func (client *Confirmation) Submit(data any) error {
 	attributes, ok := data.(*user.CreatedSucceededAttributes)
 
 	if !ok {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Submit",
 			What:  "Failure in type assertion",
 			Why: errors.Meta{

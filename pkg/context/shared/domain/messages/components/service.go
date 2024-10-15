@@ -25,7 +25,7 @@ func NewService(value string) (*Service, error) {
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
-		return nil, errors.NewInvalidValue(&errors.Bubble{
+		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewService",
 			What:  fmt.Sprintf("Service must be between %s to %s characters and be alphanumeric only", ServiceMinCharactersLength, ServiceMaxCharactersLength),
 			Why: errors.Meta{

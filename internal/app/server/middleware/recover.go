@@ -15,7 +15,7 @@ func Recover() gin.RecoveryFunc {
 		failure, ok := err.(error)
 
 		if !ok {
-			failure = errors.NewInternal(&errors.Bubble{
+			failure = errors.New[errors.Internal](&errors.Bubble{
 				Where: "Recover",
 				What:  "Unknown Error",
 				Why: errors.Meta{

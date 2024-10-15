@@ -25,7 +25,7 @@ func NewStatus(value string) (*Status, error) {
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
-		return nil, errors.NewInvalidValue(&errors.Bubble{
+		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewStatus",
 			What:  fmt.Sprintf("Status must be only one of these values: %s", strings.Join(StatusOneOf, ", ")),
 			Why: errors.Meta{

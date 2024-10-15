@@ -25,7 +25,7 @@ func NewAction(value string) (*Action, error) {
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
-		return nil, errors.NewInvalidValue(&errors.Bubble{
+		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewAction",
 			What:  fmt.Sprintf("Action must be between %s to %s characters", ActionMinCharactersLength, ActionMaxCharactersLength),
 			Why: errors.Meta{

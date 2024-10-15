@@ -28,7 +28,7 @@ func NewCreatedSucceeded(event *CreatedSucceeded) (*messages.Message, error) {
 	attributes, err := json.Marshal(event.Attributes)
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "NewCreatedSucceeded",
 			What:  "Failure to create event message attributes",
 			Why: errors.Meta{

@@ -22,7 +22,7 @@ func NewPassword(value string) (*Password, error) {
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
-		return nil, errors.NewInvalidValue(&errors.Bubble{
+		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewPassword",
 			What:  fmt.Sprintf("Password must be between %s to %s characters", PasswordMinCharactersLength, PasswordMaxCharactersLength),
 			Why: errors.Meta{

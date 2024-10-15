@@ -85,7 +85,7 @@ func Verify() error {
 	}
 
 	if len(errs) > 0 {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Verify",
 			What:  "Invalid ENV",
 			Why:   errs,

@@ -18,11 +18,11 @@ func (suite *CommandTestSuite) SetupTest() {}
 func (suite *CommandTestSuite) TestWithInvalidLength() {
 	value, err := components.CommandWithInvalidLength()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCommand",
 		What:  "Command must be between 1 to 20 characters and be alpha only",
@@ -37,11 +37,11 @@ func (suite *CommandTestSuite) TestWithInvalidLength() {
 func (suite *CommandTestSuite) TestWithInvalidAlpha() {
 	value, err := components.CommandWithInvalidAlpha()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewCommand",
 		What:  "Command must be between 1 to 20 characters and be alpha only",

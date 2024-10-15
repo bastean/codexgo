@@ -36,7 +36,7 @@ func Up() error {
 	flag.Parse()
 
 	if err := godotenv.Load(env); err != nil && env != "" {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Up",
 			What:  "Failure to load ENV file",
 			Who:   err,

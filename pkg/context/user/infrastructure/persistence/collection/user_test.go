@@ -75,11 +75,11 @@ func (suite *UserTestSuite) TestCreateErrDuplicateKey() {
 
 	suite.hashing.AssertExpectations(suite.T())
 
-	var actual *errors.ErrAlreadyExist
+	var actual *errors.AlreadyExist
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrAlreadyExist{Bubble: &errors.Bubble{
+	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDuplicateKeyError",
 		What:  "Id already registered",
@@ -187,11 +187,11 @@ func (suite *UserTestSuite) TestSearchErrDocumentNotFound() {
 
 	_, err := suite.sut.Search(criteria)
 
-	var actual *errors.ErrNotExist
+	var actual *errors.NotExist
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrNotExist{Bubble: &errors.Bubble{
+	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDocumentNotFound",
 		What:  fmt.Sprintf("%s not found", random.Id.Value),

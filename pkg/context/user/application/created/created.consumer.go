@@ -26,7 +26,7 @@ func (consumer *Consumer) On(message *messages.Message) error {
 	err := json.Unmarshal(message.Attributes, event.Attributes)
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "On",
 			What:  "Failure to obtain message attributes",
 			Why: errors.Meta{

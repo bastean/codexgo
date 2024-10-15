@@ -37,7 +37,7 @@ func (mongoDB *User) Create(user *user.User) error {
 	}
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Create",
 			What:  "Failure to create a User",
 			Why: errors.Meta{
@@ -60,7 +60,7 @@ func (mongoDB *User) Verify(id *user.Id) error {
 	})
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Verify",
 			What:  "Failure to verify a User",
 			Why: errors.Meta{
@@ -89,7 +89,7 @@ func (mongoDB *User) Update(user *user.User) error {
 	_, err = mongoDB.Collection.ReplaceOne(context.Background(), filter, updated)
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Update",
 			What:  "Failure to update a User",
 			Why: errors.Meta{
@@ -108,7 +108,7 @@ func (mongoDB *User) Delete(id *user.Id) error {
 	_, err := mongoDB.Collection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Delete",
 			What:  "Failure to delete a User",
 			Why: errors.Meta{
@@ -145,7 +145,7 @@ func (mongoDB *User) Search(criteria *repository.SearchCriteria) (*user.User, er
 	err := result.Decode(primitive)
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Search",
 			What:  "Failure to decode a result",
 			Why: errors.Meta{
@@ -158,7 +158,7 @@ func (mongoDB *User) Search(criteria *repository.SearchCriteria) (*user.User, er
 	found, err := user.FromPrimitive(primitive)
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Search",
 			What:  "Failure to create a User from a Primitive",
 			Why: errors.Meta{
@@ -191,7 +191,7 @@ func OpenUser(session *mongodb.MongoDB, name string, hashing hashing.Hashing) (r
 	})
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "OpenUser",
 			What:  "Failure to create Indexes for User Collection",
 			Why: errors.Meta{

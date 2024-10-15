@@ -18,11 +18,11 @@ func (suite *ActionTestSuite) SetupTest() {}
 func (suite *ActionTestSuite) TestWithInvalidLength() {
 	value, err := components.ActionWithInvalidLength()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewAction",
 		What:  "Action must be between 1 to 20 characters",

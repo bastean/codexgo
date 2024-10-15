@@ -18,11 +18,11 @@ func (suite *PasswordTestSuite) SetupTest() {}
 func (suite *PasswordTestSuite) TestWithInvalidLength() {
 	value, err := user.PasswordWithInvalidLength()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewPassword",
 		What:  "Password must be between 8 to 64 characters",

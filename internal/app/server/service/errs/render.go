@@ -5,7 +5,7 @@ import (
 )
 
 func Render(who error, where string) error {
-	return errors.NewInternal(&errors.Bubble{
+	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,
 		What:  "Cannot render a page",
 		Who:   who,

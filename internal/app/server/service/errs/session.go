@@ -5,7 +5,7 @@ import (
 )
 
 func SessionSave(who error, where string) error {
-	return errors.NewInternal(&errors.Bubble{
+	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,
 		What:  "Failure to save session",
 		Who:   who,

@@ -13,7 +13,7 @@ func (*Bcrypt) Hash(plain string) (string, error) {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(plain), salt)
 
 	if err != nil {
-		return "", errors.NewInternal(&errors.Bubble{
+		return "", errors.New[errors.Internal](&errors.Bubble{
 			Where: "Hash",
 			What:  "Failure to generate a hash",
 			Who:   err,

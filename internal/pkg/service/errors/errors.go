@@ -7,19 +7,15 @@ import (
 type (
 	Bubble = errors.Bubble
 	Meta   = errors.Meta
+	Error  = errors.Error
 )
 
 type (
-	ErrInvalidValue = errors.ErrInvalidValue
-	ErrAlreadyExist = errors.ErrAlreadyExist
-	ErrNotExist     = errors.ErrNotExist
-	ErrFailure      = errors.ErrFailure
-	ErrInternal     = errors.ErrInternal
-)
-
-var (
-	NewFailure  = errors.NewFailure
-	NewInternal = errors.NewInternal
+	InvalidValue = errors.InvalidValue
+	AlreadyExist = errors.AlreadyExist
+	NotExist     = errors.NotExist
+	Failure      = errors.Failure
+	Internal     = errors.Internal
 )
 
 var (
@@ -31,6 +27,10 @@ var (
 	As = errors.As
 	Is = errors.Is
 )
+
+func New[Err Error](bubble *Bubble) *Err {
+	return errors.New[Err](bubble)
+}
 
 func IsNot(err error, target error) bool {
 	return err != nil && !Is(err, target)

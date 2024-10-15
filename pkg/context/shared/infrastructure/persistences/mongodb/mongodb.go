@@ -25,7 +25,7 @@ func Open(uri, name string) (*MongoDB, error) {
 	session, err := mongo.Connect(context.Background(), options)
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Open",
 			What:  "Failure to create a MongoDB client",
 			Who:   err,
@@ -35,7 +35,7 @@ func Open(uri, name string) (*MongoDB, error) {
 	err = session.Ping(context.Background(), nil)
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Open",
 			What:  "Failure connecting to MongoDB",
 			Who:   err,
@@ -50,7 +50,7 @@ func Open(uri, name string) (*MongoDB, error) {
 
 func Close(ctx context.Context, session *MongoDB) error {
 	if err := session.Client.Disconnect(ctx); err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Close",
 			What:  "Failure to close connection with MongoDB",
 			Who:   err,
@@ -69,7 +69,7 @@ func HandleDuplicateKeyError(err error) error {
 
 	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
-	return errors.NewAlreadyExist(&errors.Bubble{
+	return errors.New[errors.AlreadyExist](&errors.Bubble{
 		Where: "HandleDuplicateKeyError",
 		What:  fmt.Sprintf("%s already registered", field),
 		Why: errors.Meta{
@@ -80,7 +80,7 @@ func HandleDuplicateKeyError(err error) error {
 }
 
 func HandleDocumentNotFound(index string, err error) error {
-	return errors.NewNotExist(&errors.Bubble{
+	return errors.New[errors.NotExist](&errors.Bubble{
 		Where: "HandleDocumentNotFound",
 		What:  fmt.Sprintf("%s not found", index),
 		Why: errors.Meta{

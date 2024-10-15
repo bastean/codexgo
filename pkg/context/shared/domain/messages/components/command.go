@@ -25,7 +25,7 @@ func NewCommand(value string) (*Command, error) {
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
-		return nil, errors.NewInvalidValue(&errors.Bubble{
+		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewCommand",
 			What:  fmt.Sprintf("Command must be between %s to %s characters and be alpha only", CommandMinCharactersLength, CommandMaxCharactersLength),
 			Why: errors.Meta{

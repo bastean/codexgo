@@ -33,7 +33,7 @@ func (rabbitMQ *RabbitMQ) AddRouter(router *messages.Router) error {
 	)
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "AddRouter",
 			What:  "Failure to declare a router",
 			Why: errors.Meta{
@@ -59,7 +59,7 @@ func (rabbitMQ *RabbitMQ) AddQueue(queue *messages.Queue) error {
 	)
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "AddQueue",
 			What:  "Failure to declare a queue",
 			Why: errors.Meta{
@@ -87,7 +87,7 @@ func (rabbitMQ *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys
 		)
 
 		if err != nil {
-			errToWrap := errors.NewInternal(&errors.Bubble{
+			errToWrap := errors.New[errors.Internal](&errors.Bubble{
 				Where: "AddQueueMessageBind",
 				What:  "Failure to bind a queue",
 				Why: errors.Meta{
@@ -124,7 +124,7 @@ func (rabbitMQ *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 		)
 
 		if err != nil {
-			errToWrap := errors.NewInternal(&errors.Bubble{
+			errToWrap := errors.New[errors.Internal](&errors.Bubble{
 				Where: "AddQueueConsumer",
 				What:  "Failure to register a consumer",
 				Why: errors.Meta{
@@ -184,7 +184,7 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 		body, err := json.Marshal(message)
 
 		if err != nil {
-			errToWrap := errors.NewInternal(&errors.Bubble{
+			errToWrap := errors.New[errors.Internal](&errors.Bubble{
 				Where: "PublishMessages",
 				What:  "Cannot encode message to JSON",
 				Why: errors.Meta{
@@ -216,7 +216,7 @@ func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
 		)
 
 		if err != nil {
-			errToWrap := errors.NewInternal(&errors.Bubble{
+			errToWrap := errors.New[errors.Internal](&errors.Bubble{
 				Where: "PublishMessages",
 				What:  "Failure to publish a message",
 				Why: errors.Meta{
@@ -241,7 +241,7 @@ func Open(uri string, logger loggers.Logger) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Open",
 			What:  "Failure connecting to RabbitMQ",
 			Who:   err,
@@ -251,7 +251,7 @@ func Open(uri string, logger loggers.Logger) (*RabbitMQ, error) {
 	channel, err := session.Channel()
 
 	if err != nil {
-		return nil, errors.NewInternal(&errors.Bubble{
+		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Open",
 			What:  "Failure to open a channel",
 			Who:   err,
@@ -269,7 +269,7 @@ func Close(session *RabbitMQ) error {
 	err := session.Channel.Close()
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Close",
 			What:  "Failure to close channel",
 			Who:   err,
@@ -279,7 +279,7 @@ func Close(session *RabbitMQ) error {
 	err = session.Connection.Close()
 
 	if err != nil {
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Close",
 			What:  "Failure to close RabbitMQ connection",
 			Who:   err,

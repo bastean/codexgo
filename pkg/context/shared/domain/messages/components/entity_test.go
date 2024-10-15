@@ -18,11 +18,11 @@ func (suite *EntityTestSuite) SetupTest() {}
 func (suite *EntityTestSuite) TestWithInvalidLength() {
 	value, err := components.EntityWithInvalidLength()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEntity",
 		What:  "Entity must be between 1 to 20 characters and be alpha only",
@@ -37,11 +37,11 @@ func (suite *EntityTestSuite) TestWithInvalidLength() {
 func (suite *EntityTestSuite) TestWithInvalidAlpha() {
 	value, err := components.EntityWithInvalidAlpha()
 
-	var actual *errors.ErrInvalidValue
+	var actual *errors.InvalidValue
 
 	suite.ErrorAs(err, &actual)
 
-	expected := &errors.ErrInvalidValue{Bubble: &errors.Bubble{
+	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "NewEntity",
 		What:  "Entity must be between 1 to 20 characters and be alpha only",

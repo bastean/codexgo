@@ -44,7 +44,7 @@ func Up() error {
 	if err := App.ListenAndServe(); errors.IsNot(err, http.ErrServerClosed) {
 		log.CannotBeStarted(Server.Gin)
 
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Up",
 			What:  "Failure to start Server",
 			Who:   err,
@@ -60,7 +60,7 @@ func Down(ctx context.Context) error {
 	if err := App.Shutdown(ctx); err != nil {
 		log.CannotBeStopped(Server.Gin)
 
-		return errors.NewInternal(&errors.Bubble{
+		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Down",
 			What:  "Failure to shutdown Server",
 			Who:   err,
