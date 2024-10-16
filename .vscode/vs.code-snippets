@@ -6,11 +6,11 @@
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
       "\nimport (\n\t\"testing\"\n\n\t\"github.com/stretchr/testify/suite\"\n\n\t$1\n)",
-      "\ntype ${2:Name}TestSuite struct {\n\t*suite.Suite\n\t${3:$LINE_COMMENT sut}\n}",
+      "\ntype ${2:Name}TestSuite struct {\n\tsuite.Suite\n\t${3:$LINE_COMMENT sut}\n}",
       "\nfunc (suite *$2TestSuite) SetupTest() {\n\t$4\n}",
       "\nfunc (suite *$2TestSuite) Test$2() {\n\t${5:$LINE_COMMENT expected | actual}\n}",
       "\nfunc (suite *$2TestSuite) Test$2Err$6() {\n\t${7:$LINE_COMMENT expected | actual}\n}",
-      "\nfunc (suite *$2TestSuite) TestWith${8:Invalid}() {\n\t${9:$LINE_COMMENT expected | actual}\n}",
+      "\nfunc (suite *$2TestSuite) TestWith$8() {\n\t${9:$LINE_COMMENT expected | actual}\n}",
       "\nfunc Test${10|Unit,Integration|}$2Suite(t *testing.T) {\n\tsuite.Run(t, new($2TestSuite))\n}\n",
     ],
     "isFileTemplate": true,
@@ -35,7 +35,7 @@
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
       "\nimport (\n\t\"github.com/stretchr/testify/mock\"\n\n\t$1\n)",
-      "\ntype ${2:Name}Mock struct {\n\t*mock.Mock\n}",
+      "\ntype ${2:Name}Mock struct {\n\tmock.Mock\n}",
       "\nfunc (${3:name} *$2Mock) ${4:Example}(${5:param int}) ${6:(string, error)} {\n\t${7:args := $3.Called(param)\n\treturn args.Get(0).(string), nil}\n}\n",
     ],
     "isFileTemplate": true,
