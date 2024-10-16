@@ -13,8 +13,6 @@ type OrganizationTestSuite struct {
 	suite.Suite
 }
 
-func (suite *OrganizationTestSuite) SetupTest() {}
-
 func (suite *OrganizationTestSuite) TestWithInvalidLength() {
 	value, err := components.OrganizationWithInvalidLength()
 

@@ -13,8 +13,6 @@ type CommandTestSuite struct {
 	suite.Suite
 }
 
-func (suite *CommandTestSuite) SetupTest() {}
-
 func (suite *CommandTestSuite) TestWithInvalidLength() {
 	value, err := components.CommandWithInvalidLength()
 

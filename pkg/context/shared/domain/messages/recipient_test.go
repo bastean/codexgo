@@ -12,8 +12,6 @@ type RecipientNameTestSuite struct {
 	suite.Suite
 }
 
-func (suite *RecipientNameTestSuite) SetupTest() {}
-
 func (suite *RecipientNameTestSuite) TestWithValidValue() {
 	components := &messages.RecipientNameComponents{
 		Service: "user",
@@ -31,8 +29,7 @@ func (suite *RecipientNameTestSuite) TestWithValidValue() {
 }
 
 func (suite *RecipientNameTestSuite) TestWithInvalidValue() {
-	components := &messages.RecipientNameComponents{}
-	suite.Panics(func() { messages.NewRecipientName(components) })
+	suite.Panics(func() { messages.NewRecipientName(&messages.RecipientNameComponents{}) })
 }
 
 func TestUnitRecipientNameSuite(t *testing.T) {

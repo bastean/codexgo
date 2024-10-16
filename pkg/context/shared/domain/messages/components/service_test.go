@@ -13,8 +13,6 @@ type ServiceTestSuite struct {
 	suite.Suite
 }
 
-func (suite *ServiceTestSuite) SetupTest() {}
-
 func (suite *ServiceTestSuite) TestWithInvalidLength() {
 	value, err := components.ServiceWithInvalidLength()
 

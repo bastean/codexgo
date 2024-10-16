@@ -13,8 +13,6 @@ type EntityTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EntityTestSuite) SetupTest() {}
-
 func (suite *EntityTestSuite) TestWithInvalidLength() {
 	value, err := components.EntityWithInvalidLength()
 

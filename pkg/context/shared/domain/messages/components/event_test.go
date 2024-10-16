@@ -13,8 +13,6 @@ type EventTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EventTestSuite) SetupTest() {}
-
 func (suite *EventTestSuite) TestWithInvalidLength() {
 	value, err := components.EventWithInvalidLength()
 

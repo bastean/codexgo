@@ -13,8 +13,6 @@ type ActionTestSuite struct {
 	suite.Suite
 }
 
-func (suite *ActionTestSuite) SetupTest() {}
-
 func (suite *ActionTestSuite) TestWithInvalidLength() {
 	value, err := components.ActionWithInvalidLength()
 

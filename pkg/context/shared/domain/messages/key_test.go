@@ -12,8 +12,6 @@ type RoutingKeyTestSuite struct {
 	suite.Suite
 }
 
-func (suite *RoutingKeyTestSuite) SetupTest() {}
-
 func (suite *RoutingKeyTestSuite) TestWithValidValue() {
 	components := &messages.RoutingKeyComponents{
 		Organization: "codexgo",
@@ -33,8 +31,7 @@ func (suite *RoutingKeyTestSuite) TestWithValidValue() {
 }
 
 func (suite *RoutingKeyTestSuite) TestWithInvalidValue() {
-	components := &messages.RoutingKeyComponents{}
-	suite.Panics(func() { messages.NewRoutingKey(components) })
+	suite.Panics(func() { messages.NewRoutingKey(&messages.RoutingKeyComponents{}) })
 }
 
 func TestUnitRoutingKeySuite(t *testing.T) {

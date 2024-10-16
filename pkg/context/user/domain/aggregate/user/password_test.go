@@ -13,8 +13,6 @@ type PasswordTestSuite struct {
 	suite.Suite
 }
 
-func (suite *PasswordTestSuite) SetupTest() {}
-
 func (suite *PasswordTestSuite) TestWithInvalidLength() {
 	value, err := user.PasswordWithInvalidLength()
 

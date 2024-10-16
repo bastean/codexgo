@@ -13,8 +13,6 @@ type EmailTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EmailTestSuite) SetupTest() {}
-
 func (suite *EmailTestSuite) TestWithInvalidValue() {
 	value, err := user.EmailWithInvalidValue()
 

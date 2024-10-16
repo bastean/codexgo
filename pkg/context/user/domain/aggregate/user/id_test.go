@@ -13,8 +13,6 @@ type IdTestSuite struct {
 	suite.Suite
 }
 
-func (suite *IdTestSuite) SetupTest() {}
-
 func (suite *IdTestSuite) TestWithInvalidValue() {
 	value, err := user.IdWithInvalidValue()
 

@@ -13,8 +13,6 @@ type TypeTestSuite struct {
 	suite.Suite
 }
 
-func (suite *TypeTestSuite) SetupTest() {}
-
 func (suite *TypeTestSuite) TestWithInvalidValue() {
 	value, err := components.TypeWithInvalidValue()
 

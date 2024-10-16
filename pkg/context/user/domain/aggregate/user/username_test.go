@@ -13,8 +13,6 @@ type UsernameTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UsernameTestSuite) SetupTest() {}
-
 func (suite *UsernameTestSuite) TestWithInvalidLength() {
 	value, err := user.UsernameWithInvalidLength()
 
