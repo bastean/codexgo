@@ -146,14 +146,14 @@ func (rabbitMQ *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
 				err := json.Unmarshal(delivery.Body, message)
 
 				if err != nil {
-					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to deliver a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err.Error()))
+					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to deliver a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err))
 					continue
 				}
 
 				err = consumer.On(message)
 
 				if err != nil {
-					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to consume a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err.Error()))
+					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to consume a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err))
 					continue
 				}
 

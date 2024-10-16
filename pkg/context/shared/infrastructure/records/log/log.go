@@ -19,7 +19,7 @@ func (color *Log) Error(message string) {
 }
 
 func (color *Log) Fatal(message string) {
-	log.Fatal(color.Red.Sprint(message))
+	log.Fatalln(color.Red.Sprint(message))
 }
 
 func (color *Log) Info(message string) {
