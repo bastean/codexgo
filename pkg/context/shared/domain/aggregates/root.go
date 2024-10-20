@@ -8,16 +8,16 @@ type Root struct {
 	Messages []*messages.Message
 }
 
-func (root *Root) RecordMessage(message *messages.Message) {
+func (root *Root) Record(message *messages.Message) {
 	root.Messages = append(root.Messages, message)
 }
 
-func (root *Root) PullMessages() []*messages.Message {
-	recordedMessages := root.Messages
+func (root *Root) Pull() []*messages.Message {
+	recorded := root.Messages
 
 	root.Messages = []*messages.Message{}
 
-	return recordedMessages
+	return recorded
 }
 
 func NewRoot() *Root {

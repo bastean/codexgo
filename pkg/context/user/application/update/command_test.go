@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -16,7 +16,7 @@ import (
 
 type UpdateTestSuite struct {
 	suite.Suite
-	sut        handlers.Command[*update.Command]
+	sut        command.Handler
 	update     cases.Update
 	hashing    *cryptographic.HashingMock
 	repository *persistence.UserMock
@@ -37,7 +37,15 @@ func (suite *UpdateTestSuite) SetupTest() {
 	}
 }
 
-func (suite *UpdateTestSuite) TestUpdate() {
+func (suite *UpdateTestSuite) TestSubscribedTo() {
+	const expected command.Type = "user.command.updating.user"
+
+	actual := suite.sut.SubscribedTo()
+
+	suite.Equal(expected, actual)
+}
+
+func (suite *UpdateTestSuite) TestHandle() {
 	command := update.RandomCommand()
 
 	new, err := user.New(&user.Primitive{

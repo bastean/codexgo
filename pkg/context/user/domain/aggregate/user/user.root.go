@@ -83,7 +83,7 @@ func New(primitive *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "New")
 	}
 
-	user.RecordMessage(message)
+	user.Record(message)
 
 	return user, nil
 }

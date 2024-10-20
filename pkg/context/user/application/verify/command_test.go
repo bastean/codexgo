@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -15,7 +15,7 @@ import (
 
 type VerifyTestSuite struct {
 	suite.Suite
-	sut        handlers.Command[*verify.Command]
+	sut        command.Handler
 	verify     cases.Verify
 	repository *persistence.UserMock
 }
@@ -32,7 +32,15 @@ func (suite *VerifyTestSuite) SetupTest() {
 	}
 }
 
-func (suite *VerifyTestSuite) TestVerify() {
+func (suite *VerifyTestSuite) TestSubscribedTo() {
+	const expected command.Type = "user.command.verifying.user"
+
+	actual := suite.sut.SubscribedTo()
+
+	suite.Equal(expected, actual)
+}
+
+func (suite *VerifyTestSuite) TestHandle() {
 	command := verify.RandomCommand()
 
 	random := user.Random()

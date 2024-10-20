@@ -7,6 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
@@ -21,7 +22,7 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	err = user.Create.Handle(command)
+	err = communication.CommandBus.Dispatch(command)
 
 	if err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))

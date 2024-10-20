@@ -7,6 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
@@ -23,7 +24,7 @@ func Verify(c *gin.Context) {
 
 	command.Id = id
 
-	err := user.Verify.Handle(command)
+	err := communication.CommandBus.Dispatch(command)
 
 	if err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Verify"))

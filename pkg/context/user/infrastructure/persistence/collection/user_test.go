@@ -45,7 +45,7 @@ func (suite *UserTestSuite) SetupTest() {
 func (suite *UserTestSuite) TestCreate() {
 	expected := user.Random()
 
-	expected.PullMessages()
+	expected.Pull()
 
 	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
@@ -115,7 +115,7 @@ func (suite *UserTestSuite) TestVerify() {
 func (suite *UserTestSuite) TestUpdate() {
 	expected := user.Random()
 
-	expected.PullMessages()
+	expected.Pull()
 
 	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 
@@ -161,7 +161,7 @@ func (suite *UserTestSuite) TestDelete() {
 func (suite *UserTestSuite) TestSearch() {
 	expected := user.Random()
 
-	expected.PullMessages()
+	expected.Pull()
 
 	suite.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
 

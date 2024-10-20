@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -15,7 +15,7 @@ import (
 
 type CreateTestSuite struct {
 	suite.Suite
-	sut        handlers.Command[*create.Command]
+	sut        command.Handler
 	create     cases.Create
 	repository *persistence.UserMock
 	broker     *communications.BrokerMock
@@ -36,7 +36,15 @@ func (suite *CreateTestSuite) SetupTest() {
 	}
 }
 
-func (suite *CreateTestSuite) TestCreate() {
+func (suite *CreateTestSuite) TestSubscribedTo() {
+	const expected command.Type = "user.command.creating.user"
+
+	actual := suite.sut.SubscribedTo()
+
+	suite.Equal(expected, actual)
+}
+
+func (suite *CreateTestSuite) TestHandle() {
 	command := create.RandomCommand()
 
 	new, err := user.New(&user.Primitive{
