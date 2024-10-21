@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/handlers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/query"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -16,7 +16,7 @@ import (
 
 type LoginTestSuite struct {
 	suite.Suite
-	sut        handlers.Query[*login.Query, *login.Response]
+	sut        query.Handler
 	login      cases.Login
 	hashing    *cryptographic.HashingMock
 	repository *persistence.UserMock
@@ -37,7 +37,23 @@ func (suite *LoginTestSuite) SetupTest() {
 	}
 }
 
-func (suite *LoginTestSuite) TestLogin() {
+func (suite *LoginTestSuite) TestSubscribedTo() {
+	const expected query.Type = "user.query.logging.user"
+
+	actual := suite.sut.SubscribedTo()
+
+	suite.Equal(expected, actual)
+}
+
+func (suite *LoginTestSuite) TestReplyTo() {
+	const expected query.Type = "user.response.logging.user"
+
+	actual := suite.sut.ReplyTo()
+
+	suite.Equal(expected, actual)
+}
+
+func (suite *LoginTestSuite) TestHandle() {
 	random := user.Random()
 
 	query := &login.Query{

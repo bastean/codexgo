@@ -22,7 +22,8 @@ type (
 )
 
 type (
-	ReadResponse = read.Response
+	ReadResponse  = read.Response
+	LoginResponse = login.Response
 )
 
 var (

@@ -48,7 +48,17 @@ func Start() error {
 
 	if err != nil {
 		log.CannotBeStarted(communication.Service.InMemory)
-		return errors.BubbleUp(err, "Up")
+		return errors.BubbleUp(err, "Start")
+	}
+
+	communication.QueryBus, err = memory.NewQueryBus([]memory.QueryHandler{
+		user.Read,
+		user.Login,
+	})
+
+	if err != nil {
+		log.CannotBeStarted(communication.Service.InMemory)
+		return errors.BubbleUp(err, "Start")
 	}
 
 	log.Started(communication.Service.InMemory)

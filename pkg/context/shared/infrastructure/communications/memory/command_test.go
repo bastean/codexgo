@@ -1,6 +1,7 @@
 package memory_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -47,9 +48,9 @@ func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Register",
-		What:  "command.testing.register_duplicate already registered",
+		What:  fmt.Sprintf("%s already registered", cmd),
 		Why: errors.Meta{
-			"Command": "command.testing.register_duplicate",
+			"Command": cmd,
 		},
 	}}
 
@@ -90,7 +91,7 @@ func (suite *CommandBusTestSuite) TestDispatchErrMissingHandler() {
 		Where: "Dispatch",
 		What:  "Failure to execute a Command without a Handler",
 		Why: errors.Meta{
-			"Command": "command.testing.dispatch_missing",
+			"Command": cmd,
 		},
 	}}
 

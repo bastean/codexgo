@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
@@ -23,10 +24,17 @@ func Dashboard(c *gin.Context) {
 
 	query.Id = format.ToString(id)
 
-	found, err := user.Read.Handle(query)
+	response, err := communication.QueryBus.Ask(query)
 
 	if err != nil {
 		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
+		return
+	}
+
+	found, ok := response.(*user.ReadResponse)
+
+	if !ok {
+		errs.AbortByErrWithRedirect(c, errs.Assertion("Dashboard"), "/")
 		return
 	}
 

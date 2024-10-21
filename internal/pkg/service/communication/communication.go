@@ -20,6 +20,7 @@ var (
 	err        error
 	RabbitMQ   *rabbitmq.RabbitMQ
 	CommandBus *memory.CommandBus
+	QueryBus   *memory.QueryBus
 )
 
 func Up() error {

@@ -55,14 +55,14 @@ func (bus *CommandBus) Dispatch(cmd command.Command) error {
 	return nil
 }
 
-func NewCommandBus(Handlers []command.Handler) (*CommandBus, error) {
+func NewCommandBus(handlers []command.Handler) (*CommandBus, error) {
 	bus := &CommandBus{
 		Handlers: make(commandMapper),
 	}
 
 	var err error
 
-	for _, handler := range Handlers {
+	for _, handler := range handlers {
 		err = bus.Register(handler.SubscribedTo(), handler)
 
 		if err != nil {

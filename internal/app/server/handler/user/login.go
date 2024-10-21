@@ -11,6 +11,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication/jwt"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
@@ -25,10 +26,17 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	found, err := user.Login.Handle(query)
+	response, err := communication.QueryBus.Ask(query)
 
 	if err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Login"))
+		return
+	}
+
+	found, ok := response.(*user.LoginResponse)
+
+	if !ok {
+		errs.AbortByErr(c, errs.Assertion("Login"))
 		return
 	}
 

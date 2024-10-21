@@ -14,3 +14,7 @@ func assertion(what, where string) error {
 func CommandAssertion(where string) error {
 	return assertion("Command", where)
 }
+
+func QueryAssertion(where string) error {
+	return assertion("Query", where)
+}
