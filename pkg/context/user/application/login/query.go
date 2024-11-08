@@ -2,21 +2,21 @@ package login
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/query"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 const (
-	QueryType    query.Type = "user.query.logging.user"
-	ResponseType query.Type = "user.response.logging.user"
+	QueryType    queries.Type = "user.query.logging.user"
+	ResponseType queries.Type = "user.response.logging.user"
 )
 
 type Query struct {
 	Email, Password string
 }
 
-func (*Query) Type() query.Type {
+func (*Query) Type() queries.Type {
 	return QueryType
 }
 
@@ -25,7 +25,7 @@ type Response struct {
 	Verified                      bool
 }
 
-func (*Response) Type() query.Type {
+func (*Response) Type() queries.Type {
 	return ResponseType
 }
 
@@ -33,15 +33,15 @@ type Handler struct {
 	cases.Login
 }
 
-func (handler *Handler) SubscribedTo() query.Type {
+func (handler *Handler) SubscribedTo() queries.Type {
 	return QueryType
 }
 
-func (handler *Handler) ReplyTo() query.Type {
+func (handler *Handler) ReplyTo() queries.Type {
 	return ResponseType
 }
 
-func (handler *Handler) Handle(ask query.Query) (query.Response, error) {
+func (handler *Handler) Handle(ask queries.Query) (queries.Response, error) {
 	data, ok := ask.(*Query)
 
 	if !ok {
@@ -49,6 +49,7 @@ func (handler *Handler) Handle(ask query.Query) (query.Response, error) {
 	}
 
 	email, errEmail := user.NewEmail(data.Email)
+
 	password, errPassword := user.NewPassword(data.Password)
 
 	err := errors.Join(errEmail, errPassword)

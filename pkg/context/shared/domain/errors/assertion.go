@@ -11,6 +11,10 @@ func assertion(what, where string) error {
 	})
 }
 
+func EventAssertion(where string) error {
+	return assertion("Event", where)
+}
+
 func CommandAssertion(where string) error {
 	return assertion("Command", where)
 }

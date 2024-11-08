@@ -3,19 +3,19 @@ package memory
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type (
-	commandMapper = map[command.Type]command.Handler
+	commandMapper = map[commands.Type]commands.Handler
 )
 
 type CommandBus struct {
 	Handlers commandMapper
 }
 
-func (bus *CommandBus) Register(cmd command.Type, handler command.Handler) error {
+func (bus *CommandBus) Register(cmd commands.Type, handler commands.Handler) error {
 	_, ok := bus.Handlers[cmd]
 
 	if ok {
@@ -33,7 +33,7 @@ func (bus *CommandBus) Register(cmd command.Type, handler command.Handler) error
 	return nil
 }
 
-func (bus *CommandBus) Dispatch(cmd command.Command) error {
+func (bus *CommandBus) Dispatch(cmd commands.Command) error {
 	handler, ok := bus.Handlers[cmd.Type()]
 
 	if !ok {
@@ -55,7 +55,7 @@ func (bus *CommandBus) Dispatch(cmd command.Command) error {
 	return nil
 }
 
-func NewCommandBus(handlers []command.Handler) (*CommandBus, error) {
+func NewCommandBus(handlers []commands.Handler) (*CommandBus, error) {
 	bus := &CommandBus{
 		Handlers: make(commandMapper),
 	}

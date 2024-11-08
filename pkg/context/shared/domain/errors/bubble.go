@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type (
@@ -27,7 +29,7 @@ type (
 )
 
 func (err *Bubble) Error() string {
-	message := fmt.Sprintf("%s (%s): %s", err.When.Format(time.RFC3339Nano), err.Where, err.What)
+	message := fmt.Sprintf("%s (%s): %s", services.FormatTime(err.When), err.Where, err.What)
 
 	if err.Why != nil {
 		why, err := json.Marshal(err.Why)

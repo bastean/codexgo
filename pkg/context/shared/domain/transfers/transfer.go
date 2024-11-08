@@ -1,5 +1,5 @@
 package transfers
 
-type Transfer interface {
-	Submit(data any) error
+type Transfer[T any] interface {
+	Submit(data T) error
 }

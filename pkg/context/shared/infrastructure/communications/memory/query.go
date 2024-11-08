@@ -4,18 +4,18 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/query"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 )
 
 type (
-	queryMapper = map[query.Type]query.Handler
+	queryMapper = map[queries.Type]queries.Handler
 )
 
 type QueryBus struct {
 	Handlers queryMapper
 }
 
-func (bus *QueryBus) Register(ask query.Type, handler query.Handler) error {
+func (bus *QueryBus) Register(ask queries.Type, handler queries.Handler) error {
 	_, ok := bus.Handlers[ask]
 
 	if ok {
@@ -33,7 +33,7 @@ func (bus *QueryBus) Register(ask query.Type, handler query.Handler) error {
 	return nil
 }
 
-func (bus *QueryBus) Ask(ask query.Query) (query.Response, error) {
+func (bus *QueryBus) Ask(ask queries.Query) (queries.Response, error) {
 	handler, ok := bus.Handlers[ask.Type()]
 
 	if !ok {
@@ -55,7 +55,7 @@ func (bus *QueryBus) Ask(ask query.Query) (query.Response, error) {
 	return response, nil
 }
 
-func NewQueryBus(handlers []query.Handler) (*QueryBus, error) {
+func NewQueryBus(handlers []queries.Handler) (*QueryBus, error) {
 	bus := &QueryBus{
 		Handlers: make(queryMapper),
 	}

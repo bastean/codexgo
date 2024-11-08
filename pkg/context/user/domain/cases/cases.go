@@ -24,9 +24,3 @@ type (
 		Run(*user.Email, *user.Password) (*user.User, error)
 	}
 )
-
-type (
-	Created interface {
-		Run(*user.CreatedSucceeded) error
-	}
-)

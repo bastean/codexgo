@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
@@ -14,7 +14,7 @@ import (
 
 type CommandBusTestSuite struct {
 	suite.Suite
-	sut     command.Bus
+	sut     commands.Bus
 	command *communications.CommandMock
 	handler *communications.CommandHandlerMock
 }
@@ -25,17 +25,17 @@ func (suite *CommandBusTestSuite) SetupTest() {
 	suite.handler = new(communications.CommandHandlerMock)
 
 	suite.sut = &memory.CommandBus{
-		Handlers: make(map[command.Type]command.Handler),
+		Handlers: make(map[commands.Type]commands.Handler),
 	}
 }
 
 func (suite *CommandBusTestSuite) TestRegister() {
-	const cmd command.Type = "command.testing.register"
+	const cmd commands.Type = "command.testing.register"
 	suite.NoError(suite.sut.Register(cmd, suite.handler))
 }
 
 func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
-	const cmd command.Type = "command.testing.register_duplicate"
+	const cmd commands.Type = "command.testing.register_duplicate"
 
 	suite.NoError(suite.sut.Register(cmd, suite.handler))
 
@@ -58,7 +58,7 @@ func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 }
 
 func (suite *CommandBusTestSuite) TestDispatch() {
-	const cmd command.Type = "command.testing.dispatch"
+	const cmd commands.Type = "command.testing.dispatch"
 
 	suite.NoError(suite.sut.Register(cmd, suite.handler))
 
@@ -74,7 +74,7 @@ func (suite *CommandBusTestSuite) TestDispatch() {
 }
 
 func (suite *CommandBusTestSuite) TestDispatchErrMissingHandler() {
-	const cmd command.Type = "command.testing.dispatch_missing"
+	const cmd commands.Type = "command.testing.dispatch_missing"
 
 	suite.command.On("Type").Return(cmd)
 

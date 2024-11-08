@@ -5,8 +5,10 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/rabbitmq"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/module/notification"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 )
 
 var Service = &struct {
@@ -28,14 +30,14 @@ func Up() error {
 
 	RabbitMQ, err = rabbitmq.Open(
 		env.BrokerRabbitMQURI,
+		env.BrokerRabbitMQName,
+		rabbitmq.Queues,
+		rabbitmq.Events{
+			user.CreatedSucceededKey: []events.Consumer{
+				notification.Confirmation,
+			},
+		},
 		log.Log,
-		rabbitmq.Exchange(env.BrokerRabbitMQName),
-		rabbitmq.Queues{
-			user.QueueSendConfirmation,
-		},
-		rabbitmq.Consumers{
-			user.Created,
-		},
 	)
 
 	if err != nil {

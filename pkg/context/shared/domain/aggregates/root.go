@@ -1,27 +1,27 @@
 package aggregates
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 )
 
 type Root struct {
-	Messages []*messages.Message
+	Events []*events.Event
 }
 
-func (root *Root) Record(message *messages.Message) {
-	root.Messages = append(root.Messages, message)
+func (r *Root) Record(events ...*events.Event) {
+	r.Events = append(r.Events, events...)
 }
 
-func (root *Root) Pull() []*messages.Message {
-	recorded := root.Messages
+func (r *Root) Pull() []*events.Event {
+	recorded := r.Events
 
-	root.Messages = []*messages.Message{}
+	r.Events = []*events.Event{}
 
 	return recorded
 }
 
 func NewRoot() *Root {
 	return &Root{
-		Messages: []*messages.Message{},
+		Events: []*events.Event{},
 	}
 }

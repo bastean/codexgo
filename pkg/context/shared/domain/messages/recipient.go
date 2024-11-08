@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
 )
 
@@ -12,14 +13,14 @@ import (
 //   - Service = Module
 //   - Entity  = Aggregate/Root
 //
-// Nomenclature of a Recipient Name:
+// Nomenclature of a Recipient:
 //   - service.entity.action_on_event/command_status
 //   - user.user.send_confirmation_on_created_succeeded
-type RecipientNameComponents struct {
+type RecipientComponents struct {
 	Service, Entity, Action, Event, Command, Status string
 }
 
-func NewRecipientName(recipient *RecipientNameComponents) string {
+func NewRecipient(recipient *RecipientComponents) events.Recipient {
 	service, errService := components.NewService(recipient.Service)
 	entity, errEntity := components.NewEntity(recipient.Entity)
 	action, errAction := components.NewAction(recipient.Action)
@@ -49,5 +50,5 @@ func NewRecipientName(recipient *RecipientNameComponents) string {
 
 	name = strings.ToLower(name)
 
-	return name
+	return events.Recipient(name)
 }

@@ -5,15 +5,16 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type RecipientNameTestSuite struct {
+type RecipientTestSuite struct {
 	suite.Suite
 }
 
-func (suite *RecipientNameTestSuite) TestWithValidValue() {
-	components := &messages.RecipientNameComponents{
+func (suite *RecipientTestSuite) TestWithValidValue() {
+	components := &messages.RecipientComponents{
 		Service: "user",
 		Entity:  "user",
 		Action:  "send confirmation",
@@ -21,17 +22,17 @@ func (suite *RecipientNameTestSuite) TestWithValidValue() {
 		Status:  messages.Status.Succeeded,
 	}
 
-	expected := "user.user.send_confirmation_on_created_succeeded"
+	expected := events.Recipient("user.user.send_confirmation_on_created_succeeded")
 
-	actual := messages.NewRecipientName(components)
+	actual := messages.NewRecipient(components)
 
 	suite.Equal(expected, actual)
 }
 
-func (suite *RecipientNameTestSuite) TestWithInvalidValue() {
-	suite.Panics(func() { messages.NewRecipientName(&messages.RecipientNameComponents{}) })
+func (suite *RecipientTestSuite) TestWithInvalidValue() {
+	suite.Panics(func() { messages.NewRecipient(&messages.RecipientComponents{}) })
 }
 
-func TestUnitRecipientNameSuite(t *testing.T) {
-	suite.Run(t, new(RecipientNameTestSuite))
+func TestUnitRecipientSuite(t *testing.T) {
+	suite.Run(t, new(RecipientTestSuite))
 }

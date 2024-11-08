@@ -2,7 +2,7 @@ package transport
 
 import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/module/notification"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/transport/smtp"
 )
@@ -32,19 +32,19 @@ func Up() error {
 			},
 		)
 
-		user.InitCreated(&user.MailConfirmation{
+		notification.Init(&notification.MailConfirmation{
 			SMTP:         SMTP,
 			AppServerURL: env.ServerGinURL,
-		}, user.QueueSendConfirmation)
+		})
 
 		log.ConnectionEstablishedWith(Service.SMTP)
 	default:
 		log.Starting(Service.Terminal)
 
-		user.InitCreated(&user.TerminalConfirmation{
+		notification.Init(&notification.TerminalConfirmation{
 			Logger:       log.Log,
 			AppServerURL: env.ServerGinURL,
-		}, user.QueueSendConfirmation)
+		})
 
 		log.Started(Service.Terminal)
 	}

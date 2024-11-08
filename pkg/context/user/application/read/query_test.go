@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/query"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -15,7 +15,7 @@ import (
 
 type ReadTestSuite struct {
 	suite.Suite
-	sut        query.Handler
+	sut        queries.Handler
 	read       cases.Read
 	repository *persistence.UserMock
 }
@@ -33,7 +33,7 @@ func (suite *ReadTestSuite) SetupTest() {
 }
 
 func (suite *ReadTestSuite) TestSubscribedTo() {
-	const expected query.Type = "user.query.reading.user"
+	const expected queries.Type = "user.query.reading.user"
 
 	actual := suite.sut.SubscribedTo()
 
@@ -41,7 +41,7 @@ func (suite *ReadTestSuite) TestSubscribedTo() {
 }
 
 func (suite *ReadTestSuite) TestReplyTo() {
-	const expected query.Type = "user.response.reading.user"
+	const expected queries.Type = "user.response.reading.user"
 
 	actual := suite.sut.ReplyTo()
 

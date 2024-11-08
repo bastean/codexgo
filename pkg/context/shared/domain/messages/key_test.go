@@ -5,15 +5,16 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type RoutingKeyTestSuite struct {
+type KeyTestSuite struct {
 	suite.Suite
 }
 
-func (suite *RoutingKeyTestSuite) TestWithValidValue() {
-	components := &messages.RoutingKeyComponents{
+func (suite *KeyTestSuite) TestWithValidValue() {
+	components := &messages.KeyComponents{
 		Organization: "codexgo",
 		Service:      "user",
 		Version:      "1",
@@ -23,17 +24,17 @@ func (suite *RoutingKeyTestSuite) TestWithValidValue() {
 		Status:       messages.Status.Succeeded,
 	}
 
-	expected := "codexgo.user.1.event.user.created.succeeded"
+	expected := events.Key("codexgo.user.1.event.user.created.succeeded")
 
-	actual := messages.NewRoutingKey(components)
+	actual := messages.NewKey(components)
 
 	suite.Equal(expected, actual)
 }
 
-func (suite *RoutingKeyTestSuite) TestWithInvalidValue() {
-	suite.Panics(func() { messages.NewRoutingKey(&messages.RoutingKeyComponents{}) })
+func (suite *KeyTestSuite) TestWithInvalidValue() {
+	suite.Panics(func() { messages.NewKey(&messages.KeyComponents{}) })
 }
 
-func TestUnitRoutingKeySuite(t *testing.T) {
-	suite.Run(t, new(RoutingKeyTestSuite))
+func TestUnitKeySuite(t *testing.T) {
+	suite.Run(t, new(KeyTestSuite))
 }

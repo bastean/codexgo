@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -15,14 +15,14 @@ import (
 
 type CreateTestSuite struct {
 	suite.Suite
-	sut        command.Handler
+	sut        commands.Handler
 	create     cases.Create
 	repository *persistence.UserMock
-	broker     *communications.BrokerMock
+	bus        *communications.EventBusMock
 }
 
 func (suite *CreateTestSuite) SetupTest() {
-	suite.broker = new(communications.BrokerMock)
+	suite.bus = new(communications.EventBusMock)
 
 	suite.repository = new(persistence.UserMock)
 
@@ -32,12 +32,12 @@ func (suite *CreateTestSuite) SetupTest() {
 
 	suite.sut = &create.Handler{
 		Create: suite.create,
-		Broker: suite.broker,
+		Bus:    suite.bus,
 	}
 }
 
 func (suite *CreateTestSuite) TestSubscribedTo() {
-	const expected command.Type = "user.command.creating.user"
+	const expected commands.Type = "user.command.creating.user"
 
 	actual := suite.sut.SubscribedTo()
 
@@ -47,7 +47,7 @@ func (suite *CreateTestSuite) TestSubscribedTo() {
 func (suite *CreateTestSuite) TestHandle() {
 	command := create.RandomCommand()
 
-	new, err := user.New(&user.Primitive{
+	account, err := user.New(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
@@ -56,17 +56,17 @@ func (suite *CreateTestSuite) TestHandle() {
 
 	suite.NoError(err)
 
-	messages := new.Messages
+	suite.repository.On("Create", account)
 
-	suite.repository.On("Create", new)
-
-	suite.broker.On("PublishMessages", messages)
+	for _, event := range account.Events {
+		suite.bus.On("Publish", event)
+	}
 
 	suite.NoError(suite.sut.Handle(command))
 
 	suite.repository.AssertExpectations(suite.T())
 
-	suite.broker.AssertExpectations(suite.T())
+	suite.bus.AssertExpectations(suite.T())
 }
 
 func TestUnitCreateSuite(t *testing.T) {

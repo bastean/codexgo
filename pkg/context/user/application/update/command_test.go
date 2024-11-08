@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -16,7 +16,7 @@ import (
 
 type UpdateTestSuite struct {
 	suite.Suite
-	sut        command.Handler
+	sut        commands.Handler
 	update     cases.Update
 	hashing    *cryptographic.HashingMock
 	repository *persistence.UserMock
@@ -38,7 +38,7 @@ func (suite *UpdateTestSuite) SetupTest() {
 }
 
 func (suite *UpdateTestSuite) TestSubscribedTo() {
-	const expected command.Type = "user.command.updating.user"
+	const expected commands.Type = "user.command.updating.user"
 
 	actual := suite.sut.SubscribedTo()
 
@@ -48,7 +48,7 @@ func (suite *UpdateTestSuite) TestSubscribedTo() {
 func (suite *UpdateTestSuite) TestHandle() {
 	command := update.RandomCommand()
 
-	new, err := user.New(&user.Primitive{
+	account, err := user.FromPrimitive(&user.Primitive{
 		Id:       command.Id,
 		Email:    command.Email,
 		Username: command.Username,
@@ -65,11 +65,11 @@ func (suite *UpdateTestSuite) TestHandle() {
 		Id: id,
 	}
 
-	suite.repository.On("Search", criteria).Return(new)
+	suite.repository.On("Search", criteria).Return(account)
 
-	suite.hashing.On("IsNotEqual", new.Password.Value, command.Password).Return(false)
+	suite.hashing.On("IsNotEqual", account.Password.Value, command.Password).Return(false)
 
-	suite.repository.On("Update", new)
+	suite.repository.On("Update", account)
 
 	suite.NoError(suite.sut.Handle(command))
 

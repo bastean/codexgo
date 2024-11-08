@@ -2,16 +2,27 @@ package rabbitmq
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"reflect"
 	"time"
 
-	"github.com/google/uuid"
+	"github.com/goccy/go-json"
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+)
+
+type (
+	Recipient struct {
+		Name             events.Recipient
+		BindingKey       events.Key
+		Attributes, Meta reflect.Type
+	}
+	Queues = map[events.Key]*Recipient
+	Events = map[events.Key][]events.Consumer
 )
 
 type RabbitMQ struct {
@@ -19,11 +30,12 @@ type RabbitMQ struct {
 	*amqp.Channel
 	loggers.Logger
 	exchange string
+	queues   Queues
 }
 
-func (rabbitMQ *RabbitMQ) AddRouter(router *messages.Router) error {
-	err := rabbitMQ.Channel.ExchangeDeclare(
-		router.Name,
+func (rmq *RabbitMQ) AddExchange(name string) error {
+	err := rmq.Channel.ExchangeDeclare(
+		name,
 		"topic",
 		true,
 		false,
@@ -34,23 +46,23 @@ func (rabbitMQ *RabbitMQ) AddRouter(router *messages.Router) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "AddRouter",
-			What:  "Failure to declare a router",
+			Where: "AddExchange",
+			What:  "Failure to declare a Exchange",
 			Why: errors.Meta{
-				"Router": router.Name,
+				"Exchange": name,
 			},
 			Who: err,
 		})
 	}
 
-	rabbitMQ.exchange = router.Name
+	rmq.exchange = name
 
 	return nil
 }
 
-func (rabbitMQ *RabbitMQ) AddQueue(queue *messages.Queue) error {
-	_, err := rabbitMQ.Channel.QueueDeclare(
-		queue.Name,
+func (rmq *RabbitMQ) AddQueue(name events.Recipient) error {
+	_, err := rmq.Channel.QueueDeclare(
+		string(name),
 		true,
 		false,
 		false,
@@ -61,9 +73,212 @@ func (rabbitMQ *RabbitMQ) AddQueue(queue *messages.Queue) error {
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "AddQueue",
-			What:  "Failure to declare a queue",
+			What:  "Failure to declare a Queue",
 			Why: errors.Meta{
-				"Queue": queue.Name,
+				"Queue": name,
+			},
+			Who: err,
+		})
+	}
+	return nil
+}
+
+func (rmq *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routingKey events.Key, attributes, meta reflect.Type) error {
+	err := rmq.Channel.QueueBind(
+		string(queue),
+		string(bindingKey),
+		rmq.exchange,
+		false,
+		nil,
+	)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "AddQueueEventBind",
+			What:  "Failure to bind a Queue",
+			Why: errors.Meta{
+				"Exchange":    rmq.exchange,
+				"Queue":       queue,
+				"Binding Key": bindingKey,
+				"Routing Key": routingKey,
+			},
+			Who: err,
+		})
+	}
+
+	rmq.Logger.Info(fmt.Sprintf("Binding Queue [%s] to Exchange [%s] with Binding Key [%s]", queue, rmq.exchange, bindingKey))
+
+	rmq.queues[routingKey] = &Recipient{queue, bindingKey, attributes, meta}
+
+	return nil
+}
+
+func (rmq *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *events.Event) error {
+	received := make(map[string]json.RawMessage)
+
+	err := json.Unmarshal(data, &received)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Unmarshal",
+			What:  "Cannot unmarshal an Event",
+			Who:   err,
+		})
+	}
+
+	err = json.Unmarshal(data, event)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Unmarshal",
+			What:  "Cannot unmarshal an Event ID, OccurredOn & Key",
+			Who:   err,
+		})
+	}
+
+	var value any
+
+	if attributes != nil {
+		value = reflect.New(attributes.Elem()).Interface()
+
+		err = json.Unmarshal(received["Attributes"], value)
+
+		if err != nil {
+			return errors.New[errors.Internal](&errors.Bubble{
+				Where: "Unmarshal",
+				What:  "Cannot unmarshal an Event Attributes",
+				Who:   err,
+			})
+		}
+
+		event.Attributes = value
+	}
+
+	if meta != nil {
+		value = reflect.New(meta.Elem()).Interface()
+
+		err = json.Unmarshal(received["Meta"], value)
+
+		if err != nil {
+			return errors.New[errors.Internal](&errors.Bubble{
+				Where: "Unmarshal",
+				What:  "Cannot unmarshal an Event Meta",
+				Who:   err,
+			})
+		}
+
+		event.Meta = value
+	}
+
+	return nil
+}
+
+func (rmq *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
+	queue, ok := rmq.queues[key]
+
+	if !ok {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Subscribe",
+			What:  "Queue is not declared",
+			Why: errors.Meta{
+				"Exchange": rmq.exchange,
+				"Event":    key,
+			},
+		})
+	}
+
+	deliveries, err := rmq.Channel.Consume(
+		string(queue.Name),
+		"",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Subscribe",
+			What:  "Failure to subscribe a Consumer",
+			Why: errors.Meta{
+				"Exchange": rmq.exchange,
+				"Queue":    queue,
+			},
+			Who: err,
+		})
+	}
+
+	for delivery := range deliveries {
+		event := new(events.Event)
+
+		err := rmq.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
+
+		if err != nil {
+			rmq.Logger.Error(fmt.Sprintf("Failed to deliver a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
+			continue
+		}
+
+		err = consumer.On(event)
+
+		if err != nil {
+			rmq.Logger.Error(fmt.Sprintf("Failed to consume a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
+			continue
+		}
+
+		delivery.Ack(false)
+	}
+
+	return nil
+}
+
+func (rmq *RabbitMQ) Publish(event *events.Event) error {
+	if event.ID == "" {
+		event.ID = services.UUID()
+	}
+
+	if event.OccurredOn == "" {
+		event.OccurredOn = services.TimeNow()
+	}
+
+	body, err := json.Marshal(event)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Publish",
+			What:  "Cannot encode Event to JSON",
+			Why: errors.Meta{
+				"Exchange": rmq.exchange,
+				"Event":    event,
+			},
+			Who: err,
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+
+	defer cancel()
+
+	err = rmq.Channel.PublishWithContext(
+		ctx,
+		rmq.exchange,
+		string(event.Key),
+		false,
+		false,
+		amqp.Publishing{
+			DeliveryMode: amqp.Persistent,
+			ContentType:  "application/json",
+			Body:         body,
+		},
+	)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Publish",
+			What:  "Failure to publish a Event",
+			Why: errors.Meta{
+				"Exchange": rmq.exchange,
+				"Event":    event,
 			},
 			Who: err,
 		})
@@ -72,172 +287,7 @@ func (rabbitMQ *RabbitMQ) AddQueue(queue *messages.Queue) error {
 	return nil
 }
 
-func (rabbitMQ *RabbitMQ) AddQueueMessageBind(queue *messages.Queue, bindingKeys []string) error {
-	var errWrap error
-
-	for _, bindingKey := range bindingKeys {
-		rabbitMQ.Logger.Info(fmt.Sprintf("Binding queue [%s] to exchange [%s] with binding key [%s]", queue.Name, rabbitMQ.exchange, bindingKey))
-
-		err := rabbitMQ.Channel.QueueBind(
-			queue.Name,
-			bindingKey,
-			rabbitMQ.exchange,
-			false,
-			nil,
-		)
-
-		if err != nil {
-			errToWrap := errors.New[errors.Internal](&errors.Bubble{
-				Where: "AddQueueMessageBind",
-				What:  "Failure to bind a queue",
-				Why: errors.Meta{
-					"Queue":       queue.Name,
-					"Binding Key": bindingKey,
-					"Exchange":    rabbitMQ.exchange,
-				},
-				Who: err,
-			})
-
-			errWrap = errors.Join(errWrap, errToWrap)
-		}
-	}
-
-	if errWrap != nil {
-		return errors.BubbleUp(errWrap, "AddQueueMessageBind")
-	}
-
-	return nil
-}
-
-func (rabbitMQ *RabbitMQ) AddQueueConsumer(consumer messages.Consumer) error {
-	var errWrap error
-
-	for _, queue := range consumer.SubscribedTo() {
-		deliveries, err := rabbitMQ.Channel.Consume(
-			queue.Name,
-			"",
-			false,
-			false,
-			false,
-			false,
-			nil,
-		)
-
-		if err != nil {
-			errToWrap := errors.New[errors.Internal](&errors.Bubble{
-				Where: "AddQueueConsumer",
-				What:  "Failure to register a consumer",
-				Why: errors.Meta{
-					"Queue":    queue.Name,
-					"Exchange": rabbitMQ.exchange,
-				},
-				Who: err,
-			})
-
-			errWrap = errors.Join(errWrap, errToWrap)
-
-			continue
-		}
-
-		go func() {
-			for delivery := range deliveries {
-				message := new(messages.Message)
-
-				err := json.Unmarshal(delivery.Body, message)
-
-				if err != nil {
-					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to deliver a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err))
-					continue
-				}
-
-				err = consumer.On(message)
-
-				if err != nil {
-					rabbitMQ.Logger.Error(fmt.Sprintf("Failed to consume a message with id [%s] from queue [%s]: [%s]", message.Id, queue.Name, err))
-					continue
-				}
-
-				delivery.Ack(false)
-			}
-		}()
-	}
-
-	if errWrap != nil {
-		return errors.BubbleUp(errWrap, "AddQueueConsumer")
-	}
-
-	return nil
-}
-
-func (rabbitMQ *RabbitMQ) PublishMessages(messages []*messages.Message) error {
-	var errWrap error
-
-	for _, message := range messages {
-		if message.Id == "" {
-			message.Id = uuid.NewString()
-		}
-
-		if message.OccurredOn == "" {
-			message.OccurredOn = time.Now().UTC().Format(time.RFC3339Nano)
-		}
-
-		body, err := json.Marshal(message)
-
-		if err != nil {
-			errToWrap := errors.New[errors.Internal](&errors.Bubble{
-				Where: "PublishMessages",
-				What:  "Cannot encode message to JSON",
-				Why: errors.Meta{
-					"Exchange": rabbitMQ.exchange,
-					"Message":  message.Id,
-				},
-				Who: err,
-			})
-
-			errWrap = errors.Join(errWrap, errToWrap)
-
-			continue
-		}
-
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-
-		defer cancel()
-
-		err = rabbitMQ.Channel.PublishWithContext(ctx,
-			rabbitMQ.exchange,
-			message.Type,
-			false,
-			false,
-			amqp.Publishing{
-				DeliveryMode: amqp.Persistent,
-				ContentType:  "application/json",
-				Body:         body,
-			},
-		)
-
-		if err != nil {
-			errToWrap := errors.New[errors.Internal](&errors.Bubble{
-				Where: "PublishMessages",
-				What:  "Failure to publish a message",
-				Why: errors.Meta{
-					"Exchange": rabbitMQ.exchange,
-					"Message":  message.Id,
-				},
-				Who: err,
-			})
-
-			errWrap = errors.Join(errWrap, errToWrap)
-		}
-	}
-
-	if errWrap != nil {
-		return errors.BubbleUp(errWrap, "PublishMessages")
-	}
-
-	return nil
-}
-
-func Open(uri string, logger loggers.Logger) (*RabbitMQ, error) {
+func Open(uri string, exchange string, queues Queues, logger loggers.Logger) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {
@@ -253,16 +303,39 @@ func Open(uri string, logger loggers.Logger) (*RabbitMQ, error) {
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Open",
-			What:  "Failure to open a channel",
+			What:  "Failure to open a Channel",
 			Who:   err,
 		})
 	}
 
-	return &RabbitMQ{
+	rmq := &RabbitMQ{
 		Connection: session,
 		Channel:    channel,
 		Logger:     logger,
-	}, nil
+		queues:     make(Queues),
+	}
+
+	err = rmq.AddExchange(exchange)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Open")
+	}
+
+	for routingKey, queue := range queues {
+		err = rmq.AddQueue(queue.Name)
+
+		if err != nil {
+			return nil, errors.BubbleUp(err, "Open")
+		}
+
+		err = rmq.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
+
+		if err != nil {
+			return nil, errors.BubbleUp(err, "Open")
+		}
+	}
+
+	return rmq, nil
 }
 
 func Close(session *RabbitMQ) error {
@@ -271,7 +344,7 @@ func Close(session *RabbitMQ) error {
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Close",
-			What:  "Failure to close channel",
+			What:  "Failure to close Channel",
 			Who:   err,
 		})
 	}

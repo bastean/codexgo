@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
@@ -12,12 +12,12 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
-func Start(repository repository.Repository, broker messages.Broker, hashing hashing.Hashing) {
+func Start(repository repository.Repository, bus events.Bus, hashing hashing.Hashing) {
 	Create = &create.Handler{
 		Create: &create.Create{
 			Repository: repository,
 		},
-		Broker: broker,
+		Bus: bus,
 	}
 
 	Read = &read.Handler{

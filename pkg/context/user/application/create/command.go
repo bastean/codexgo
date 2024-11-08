@@ -1,40 +1,40 @@
 package create
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-const CommandType command.Type = "user.command.creating.user"
+const CommandType commands.Type = "user.command.creating.user"
 
 type Command struct {
 	Id, Email, Username, Password string
 }
 
-func (*Command) Type() command.Type {
+func (*Command) Type() commands.Type {
 	return CommandType
 }
 
 type Handler struct {
 	cases.Create
-	messages.Broker
+	events.Bus
 }
 
-func (handler *Handler) SubscribedTo() command.Type {
+func (handler *Handler) SubscribedTo() commands.Type {
 	return CommandType
 }
 
-func (handler *Handler) Handle(cmd command.Command) error {
+func (handler *Handler) Handle(cmd commands.Command) error {
 	data, ok := cmd.(*Command)
 
 	if !ok {
 		return errors.CommandAssertion("Handle")
 	}
 
-	aggregate, err := user.New(&user.Primitive{
+	account, err := user.New(&user.Primitive{
 		Id:       data.Id,
 		Email:    data.Email,
 		Username: data.Username,
@@ -45,13 +45,19 @@ func (handler *Handler) Handle(cmd command.Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	err = handler.Create.Run(aggregate)
+	err = handler.Create.Run(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	handler.Broker.PublishMessages(aggregate.Pull())
+	for _, event := range account.Pull() {
+		err = handler.Bus.Publish(event)
+
+		if err != nil {
+			return errors.BubbleUp(err, "Handle")
+		}
+	}
 
 	return nil
 }

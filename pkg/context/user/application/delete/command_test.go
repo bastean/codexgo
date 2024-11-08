@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -16,7 +16,7 @@ import (
 
 type DeleteTestSuite struct {
 	suite.Suite
-	sut        command.Handler
+	sut        commands.Handler
 	delete     cases.Delete
 	hashing    *cryptographic.HashingMock
 	repository *persistence.UserMock
@@ -38,7 +38,7 @@ func (suite *DeleteTestSuite) SetupTest() {
 }
 
 func (suite *DeleteTestSuite) TestSubscribedTo() {
-	const expected command.Type = "user.command.deleting.user"
+	const expected commands.Type = "user.command.deleting.user"
 
 	actual := suite.sut.SubscribedTo()
 
