@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -37,39 +38,29 @@ func (suite *LoginTestSuite) SetupTest() {
 	}
 }
 
-func (suite *LoginTestSuite) TestSubscribedTo() {
-	const expected queries.Type = "user.query.logging.user"
-
-	actual := suite.sut.SubscribedTo()
-
-	suite.Equal(expected, actual)
-}
-
-func (suite *LoginTestSuite) TestReplyTo() {
-	const expected queries.Type = "user.response.logging.user"
-
-	actual := suite.sut.ReplyTo()
-
-	suite.Equal(expected, actual)
-}
-
 func (suite *LoginTestSuite) TestHandle() {
-	random := user.Random()
-
-	query := &login.Query{
-		Email:    random.Email.Value,
-		Password: random.Password.Value,
-	}
+	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
-		Email: random.Email,
+		Email: account.Email,
 	}
 
-	suite.repository.On("Search", criteria).Return(random)
+	suite.repository.On("Search", criteria).Return(account)
 
-	suite.hashing.On("IsNotEqual", random.Password.Value, random.Password.Value).Return(false)
+	suite.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
 
-	expected := random.ToPrimitive()
+	expected := messages.New[queries.Response](
+		login.ResponseKey,
+		(*login.ResponseAttributes)(account.ToPrimitive()),
+		new(login.ResponseMeta),
+	)
+
+	attributes := &login.QueryAttributes{
+		Email:    account.Email.Value,
+		Password: account.Password.Value,
+	}
+
+	query := messages.RandomWithAttributes[queries.Query](attributes, false)
 
 	actual, err := suite.sut.Handle(query)
 

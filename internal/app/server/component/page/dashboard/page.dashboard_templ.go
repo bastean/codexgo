@@ -59,7 +59,7 @@ func Logout() templ.ComponentScript {
 	}
 }
 
-func Page(user *user.ReadResponse) templ.Component {
+func Page(attributes *user.ReadResponseAttributes) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -97,9 +97,9 @@ func Page(user *user.ReadResponse) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(user.Username)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(attributes.Username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/page.dashboard.templ`, Line: 59, Col: 42}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/page.dashboard.templ`, Line: 59, Col: 48}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -109,7 +109,7 @@ func Page(user *user.ReadResponse) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if !user.Verified {
+			if !attributes.Verified {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<i class=\"inverted red times circle icon\" data-variation=\"red\" data-content=\"Unverified\"></i> ")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -158,7 +158,7 @@ func Page(user *user.ReadResponse) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = UpdateForm(user.Email, user.Username).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = UpdateForm(attributes.Email, attributes.Username).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -170,7 +170,7 @@ func Page(user *user.ReadResponse) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if !user.Verified {
+			if !attributes.Verified {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"ui looping pulsating transition blue bottom fixed nag\"><div class=\"title\"><i class=\"check circle icon\"></i> Account Confirmation</div><div>Link sent. Please check your inbox</div><i class=\"close icon\"></i></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err

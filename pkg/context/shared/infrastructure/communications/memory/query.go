@@ -8,45 +8,45 @@ import (
 )
 
 type (
-	queryMapper = map[queries.Type]queries.Handler
+	QueryMapper = map[queries.Key]queries.Handler
 )
 
 type QueryBus struct {
-	Handlers queryMapper
+	Handlers QueryMapper
 }
 
-func (bus *QueryBus) Register(ask queries.Type, handler queries.Handler) error {
-	_, ok := bus.Handlers[ask]
+func (bus *QueryBus) Register(key queries.Key, handler queries.Handler) error {
+	_, ok := bus.Handlers[key]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Register",
-			What:  fmt.Sprintf("%s already registered", ask),
+			What:  fmt.Sprintf("%s already registered", key),
 			Why: errors.Meta{
-				"Query": ask,
+				"Query": key,
 			},
 		})
 	}
 
-	bus.Handlers[ask] = handler
+	bus.Handlers[key] = handler
 
 	return nil
 }
 
-func (bus *QueryBus) Ask(ask queries.Query) (queries.Response, error) {
-	handler, ok := bus.Handlers[ask.Type()]
+func (bus *QueryBus) Ask(query *queries.Query) (*queries.Response, error) {
+	handler, ok := bus.Handlers[query.Key]
 
 	if !ok {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Ask",
 			What:  "Failure to execute a Query without a Handler",
 			Why: errors.Meta{
-				"Query": ask.Type(),
+				"Query": query.Key,
 			},
 		})
 	}
 
-	response, err := handler.Handle(ask)
+	response, err := handler.Handle(query)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Ask")
@@ -55,15 +55,15 @@ func (bus *QueryBus) Ask(ask queries.Query) (queries.Response, error) {
 	return response, nil
 }
 
-func NewQueryBus(handlers []queries.Handler) (*QueryBus, error) {
+func NewQueryBus(mapper QueryMapper) (*QueryBus, error) {
 	bus := &QueryBus{
-		Handlers: make(queryMapper),
+		Handlers: make(QueryMapper),
 	}
 
 	var err error
 
-	for _, handler := range handlers {
-		err = bus.Register(handler.SubscribedTo(), handler)
+	for key, handler := range mapper {
+		err = bus.Register(key, handler)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "NewQueryBus")

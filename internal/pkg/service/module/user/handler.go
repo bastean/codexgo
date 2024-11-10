@@ -25,11 +25,31 @@ var (
 	VerifyCommandKey = verify.CommandKey
 )
 
+var (
+	ReadQueryKey  = read.QueryKey
+	LoginQueryKey = login.QueryKey
+)
+
+var (
+	ReadResponseKey  = read.ResponseKey
+	LoginResponseKey = login.ResponseKey
+)
+
 type (
 	CreateCommandAttributes = create.CommandAttributes
 	UpdateCommandAttributes = update.CommandAttributes
 	DeleteCommandAttributes = delete.CommandAttributes
 	VerifyCommandAttributes = verify.CommandAttributes
+)
+
+type (
+	ReadQueryAttributes  = read.QueryAttributes
+	LoginQueryAttributes = login.QueryAttributes
+)
+
+type (
+	ReadResponseAttributes  = read.ResponseAttributes
+	LoginResponseAttributes = login.ResponseAttributes
 )
 
 type (
@@ -40,11 +60,11 @@ type (
 )
 
 type (
-	ReadQuery  = read.Query
-	LoginQuery = login.Query
+	ReadQueryMeta  = read.QueryMeta
+	LoginQueryMeta = login.QueryMeta
 )
 
 type (
-	ReadResponse  = read.Response
-	LoginResponse = login.Response
+	ReadResponseMeta  = read.ResponseMeta
+	LoginResponseMeta = login.ResponseMeta
 )

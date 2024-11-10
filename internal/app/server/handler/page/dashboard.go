@@ -7,9 +7,9 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/query"
 )
 
 func Dashboard(c *gin.Context) {
@@ -20,18 +20,22 @@ func Dashboard(c *gin.Context) {
 		return
 	}
 
-	query := new(user.ReadQuery)
+	attributes := new(user.ReadQueryAttributes)
 
-	query.Id = format.ToString(id)
+	attributes.Id = format.ToString(id)
 
-	response, err := communication.QueryBus.Ask(query)
+	response, err := query.Bus.Ask(query.New(
+		user.ReadQueryKey,
+		attributes,
+		new(user.ReadQueryMeta),
+	))
 
 	if err != nil {
 		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
 		return
 	}
 
-	found, ok := response.(*user.ReadResponse)
+	found, ok := response.Attributes.(*user.ReadResponseAttributes)
 
 	if !ok {
 		errs.AbortByErrWithRedirect(c, errs.Assertion("Dashboard"), "/")

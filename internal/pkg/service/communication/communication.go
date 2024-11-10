@@ -1,7 +1,6 @@
 package communication
 
 import (
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/memory"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/rabbitmq"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
@@ -21,7 +20,6 @@ var Service = &struct {
 var (
 	err      error
 	RabbitMQ *rabbitmq.RabbitMQ
-	QueryBus *memory.QueryBus
 )
 
 func Up() error {

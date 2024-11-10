@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
@@ -14,35 +15,28 @@ import (
 
 type QueryBusTestSuite struct {
 	suite.Suite
-	sut      queries.Bus
-	query    *communications.QueryMock
-	response *communications.ResponseMock
-	handler  *communications.QueryHandlerMock
+	sut     queries.Bus
+	handler *communications.QueryHandlerMock
 }
 
 func (suite *QueryBusTestSuite) SetupTest() {
-	suite.query = new(communications.QueryMock)
-
-	suite.response = new(communications.ResponseMock)
-
 	suite.handler = new(communications.QueryHandlerMock)
 
 	suite.sut = &memory.QueryBus{
-		Handlers: make(map[queries.Type]queries.Handler),
+		Handlers: make(map[queries.Key]queries.Handler),
 	}
 }
 
 func (suite *QueryBusTestSuite) TestRegister() {
-	const ask queries.Type = "query.testing.register"
-	suite.NoError(suite.sut.Register(ask, suite.handler))
+	suite.NoError(suite.sut.Register(messages.Random[queries.Query]().Key, suite.handler))
 }
 
 func (suite *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
-	const ask queries.Type = "query.testing.register_duplicate"
+	key := messages.Random[queries.Query]().Key
 
-	suite.NoError(suite.sut.Register(ask, suite.handler))
+	suite.NoError(suite.sut.Register(key, suite.handler))
 
-	err := suite.sut.Register(ask, suite.handler)
+	err := suite.sut.Register(key, suite.handler)
 
 	var actual *errors.Internal
 
@@ -51,9 +45,9 @@ func (suite *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Register",
-		What:  fmt.Sprintf("%s already registered", ask),
+		What:  fmt.Sprintf("%s already registered", key),
 		Why: errors.Meta{
-			"Query": ask,
+			"Query": key,
 		},
 	}}
 
@@ -61,35 +55,29 @@ func (suite *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
 }
 
 func (suite *QueryBusTestSuite) TestAsk() {
-	const ask queries.Type = "query.testing.ask"
+	query := messages.Random[queries.Query]()
 
-	suite.NoError(suite.sut.Register(ask, suite.handler))
+	suite.NoError(suite.sut.Register(query.Key, suite.handler))
 
-	suite.query.On("Type").Return(ask)
+	response := messages.Random[queries.Response]()
 
-	suite.handler.On("Handle", suite.query).Return(suite.response)
+	suite.handler.On("Handle", query).Return(response)
 
-	actual, err := suite.sut.Ask(suite.query)
+	actual, err := suite.sut.Ask(query)
 
 	suite.NoError(err)
 
-	suite.query.AssertExpectations(suite.T())
-
 	suite.handler.AssertExpectations(suite.T())
 
-	expected := suite.response
+	expected := response
 
 	suite.Equal(expected, actual)
 }
 
 func (suite *QueryBusTestSuite) TestAskErrMissingHandler() {
-	const ask queries.Type = "query.testing.ask_missing"
+	query := messages.Random[queries.Query]()
 
-	suite.query.On("Type").Return(ask)
-
-	_, err := suite.sut.Ask(suite.query)
-
-	suite.query.AssertExpectations(suite.T())
+	_, err := suite.sut.Ask(query)
 
 	var actual *errors.Internal
 
@@ -100,7 +88,7 @@ func (suite *QueryBusTestSuite) TestAskErrMissingHandler() {
 		Where: "Ask",
 		What:  "Failure to execute a Query without a Handler",
 		Why: errors.Meta{
-			"Query": ask,
+			"Query": query.Key,
 		},
 	}}
 

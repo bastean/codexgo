@@ -39,7 +39,7 @@ script Logout() {
     window.location.replace("/");
 }
 
-templ Page(user *user.ReadResponse) {
+templ Page(attributes *user.ReadResponseAttributes) {
 	@layout.Index(scripts.Head{}, scripts.Body{}) {
 		<div class="ui centered grid container" style="height: 100%;">
 			<div class="sixteen wide column">
@@ -56,11 +56,11 @@ templ Page(user *user.ReadResponse) {
 							<img class="ui avatar image" src="/public/static/assets/favicon.png"/>
 							<div class="content">
 								<div class="ui inverted dropdown">
-									<div class="text">{ user.Username }</div>
+									<div class="text">{ attributes.Username }</div>
 									<i class="dropdown icon"></i>
 									<div class="menu">
 										<div class="header">
-											if !user.Verified {
+											if !attributes.Verified {
 												<i class="inverted red times circle icon" data-variation="red" data-content="Unverified"></i>
 											} else {
 												<i class="inverted green check circle icon" data-variation="green" data-content="Verified"></i>
@@ -85,10 +85,10 @@ templ Page(user *user.ReadResponse) {
 				</div>
 			</div>
 			<div class="sixteen wide mobile eight wide computer column">
-				@UpdateForm(user.Email, user.Username)
+				@UpdateForm(attributes.Email, attributes.Username)
 				@DeleteForm()
 			</div>
-			if !user.Verified {
+			if !attributes.Verified {
 				<div class="ui looping pulsating transition blue bottom fixed nag">
 					<div class="title">
 						<i class="check circle icon"></i>

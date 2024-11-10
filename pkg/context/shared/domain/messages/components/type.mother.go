@@ -6,7 +6,7 @@ import (
 )
 
 func TypeWithValidValue() *Type {
-	value, err := NewType(services.Create.RandomString([]string{"event", "command"}))
+	value, err := NewType(services.Create.RandomString([]string{"event", "command", "query", "response"}))
 
 	if err != nil {
 		errors.Panic(err.Error(), "TypeWithValidValue")

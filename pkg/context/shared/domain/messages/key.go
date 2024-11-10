@@ -9,10 +9,12 @@ import (
 )
 
 var Type = struct {
-	Event, Command string
+	Event, Command, Query, Response string
 }{
-	Event:   "event",
-	Command: "command",
+	Event:    "event",
+	Command:  "command",
+	Query:    "query",
+	Response: "response",
 }
 
 var Status = struct {
@@ -34,10 +36,10 @@ type (
 //   - Entity		= Aggregate/Root
 //
 // Nomenclature of a Key:
-//   - organization.service.version.type.entity.event/command.status
+//   - organization.service.version.type.entity.event/command/query/response.status
 //   - codexgo.user.1.event.user.created.succeeded
 type KeyComponents struct {
-	Organization, Service, Version, Type, Entity, Event, Command, Status string
+	Organization, Service, Version, Type, Entity, Event, Command, Query, Response, Status string
 }
 
 func NewKey(key *KeyComponents) Key {
@@ -53,6 +55,8 @@ func NewKey(key *KeyComponents) Key {
 
 	event, errEvent := components.NewEvent(key.Event)
 	command, errCommand := components.NewCommand(key.Command)
+	query, errQuery := components.NewQuery(key.Query)
+	response, errResponse := components.NewResponse(key.Response)
 
 	var action string
 	var errAction error
@@ -64,6 +68,12 @@ func NewKey(key *KeyComponents) Key {
 	case Type.Command:
 		action = command.Value
 		errAction = errCommand
+	case Type.Query:
+		action = query.Value
+		errAction = errQuery
+	case Type.Response:
+		action = response.Value
+		errAction = errResponse
 	}
 
 	status, errStatus := components.NewStatus(key.Status)

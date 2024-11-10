@@ -1,24 +1,23 @@
 package queries
 
-type (
-	Type string
+import (
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type Query interface {
-	Type() Type
-}
+type (
+	Key = messages.Key
+)
 
-type Response interface {
-	Type() Type
-}
+type (
+	Query    messages.Message
+	Response messages.Message
+)
 
 type Handler interface {
-	SubscribedTo() Type
-	ReplyTo() Type
-	Handle(Query) (Response, error)
+	Handle(*Query) (*Response, error)
 }
 
 type Bus interface {
-	Register(Type, Handler) error
-	Ask(Query) (Response, error)
+	Register(Key, Handler) error
+	Ask(*Query) (*Response, error)
 }

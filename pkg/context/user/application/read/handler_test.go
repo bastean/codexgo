@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -32,36 +33,26 @@ func (suite *ReadTestSuite) SetupTest() {
 	}
 }
 
-func (suite *ReadTestSuite) TestSubscribedTo() {
-	const expected queries.Type = "user.query.reading.user"
-
-	actual := suite.sut.SubscribedTo()
-
-	suite.Equal(expected, actual)
-}
-
-func (suite *ReadTestSuite) TestReplyTo() {
-	const expected queries.Type = "user.response.reading.user"
-
-	actual := suite.sut.ReplyTo()
-
-	suite.Equal(expected, actual)
-}
-
 func (suite *ReadTestSuite) TestHandle() {
-	random := user.Random()
-
-	query := &read.Query{
-		Id: random.Id.Value,
-	}
+	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
-		Id: random.Id,
+		Id: account.Id,
 	}
 
-	suite.repository.On("Search", criteria).Return(random)
+	suite.repository.On("Search", criteria).Return(account)
 
-	expected := random.ToPrimitive()
+	expected := messages.New[queries.Response](
+		read.ResponseKey,
+		(*read.ResponseAttributes)(account.ToPrimitive()),
+		new(read.ResponseMeta),
+	)
+
+	attributes := &read.QueryAttributes{
+		Id: account.Id.Value,
+	}
+
+	query := messages.RandomWithAttributes[queries.Query](attributes, false)
 
 	actual, err := suite.sut.Handle(query)
 

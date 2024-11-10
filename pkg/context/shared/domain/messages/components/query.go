@@ -8,29 +8,28 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-var (
-	TypeOneOf = []string{"Event", "Command", "Query", "Response"}
+const (
+	QueryMinCharactersLength = "1"
+	QueryMaxCharactersLength = "20"
 )
 
-type Type struct {
-	Value string `validate:"oneof=event command query response"`
+type Query struct {
+	Value string `validate:"gte=1,lte=20,alpha"`
 }
 
-func NewType(value string) (*Type, error) {
+func NewQuery(value string) (*Query, error) {
 	value = strings.TrimSpace(value)
 
-	value = strings.ToLower(value)
-
-	valueObj := &Type{
+	valueObj := &Query{
 		Value: value,
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewType",
-			What:  fmt.Sprintf("Type must be only one of these values: %s", strings.Join(TypeOneOf, ", ")),
+			Where: "NewQuery",
+			What:  fmt.Sprintf("Query must be between %s to %s characters and be alpha only", QueryMinCharactersLength, QueryMaxCharactersLength),
 			Why: errors.Meta{
-				"Type": value,
+				"Query": value,
 			},
 		})
 	}

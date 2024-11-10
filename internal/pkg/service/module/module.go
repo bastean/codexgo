@@ -3,10 +3,10 @@ package module
 import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/command"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/memory"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/persistence"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/query"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
@@ -52,9 +52,9 @@ func Start() error {
 		return errors.BubbleUp(err, "Start")
 	}
 
-	communication.QueryBus, err = memory.NewQueryBus([]memory.QueryHandler{
-		user.ReadHandler,
-		user.LoginHandler,
+	query.Bus, err = query.NewBus(query.Mapper{
+		user.ReadQueryKey:  user.ReadHandler,
+		user.LoginQueryKey: user.LoginHandler,
 	})
 
 	if err != nil {
