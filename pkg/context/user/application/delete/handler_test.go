@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -37,31 +38,25 @@ func (suite *DeleteTestSuite) SetupTest() {
 	}
 }
 
-func (suite *DeleteTestSuite) TestSubscribedTo() {
-	const expected commands.Type = "user.command.deleting.user"
-
-	actual := suite.sut.SubscribedTo()
-
-	suite.Equal(expected, actual)
-}
-
 func (suite *DeleteTestSuite) TestHandle() {
-	random := user.Random()
-
-	command := &delete.Command{
-		Id:       random.Id.Value,
-		Password: random.Password.Value,
-	}
+	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
-		Id: random.Id,
+		Id: account.Id,
 	}
 
-	suite.repository.On("Search", criteria).Return(random)
+	suite.repository.On("Search", criteria).Return(account)
 
-	suite.hashing.On("IsNotEqual", random.Password.Value, random.Password.Value).Return(false)
+	suite.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
 
-	suite.repository.On("Delete", random.Id)
+	suite.repository.On("Delete", account.Id)
+
+	attributes := &delete.CommandAttributes{
+		Id:       account.Id.Value,
+		Password: account.Password.Value,
+	}
+
+	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
 	suite.NoError(suite.sut.Handle(command))
 

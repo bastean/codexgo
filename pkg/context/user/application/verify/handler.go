@@ -3,30 +3,32 @@ package verify
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-const CommandType commands.Type = "user.command.verifying.user"
+var CommandKey = messages.NewKey(&messages.KeyComponents{
+	Service: "user",
+	Version: "1",
+	Type:    messages.Type.Command,
+	Entity:  "user",
+	Command: "verifying",
+	Status:  messages.Status.Queued,
+})
 
-type Command struct {
+type CommandAttributes struct {
 	Id string
 }
 
-func (*Command) Type() commands.Type {
-	return CommandType
-}
+type CommandMeta struct{}
 
 type Handler struct {
 	cases.Verify
 }
 
-func (handler *Handler) SubscribedTo() commands.Type {
-	return CommandType
-}
-
-func (handler *Handler) Handle(cmd commands.Command) error {
-	data, ok := cmd.(*Command)
+func (handler *Handler) Handle(command *commands.Command) error {
+	data, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {
 		return errors.CommandAssertion("Handle")

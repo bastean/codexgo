@@ -5,6 +5,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
 type User struct {
@@ -73,7 +74,7 @@ func New(primitive *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "New")
 	}
 
-	aggregate.Record(events.New(
+	aggregate.Record(messages.New[events.Event](
 		user.CreatedSucceededKey,
 		&user.CreatedSucceededAttributes{
 			ID:       aggregate.Id.Value,

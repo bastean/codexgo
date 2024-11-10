@@ -4,41 +4,43 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-const CommandType commands.Type = "user.command.creating.user"
+var CommandKey = messages.NewKey(&messages.KeyComponents{
+	Service: "user",
+	Version: "1",
+	Type:    messages.Type.Command,
+	Entity:  "user",
+	Command: "creating",
+	Status:  messages.Status.Queued,
+})
 
-type Command struct {
+type CommandAttributes struct {
 	Id, Email, Username, Password string
 }
 
-func (*Command) Type() commands.Type {
-	return CommandType
-}
+type CommandMeta struct{}
 
 type Handler struct {
 	cases.Create
 	events.Bus
 }
 
-func (handler *Handler) SubscribedTo() commands.Type {
-	return CommandType
-}
-
-func (handler *Handler) Handle(cmd commands.Command) error {
-	data, ok := cmd.(*Command)
+func (handler *Handler) Handle(command *commands.Command) error {
+	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {
 		return errors.CommandAssertion("Handle")
 	}
 
 	account, err := user.New(&user.Primitive{
-		Id:       data.Id,
-		Email:    data.Email,
-		Username: data.Username,
-		Password: data.Password,
+		Id:       attributes.Id,
+		Email:    attributes.Email,
+		Username: attributes.Username,
+		Password: attributes.Password,
 	})
 
 	if err != nil {

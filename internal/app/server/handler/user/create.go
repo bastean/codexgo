@@ -7,22 +7,26 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/command"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
 
 func Create(c *gin.Context) {
-	command := new(user.CreateCommand)
+	attributes := new(user.CreateCommandAttributes)
 
-	err := c.BindJSON(command)
+	err := c.BindJSON(attributes)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err, "Create"))
 		return
 	}
 
-	err = communication.CommandBus.Dispatch(command)
+	err = command.Bus.Dispatch(command.New(
+		user.CreateCommandKey,
+		attributes,
+		new(user.CreateCommandMeta),
+	))
 
 	if err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))

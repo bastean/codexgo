@@ -19,11 +19,3 @@ type Bus interface {
 	Subscribe(Key, Consumer) error
 	Publish(*Event) error
 }
-
-func New(key Key, attributes, meta any) *Event {
-	return &Event{
-		Key:        key,
-		Attributes: attributes,
-		Meta:       meta,
-	}
-}

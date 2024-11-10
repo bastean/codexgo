@@ -6,11 +6,11 @@ import (
 )
 
 type (
-	eventMapper = map[events.Key][]events.Consumer
+	EventMapper = map[events.Key][]events.Consumer
 )
 
 type EventBus struct {
-	Consumers eventMapper
+	Consumers EventMapper
 }
 
 func (bus *EventBus) Subscribe(key events.Key, consumer events.Consumer) error {
@@ -42,9 +42,9 @@ func (bus *EventBus) Publish(event *events.Event) error {
 	return nil
 }
 
-func NewEventBus(mapper eventMapper) (*EventBus, error) {
+func NewEventBus(mapper EventMapper) (*EventBus, error) {
 	bus := &EventBus{
-		Consumers: make(eventMapper, len(mapper)),
+		Consumers: make(EventMapper, len(mapper)),
 	}
 
 	var err error

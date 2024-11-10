@@ -9,11 +9,34 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 )
 
+var (
+	CreateHandler *create.Handler
+	ReadHandler   *read.Handler
+	UpdateHandler *update.Handler
+	DeleteHandler *delete.Handler
+	VerifyHandler *verify.Handler
+	LoginHandler  *login.Handler
+)
+
+var (
+	CreateCommandKey = create.CommandKey
+	UpdateCommandKey = update.CommandKey
+	DeleteCommandKey = delete.CommandKey
+	VerifyCommandKey = verify.CommandKey
+)
+
 type (
-	CreateCommand = create.Command
-	UpdateCommand = update.Command
-	DeleteCommand = delete.Command
-	VerifyCommand = verify.Command
+	CreateCommandAttributes = create.CommandAttributes
+	UpdateCommandAttributes = update.CommandAttributes
+	DeleteCommandAttributes = delete.CommandAttributes
+	VerifyCommandAttributes = verify.CommandAttributes
+)
+
+type (
+	CreateCommandMeta = create.CommandMeta
+	UpdateCommandMeta = update.CommandMeta
+	DeleteCommandMeta = delete.CommandMeta
+	VerifyCommandMeta = verify.CommandMeta
 )
 
 type (
@@ -24,13 +47,4 @@ type (
 type (
 	ReadResponse  = read.Response
 	LoginResponse = login.Response
-)
-
-var (
-	Create *create.Handler
-	Read   *read.Handler
-	Update *update.Handler
-	Delete *delete.Handler
-	Verify *verify.Handler
-	Login  *login.Handler
 )

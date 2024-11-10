@@ -9,7 +9,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/command"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
@@ -22,18 +22,22 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	command := new(user.UpdateCommand)
+	attributes := new(user.UpdateCommandAttributes)
 
-	err := c.BindJSON(command)
+	err := c.BindJSON(attributes)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err, "Update"))
 		return
 	}
 
-	command.Id = format.ToString(id)
+	attributes.Id = format.ToString(id)
 
-	err = communication.CommandBus.Dispatch(command)
+	err = command.Bus.Dispatch(command.New(
+		user.UpdateCommandKey,
+		attributes,
+		new(user.UpdateCommandMeta),
+	))
 
 	if err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Update"))

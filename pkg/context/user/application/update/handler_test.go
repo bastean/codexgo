@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -37,27 +38,19 @@ func (suite *UpdateTestSuite) SetupTest() {
 	}
 }
 
-func (suite *UpdateTestSuite) TestSubscribedTo() {
-	const expected commands.Type = "user.command.updating.user"
-
-	actual := suite.sut.SubscribedTo()
-
-	suite.Equal(expected, actual)
-}
-
 func (suite *UpdateTestSuite) TestHandle() {
-	command := update.RandomCommand()
+	attributes := update.CommandRandomAttributes()
 
 	account, err := user.FromPrimitive(&user.Primitive{
-		Id:       command.Id,
-		Email:    command.Email,
-		Username: command.Username,
-		Password: command.UpdatedPassword,
+		Id:       attributes.Id,
+		Email:    attributes.Email,
+		Username: attributes.Username,
+		Password: attributes.UpdatedPassword,
 	})
 
 	suite.NoError(err)
 
-	id, err := user.NewId(command.Id)
+	id, err := user.NewId(attributes.Id)
 
 	suite.NoError(err)
 
@@ -67,9 +60,11 @@ func (suite *UpdateTestSuite) TestHandle() {
 
 	suite.repository.On("Search", criteria).Return(account)
 
-	suite.hashing.On("IsNotEqual", account.Password.Value, command.Password).Return(false)
+	suite.hashing.On("IsNotEqual", account.Password.Value, attributes.Password).Return(false)
 
 	suite.repository.On("Update", account)
+
+	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
 	suite.NoError(suite.sut.Handle(command))
 

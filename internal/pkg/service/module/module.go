@@ -1,6 +1,7 @@
 package module
 
 import (
+	"github.com/bastean/codexgo/v4/internal/pkg/service/command"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/memory"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
@@ -39,11 +40,11 @@ func Start() error {
 
 	log.Starting(communication.Service.InMemory)
 
-	communication.CommandBus, err = memory.NewCommandBus([]memory.CommandHandler{
-		user.Create,
-		user.Update,
-		user.Delete,
-		user.Verify,
+	command.Bus, err = command.NewBus(command.Mapper{
+		user.CreateCommandKey: user.CreateHandler,
+		user.UpdateCommandKey: user.UpdateHandler,
+		user.DeleteCommandKey: user.DeleteHandler,
+		user.VerifyCommandKey: user.VerifyHandler,
 	})
 
 	if err != nil {
@@ -52,8 +53,8 @@ func Start() error {
 	}
 
 	communication.QueryBus, err = memory.NewQueryBus([]memory.QueryHandler{
-		user.Read,
-		user.Login,
+		user.ReadHandler,
+		user.LoginHandler,
 	})
 
 	if err != nil {

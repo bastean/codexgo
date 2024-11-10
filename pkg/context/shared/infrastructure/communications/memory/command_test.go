@@ -8,6 +8,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
 )
@@ -15,31 +16,27 @@ import (
 type CommandBusTestSuite struct {
 	suite.Suite
 	sut     commands.Bus
-	command *communications.CommandMock
 	handler *communications.CommandHandlerMock
 }
 
 func (suite *CommandBusTestSuite) SetupTest() {
-	suite.command = new(communications.CommandMock)
-
 	suite.handler = new(communications.CommandHandlerMock)
 
 	suite.sut = &memory.CommandBus{
-		Handlers: make(map[commands.Type]commands.Handler),
+		Handlers: make(map[commands.Key]commands.Handler),
 	}
 }
 
 func (suite *CommandBusTestSuite) TestRegister() {
-	const cmd commands.Type = "command.testing.register"
-	suite.NoError(suite.sut.Register(cmd, suite.handler))
+	suite.NoError(suite.sut.Register(messages.Random[commands.Command]().Key, suite.handler))
 }
 
 func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
-	const cmd commands.Type = "command.testing.register_duplicate"
+	key := messages.Random[commands.Command]().Key
 
-	suite.NoError(suite.sut.Register(cmd, suite.handler))
+	suite.NoError(suite.sut.Register(key, suite.handler))
 
-	err := suite.sut.Register(cmd, suite.handler)
+	err := suite.sut.Register(key, suite.handler)
 
 	var actual *errors.Internal
 
@@ -48,9 +45,9 @@ func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Register",
-		What:  fmt.Sprintf("%s already registered", cmd),
+		What:  fmt.Sprintf("%s already registered", key),
 		Why: errors.Meta{
-			"Command": cmd,
+			"Command": key,
 		},
 	}}
 
@@ -58,29 +55,21 @@ func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 }
 
 func (suite *CommandBusTestSuite) TestDispatch() {
-	const cmd commands.Type = "command.testing.dispatch"
+	command := messages.Random[commands.Command]()
 
-	suite.NoError(suite.sut.Register(cmd, suite.handler))
+	suite.NoError(suite.sut.Register(command.Key, suite.handler))
 
-	suite.command.On("Type").Return(cmd)
+	suite.handler.On("Handle", command)
 
-	suite.handler.On("Handle", suite.command)
-
-	suite.NoError(suite.sut.Dispatch(suite.command))
-
-	suite.command.AssertExpectations(suite.T())
+	suite.NoError(suite.sut.Dispatch(command))
 
 	suite.handler.AssertExpectations(suite.T())
 }
 
 func (suite *CommandBusTestSuite) TestDispatchErrMissingHandler() {
-	const cmd commands.Type = "command.testing.dispatch_missing"
+	command := messages.Random[commands.Command]()
 
-	suite.command.On("Type").Return(cmd)
-
-	err := suite.sut.Dispatch(suite.command)
-
-	suite.command.AssertExpectations(suite.T())
+	err := suite.sut.Dispatch(command)
 
 	var actual *errors.Internal
 
@@ -91,7 +80,7 @@ func (suite *CommandBusTestSuite) TestDispatchErrMissingHandler() {
 		Where: "Dispatch",
 		What:  "Failure to execute a Command without a Handler",
 		Why: errors.Meta{
-			"Command": cmd,
+			"Command": command.Key,
 		},
 	}}
 

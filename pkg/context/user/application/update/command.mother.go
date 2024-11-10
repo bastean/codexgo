@@ -4,18 +4,12 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-func RandomCommand() *Command {
-	id := user.IdWithValidValue()
-	email := user.EmailWithValidValue()
-	username := user.UsernameWithValidValue()
-	password := user.PasswordWithValidValue()
-	updatedPassword := user.PasswordWithValidValue()
-
-	return &Command{
-		Id:              id.Value,
-		Email:           email.Value,
-		Username:        username.Value,
-		Password:        password.Value,
-		UpdatedPassword: updatedPassword.Value,
+func CommandRandomAttributes() *CommandAttributes {
+	return &CommandAttributes{
+		Id:              user.IdWithValidValue().Value,
+		Email:           user.EmailWithValidValue().Value,
+		Username:        user.UsernameWithValidValue().Value,
+		Password:        user.PasswordWithValidValue().Value,
+		UpdatedPassword: user.PasswordWithValidValue().Value,
 	}
 }

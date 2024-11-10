@@ -8,45 +8,45 @@ import (
 )
 
 type (
-	commandMapper = map[commands.Type]commands.Handler
+	CommandMapper = map[commands.Key]commands.Handler
 )
 
 type CommandBus struct {
-	Handlers commandMapper
+	Handlers CommandMapper
 }
 
-func (bus *CommandBus) Register(cmd commands.Type, handler commands.Handler) error {
-	_, ok := bus.Handlers[cmd]
+func (bus *CommandBus) Register(key commands.Key, handler commands.Handler) error {
+	_, ok := bus.Handlers[key]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Register",
-			What:  fmt.Sprintf("%s already registered", cmd),
+			What:  fmt.Sprintf("%s already registered", key),
 			Why: errors.Meta{
-				"Command": cmd,
+				"Command": key,
 			},
 		})
 	}
 
-	bus.Handlers[cmd] = handler
+	bus.Handlers[key] = handler
 
 	return nil
 }
 
-func (bus *CommandBus) Dispatch(cmd commands.Command) error {
-	handler, ok := bus.Handlers[cmd.Type()]
+func (bus *CommandBus) Dispatch(command *commands.Command) error {
+	handler, ok := bus.Handlers[command.Key]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Dispatch",
 			What:  "Failure to execute a Command without a Handler",
 			Why: errors.Meta{
-				"Command": cmd.Type(),
+				"Command": command.Key,
 			},
 		})
 	}
 
-	err := handler.Handle(cmd)
+	err := handler.Handle(command)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Dispatch")
@@ -55,15 +55,15 @@ func (bus *CommandBus) Dispatch(cmd commands.Command) error {
 	return nil
 }
 
-func NewCommandBus(handlers []commands.Handler) (*CommandBus, error) {
+func NewCommandBus(mapper CommandMapper) (*CommandBus, error) {
 	bus := &CommandBus{
-		Handlers: make(commandMapper),
+		Handlers: make(CommandMapper),
 	}
 
 	var err error
 
-	for _, handler := range handlers {
-		err = bus.Register(handler.SubscribedTo(), handler)
+	for key, handler := range mapper {
+		err = bus.Register(key, handler)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "NewCommandBus")

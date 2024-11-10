@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -32,20 +33,12 @@ func (suite *VerifyTestSuite) SetupTest() {
 	}
 }
 
-func (suite *VerifyTestSuite) TestSubscribedTo() {
-	const expected commands.Type = "user.command.verifying.user"
-
-	actual := suite.sut.SubscribedTo()
-
-	suite.Equal(expected, actual)
-}
-
 func (suite *VerifyTestSuite) TestHandle() {
-	command := verify.RandomCommand()
+	attributes := verify.CommandRandomAttributes()
 
 	random := user.Random()
 
-	id, err := user.NewId(command.Id)
+	id, err := user.NewId(attributes.Id)
 
 	suite.NoError(err)
 
@@ -58,6 +51,8 @@ func (suite *VerifyTestSuite) TestHandle() {
 	suite.repository.On("Search", criteria).Return(random)
 
 	suite.repository.On("Verify", id)
+
+	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
 	suite.NoError(suite.sut.Handle(command))
 

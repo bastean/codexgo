@@ -1,19 +1,20 @@
 package commands
 
-type (
-	Type string
+import (
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type Command interface {
-	Type() Type
-}
+type (
+	Key = messages.Key
+)
+
+type Command messages.Message
 
 type Handler interface {
-	SubscribedTo() Type
-	Handle(Command) error
+	Handle(*Command) error
 }
 
 type Bus interface {
-	Register(Type, Handler) error
-	Dispatch(Command) error
+	Register(Key, Handler) error
+	Dispatch(*Command) error
 }

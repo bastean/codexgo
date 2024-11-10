@@ -19,10 +19,9 @@ var Service = &struct {
 }
 
 var (
-	err        error
-	RabbitMQ   *rabbitmq.RabbitMQ
-	CommandBus *memory.CommandBus
-	QueryBus   *memory.QueryBus
+	err      error
+	RabbitMQ *rabbitmq.RabbitMQ
+	QueryBus *memory.QueryBus
 )
 
 func Up() error {

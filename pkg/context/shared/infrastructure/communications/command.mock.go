@@ -6,26 +6,12 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 )
 
-type CommandMock struct {
-	mock.Mock
-}
-
-func (cmd *CommandMock) Type() commands.Type {
-	args := cmd.Called()
-	return args.Get(0).(commands.Type)
-}
-
 type CommandHandlerMock struct {
 	mock.Mock
 }
 
-func (handler *CommandHandlerMock) SubscribedTo() commands.Type {
-	args := handler.Called()
-	return args.Get(0).(commands.Type)
-}
-
-func (handler *CommandHandlerMock) Handle(cmd commands.Command) error {
-	handler.Called(cmd)
+func (handler *CommandHandlerMock) Handle(command *commands.Command) error {
+	handler.Called(command)
 	return nil
 }
 
@@ -33,12 +19,12 @@ type CommandBusMock struct {
 	mock.Mock
 }
 
-func (bus *CommandBusMock) Register(cmd commands.Type, handler commands.Handler) error {
-	bus.Called(cmd, handler)
+func (bus *CommandBusMock) Register(key commands.Key, handler commands.Handler) error {
+	bus.Called(key, handler)
 	return nil
 }
 
-func (bus *CommandBusMock) Dispatch(cmd commands.Command) error {
-	bus.Called(cmd)
+func (bus *CommandBusMock) Dispatch(command *commands.Command) error {
+	bus.Called(command)
 	return nil
 }

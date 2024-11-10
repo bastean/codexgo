@@ -25,9 +25,13 @@ func RandomWithKey[T ~Message](key Key) *T {
 	}
 }
 
-func RandomWithAttributes[T ~Message](attributes any) *T {
-	if err := services.Create.Struct(attributes); err != nil {
-		errors.Panic(err.Error(), "RandomWithAttributes")
+func RandomWithAttributes[T ~Message](attributes any, shouldRandomize bool) *T {
+	if shouldRandomize {
+		err := services.Create.Struct(attributes)
+
+		if err != nil {
+			errors.Panic(err.Error(), "RandomWithAttributes")
+		}
 	}
 
 	return &T{

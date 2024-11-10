@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -36,22 +37,14 @@ func (suite *CreateTestSuite) SetupTest() {
 	}
 }
 
-func (suite *CreateTestSuite) TestSubscribedTo() {
-	const expected commands.Type = "user.command.creating.user"
-
-	actual := suite.sut.SubscribedTo()
-
-	suite.Equal(expected, actual)
-}
-
 func (suite *CreateTestSuite) TestHandle() {
-	command := create.RandomCommand()
+	attributes := create.CommandRandomAttributes()
 
 	account, err := user.New(&user.Primitive{
-		Id:       command.Id,
-		Email:    command.Email,
-		Username: command.Username,
-		Password: command.Password,
+		Id:       attributes.Id,
+		Email:    attributes.Email,
+		Username: attributes.Username,
+		Password: attributes.Password,
 	})
 
 	suite.NoError(err)
@@ -61,6 +54,8 @@ func (suite *CreateTestSuite) TestHandle() {
 	for _, event := range account.Events {
 		suite.bus.On("Publish", event)
 	}
+
+	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
 	suite.NoError(suite.sut.Handle(command))
 
