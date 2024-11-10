@@ -1,17 +1,15 @@
 package events
 
-type (
-	Key       string
-	Recipient string
+import (
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type Event struct {
-	ID         string
-	OccurredOn string
-	Key        Key
-	Attributes any
-	Meta       any
-}
+type (
+	Key       = messages.Key
+	Recipient = messages.Recipient
+)
+
+type Event messages.Message
 
 type Consumer interface {
 	On(*Event) error

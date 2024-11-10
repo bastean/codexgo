@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
@@ -35,7 +35,7 @@ func (suite *ConfirmationTestSuite) SetupTest() {
 func (suite *ConfirmationTestSuite) TestSubmit() {
 	attributes := new(user.CreatedSucceededAttributes)
 
-	events.RandomAttributes(attributes)
+	messages.RandomAttributes(attributes)
 
 	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", attributes.Username, suite.appServerURL, attributes.ID)
 

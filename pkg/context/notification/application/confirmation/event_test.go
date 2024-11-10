@@ -9,6 +9,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports"
 )
 
@@ -32,7 +33,7 @@ func (suite *ConfirmationTestSuite) SetupTest() {
 }
 
 func (suite *ConfirmationTestSuite) TestConsumer() {
-	event := events.RandomWithAttributes(new(user.CreatedSucceededAttributes))
+	event := messages.RandomWithAttributes[events.Event](new(user.CreatedSucceededAttributes))
 
 	suite.transfer.On("Submit", event.Attributes)
 

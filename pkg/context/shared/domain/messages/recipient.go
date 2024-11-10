@@ -5,8 +5,11 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
+)
+
+type (
+	Recipient string
 )
 
 // Terminology:
@@ -20,7 +23,7 @@ type RecipientComponents struct {
 	Service, Entity, Action, Event, Command, Status string
 }
 
-func NewRecipient(recipient *RecipientComponents) events.Recipient {
+func NewRecipient(recipient *RecipientComponents) Recipient {
 	service, errService := components.NewService(recipient.Service)
 	entity, errEntity := components.NewEntity(recipient.Entity)
 	action, errAction := components.NewAction(recipient.Action)
@@ -50,5 +53,5 @@ func NewRecipient(recipient *RecipientComponents) events.Recipient {
 
 	name = strings.ToLower(name)
 
-	return events.Recipient(name)
+	return Recipient(name)
 }

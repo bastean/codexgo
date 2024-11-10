@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
 )
 
@@ -25,6 +24,10 @@ var Status = struct {
 	Done:      "done",
 }
 
+type (
+	Key string
+)
+
 // Terminology:
 //   - Organization = Context
 //   - Service		= Module
@@ -37,7 +40,7 @@ type KeyComponents struct {
 	Organization, Service, Version, Type, Entity, Event, Command, Status string
 }
 
-func NewKey(key *KeyComponents) events.Key {
+func NewKey(key *KeyComponents) Key {
 	if key.Organization == "" {
 		key.Organization = "codexgo"
 	}
@@ -73,5 +76,5 @@ func NewKey(key *KeyComponents) events.Key {
 
 	value = strings.ToLower(value)
 
-	return events.Key(value)
+	return Key(value)
 }

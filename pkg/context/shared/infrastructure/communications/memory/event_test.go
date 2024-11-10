@@ -7,6 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
 )
@@ -14,15 +15,10 @@ import (
 type EventBusTestSuite struct {
 	suite.Suite
 	sut      events.Bus
-	event    *events.Event
 	consumer *communications.EventConsumerMock
 }
 
 func (suite *EventBusTestSuite) SetupTest() {
-	suite.event = &events.Event{
-		Key: "event.testing",
-	}
-
 	suite.consumer = new(communications.EventConsumerMock)
 
 	suite.sut = &memory.EventBus{
@@ -31,21 +27,25 @@ func (suite *EventBusTestSuite) SetupTest() {
 }
 
 func (suite *EventBusTestSuite) TestSubscribe() {
-	suite.NoError(suite.sut.Subscribe(suite.event.Key, suite.consumer))
+	suite.NoError(suite.sut.Subscribe(messages.Random[events.Event]().Key, suite.consumer))
 }
 
 func (suite *EventBusTestSuite) TestPublish() {
-	suite.NoError(suite.sut.Subscribe(suite.event.Key, suite.consumer))
+	event := messages.Random[events.Event]()
 
-	suite.consumer.Mock.On("On", suite.event)
+	suite.NoError(suite.sut.Subscribe(event.Key, suite.consumer))
 
-	suite.NoError(suite.sut.Publish(suite.event))
+	suite.consumer.Mock.On("On", event)
+
+	suite.NoError(suite.sut.Publish(event))
 
 	suite.consumer.AssertExpectations(suite.T())
 }
 
 func (suite *EventBusTestSuite) TestPublishErrMissingConsumer() {
-	err := suite.sut.Publish(suite.event)
+	event := messages.Random[events.Event]()
+
+	err := suite.sut.Publish(event)
 
 	var actual *errors.Internal
 
@@ -56,7 +56,7 @@ func (suite *EventBusTestSuite) TestPublishErrMissingConsumer() {
 		Where: "Publish",
 		What:  "Failure to execute a Event without a Consumer",
 		Why: errors.Meta{
-			"Event": suite.event.Key,
+			"Event": event.Key,
 		},
 	}}
 

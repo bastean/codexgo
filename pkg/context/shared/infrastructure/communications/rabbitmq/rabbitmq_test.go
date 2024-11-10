@@ -68,7 +68,7 @@ func (s *RabbitMQTestSuite) SetupTest() {
 }
 
 func (s *RabbitMQTestSuite) TestPublish() {
-	event := events.RandomWithKey(s.routingKey)
+	event := messages.RandomWithKey[events.Event](s.routingKey)
 
 	s.consumer.Mock.On("On", event)
 
