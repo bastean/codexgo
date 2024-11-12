@@ -7,23 +7,23 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-type Id struct {
+type ID struct {
 	Value string `validate:"uuid4"`
 }
 
-func NewId(value string) (*Id, error) {
+func NewID(value string) (*ID, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Id{
+	valueObj := &ID{
 		Value: value,
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewId",
+			Where: "NewID",
 			What:  "Invalid UUID4 format",
 			Why: errors.Meta{
-				"Id": value,
+				"ID": value,
 			},
 		})
 	}

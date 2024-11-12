@@ -15,8 +15,8 @@ type QueryBus struct {
 	Handlers QueryMapper
 }
 
-func (bus *QueryBus) Register(key queries.Key, handler queries.Handler) error {
-	_, ok := bus.Handlers[key]
+func (b *QueryBus) Register(key queries.Key, handler queries.Handler) error {
+	_, ok := b.Handlers[key]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -28,13 +28,13 @@ func (bus *QueryBus) Register(key queries.Key, handler queries.Handler) error {
 		})
 	}
 
-	bus.Handlers[key] = handler
+	b.Handlers[key] = handler
 
 	return nil
 }
 
-func (bus *QueryBus) Ask(query *queries.Query) (*queries.Response, error) {
-	handler, ok := bus.Handlers[query.Key]
+func (b *QueryBus) Ask(query *queries.Query) (*queries.Response, error) {
+	handler, ok := b.Handlers[query.Key]
 
 	if !ok {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
@@ -57,7 +57,7 @@ func (bus *QueryBus) Ask(query *queries.Query) (*queries.Response, error) {
 
 func NewQueryBus(mapper QueryMapper) (*QueryBus, error) {
 	bus := &QueryBus{
-		Handlers: make(QueryMapper),
+		Handlers: make(QueryMapper, len(mapper)),
 	}
 
 	var err error

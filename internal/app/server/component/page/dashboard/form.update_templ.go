@@ -9,13 +9,13 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	UpdateFormTagId = "update"
+	UpdateFormTagID = "update"
 )
 
-func UpdateFormInit(formTagId string) templ.ComponentScript {
+func UpdateFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_UpdateFormInit_44f1`,
-		Function: `function __templ_UpdateFormInit_44f1(formTagId){$(` + "`" + `#${formTagId}` + "`" + `)
+		Name: `__templ_UpdateFormInit_c8cd`,
+		Function: `function __templ_UpdateFormInit_c8cd(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -107,8 +107,8 @@ func UpdateFormInit(formTagId string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_UpdateFormInit_44f1`, formTagId),
-		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_44f1`, formTagId),
+		Call:       templ.SafeScript(`__templ_UpdateFormInit_c8cd`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_c8cd`, formTagID),
 	}
 }
 
@@ -138,7 +138,7 @@ func UpdateForm(email, username string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(UpdateFormTagId)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(UpdateFormTagID)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 102, Col: 27}
 		}
@@ -176,7 +176,7 @@ func UpdateForm(email, username string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = UpdateFormInit(UpdateFormTagId).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = UpdateFormInit(UpdateFormTagID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

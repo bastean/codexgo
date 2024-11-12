@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	RegisterTabTagId = "tab-register"
-	LoginTabTagId    = "tab-login"
+	RegisterTabTagID = "tab-register"
+	LoginTabTagID    = "tab-login"
 )
 
 script PageInit() {
@@ -29,8 +29,8 @@ script PageInit() {
     ;
 }
 
-script ShowTab(tabTagId string) {
-   $(`.ui.menu .right .item[data-tab=${tabTagId}]`).trigger("click");
+script ShowTab(tabTagID string) {
+   $(`.ui.menu .right .item[data-tab=${tabTagID}]`).trigger("click");
 }
 
 templ Page() {
@@ -46,17 +46,17 @@ templ Page() {
 						><img class="ui small image" src="/public/static/assets/logo.png"/></a>
 					</div>
 					<div class="right menu">
-						<a class="blue item" data-tab={ LoginTabTagId }>Sign in</a>
-						<a class="active blue item" data-tab={ RegisterTabTagId }>Sign up</a>
+						<a class="blue item" data-tab={ LoginTabTagID }>Sign in</a>
+						<a class="active blue item" data-tab={ RegisterTabTagID }>Sign up</a>
 					</div>
 				</div>
 			</div>
 			<div class="sixteen wide mobile eight wide computer column">
-				<div class="ui tab basic segment active" data-tab={ RegisterTabTagId }>
+				<div class="ui tab basic segment active" data-tab={ RegisterTabTagID }>
 					@RegisterForm()
 					@TermsModal()
 				</div>
-				<div class="ui tab basic segment" data-tab={ LoginTabTagId }>
+				<div class="ui tab basic segment" data-tab={ LoginTabTagID }>
 					@LoginForm()
 				</div>
 			</div>

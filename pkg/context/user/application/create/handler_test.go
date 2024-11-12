@@ -3,8 +3,6 @@ package create_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
@@ -12,6 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
+	"github.com/stretchr/testify/suite"
 )
 
 type CreateTestSuite struct {
@@ -22,46 +21,46 @@ type CreateTestSuite struct {
 	bus        *communications.EventBusMock
 }
 
-func (suite *CreateTestSuite) SetupTest() {
-	suite.bus = new(communications.EventBusMock)
+func (s *CreateTestSuite) SetupTest() {
+	s.bus = new(communications.EventBusMock)
 
-	suite.repository = new(persistence.UserMock)
+	s.repository = new(persistence.UserMock)
 
-	suite.create = &create.Create{
-		Repository: suite.repository,
+	s.create = &create.Case{
+		Repository: s.repository,
 	}
 
-	suite.sut = &create.Handler{
-		Create: suite.create,
-		Bus:    suite.bus,
+	s.sut = &create.Handler{
+		Create: s.create,
+		Bus:    s.bus,
 	}
 }
 
-func (suite *CreateTestSuite) TestHandle() {
+func (s *CreateTestSuite) TestHandle() {
 	attributes := create.CommandRandomAttributes()
 
 	account, err := user.New(&user.Primitive{
-		Id:       attributes.Id,
+		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,
 		Password: attributes.Password,
 	})
 
-	suite.NoError(err)
+	s.NoError(err)
 
-	suite.repository.On("Create", account)
+	s.repository.On("Create", account)
 
 	for _, event := range account.Events {
-		suite.bus.On("Publish", event)
+		s.bus.On("Publish", event)
 	}
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	suite.NoError(suite.sut.Handle(command))
+	s.NoError(s.sut.Handle(command))
 
-	suite.repository.AssertExpectations(suite.T())
+	s.repository.AssertExpectations(s.T())
 
-	suite.bus.AssertExpectations(suite.T())
+	s.bus.AssertExpectations(s.T())
 }
 
 func TestUnitCreateSuite(t *testing.T) {

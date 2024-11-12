@@ -5,13 +5,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
+	"github.com/stretchr/testify/suite"
 )
 
 type ConfirmationTestSuite struct {
@@ -21,29 +20,29 @@ type ConfirmationTestSuite struct {
 	appServerURL string
 }
 
-func (suite *ConfirmationTestSuite) SetupTest() {
-	suite.logger = new(records.LoggerMock)
+func (s *ConfirmationTestSuite) SetupTest() {
+	s.logger = new(records.LoggerMock)
 
-	suite.appServerURL = os.Getenv("CODEXGO_SERVER_GIN_URL")
+	s.appServerURL = os.Getenv("CODEXGO_SERVER_GIN_URL")
 
-	suite.sut = &terminal.Confirmation{
-		Logger:       suite.logger,
-		AppServerURL: suite.appServerURL,
+	s.sut = &terminal.Confirmation{
+		Logger:       s.logger,
+		AppServerURL: s.appServerURL,
 	}
 }
 
-func (suite *ConfirmationTestSuite) TestSubmit() {
+func (s *ConfirmationTestSuite) TestSubmit() {
 	attributes := new(user.CreatedSucceededAttributes)
 
 	messages.RandomAttributes(attributes)
 
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", attributes.Username, suite.appServerURL, attributes.ID)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", attributes.Username, s.appServerURL, attributes.ID)
 
-	suite.logger.Mock.On("Info", link)
+	s.logger.Mock.On("Info", link)
 
-	suite.NoError(suite.sut.Submit(attributes))
+	s.NoError(s.sut.Submit(attributes))
 
-	suite.logger.AssertExpectations(suite.T())
+	s.logger.AssertExpectations(s.T())
 }
 
 func TestIntegrationConfirmationSuite(t *testing.T) {

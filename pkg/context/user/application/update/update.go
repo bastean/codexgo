@@ -8,21 +8,21 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
-type Update struct {
+type Case struct {
 	repository.Repository
 	hashing.Hashing
 }
 
-func (use *Update) Run(account *user.User, updated *user.Password) error {
-	found, err := use.Repository.Search(&repository.SearchCriteria{
-		Id: account.Id,
+func (c *Case) Run(account *user.User, updated *user.Password) error {
+	found, err := c.Repository.Search(&repository.SearchCriteria{
+		ID: account.ID,
 	})
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(use.Hashing, found.Password.Value, account.Password.Value)
+	err = service.IsPasswordInvalid(c.Hashing, found.Password.Value, account.Password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
@@ -34,7 +34,7 @@ func (use *Update) Run(account *user.User, updated *user.Password) error {
 
 	account.Verified = found.Verified
 
-	err = use.Repository.Update(account)
+	err = c.Repository.Update(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

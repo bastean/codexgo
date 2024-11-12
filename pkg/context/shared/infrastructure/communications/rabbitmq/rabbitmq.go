@@ -33,8 +33,8 @@ type RabbitMQ struct {
 	queues   Queues
 }
 
-func (rmq *RabbitMQ) AddExchange(name string) error {
-	err := rmq.Channel.ExchangeDeclare(
+func (r *RabbitMQ) AddExchange(name string) error {
+	err := r.Channel.ExchangeDeclare(
 		name,
 		"topic",
 		true,
@@ -55,13 +55,13 @@ func (rmq *RabbitMQ) AddExchange(name string) error {
 		})
 	}
 
-	rmq.exchange = name
+	r.exchange = name
 
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueue(name events.Recipient) error {
-	_, err := rmq.Channel.QueueDeclare(
+func (r *RabbitMQ) AddQueue(name events.Recipient) error {
+	_, err := r.Channel.QueueDeclare(
 		string(name),
 		true,
 		false,
@@ -83,11 +83,11 @@ func (rmq *RabbitMQ) AddQueue(name events.Recipient) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routingKey events.Key, attributes, meta reflect.Type) error {
-	err := rmq.Channel.QueueBind(
+func (r *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routingKey events.Key, attributes, meta reflect.Type) error {
+	err := r.Channel.QueueBind(
 		string(queue),
 		string(bindingKey),
-		rmq.exchange,
+		r.exchange,
 		false,
 		nil,
 	)
@@ -97,7 +97,7 @@ func (rmq *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routi
 			Where: "AddQueueEventBind",
 			What:  "Failure to bind a Queue",
 			Why: errors.Meta{
-				"Exchange":    rmq.exchange,
+				"Exchange":    r.exchange,
 				"Queue":       queue,
 				"Binding Key": bindingKey,
 				"Routing Key": routingKey,
@@ -106,14 +106,14 @@ func (rmq *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routi
 		})
 	}
 
-	rmq.Logger.Info(fmt.Sprintf("Binding Queue [%s] to Exchange [%s] with Binding Key [%s]", queue, rmq.exchange, bindingKey))
+	r.Logger.Info(fmt.Sprintf("Binding Queue [%s] to Exchange [%s] with Binding Key [%s]", queue, r.exchange, bindingKey))
 
-	rmq.queues[routingKey] = &Recipient{queue, bindingKey, attributes, meta}
+	r.queues[routingKey] = &Recipient{queue, bindingKey, attributes, meta}
 
 	return nil
 }
 
-func (rmq *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *events.Event) error {
+func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *events.Event) error {
 	received := make(map[string]json.RawMessage)
 
 	err := json.Unmarshal(data, &received)
@@ -173,21 +173,21 @@ func (rmq *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event
 	return nil
 }
 
-func (rmq *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
-	queue, ok := rmq.queues[key]
+func (r *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
+	queue, ok := r.queues[key]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Subscribe",
 			What:  "Queue is not declared",
 			Why: errors.Meta{
-				"Exchange": rmq.exchange,
+				"Exchange": r.exchange,
 				"Event":    key,
 			},
 		})
 	}
 
-	deliveries, err := rmq.Channel.Consume(
+	deliveries, err := r.Channel.Consume(
 		string(queue.Name),
 		"",
 		false,
@@ -202,7 +202,7 @@ func (rmq *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 			Where: "Subscribe",
 			What:  "Failure to subscribe a Consumer",
 			Why: errors.Meta{
-				"Exchange": rmq.exchange,
+				"Exchange": r.exchange,
 				"Queue":    queue,
 			},
 			Who: err,
@@ -212,17 +212,17 @@ func (rmq *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 	for delivery := range deliveries {
 		event := new(events.Event)
 
-		err := rmq.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
+		err := r.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
 
 		if err != nil {
-			rmq.Logger.Error(fmt.Sprintf("Failed to deliver a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
+			r.Logger.Error(fmt.Sprintf("Failed to deliver a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
 			continue
 		}
 
 		err = consumer.On(event)
 
 		if err != nil {
-			rmq.Logger.Error(fmt.Sprintf("Failed to consume a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
+			r.Logger.Error(fmt.Sprintf("Failed to consume a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
 			continue
 		}
 
@@ -232,7 +232,7 @@ func (rmq *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 	return nil
 }
 
-func (rmq *RabbitMQ) Publish(event *events.Event) error {
+func (r *RabbitMQ) Publish(event *events.Event) error {
 	if event.ID == "" {
 		event.ID = services.UUID()
 	}
@@ -248,7 +248,7 @@ func (rmq *RabbitMQ) Publish(event *events.Event) error {
 			Where: "Publish",
 			What:  "Cannot encode Event to JSON",
 			Why: errors.Meta{
-				"Exchange": rmq.exchange,
+				"Exchange": r.exchange,
 				"Event":    event,
 			},
 			Who: err,
@@ -259,9 +259,9 @@ func (rmq *RabbitMQ) Publish(event *events.Event) error {
 
 	defer cancel()
 
-	err = rmq.Channel.PublishWithContext(
+	err = r.Channel.PublishWithContext(
 		ctx,
-		rmq.exchange,
+		r.exchange,
 		string(event.Key),
 		false,
 		false,
@@ -277,7 +277,7 @@ func (rmq *RabbitMQ) Publish(event *events.Event) error {
 			Where: "Publish",
 			What:  "Failure to publish a Event",
 			Why: errors.Meta{
-				"Exchange": rmq.exchange,
+				"Exchange": r.exchange,
 				"Event":    event,
 			},
 			Who: err,
@@ -308,34 +308,34 @@ func Open(uri string, exchange string, queues Queues, logger loggers.Logger) (*R
 		})
 	}
 
-	rmq := &RabbitMQ{
+	r := &RabbitMQ{
 		Connection: session,
 		Channel:    channel,
 		Logger:     logger,
 		queues:     make(Queues),
 	}
 
-	err = rmq.AddExchange(exchange)
+	err = r.AddExchange(exchange)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Open")
 	}
 
 	for routingKey, queue := range queues {
-		err = rmq.AddQueue(queue.Name)
+		err = r.AddQueue(queue.Name)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "Open")
 		}
 
-		err = rmq.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
+		err = r.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "Open")
 		}
 	}
 
-	return rmq, nil
+	return r, nil
 }
 
 func Close(session *RabbitMQ) error {

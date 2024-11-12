@@ -6,6 +6,6 @@ import (
 
 func QueryRandomAttributes() *QueryAttributes {
 	return &QueryAttributes{
-		Id: user.IdWithValidValue().Value,
+		ID: user.IDWithValidValue().Value,
 	}
 }

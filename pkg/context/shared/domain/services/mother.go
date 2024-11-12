@@ -11,8 +11,8 @@ type mother struct {
 	*gofakeit.Faker
 }
 
-func (create *mother) Email() string {
-	username := strings.Split(create.Faker.Email(), "@")[0]
+func (m *mother) Email() string {
+	username := strings.Split(m.Faker.Email(), "@")[0]
 
 	domain := "example.com"
 

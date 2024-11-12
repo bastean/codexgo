@@ -18,7 +18,7 @@ var CommandKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type CommandAttributes struct {
-	Id, Password string
+	ID, Password string
 }
 
 type CommandMeta struct{}
@@ -27,24 +27,24 @@ type Handler struct {
 	cases.Delete
 }
 
-func (handler *Handler) Handle(command *commands.Command) error {
+func (h *Handler) Handle(command *commands.Command) error {
 	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {
 		return errors.CommandAssertion("Handle")
 	}
 
-	id, errId := user.NewId(attributes.Id)
+	id, errID := user.NewID(attributes.ID)
 
 	password, errPassword := user.NewPassword(attributes.Password)
 
-	err := errors.Join(errId, errPassword)
+	err := errors.Join(errID, errPassword)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	err = handler.Delete.Run(id, password)
+	err = h.Delete.Run(id, password)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

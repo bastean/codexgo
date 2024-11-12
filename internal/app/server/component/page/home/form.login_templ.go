@@ -9,13 +9,13 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	LoginFormTagId = "login"
+	LoginFormTagID = "login"
 )
 
-func LoginFormInit(formTagId string) templ.ComponentScript {
+func LoginFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_LoginFormInit_a643`,
-		Function: `function __templ_LoginFormInit_a643(formTagId){$(` + "`" + `#${formTagId}` + "`" + `)
+		Name: `__templ_LoginFormInit_42b5`,
+		Function: `function __templ_LoginFormInit_42b5(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -66,8 +66,8 @@ func LoginFormInit(formTagId string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_LoginFormInit_a643`, formTagId),
-		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_a643`, formTagId),
+		Call:       templ.SafeScript(`__templ_LoginFormInit_42b5`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_42b5`, formTagID),
 	}
 }
 
@@ -97,7 +97,7 @@ func LoginForm() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(LoginFormTagId)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(LoginFormTagID)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.login.templ`, Line: 61, Col: 26}
 		}
@@ -109,7 +109,7 @@ func LoginForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTab(RegisterTabTagId))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTab(RegisterTabTagID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -117,7 +117,7 @@ func LoginForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 templ.ComponentScript = ShowTab(RegisterTabTagId)
+		var templ_7745c5c3_Var3 templ.ComponentScript = ShowTab(RegisterTabTagID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -126,7 +126,7 @@ func LoginForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = LoginFormInit(LoginFormTagId).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = LoginFormInit(LoginFormTagID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

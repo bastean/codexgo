@@ -3,7 +3,7 @@ package key
 const (
 	Authorization = "Authorization"
 	Exp           = "exp"
-	Id            = "id"
+	ID            = "id"
 	Redirect      = "Redirect"
-	UserId        = "userId"
+	UserID        = "userID"
 )

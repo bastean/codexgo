@@ -13,13 +13,13 @@ type EventBus struct {
 	Consumers EventMapper
 }
 
-func (bus *EventBus) Subscribe(key events.Key, consumer events.Consumer) error {
-	bus.Consumers[key] = append(bus.Consumers[key], consumer)
+func (b *EventBus) Subscribe(key events.Key, consumer events.Consumer) error {
+	b.Consumers[key] = append(b.Consumers[key], consumer)
 	return nil
 }
 
-func (bus *EventBus) Publish(event *events.Event) error {
-	consumers, ok := bus.Consumers[event.Key]
+func (b *EventBus) Publish(event *events.Event) error {
+	consumers, ok := b.Consumers[event.Key]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{

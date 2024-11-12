@@ -27,11 +27,11 @@ var ResponseKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type QueryAttributes struct {
-	Id string
+	ID string
 }
 
 type ResponseAttributes struct {
-	Id, Email, Username, Password string
+	ID, Email, Username, Password string
 	Verified                      bool
 }
 
@@ -43,30 +43,30 @@ type Handler struct {
 	cases.Read
 }
 
-func (handler *Handler) Handle(query *queries.Query) (*queries.Response, error) {
+func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 	attributes, ok := query.Attributes.(*QueryAttributes)
 
 	if !ok {
 		return nil, errors.QueryAssertion("Handle")
 	}
 
-	id, err := user.NewId(attributes.Id)
+	id, err := user.NewID(attributes.ID)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	found, err := handler.Read.Run(id)
+	found, err := h.Read.Run(id)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	response := ResponseAttributes(*found.ToPrimitive())
+	response := (*ResponseAttributes)(found.ToPrimitive())
 
 	return messages.New[queries.Response](
 		ResponseKey,
-		&response,
+		response,
 		new(ResponseMeta),
 	), nil
 }

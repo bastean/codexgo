@@ -9,13 +9,13 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	DeleteFormTagId = "delete"
+	DeleteFormTagID = "delete"
 )
 
-func DeleteFormInit(formTagId string) templ.ComponentScript {
+func DeleteFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_DeleteFormInit_7477`,
-		Function: `function __templ_DeleteFormInit_7477(formTagId){$(` + "`" + `#${formTagId}` + "`" + `)
+		Name: `__templ_DeleteFormInit_89c1`,
+		Function: `function __templ_DeleteFormInit_89c1(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -71,8 +71,8 @@ func DeleteFormInit(formTagId string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_DeleteFormInit_7477`, formTagId),
-		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_7477`, formTagId),
+		Call:       templ.SafeScript(`__templ_DeleteFormInit_89c1`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_89c1`, formTagID),
 	}
 }
 
@@ -112,7 +112,7 @@ func DeleteForm() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(DeleteFormTagId)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(DeleteFormTagID)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.delete.templ`, Line: 73, Col: 29}
 		}
@@ -124,7 +124,7 @@ func DeleteForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = DeleteFormInit(DeleteFormTagId).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = DeleteFormInit(DeleteFormTagID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -13,16 +13,16 @@ import (
 )
 
 func Verify(c *gin.Context) {
-	id := c.Param(key.Id)
+	id := c.Param(key.ID)
 
 	if id == "" {
-		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.Id, "Verify"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.ID, "Verify"), "/")
 		return
 	}
 
 	attributes := new(user.VerifyCommandAttributes)
 
-	attributes.Id = id
+	attributes.ID = id
 
 	err := command.Bus.Dispatch(command.New(
 		user.VerifyCommandKey,

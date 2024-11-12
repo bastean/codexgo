@@ -11,27 +11,27 @@ type UserMock struct {
 	mock.Mock
 }
 
-func (repository *UserMock) Create(user *user.User) error {
-	repository.Called(user)
+func (m *UserMock) Create(user *user.User) error {
+	m.Called(user)
 	return nil
 }
 
-func (repository *UserMock) Verify(id *user.Id) error {
-	repository.Called(id)
+func (m *UserMock) Verify(id *user.ID) error {
+	m.Called(id)
 	return nil
 }
 
-func (repository *UserMock) Update(user *user.User) error {
-	repository.Called(user)
+func (m *UserMock) Update(user *user.User) error {
+	m.Called(user)
 	return nil
 }
 
-func (repository *UserMock) Delete(id *user.Id) error {
-	repository.Called(id)
+func (m *UserMock) Delete(id *user.ID) error {
+	m.Called(id)
 	return nil
 }
 
-func (repository *UserMock) Search(criteria *repository.SearchCriteria) (*user.User, error) {
-	args := repository.Called(criteria)
+func (m *UserMock) Search(criteria *repository.SearchCriteria) (*user.User, error) {
+	args := m.Called(criteria)
 	return args.Get(0).(*user.User), nil
 }

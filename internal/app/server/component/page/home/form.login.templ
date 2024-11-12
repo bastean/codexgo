@@ -1,11 +1,11 @@
 package home
 
 const (
-	LoginFormTagId = "login"
+	LoginFormTagID = "login"
 )
 
-script LoginFormInit(formTagId string) {
-    $(`#${formTagId}`)
+script LoginFormInit(formTagID string) {
+    $(`#${formTagID}`)
         .form({
             on: "blur",
             inline: true,
@@ -58,10 +58,10 @@ script LoginFormInit(formTagId string) {
 }
 
 templ LoginForm() {
-	<form id={ LoginFormTagId } class="ui inverted form">
+	<form id={ LoginFormTagID } class="ui inverted form">
 		<h1 class="ui dividing inverted header">
 			Sign in to your account
-			<div class="sub header">Don't have an account? <a style="cursor: pointer;" onclick={ ShowTab(RegisterTabTagId) }>Sign up</a></div>
+			<div class="sub header">Don't have an account? <a style="cursor: pointer;" onclick={ ShowTab(RegisterTabTagID) }>Sign up</a></div>
 		</h1>
 		<div class="required field">
 			<label>Email</label>
@@ -80,5 +80,5 @@ templ LoginForm() {
 		<div class="ui divider"></div>
 		<button class="ui fluid primary submit button">Sign in</button>
 	</form>
-	@LoginFormInit(LoginFormTagId)
+	@LoginFormInit(LoginFormTagID)
 }

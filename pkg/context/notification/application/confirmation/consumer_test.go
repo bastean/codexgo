@@ -3,14 +3,13 @@ package confirmation_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/application/confirmation"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports"
+	"github.com/stretchr/testify/suite"
 )
 
 type ConfirmationTestSuite struct {
@@ -20,28 +19,28 @@ type ConfirmationTestSuite struct {
 	transfer     *transports.TransferMock[*user.CreatedSucceededAttributes]
 }
 
-func (suite *ConfirmationTestSuite) SetupTest() {
-	suite.transfer = new(transports.TransferMock[*user.CreatedSucceededAttributes])
+func (s *ConfirmationTestSuite) SetupTest() {
+	s.transfer = new(transports.TransferMock[*user.CreatedSucceededAttributes])
 
-	suite.confirmation = &confirmation.Confirmation{
-		Transfer: suite.transfer,
+	s.confirmation = &confirmation.Case{
+		Transfer: s.transfer,
 	}
 
-	suite.sut = &confirmation.Consumer{
-		Confirmation: suite.confirmation,
+	s.sut = &confirmation.Consumer{
+		Confirmation: s.confirmation,
 	}
 }
 
-func (suite *ConfirmationTestSuite) TestConsumer() {
+func (s *ConfirmationTestSuite) TestConsumer() {
 	event := messages.RandomWithAttributes[events.Event](new(user.CreatedSucceededAttributes), true)
 
-	suite.transfer.On("Submit", event.Attributes)
+	s.transfer.On("Submit", event.Attributes)
 
-	suite.NoError(suite.sut.On(event))
+	s.NoError(s.sut.On(event))
 
-	suite.transfer.AssertExpectations(suite.T())
+	s.transfer.AssertExpectations(s.T())
 }
 
-func TestUnitNotificationSuite(t *testing.T) {
+func TestUnitConfirmationSuite(t *testing.T) {
 	suite.Run(t, new(ConfirmationTestSuite))
 }

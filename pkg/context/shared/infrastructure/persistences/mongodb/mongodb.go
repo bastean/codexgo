@@ -69,6 +69,11 @@ func HandleDuplicateKeyError(err error) error {
 
 	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
 
+	switch field {
+	case "Id":
+		field = strings.ToUpper(field)
+	}
+
 	return errors.New[errors.AlreadyExist](&errors.Bubble{
 		Where: "HandleDuplicateKeyError",
 		What:  fmt.Sprintf("%s already registered", field),

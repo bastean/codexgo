@@ -1,11 +1,11 @@
 package home
 
 const (
-	RegisterFormTagId = "register"
+	RegisterFormTagID = "register"
 )
 
-script RegisterFormInit(formTagId, loginTabTagId string) {
-    $(`#${formTagId}`)
+script RegisterFormInit(formTagID, loginTabTagID string) {
+    $(`#${formTagID}`)
         .form({
             on: "blur",
             inline: true,
@@ -66,7 +66,7 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
             action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
-                settings.data.Id = crypto.randomUUID();
+                settings.data.ID = crypto.randomUUID();
 
                 settings.data = JSON.stringify(settings.data);
         
@@ -80,8 +80,8 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
                 });
 
                 _.delay(function() {
-                    $.tab("change tab", loginTabTagId);
-                    $(`#${formTagId}`).form("reset");
+                    $.tab("change tab", loginTabTagID);
+                    $(`#${formTagID}`).form("reset");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
@@ -95,15 +95,15 @@ script RegisterFormInit(formTagId, loginTabTagId string) {
     ;
 }
 
-script ShowTerms(modalTagId string) {
-    $(`#${modalTagId}`).modal("show");
+script ShowTerms(modalTagID string) {
+    $(`#${modalTagID}`).modal("show");
 }
 
 templ RegisterForm() {
-	<form id={ RegisterFormTagId } class="ui inverted form">
+	<form id={ RegisterFormTagID } class="ui inverted form">
 		<h1 class="ui dividing inverted header">
 			Create an account
-			<div class="sub header">Already have an account? <a style="cursor: pointer;" onclick={ ShowTab(LoginTabTagId) }>Sign in</a></div>
+			<div class="sub header">Already have an account? <a style="cursor: pointer;" onclick={ ShowTab(LoginTabTagID) }>Sign in</a></div>
 		</h1>
 		<div class="required field">
 			<label>Email</label>
@@ -139,12 +139,12 @@ templ RegisterForm() {
 				<div class="inline required field">
 					<div class="ui inverted checkbox">
 						<input type="checkbox" name="Terms"/>
-						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagId) }>I agree to the <a><b>Terms and Conditions</b></a></label>
+						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagID) }>I agree to the <a><b>Terms and Conditions</b></a></label>
 					</div>
 				</div>
 				<button class="ui fluid primary submit button">Sign up</button>
 			</div>
 		</div>
 	</form>
-	@RegisterFormInit(RegisterFormTagId, LoginTabTagId)
+	@RegisterFormInit(RegisterFormTagID, LoginTabTagID)
 }

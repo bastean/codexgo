@@ -10,8 +10,8 @@ type CommandHandlerMock struct {
 	mock.Mock
 }
 
-func (handler *CommandHandlerMock) Handle(command *commands.Command) error {
-	handler.Called(command)
+func (m *CommandHandlerMock) Handle(command *commands.Command) error {
+	m.Called(command)
 	return nil
 }
 
@@ -19,12 +19,12 @@ type CommandBusMock struct {
 	mock.Mock
 }
 
-func (bus *CommandBusMock) Register(key commands.Key, handler commands.Handler) error {
-	bus.Called(key, handler)
+func (m *CommandBusMock) Register(key commands.Key, handler commands.Handler) error {
+	m.Called(key, handler)
 	return nil
 }
 
-func (bus *CommandBusMock) Dispatch(command *commands.Command) error {
-	bus.Called(command)
+func (m *CommandBusMock) Dispatch(command *commands.Command) error {
+	m.Called(command)
 	return nil
 }

@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
+	"github.com/stretchr/testify/suite"
 )
 
 type QueryBusTestSuite struct {
@@ -19,28 +18,28 @@ type QueryBusTestSuite struct {
 	handler *communications.QueryHandlerMock
 }
 
-func (suite *QueryBusTestSuite) SetupTest() {
-	suite.handler = new(communications.QueryHandlerMock)
+func (s *QueryBusTestSuite) SetupTest() {
+	s.handler = new(communications.QueryHandlerMock)
 
-	suite.sut = &memory.QueryBus{
+	s.sut = &memory.QueryBus{
 		Handlers: make(map[queries.Key]queries.Handler),
 	}
 }
 
-func (suite *QueryBusTestSuite) TestRegister() {
-	suite.NoError(suite.sut.Register(messages.Random[queries.Query]().Key, suite.handler))
+func (s *QueryBusTestSuite) TestRegister() {
+	s.NoError(s.sut.Register(messages.Random[queries.Query]().Key, s.handler))
 }
 
-func (suite *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
+func (s *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
 	key := messages.Random[queries.Query]().Key
 
-	suite.NoError(suite.sut.Register(key, suite.handler))
+	s.NoError(s.sut.Register(key, s.handler))
 
-	err := suite.sut.Register(key, suite.handler)
+	err := s.sut.Register(key, s.handler)
 
 	var actual *errors.Internal
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -51,37 +50,37 @@ func (suite *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
-func (suite *QueryBusTestSuite) TestAsk() {
+func (s *QueryBusTestSuite) TestAsk() {
 	query := messages.Random[queries.Query]()
 
-	suite.NoError(suite.sut.Register(query.Key, suite.handler))
+	s.NoError(s.sut.Register(query.Key, s.handler))
 
 	response := messages.Random[queries.Response]()
 
-	suite.handler.On("Handle", query).Return(response)
+	s.handler.On("Handle", query).Return(response)
 
-	actual, err := suite.sut.Ask(query)
+	actual, err := s.sut.Ask(query)
 
-	suite.NoError(err)
+	s.NoError(err)
 
-	suite.handler.AssertExpectations(suite.T())
+	s.handler.AssertExpectations(s.T())
 
 	expected := response
 
-	suite.Equal(expected, actual)
+	s.Equal(expected, actual)
 }
 
-func (suite *QueryBusTestSuite) TestAskErrMissingHandler() {
+func (s *QueryBusTestSuite) TestAskErrMissingHandler() {
 	query := messages.Random[queries.Query]()
 
-	_, err := suite.sut.Ask(query)
+	_, err := s.sut.Ask(query)
 
 	var actual *errors.Internal
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -92,7 +91,7 @@ func (suite *QueryBusTestSuite) TestAskErrMissingHandler() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestIntegrationQueryBusSuite(t *testing.T) {

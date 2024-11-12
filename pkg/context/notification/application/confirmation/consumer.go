@@ -11,14 +11,14 @@ type Consumer struct {
 	cases.Confirmation
 }
 
-func (consumer *Consumer) On(event *events.Event) error {
+func (c *Consumer) On(event *events.Event) error {
 	account, ok := event.Attributes.(*user.CreatedSucceededAttributes)
 
 	if !ok {
 		return errors.EventAssertion("On")
 	}
 
-	err := consumer.Confirmation.Run(account)
+	err := c.Confirmation.Run(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "On")

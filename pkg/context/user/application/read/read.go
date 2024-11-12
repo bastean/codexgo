@@ -6,13 +6,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
-type Read struct {
+type Case struct {
 	repository.Repository
 }
 
-func (use *Read) Run(id *user.Id) (*user.User, error) {
-	found, err := use.Repository.Search(&repository.SearchCriteria{
-		Id: id,
+func (c *Case) Run(id *user.ID) (*user.User, error) {
+	found, err := c.Repository.Search(&repository.SearchCriteria{
+		ID: id,
 	})
 
 	if err != nil {

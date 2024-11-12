@@ -3,8 +3,6 @@ package login_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
@@ -13,6 +11,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
+	"github.com/stretchr/testify/suite"
 )
 
 type LoginTestSuite struct {
@@ -23,31 +22,31 @@ type LoginTestSuite struct {
 	repository *persistence.UserMock
 }
 
-func (suite *LoginTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserMock)
+func (s *LoginTestSuite) SetupTest() {
+	s.repository = new(persistence.UserMock)
 
-	suite.hashing = new(cryptographic.HashingMock)
+	s.hashing = new(cryptographic.HashingMock)
 
-	suite.login = &login.Login{
-		Repository: suite.repository,
-		Hashing:    suite.hashing,
+	s.login = &login.Case{
+		Repository: s.repository,
+		Hashing:    s.hashing,
 	}
 
-	suite.sut = &login.Handler{
-		Login: suite.login,
+	s.sut = &login.Handler{
+		Login: s.login,
 	}
 }
 
-func (suite *LoginTestSuite) TestHandle() {
+func (s *LoginTestSuite) TestHandle() {
 	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
 		Email: account.Email,
 	}
 
-	suite.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(account)
 
-	suite.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
+	s.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
 
 	expected := messages.New[queries.Response](
 		login.ResponseKey,
@@ -62,15 +61,15 @@ func (suite *LoginTestSuite) TestHandle() {
 
 	query := messages.RandomWithAttributes[queries.Query](attributes, false)
 
-	actual, err := suite.sut.Handle(query)
+	actual, err := s.sut.Handle(query)
 
-	suite.NoError(err)
+	s.NoError(err)
 
-	suite.repository.AssertExpectations(suite.T())
+	s.repository.AssertExpectations(s.T())
 
-	suite.hashing.AssertExpectations(suite.T())
+	s.hashing.AssertExpectations(s.T())
 
-	suite.EqualValues(expected, actual)
+	s.EqualValues(expected, actual)
 }
 
 func TestUnitLoginSuite(t *testing.T) {

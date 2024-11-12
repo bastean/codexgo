@@ -6,12 +6,12 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
-type Create struct {
+type Case struct {
 	repository.Repository
 }
 
-func (use *Create) Run(account *user.User) error {
-	err := use.Repository.Create(account)
+func (c *Case) Run(account *user.User) error {
+	err := c.Repository.Create(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

@@ -10,7 +10,7 @@ import (
 
 type User struct {
 	*aggregates.Root
-	*Id
+	*ID
 	*Email
 	*Username
 	*Password
@@ -18,26 +18,26 @@ type User struct {
 }
 
 type Primitive struct {
-	Id, Email, Username, Password string
+	ID, Email, Username, Password string
 	Verified                      bool
 }
 
 func create(primitive *Primitive) (*User, error) {
 	root := aggregates.NewRoot()
 
-	id, errId := NewId(primitive.Id)
+	id, errID := NewID(primitive.ID)
 	email, errEmail := NewEmail(primitive.Email)
 	username, errUsername := NewUsername(primitive.Username)
 	password, errPassword := NewPassword(primitive.Password)
 	verified, errVerified := NewVerified(primitive.Verified)
 
-	if err := errors.Join(errId, errEmail, errUsername, errPassword, errVerified); err != nil {
+	if err := errors.Join(errID, errEmail, errUsername, errPassword, errVerified); err != nil {
 		return nil, errors.BubbleUp(err, "create")
 	}
 
 	return &User{
 		Root:     root,
-		Id:       id,
+		ID:       id,
 		Email:    email,
 		Username: username,
 		Password: password,
@@ -45,13 +45,13 @@ func create(primitive *Primitive) (*User, error) {
 	}, nil
 }
 
-func (user *User) ToPrimitive() *Primitive {
+func (u *User) ToPrimitive() *Primitive {
 	return &Primitive{
-		Id:       user.Id.Value,
-		Email:    user.Email.Value,
-		Username: user.Username.Value,
-		Password: user.Password.Value,
-		Verified: user.Verified.Value,
+		ID:       u.ID.Value,
+		Email:    u.Email.Value,
+		Username: u.Username.Value,
+		Password: u.Password.Value,
+		Verified: u.Verified.Value,
 	}
 }
 
@@ -77,7 +77,7 @@ func New(primitive *Primitive) (*User, error) {
 	aggregate.Record(messages.New[events.Event](
 		user.CreatedSucceededKey,
 		&user.CreatedSucceededAttributes{
-			ID:       aggregate.Id.Value,
+			ID:       aggregate.ID.Value,
 			Email:    aggregate.Email.Value,
 			Username: aggregate.Username.Value,
 		},

@@ -13,16 +13,16 @@ import (
 )
 
 func Dashboard(c *gin.Context) {
-	id, exists := c.Get(key.UserId)
+	id, exists := c.Get(key.UserID)
 
 	if !exists {
-		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserId, "Dashboard"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserID, "Dashboard"), "/")
 		return
 	}
 
 	attributes := new(user.ReadQueryAttributes)
 
-	attributes.Id = format.ToString(id)
+	attributes.ID = format.ToString(id)
 
 	response, err := query.Bus.Ask(query.New(
 		user.ReadQueryKey,

@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	TermsModalTagId = "terms"
+	TermsModalTagID = "terms"
 )
 
 func TermsModal() templ.Component {
@@ -38,7 +38,7 @@ func TermsModal() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(TermsModalTagId)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(TermsModalTagID)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/modal.terms.templ`, Line: 8, Col: 26}
 		}

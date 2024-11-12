@@ -8,7 +8,7 @@ type TransferMock[T any] struct {
 	mock.Mock
 }
 
-func (transfer *TransferMock[T]) Submit(data T) error {
-	transfer.Called(data)
+func (m *TransferMock[T]) Submit(data T) error {
+	m.Called(data)
 	return nil
 }

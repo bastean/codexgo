@@ -6,13 +6,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
-type Verify struct {
+type Case struct {
 	repository.Repository
 }
 
-func (use *Verify) Run(id *user.Id) error {
-	found, err := use.Repository.Search(&repository.SearchCriteria{
-		Id: id,
+func (c *Case) Run(id *user.ID) error {
+	found, err := c.Repository.Search(&repository.SearchCriteria{
+		ID: id,
 	})
 
 	if err != nil {
@@ -23,7 +23,7 @@ func (use *Verify) Run(id *user.Id) error {
 		return nil
 	}
 
-	err = use.Repository.Verify(id)
+	err = c.Repository.Verify(id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

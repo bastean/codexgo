@@ -14,40 +14,40 @@ import (
 
 func Start(repository repository.Repository, bus events.Bus, hashing hashing.Hashing) {
 	CreateHandler = &create.Handler{
-		Create: &create.Create{
+		Create: &create.Case{
 			Repository: repository,
 		},
 		Bus: bus,
 	}
 
 	ReadHandler = &read.Handler{
-		Read: &read.Read{
+		Read: &read.Case{
 			Repository: repository,
 		},
 	}
 
 	UpdateHandler = &update.Handler{
-		Update: &update.Update{
+		Update: &update.Case{
 			Repository: repository,
 			Hashing:    hashing,
 		},
 	}
 
 	DeleteHandler = &delete.Handler{
-		Delete: &delete.Delete{
+		Delete: &delete.Case{
 			Repository: repository,
 			Hashing:    hashing,
 		},
 	}
 
 	VerifyHandler = &verify.Handler{
-		Verify: &verify.Verify{
+		Verify: &verify.Case{
 			Repository: repository,
 		},
 	}
 
 	LoginHandler = &login.Handler{
-		Login: &login.Login{
+		Login: &login.Case{
 			Repository: repository,
 			Hashing:    hashing,
 		},

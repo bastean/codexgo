@@ -5,13 +5,13 @@ import (
 )
 
 func Random() *User {
-	id := IdWithValidValue()
+	id := IDWithValidValue()
 	email := EmailWithValidValue()
 	username := UsernameWithValidValue()
 	password := PasswordWithValidValue()
 
 	user, err := New(&Primitive{
-		Id:       id.Value,
+		ID:       id.Value,
 		Email:    email.Value,
 		Username: username.Value,
 		Password: password.Value,

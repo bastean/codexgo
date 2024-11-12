@@ -3,22 +3,21 @@ package components_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
+	"github.com/stretchr/testify/suite"
 )
 
 type EntityTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EntityTestSuite) TestWithInvalidLength() {
+func (s *EntityTestSuite) TestWithInvalidLength() {
 	value, err := components.EntityWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -29,15 +28,15 @@ func (suite *EntityTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
-func (suite *EntityTestSuite) TestWithInvalidAlpha() {
+func (s *EntityTestSuite) TestWithInvalidAlpha() {
 	value, err := components.EntityWithInvalidAlpha()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -48,7 +47,7 @@ func (suite *EntityTestSuite) TestWithInvalidAlpha() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestUnitEntitySuite(t *testing.T) {

@@ -8,27 +8,27 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
-type Delete struct {
+type Case struct {
 	repository.Repository
 	hashing.Hashing
 }
 
-func (use *Delete) Run(id *user.Id, password *user.Password) error {
-	found, err := use.Repository.Search(&repository.SearchCriteria{
-		Id: id,
+func (c *Case) Run(id *user.ID, password *user.Password) error {
+	found, err := c.Repository.Search(&repository.SearchCriteria{
+		ID: id,
 	})
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(use.Hashing, found.Password.Value, password.Value)
+	err = service.IsPasswordInvalid(c.Hashing, found.Password.Value, password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = use.Repository.Delete(found.Id)
+	err = c.Repository.Delete(found.ID)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

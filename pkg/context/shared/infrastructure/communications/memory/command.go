@@ -15,8 +15,8 @@ type CommandBus struct {
 	Handlers CommandMapper
 }
 
-func (bus *CommandBus) Register(key commands.Key, handler commands.Handler) error {
-	_, ok := bus.Handlers[key]
+func (b *CommandBus) Register(key commands.Key, handler commands.Handler) error {
+	_, ok := b.Handlers[key]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -28,13 +28,13 @@ func (bus *CommandBus) Register(key commands.Key, handler commands.Handler) erro
 		})
 	}
 
-	bus.Handlers[key] = handler
+	b.Handlers[key] = handler
 
 	return nil
 }
 
-func (bus *CommandBus) Dispatch(command *commands.Command) error {
-	handler, ok := bus.Handlers[command.Key]
+func (b *CommandBus) Dispatch(command *commands.Command) error {
+	handler, ok := b.Handlers[command.Key]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -57,7 +57,7 @@ func (bus *CommandBus) Dispatch(command *commands.Command) error {
 
 func NewCommandBus(mapper CommandMapper) (*CommandBus, error) {
 	bus := &CommandBus{
-		Handlers: make(CommandMapper),
+		Handlers: make(CommandMapper, len(mapper)),
 	}
 
 	var err error

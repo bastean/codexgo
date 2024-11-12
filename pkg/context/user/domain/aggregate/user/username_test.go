@@ -3,22 +3,21 @@ package user_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/stretchr/testify/suite"
 )
 
 type UsernameTestSuite struct {
 	suite.Suite
 }
 
-func (suite *UsernameTestSuite) TestWithInvalidLength() {
+func (s *UsernameTestSuite) TestWithInvalidLength() {
 	value, err := user.UsernameWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -29,15 +28,15 @@ func (suite *UsernameTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
-func (suite *UsernameTestSuite) TestWithInvalidAlphanumeric() {
+func (s *UsernameTestSuite) TestWithInvalidAlphanumeric() {
 	value, err := user.UsernameWithInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -48,7 +47,7 @@ func (suite *UsernameTestSuite) TestWithInvalidAlphanumeric() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestUnitUsernameSuite(t *testing.T) {

@@ -32,14 +32,14 @@ func Authentication(c *gin.Context) {
 		return
 	}
 
-	value, exists := claims[key.UserId]
+	value, exists := claims[key.UserID]
 
 	if !exists {
-		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserId, "Authentication"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserID, "Authentication"), "/")
 		return
 	}
 
-	c.Set(key.UserId, value)
+	c.Set(key.UserID, value)
 
 	c.Next()
 }

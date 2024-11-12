@@ -1,11 +1,11 @@
 package dashboard
 
 const (
-	UpdateFormTagId = "update"
+	UpdateFormTagID = "update"
 )
 
-script UpdateFormInit(formTagId string) {
-    $(`#${formTagId}`)
+script UpdateFormInit(formTagID string) {
+    $(`#${formTagID}`)
         .form({
             on: "blur",
             inline: true,
@@ -99,7 +99,7 @@ script UpdateFormInit(formTagId string) {
 }
 
 templ UpdateForm(email, username string) {
-	<form id={ UpdateFormTagId } class="ui inverted form">
+	<form id={ UpdateFormTagID } class="ui inverted form">
 		<h1 class="ui dividing inverted header">
 			Account settings
 		</h1>
@@ -156,5 +156,5 @@ templ UpdateForm(email, username string) {
 			</div>
 		</div>
 	</form>
-	@UpdateFormInit(UpdateFormTagId)
+	@UpdateFormInit(UpdateFormTagID)
 }

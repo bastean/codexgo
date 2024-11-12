@@ -3,8 +3,6 @@ package delete_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
@@ -13,6 +11,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
+	"github.com/stretchr/testify/suite"
 )
 
 type DeleteTestSuite struct {
@@ -23,46 +22,46 @@ type DeleteTestSuite struct {
 	repository *persistence.UserMock
 }
 
-func (suite *DeleteTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserMock)
+func (s *DeleteTestSuite) SetupTest() {
+	s.repository = new(persistence.UserMock)
 
-	suite.hashing = new(cryptographic.HashingMock)
+	s.hashing = new(cryptographic.HashingMock)
 
-	suite.delete = &delete.Delete{
-		Repository: suite.repository,
-		Hashing:    suite.hashing,
+	s.delete = &delete.Case{
+		Repository: s.repository,
+		Hashing:    s.hashing,
 	}
 
-	suite.sut = &delete.Handler{
-		Delete: suite.delete,
+	s.sut = &delete.Handler{
+		Delete: s.delete,
 	}
 }
 
-func (suite *DeleteTestSuite) TestHandle() {
+func (s *DeleteTestSuite) TestHandle() {
 	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
-		Id: account.Id,
+		ID: account.ID,
 	}
 
-	suite.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(account)
 
-	suite.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
+	s.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
 
-	suite.repository.On("Delete", account.Id)
+	s.repository.On("Delete", account.ID)
 
 	attributes := &delete.CommandAttributes{
-		Id:       account.Id.Value,
+		ID:       account.ID.Value,
 		Password: account.Password.Value,
 	}
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	suite.NoError(suite.sut.Handle(command))
+	s.NoError(s.sut.Handle(command))
 
-	suite.repository.AssertExpectations(suite.T())
+	s.repository.AssertExpectations(s.T())
 
-	suite.hashing.AssertExpectations(suite.T())
+	s.hashing.AssertExpectations(s.T())
 }
 
 func TestUnitDeleteSuite(t *testing.T) {

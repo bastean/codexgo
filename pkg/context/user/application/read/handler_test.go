@@ -3,8 +3,6 @@ package read_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
@@ -12,6 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
+	"github.com/stretchr/testify/suite"
 )
 
 type ReadTestSuite struct {
@@ -21,26 +20,26 @@ type ReadTestSuite struct {
 	repository *persistence.UserMock
 }
 
-func (suite *ReadTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserMock)
+func (s *ReadTestSuite) SetupTest() {
+	s.repository = new(persistence.UserMock)
 
-	suite.read = &read.Read{
-		Repository: suite.repository,
+	s.read = &read.Case{
+		Repository: s.repository,
 	}
 
-	suite.sut = &read.Handler{
-		Read: suite.read,
+	s.sut = &read.Handler{
+		Read: s.read,
 	}
 }
 
-func (suite *ReadTestSuite) TestHandle() {
+func (s *ReadTestSuite) TestHandle() {
 	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
-		Id: account.Id,
+		ID: account.ID,
 	}
 
-	suite.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(account)
 
 	expected := messages.New[queries.Response](
 		read.ResponseKey,
@@ -49,18 +48,18 @@ func (suite *ReadTestSuite) TestHandle() {
 	)
 
 	attributes := &read.QueryAttributes{
-		Id: account.Id.Value,
+		ID: account.ID.Value,
 	}
 
 	query := messages.RandomWithAttributes[queries.Query](attributes, false)
 
-	actual, err := suite.sut.Handle(query)
+	actual, err := s.sut.Handle(query)
 
-	suite.NoError(err)
+	s.NoError(err)
 
-	suite.repository.AssertExpectations(suite.T())
+	s.repository.AssertExpectations(s.T())
 
-	suite.EqualValues(expected, actual)
+	s.EqualValues(expected, actual)
 }
 
 func TestUnitReadSuite(t *testing.T) {

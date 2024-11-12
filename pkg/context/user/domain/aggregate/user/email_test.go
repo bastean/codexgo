@@ -3,22 +3,21 @@ package user_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/stretchr/testify/suite"
 )
 
 type EmailTestSuite struct {
 	suite.Suite
 }
 
-func (suite *EmailTestSuite) TestWithInvalidValue() {
+func (s *EmailTestSuite) TestWithInvalidValue() {
 	value, err := user.EmailWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -29,7 +28,7 @@ func (suite *EmailTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestUnitEmailSuite(t *testing.T) {

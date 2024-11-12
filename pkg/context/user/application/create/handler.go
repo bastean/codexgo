@@ -19,7 +19,7 @@ var CommandKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type CommandAttributes struct {
-	Id, Email, Username, Password string
+	ID, Email, Username, Password string
 }
 
 type CommandMeta struct{}
@@ -29,7 +29,7 @@ type Handler struct {
 	events.Bus
 }
 
-func (handler *Handler) Handle(command *commands.Command) error {
+func (h *Handler) Handle(command *commands.Command) error {
 	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {
@@ -37,7 +37,7 @@ func (handler *Handler) Handle(command *commands.Command) error {
 	}
 
 	account, err := user.New(&user.Primitive{
-		Id:       attributes.Id,
+		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,
 		Password: attributes.Password,
@@ -47,14 +47,14 @@ func (handler *Handler) Handle(command *commands.Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	err = handler.Create.Run(account)
+	err = h.Create.Run(account)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
 	for _, event := range account.Pull() {
-		err = handler.Bus.Publish(event)
+		err = h.Bus.Publish(event)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Handle")

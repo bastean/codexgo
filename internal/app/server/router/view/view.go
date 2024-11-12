@@ -11,16 +11,16 @@ type View struct {
 	*gin.Engine
 }
 
-func (view *View) Public() {
-	public := view.Group("/")
+func (v *View) Public() {
+	public := v.Group("/")
 
 	home := public.Group("/")
 
 	home.GET("/", page.Home)
 }
 
-func (view *View) Private() {
-	private := view.Group("/", middleware.Authentication)
+func (v *View) Private() {
+	private := v.Group("/", middleware.Authentication)
 
 	dashboard := private.Group("/dashboard")
 

@@ -46,7 +46,7 @@ func Login(c *gin.Context) {
 
 	token, err := jwt.Generate(jwt.Payload{
 		key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
-		key.UserId: found.Id,
+		key.UserID: found.ID,
 	})
 
 	if err != nil {

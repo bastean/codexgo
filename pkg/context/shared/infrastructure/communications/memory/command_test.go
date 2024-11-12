@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
+	"github.com/stretchr/testify/suite"
 )
 
 type CommandBusTestSuite struct {
@@ -19,28 +18,28 @@ type CommandBusTestSuite struct {
 	handler *communications.CommandHandlerMock
 }
 
-func (suite *CommandBusTestSuite) SetupTest() {
-	suite.handler = new(communications.CommandHandlerMock)
+func (s *CommandBusTestSuite) SetupTest() {
+	s.handler = new(communications.CommandHandlerMock)
 
-	suite.sut = &memory.CommandBus{
+	s.sut = &memory.CommandBus{
 		Handlers: make(map[commands.Key]commands.Handler),
 	}
 }
 
-func (suite *CommandBusTestSuite) TestRegister() {
-	suite.NoError(suite.sut.Register(messages.Random[commands.Command]().Key, suite.handler))
+func (s *CommandBusTestSuite) TestRegister() {
+	s.NoError(s.sut.Register(messages.Random[commands.Command]().Key, s.handler))
 }
 
-func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
+func (s *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 	key := messages.Random[commands.Command]().Key
 
-	suite.NoError(suite.sut.Register(key, suite.handler))
+	s.NoError(s.sut.Register(key, s.handler))
 
-	err := suite.sut.Register(key, suite.handler)
+	err := s.sut.Register(key, s.handler)
 
 	var actual *errors.Internal
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -51,29 +50,29 @@ func (suite *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
-func (suite *CommandBusTestSuite) TestDispatch() {
+func (s *CommandBusTestSuite) TestDispatch() {
 	command := messages.Random[commands.Command]()
 
-	suite.NoError(suite.sut.Register(command.Key, suite.handler))
+	s.NoError(s.sut.Register(command.Key, s.handler))
 
-	suite.handler.On("Handle", command)
+	s.handler.On("Handle", command)
 
-	suite.NoError(suite.sut.Dispatch(command))
+	s.NoError(s.sut.Dispatch(command))
 
-	suite.handler.AssertExpectations(suite.T())
+	s.handler.AssertExpectations(s.T())
 }
 
-func (suite *CommandBusTestSuite) TestDispatchErrMissingHandler() {
+func (s *CommandBusTestSuite) TestDispatchErrMissingHandler() {
 	command := messages.Random[commands.Command]()
 
-	err := suite.sut.Dispatch(command)
+	err := s.sut.Dispatch(command)
 
 	var actual *errors.Internal
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -84,7 +83,7 @@ func (suite *CommandBusTestSuite) TestDispatchErrMissingHandler() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestIntegrationCommandBusSuite(t *testing.T) {

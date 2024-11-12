@@ -9,13 +9,13 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	RegisterFormTagId = "register"
+	RegisterFormTagID = "register"
 )
 
-func RegisterFormInit(formTagId, loginTabTagId string) templ.ComponentScript {
+func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_RegisterFormInit_2940`,
-		Function: `function __templ_RegisterFormInit_2940(formTagId, loginTabTagId){$(` + "`" + `#${formTagId}` + "`" + `)
+		Name: `__templ_RegisterFormInit_7f14`,
+		Function: `function __templ_RegisterFormInit_7f14(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -76,7 +76,7 @@ func RegisterFormInit(formTagId, loginTabTagId string) templ.ComponentScript {
             action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
-                settings.data.Id = crypto.randomUUID();
+                settings.data.ID = crypto.randomUUID();
 
                 settings.data = JSON.stringify(settings.data);
         
@@ -90,8 +90,8 @@ func RegisterFormInit(formTagId, loginTabTagId string) templ.ComponentScript {
                 });
 
                 _.delay(function() {
-                    $.tab("change tab", loginTabTagId);
-                    $(` + "`" + `#${formTagId}` + "`" + `).form("reset");
+                    $.tab("change tab", loginTabTagID);
+                    $(` + "`" + `#${formTagID}` + "`" + `).form("reset");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
@@ -104,18 +104,18 @@ func RegisterFormInit(formTagId, loginTabTagId string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_RegisterFormInit_2940`, formTagId, loginTabTagId),
-		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_2940`, formTagId, loginTabTagId),
+		Call:       templ.SafeScript(`__templ_RegisterFormInit_7f14`, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_7f14`, formTagID, loginTabTagID),
 	}
 }
 
-func ShowTerms(modalTagId string) templ.ComponentScript {
+func ShowTerms(modalTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ShowTerms_9e12`,
-		Function: `function __templ_ShowTerms_9e12(modalTagId){$(` + "`" + `#${modalTagId}` + "`" + `).modal("show");
+		Name: `__templ_ShowTerms_42f0`,
+		Function: `function __templ_ShowTerms_42f0(modalTagID){$(` + "`" + `#${modalTagID}` + "`" + `).modal("show");
 }`,
-		Call:       templ.SafeScript(`__templ_ShowTerms_9e12`, modalTagId),
-		CallInline: templ.SafeScriptInline(`__templ_ShowTerms_9e12`, modalTagId),
+		Call:       templ.SafeScript(`__templ_ShowTerms_42f0`, modalTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ShowTerms_42f0`, modalTagID),
 	}
 }
 
@@ -145,7 +145,7 @@ func RegisterForm() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterFormTagId)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterFormTagID)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 103, Col: 29}
 		}
@@ -157,7 +157,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTab(LoginTabTagId))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTab(LoginTabTagID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -165,7 +165,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var3 templ.ComponentScript = ShowTab(LoginTabTagId)
+		var templ_7745c5c3_Var3 templ.ComponentScript = ShowTab(LoginTabTagID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var3.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -174,7 +174,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTerms(TermsModalTagId))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTerms(TermsModalTagID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -182,7 +182,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 templ.ComponentScript = ShowTerms(TermsModalTagId)
+		var templ_7745c5c3_Var4 templ.ComponentScript = ShowTerms(TermsModalTagID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -191,7 +191,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RegisterFormInit(RegisterFormTagId, LoginTabTagId).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RegisterFormInit(RegisterFormTagID, LoginTabTagID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -15,10 +15,10 @@ type Confirmation struct {
 	AppServerURL string
 }
 
-func (client *Confirmation) Submit(data *user.CreatedSucceededAttributes) error {
+func (c *Confirmation) Submit(attributes *user.CreatedSucceededAttributes) error {
 	var message bytes.Buffer
 
-	headers := client.Headers(data.Email, "Account Confirmation")
+	headers := c.Headers(attributes.Email, "Account Confirmation")
 
 	_, err := message.Write([]byte(headers))
 
@@ -28,25 +28,25 @@ func (client *Confirmation) Submit(data *user.CreatedSucceededAttributes) error 
 			What:  "Failure to write message headers",
 			Why: errors.Meta{
 				"Headers": headers,
-				"User ID": data.ID,
+				"User ID": attributes.ID,
 			},
 			Who: err,
 		})
 	}
 
-	link := fmt.Sprintf("%s/v4/account/verify/%s", client.AppServerURL, data.ID)
+	link := fmt.Sprintf("%s/v4/account/verify/%s", c.AppServerURL, attributes.ID)
 
-	ConfirmationTemplate(data.Username, link).Render(context.Background(), &message)
+	ConfirmationTemplate(attributes.Username, link).Render(context.Background(), &message)
 
-	err = client.SendMail([]string{data.Email}, message.Bytes())
+	err = c.SendMail([]string{attributes.Email}, message.Bytes())
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Submit",
 			What:  "Failure to send an account confirmation mail",
 			Why: errors.Meta{
-				"User ID":         data.ID,
-				"SMTP Server URL": client.ServerURL,
+				"User ID":         attributes.ID,
+				"SMTP Server URL": c.ServerURL,
 			},
 			Who: err,
 		})

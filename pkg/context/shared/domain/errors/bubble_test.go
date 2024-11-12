@@ -5,16 +5,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/stretchr/testify/suite"
 )
 
 type BubbleTestSuite struct {
 	suite.Suite
 }
 
-func (suite *BubbleTestSuite) TestWithValidValue() {
+func (s *BubbleTestSuite) TestWithValidValue() {
 	bubble := &errors.Bubble{
 		When:  time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC),
 		Where: "TestWithValidValue",
@@ -31,13 +30,13 @@ func (suite *BubbleTestSuite) TestWithValidValue() {
 
 	var actual *errors.Default
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
-	suite.Equal(expected, actual.Error())
+	s.Equal(expected, actual.Error())
 }
 
-func (suite *BubbleTestSuite) TestWithInvalidValue() {
-	suite.Panics(func() { errors.New[errors.Default](&errors.Bubble{}) })
+func (s *BubbleTestSuite) TestWithInvalidValue() {
+	s.Panics(func() { errors.New[errors.Default](&errors.Bubble{}) })
 }
 
 func TestUnitBubbleSuite(t *testing.T) {

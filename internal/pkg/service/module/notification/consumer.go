@@ -12,7 +12,7 @@ var (
 
 func Init(transfer transfers.Transfer[*user.CreatedSucceededAttributes]) {
 	Confirmation = &confirmation.Consumer{
-		Confirmation: &confirmation.Confirmation{
+		Confirmation: &confirmation.Case{
 			Transfer: transfer,
 		},
 	}

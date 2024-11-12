@@ -18,7 +18,7 @@ var CommandKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type CommandAttributes struct {
-	Id, Email, Username, Password, UpdatedPassword string
+	ID, Email, Username, Password, UpdatedPassword string
 }
 
 type CommandMeta struct{}
@@ -27,18 +27,18 @@ type Handler struct {
 	cases.Update
 }
 
-func (handler *Handler) Handle(command *commands.Command) error {
-	data, ok := command.Attributes.(*CommandAttributes)
+func (h *Handler) Handle(command *commands.Command) error {
+	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {
 		return errors.CommandAssertion("Handle")
 	}
 
 	account, err := user.FromPrimitive(&user.Primitive{
-		Id:       data.Id,
-		Email:    data.Email,
-		Username: data.Username,
-		Password: data.Password,
+		ID:       attributes.ID,
+		Email:    attributes.Email,
+		Username: attributes.Username,
+		Password: attributes.Password,
 	})
 
 	if err != nil {
@@ -47,15 +47,15 @@ func (handler *Handler) Handle(command *commands.Command) error {
 
 	var updated *user.Password
 
-	if data.UpdatedPassword != "" {
-		updated, err = user.NewPassword(data.UpdatedPassword)
+	if attributes.UpdatedPassword != "" {
+		updated, err = user.NewPassword(attributes.UpdatedPassword)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Handle")
 		}
 	}
 
-	err = handler.Update.Run(account, updated)
+	err = h.Update.Run(account, updated)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

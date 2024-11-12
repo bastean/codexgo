@@ -31,7 +31,7 @@ type QueryAttributes struct {
 }
 
 type ResponseAttributes struct {
-	Id, Email, Username, Password string
+	ID, Email, Username, Password string
 	Verified                      bool
 }
 
@@ -43,7 +43,7 @@ type Handler struct {
 	cases.Login
 }
 
-func (handler *Handler) Handle(query *queries.Query) (*queries.Response, error) {
+func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 	attributes, ok := query.Attributes.(*QueryAttributes)
 
 	if !ok {
@@ -60,17 +60,17 @@ func (handler *Handler) Handle(query *queries.Query) (*queries.Response, error) 
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	found, err := handler.Login.Run(email, password)
+	found, err := h.Login.Run(email, password)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	response := ResponseAttributes(*found.ToPrimitive())
+	response := (*ResponseAttributes)(found.ToPrimitive())
 
 	return messages.New[queries.Response](
 		ResponseKey,
-		&response,
+		response,
 		new(ResponseMeta),
 	), nil
 }

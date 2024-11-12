@@ -3,22 +3,21 @@ package components_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
+	"github.com/stretchr/testify/suite"
 )
 
 type VersionTestSuite struct {
 	suite.Suite
 }
 
-func (suite *VersionTestSuite) TestWithInvalidValue() {
+func (s *VersionTestSuite) TestWithInvalidValue() {
 	value, err := components.VersionWithInvalidValue()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -29,7 +28,7 @@ func (suite *VersionTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestUnitVersionSuite(t *testing.T) {

@@ -5,14 +5,14 @@ import (
 )
 
 type SearchCriteria struct {
-	*user.Id
+	*user.ID
 	*user.Email
 }
 
 type Repository interface {
 	Create(*user.User) error
-	Verify(*user.Id) error
+	Verify(*user.ID) error
 	Update(*user.User) error
-	Delete(*user.Id) error
+	Delete(*user.ID) error
 	Search(*SearchCriteria) (*user.User, error)
 }

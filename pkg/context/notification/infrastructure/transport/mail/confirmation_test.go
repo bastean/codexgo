@@ -4,14 +4,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
+	"github.com/stretchr/testify/suite"
 )
 
 type ConfirmationTestSuite struct {
@@ -20,8 +19,8 @@ type ConfirmationTestSuite struct {
 	smtp *smtp.SMTP
 }
 
-func (suite *ConfirmationTestSuite) SetupTest() {
-	suite.smtp = smtp.Open(
+func (s *ConfirmationTestSuite) SetupTest() {
+	s.smtp = smtp.Open(
 		&smtp.Auth{
 			Host:     os.Getenv("CODEXGO_SMTP_HOST"),
 			Port:     os.Getenv("CODEXGO_SMTP_PORT"),
@@ -30,20 +29,20 @@ func (suite *ConfirmationTestSuite) SetupTest() {
 		},
 	)
 
-	suite.sut = &mail.Confirmation{
-		SMTP:         suite.smtp,
+	s.sut = &mail.Confirmation{
+		SMTP:         s.smtp,
 		AppServerURL: os.Getenv("CODEXGO_SERVER_GIN_URL"),
 	}
 }
 
-func (suite *ConfirmationTestSuite) TestSubmit() {
+func (s *ConfirmationTestSuite) TestSubmit() {
 	attributes := new(user.CreatedSucceededAttributes)
 
 	messages.RandomAttributes(attributes)
 
 	attributes.Email = services.Create.Email()
 
-	suite.NoError(suite.sut.Submit(attributes))
+	s.NoError(s.sut.Submit(attributes))
 }
 
 func TestIntegrationConfirmationSuite(t *testing.T) {

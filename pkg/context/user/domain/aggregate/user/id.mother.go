@@ -5,20 +5,20 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-func IdWithValidValue() *Id {
-	value, err := NewId(services.Create.UUID())
+func IDWithValidValue() *ID {
+	value, err := NewID(services.Create.UUID())
 
 	if err != nil {
-		errors.Panic(err.Error(), "IdWithValidValue")
+		errors.Panic(err.Error(), "IDWithValidValue")
 	}
 
 	return value
 }
 
-func IdWithInvalidValue() (string, error) {
+func IDWithInvalidValue() (string, error) {
 	value := "x"
 
-	_, err := NewId(value)
+	_, err := NewID(value)
 
 	return value, err
 }

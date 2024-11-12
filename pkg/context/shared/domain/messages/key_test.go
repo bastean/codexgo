@@ -3,17 +3,16 @@ package messages_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/stretchr/testify/suite"
 )
 
 type KeyTestSuite struct {
 	suite.Suite
 }
 
-func (suite *KeyTestSuite) TestWithValidValue() {
+func (s *KeyTestSuite) TestWithValidValue() {
 	components := &messages.KeyComponents{
 		Organization: "codexgo",
 		Service:      "user",
@@ -28,11 +27,11 @@ func (suite *KeyTestSuite) TestWithValidValue() {
 
 	actual := messages.NewKey(components)
 
-	suite.Equal(expected, actual)
+	s.Equal(expected, actual)
 }
 
-func (suite *KeyTestSuite) TestWithInvalidValue() {
-	suite.Panics(func() { messages.NewKey(&messages.KeyComponents{}) })
+func (s *KeyTestSuite) TestWithInvalidValue() {
+	s.Panics(func() { messages.NewKey(&messages.KeyComponents{}) })
 }
 
 func TestUnitKeySuite(t *testing.T) {

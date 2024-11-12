@@ -8,13 +8,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
-type Login struct {
+type Case struct {
 	repository.Repository
 	hashing.Hashing
 }
 
-func (use *Login) Run(email *user.Email, password *user.Password) (*user.User, error) {
-	found, err := use.Repository.Search(&repository.SearchCriteria{
+func (c *Case) Run(email *user.Email, password *user.Password) (*user.User, error) {
+	found, err := c.Repository.Search(&repository.SearchCriteria{
 		Email: email,
 	})
 
@@ -22,7 +22,7 @@ func (use *Login) Run(email *user.Email, password *user.Password) (*user.User, e
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(use.Hashing, found.Password.Value, password.Value)
+	err = service.IsPasswordInvalid(c.Hashing, found.Password.Value, password.Value)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")

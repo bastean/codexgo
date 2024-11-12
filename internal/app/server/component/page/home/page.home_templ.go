@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	RegisterTabTagId = "tab-register"
-	LoginTabTagId    = "tab-login"
+	RegisterTabTagID = "tab-register"
+	LoginTabTagID    = "tab-login"
 )
 
 func PageInit() templ.ComponentScript {
@@ -43,13 +43,13 @@ func PageInit() templ.ComponentScript {
 	}
 }
 
-func ShowTab(tabTagId string) templ.ComponentScript {
+func ShowTab(tabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ShowTab_ce29`,
-		Function: `function __templ_ShowTab_ce29(tabTagId){$(` + "`" + `.ui.menu .right .item[data-tab=${tabTagId}]` + "`" + `).trigger("click");
+		Name: `__templ_ShowTab_604f`,
+		Function: `function __templ_ShowTab_604f(tabTagID){$(` + "`" + `.ui.menu .right .item[data-tab=${tabTagID}]` + "`" + `).trigger("click");
 }`,
-		Call:       templ.SafeScript(`__templ_ShowTab_ce29`, tabTagId),
-		CallInline: templ.SafeScriptInline(`__templ_ShowTab_ce29`, tabTagId),
+		Call:       templ.SafeScript(`__templ_ShowTab_604f`, tabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ShowTab_604f`, tabTagID),
 	}
 }
 
@@ -91,7 +91,7 @@ func Page() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
-			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagId)
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagID)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 49, Col: 51}
 			}
@@ -104,7 +104,7 @@ func Page() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagId)
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagID)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 50, Col: 61}
 			}
@@ -117,7 +117,7 @@ func Page() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagId)
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagID)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 55, Col: 72}
 			}
@@ -142,7 +142,7 @@ func Page() templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var6 string
-			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagId)
+			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagID)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 59, Col: 62}
 			}

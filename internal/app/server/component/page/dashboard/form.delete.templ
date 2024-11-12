@@ -1,11 +1,11 @@
 package dashboard
 
 const (
-	DeleteFormTagId = "delete"
+	DeleteFormTagID = "delete"
 )
 
-script DeleteFormInit(formTagId string) {
-    $(`#${formTagId}`)
+script DeleteFormInit(formTagID string) {
+    $(`#${formTagID}`)
         .form({
             on: "blur",
             inline: true,
@@ -70,7 +70,7 @@ templ DeleteForm() {
 	<div class="ui mini inverted modal">
 		<div class="header">Delete Your Account</div>
 		<div class="content">
-			<form id={ DeleteFormTagId } class="ui inverted form">
+			<form id={ DeleteFormTagID } class="ui inverted form">
 				<div class="required field">
 					<label>Password</label>
 					<div class="ui inverted transparent left icon input">
@@ -90,5 +90,5 @@ templ DeleteForm() {
 			</form>
 		</div>
 	</div>
-	@DeleteFormInit(DeleteFormTagId)
+	@DeleteFormInit(DeleteFormTagID)
 }

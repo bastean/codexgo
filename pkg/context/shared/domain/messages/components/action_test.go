@@ -3,22 +3,21 @@ package components_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
+	"github.com/stretchr/testify/suite"
 )
 
 type ActionTestSuite struct {
 	suite.Suite
 }
 
-func (suite *ActionTestSuite) TestWithInvalidLength() {
+func (s *ActionTestSuite) TestWithInvalidLength() {
 	value, err := components.ActionWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -29,7 +28,7 @@ func (suite *ActionTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestUnitActionSuite(t *testing.T) {

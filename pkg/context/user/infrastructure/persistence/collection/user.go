@@ -19,18 +19,18 @@ type User struct {
 	hashing.Hashing
 }
 
-func (mongoDB *User) Create(user *user.User) error {
-	new := user.ToPrimitive()
+func (u *User) Create(user *user.User) error {
+	account := user.ToPrimitive()
 
-	hashed, err := mongoDB.Hashing.Hash(new.Password)
+	hashed, err := u.Hashing.Hash(account.Password)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Create")
 	}
 
-	new.Password = hashed
+	account.Password = hashed
 
-	_, err = mongoDB.Collection.InsertOne(context.Background(), new)
+	_, err = u.Collection.InsertOne(context.Background(), account)
 
 	if mongo.IsDuplicateKeyError(err) {
 		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Create")
@@ -41,7 +41,7 @@ func (mongoDB *User) Create(user *user.User) error {
 			Where: "Create",
 			What:  "Failure to create a User",
 			Why: errors.Meta{
-				"Id": user.Id.Value,
+				"ID": user.ID.Value,
 			},
 			Who: err,
 		})
@@ -50,10 +50,10 @@ func (mongoDB *User) Create(user *user.User) error {
 	return nil
 }
 
-func (mongoDB *User) Verify(id *user.Id) error {
+func (u *User) Verify(id *user.ID) error {
 	filter := bson.D{{Key: "id", Value: id.Value}}
 
-	_, err := mongoDB.Collection.UpdateOne(context.Background(), filter, bson.D{
+	_, err := u.Collection.UpdateOne(context.Background(), filter, bson.D{
 		{Key: "$set", Value: bson.D{
 			{Key: "verified", Value: true},
 		}},
@@ -64,7 +64,7 @@ func (mongoDB *User) Verify(id *user.Id) error {
 			Where: "Verify",
 			What:  "Failure to verify a User",
 			Why: errors.Meta{
-				"Id": id.Value,
+				"ID": id.Value,
 			},
 			Who: err,
 		})
@@ -73,12 +73,12 @@ func (mongoDB *User) Verify(id *user.Id) error {
 	return nil
 }
 
-func (mongoDB *User) Update(user *user.User) error {
+func (u *User) Update(user *user.User) error {
 	updated := user.ToPrimitive()
 
-	filter := bson.D{{Key: "id", Value: user.Id.Value}}
+	filter := bson.D{{Key: "id", Value: user.ID.Value}}
 
-	hashed, err := mongoDB.Hashing.Hash(user.Password.Value)
+	hashed, err := u.Hashing.Hash(user.Password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Update")
@@ -86,14 +86,14 @@ func (mongoDB *User) Update(user *user.User) error {
 
 	updated.Password = hashed
 
-	_, err = mongoDB.Collection.ReplaceOne(context.Background(), filter, updated)
+	_, err = u.Collection.ReplaceOne(context.Background(), filter, updated)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Update",
 			What:  "Failure to update a User",
 			Why: errors.Meta{
-				"Id": user.Id.Value,
+				"ID": user.ID.Value,
 			},
 			Who: err,
 		})
@@ -102,17 +102,17 @@ func (mongoDB *User) Update(user *user.User) error {
 	return nil
 }
 
-func (mongoDB *User) Delete(id *user.Id) error {
+func (u *User) Delete(id *user.ID) error {
 	filter := bson.D{{Key: "id", Value: id.Value}}
 
-	_, err := mongoDB.Collection.DeleteOne(context.Background(), filter)
+	_, err := u.Collection.DeleteOne(context.Background(), filter)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Delete",
 			What:  "Failure to delete a User",
 			Why: errors.Meta{
-				"Id": id.Value,
+				"ID": id.Value,
 			},
 			Who: err,
 		})
@@ -121,20 +121,20 @@ func (mongoDB *User) Delete(id *user.Id) error {
 	return nil
 }
 
-func (mongoDB *User) Search(criteria *repository.SearchCriteria) (*user.User, error) {
+func (u *User) Search(criteria *repository.SearchCriteria) (*user.User, error) {
 	var filter bson.D
 	var index string
 
 	switch {
-	case criteria.Id != nil:
-		filter = bson.D{{Key: "id", Value: criteria.Id.Value}}
-		index = criteria.Id.Value
+	case criteria.ID != nil:
+		filter = bson.D{{Key: "id", Value: criteria.ID.Value}}
+		index = criteria.ID.Value
 	case criteria.Email != nil:
 		filter = bson.D{{Key: "email", Value: criteria.Email.Value}}
 		index = criteria.Email.Value
 	}
 
-	result := mongoDB.Collection.FindOne(context.Background(), filter)
+	result := u.Collection.FindOne(context.Background(), filter)
 
 	if err := result.Err(); err != nil {
 		return nil, mongodb.HandleDocumentNotFound(index, err)

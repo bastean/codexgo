@@ -14,10 +14,10 @@ type JWT struct {
 	secretKey []byte
 }
 
-func (auth *JWT) Generate(payload map[string]any) (string, error) {
+func (j *JWT) Generate(payload map[string]any) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims(payload))
 
-	signature, err := token.SignedString(auth.secretKey)
+	signature, err := token.SignedString(j.secretKey)
 
 	if err != nil {
 		return "", errors.New[errors.Internal](&errors.Bubble{
@@ -30,9 +30,9 @@ func (auth *JWT) Generate(payload map[string]any) (string, error) {
 	return signature, nil
 }
 
-func (auth *JWT) Validate(signature string) (jwt.MapClaims, error) {
+func (j *JWT) Validate(signature string) (jwt.MapClaims, error) {
 	token, _ := jwt.Parse(signature, func(token *jwt.Token) (any, error) {
-		return auth.secretKey, nil
+		return j.secretKey, nil
 	})
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {

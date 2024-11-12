@@ -3,8 +3,6 @@ package verify_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
@@ -12,6 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
+	"github.com/stretchr/testify/suite"
 )
 
 type VerifyTestSuite struct {
@@ -21,42 +20,42 @@ type VerifyTestSuite struct {
 	repository *persistence.UserMock
 }
 
-func (suite *VerifyTestSuite) SetupTest() {
-	suite.repository = new(persistence.UserMock)
+func (s *VerifyTestSuite) SetupTest() {
+	s.repository = new(persistence.UserMock)
 
-	suite.verify = &verify.Verify{
-		Repository: suite.repository,
+	s.verify = &verify.Case{
+		Repository: s.repository,
 	}
 
-	suite.sut = &verify.Handler{
-		Verify: suite.verify,
+	s.sut = &verify.Handler{
+		Verify: s.verify,
 	}
 }
 
-func (suite *VerifyTestSuite) TestHandle() {
+func (s *VerifyTestSuite) TestHandle() {
 	attributes := verify.CommandRandomAttributes()
 
 	random := user.Random()
 
-	id, err := user.NewId(attributes.Id)
+	id, err := user.NewID(attributes.ID)
 
-	suite.NoError(err)
+	s.NoError(err)
 
-	random.Id = id
+	random.ID = id
 
 	criteria := &repository.SearchCriteria{
-		Id: id,
+		ID: id,
 	}
 
-	suite.repository.On("Search", criteria).Return(random)
+	s.repository.On("Search", criteria).Return(random)
 
-	suite.repository.On("Verify", id)
+	s.repository.On("Verify", id)
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	suite.NoError(suite.sut.Handle(command))
+	s.NoError(s.sut.Handle(command))
 
-	suite.repository.AssertExpectations(suite.T())
+	s.repository.AssertExpectations(s.T())
 }
 
 func TestUnitVerifySuite(t *testing.T) {

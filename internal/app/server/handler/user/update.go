@@ -15,10 +15,10 @@ import (
 )
 
 func Update(c *gin.Context) {
-	id, exists := c.Get(key.UserId)
+	id, exists := c.Get(key.UserID)
 
 	if !exists {
-		errs.AbortByErr(c, errs.MissingKey(key.UserId, "Update"))
+		errs.AbortByErr(c, errs.MissingKey(key.UserID, "Update"))
 		return
 	}
 
@@ -31,7 +31,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	attributes.Id = format.ToString(id)
+	attributes.ID = format.ToString(id)
 
 	err = command.Bus.Dispatch(command.New(
 		user.UpdateCommandKey,

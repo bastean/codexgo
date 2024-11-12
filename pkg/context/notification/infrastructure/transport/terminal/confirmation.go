@@ -12,10 +12,10 @@ type Confirmation struct {
 	AppServerURL string
 }
 
-func (client *Confirmation) Submit(data *user.CreatedSucceededAttributes) error {
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", data.Username, client.AppServerURL, data.ID)
+func (c *Confirmation) Submit(attributes *user.CreatedSucceededAttributes) error {
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify/%s", attributes.Username, c.AppServerURL, attributes.ID)
 
-	client.Logger.Info(link)
+	c.Logger.Info(link)
 
 	return nil
 }

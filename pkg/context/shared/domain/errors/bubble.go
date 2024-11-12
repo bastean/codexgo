@@ -28,11 +28,11 @@ type (
 	NotExist     struct{ *Bubble }
 )
 
-func (err *Bubble) Error() string {
-	message := fmt.Sprintf("%s (%s): %s", services.FormatTime(err.When), err.Where, err.What)
+func (b *Bubble) Error() string {
+	message := fmt.Sprintf("%s (%s): %s", services.FormatTime(b.When), b.Where, b.What)
 
-	if err.Why != nil {
-		why, err := json.Marshal(err.Why)
+	if b.Why != nil {
+		why, err := json.Marshal(b.Why)
 
 		if err != nil {
 			why = []byte(fmt.Sprintf("{\"Error\":\"Cannot JSON encoding \"Why\" from error Bubble: [%s]\"}", err))
@@ -41,8 +41,8 @@ func (err *Bubble) Error() string {
 		message = fmt.Sprintf("%s: %s", message, why)
 	}
 
-	if err.Who != nil {
-		message = fmt.Sprintf("%s: [%s]", message, err.Who)
+	if b.Who != nil {
+		message = fmt.Sprintf("%s: [%s]", message, b.Who)
 	}
 
 	return message

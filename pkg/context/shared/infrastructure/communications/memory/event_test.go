@@ -3,13 +3,12 @@ package memory_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
+	"github.com/stretchr/testify/suite"
 )
 
 type EventBusTestSuite struct {
@@ -18,38 +17,38 @@ type EventBusTestSuite struct {
 	consumer *communications.EventConsumerMock
 }
 
-func (suite *EventBusTestSuite) SetupTest() {
-	suite.consumer = new(communications.EventConsumerMock)
+func (s *EventBusTestSuite) SetupTest() {
+	s.consumer = new(communications.EventConsumerMock)
 
-	suite.sut = &memory.EventBus{
+	s.sut = &memory.EventBus{
 		Consumers: make(map[events.Key][]events.Consumer),
 	}
 }
 
-func (suite *EventBusTestSuite) TestSubscribe() {
-	suite.NoError(suite.sut.Subscribe(messages.Random[events.Event]().Key, suite.consumer))
+func (s *EventBusTestSuite) TestSubscribe() {
+	s.NoError(s.sut.Subscribe(messages.Random[events.Event]().Key, s.consumer))
 }
 
-func (suite *EventBusTestSuite) TestPublish() {
+func (s *EventBusTestSuite) TestPublish() {
 	event := messages.Random[events.Event]()
 
-	suite.NoError(suite.sut.Subscribe(event.Key, suite.consumer))
+	s.NoError(s.sut.Subscribe(event.Key, s.consumer))
 
-	suite.consumer.Mock.On("On", event)
+	s.consumer.Mock.On("On", event)
 
-	suite.NoError(suite.sut.Publish(event))
+	s.NoError(s.sut.Publish(event))
 
-	suite.consumer.AssertExpectations(suite.T())
+	s.consumer.AssertExpectations(s.T())
 }
 
-func (suite *EventBusTestSuite) TestPublishErrMissingConsumer() {
+func (s *EventBusTestSuite) TestPublishErrMissingConsumer() {
 	event := messages.Random[events.Event]()
 
-	err := suite.sut.Publish(event)
+	err := s.sut.Publish(event)
 
 	var actual *errors.Internal
 
-	suite.ErrorAs(err, &actual)
+	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
@@ -60,7 +59,7 @@ func (suite *EventBusTestSuite) TestPublishErrMissingConsumer() {
 		},
 	}}
 
-	suite.EqualError(expected, actual.Error())
+	s.EqualError(expected, actual.Error())
 }
 
 func TestIntegrationEventBusSuite(t *testing.T) {

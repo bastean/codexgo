@@ -9,16 +9,16 @@ type (
 		Run(*user.User) error
 	}
 	Read interface {
-		Run(*user.Id) (*user.User, error)
+		Run(*user.ID) (*user.User, error)
 	}
 	Update interface {
 		Run(*user.User, *user.Password) error
 	}
 	Delete interface {
-		Run(*user.Id, *user.Password) error
+		Run(*user.ID, *user.Password) error
 	}
 	Verify interface {
-		Run(*user.Id) error
+		Run(*user.ID) error
 	}
 	Login interface {
 		Run(*user.Email, *user.Password) (*user.User, error)
