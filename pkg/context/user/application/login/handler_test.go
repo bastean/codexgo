@@ -3,29 +3,30 @@ package login_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
-	"github.com/stretchr/testify/suite"
 )
 
 type LoginTestSuite struct {
 	suite.Suite
 	sut        queries.Handler
 	login      cases.Login
-	hashing    *cryptographic.HashingMock
+	hashing    *ciphers.HashingMock
 	repository *persistence.UserMock
 }
 
 func (s *LoginTestSuite) SetupTest() {
 	s.repository = new(persistence.UserMock)
 
-	s.hashing = new(cryptographic.HashingMock)
+	s.hashing = new(ciphers.HashingMock)
 
 	s.login = &login.Case{
 		Repository: s.repository,

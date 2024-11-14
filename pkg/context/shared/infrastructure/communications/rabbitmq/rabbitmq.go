@@ -308,34 +308,34 @@ func Open(uri string, exchange string, queues Queues, logger loggers.Logger) (*R
 		})
 	}
 
-	r := &RabbitMQ{
+	rmq := &RabbitMQ{
 		Connection: session,
 		Channel:    channel,
 		Logger:     logger,
 		queues:     make(Queues),
 	}
 
-	err = r.AddExchange(exchange)
+	err = rmq.AddExchange(exchange)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Open")
 	}
 
 	for routingKey, queue := range queues {
-		err = r.AddQueue(queue.Name)
+		err = rmq.AddQueue(queue.Name)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "Open")
 		}
 
-		err = r.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
+		err = rmq.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
 
 		if err != nil {
 			return nil, errors.BubbleUp(err, "Open")
 		}
 	}
 
-	return r, nil
+	return rmq, nil
 }
 
 func Close(session *RabbitMQ) error {

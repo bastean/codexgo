@@ -3,6 +3,8 @@ package verify_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
@@ -10,7 +12,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
-	"github.com/stretchr/testify/suite"
 )
 
 type VerifyTestSuite struct {
@@ -35,19 +36,19 @@ func (s *VerifyTestSuite) SetupTest() {
 func (s *VerifyTestSuite) TestHandle() {
 	attributes := verify.CommandRandomAttributes()
 
-	random := user.Random()
+	account := user.Random()
 
 	id, err := user.NewID(attributes.ID)
 
 	s.NoError(err)
 
-	random.ID = id
+	account.ID = id
 
 	criteria := &repository.SearchCriteria{
 		ID: id,
 	}
 
-	s.repository.On("Search", criteria).Return(random)
+	s.repository.On("Search", criteria).Return(account)
 
 	s.repository.On("Verify", id)
 

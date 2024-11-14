@@ -5,8 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type BubbleTestSuite struct {

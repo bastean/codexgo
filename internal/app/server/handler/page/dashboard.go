@@ -7,9 +7,9 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/query"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/query"
 )
 
 func Dashboard(c *gin.Context) {

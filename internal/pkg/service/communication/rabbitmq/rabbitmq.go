@@ -10,11 +10,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
 )
 
-type (
-	RabbitMQ = rabbitmq.RabbitMQ
-	Events   = rabbitmq.Events
-)
-
 var (
 	Close = rabbitmq.Close
 )
@@ -32,6 +27,11 @@ var Queues = rabbitmq.Queues{
 		Attributes: reflect.TypeOf(new(user.CreatedSucceededAttributes)),
 	},
 }
+
+type (
+	RabbitMQ = rabbitmq.RabbitMQ
+	Events   = rabbitmq.Events
+)
 
 func Open(uri string, exchange string, queues rabbitmq.Queues, mapper rabbitmq.Events, logger loggers.Logger) (*rabbitmq.RabbitMQ, error) {
 	rmq, err := rabbitmq.Open(

@@ -1,12 +1,13 @@
 package module
 
 import (
-	"github.com/bastean/codexgo/v4/internal/pkg/service/command"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/cipher/bcrypt"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/command"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/query"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/persistence"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/query"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 )
 
@@ -22,7 +23,7 @@ func Start() error {
 	collection, err := user.OpenCollection(
 		persistence.MongoDB,
 		user.CollectionName,
-		user.Bcrypt,
+		bcrypt.Bcrypt,
 	)
 
 	if err != nil {
@@ -33,12 +34,12 @@ func Start() error {
 	user.Start(
 		collection,
 		communication.RabbitMQ,
-		user.Bcrypt,
+		bcrypt.Bcrypt,
 	)
 
 	log.Started(Module.User)
 
-	log.Starting(communication.Service.InMemory)
+	log.Starting(communication.Service.CommandBus)
 
 	command.Bus, err = command.NewBus(command.Mapper{
 		user.CreateCommandKey: user.CreateHandler,
@@ -48,9 +49,13 @@ func Start() error {
 	})
 
 	if err != nil {
-		log.CannotBeStarted(communication.Service.InMemory)
+		log.CannotBeStarted(communication.Service.CommandBus)
 		return errors.BubbleUp(err, "Start")
 	}
+
+	log.Started(communication.Service.CommandBus)
+
+	log.Starting(communication.Service.QueryBus)
 
 	query.Bus, err = query.NewBus(query.Mapper{
 		user.ReadQueryKey:  user.ReadHandler,
@@ -58,11 +63,11 @@ func Start() error {
 	})
 
 	if err != nil {
-		log.CannotBeStarted(communication.Service.InMemory)
+		log.CannotBeStarted(communication.Service.QueryBus)
 		return errors.BubbleUp(err, "Start")
 	}
 
-	log.Started(communication.Service.InMemory)
+	log.Started(communication.Service.QueryBus)
 
 	return nil
 }

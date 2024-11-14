@@ -3,6 +3,8 @@ package create_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
@@ -10,7 +12,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
-	"github.com/stretchr/testify/suite"
 )
 
 type CreateTestSuite struct {

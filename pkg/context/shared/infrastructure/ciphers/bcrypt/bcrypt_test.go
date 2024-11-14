@@ -3,15 +3,16 @@ package bcrypt_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/hashing"
-	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic/bcrypt"
 	"github.com/stretchr/testify/suite"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/hashes"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers/bcrypt"
 )
 
 type BcryptTestSuite struct {
 	suite.Suite
-	sut hashing.Hashing
+	sut hashes.Hashing
 }
 
 func (s *BcryptTestSuite) SetupTest() {
@@ -19,9 +20,7 @@ func (s *BcryptTestSuite) SetupTest() {
 }
 
 func (s *BcryptTestSuite) TestHash() {
-	password := user.PasswordWithValidValue()
-
-	plain := password.Value
+	plain := services.Create.LoremIpsumWord()
 
 	hashed, err := s.sut.Hash(plain)
 
@@ -31,17 +30,13 @@ func (s *BcryptTestSuite) TestHash() {
 }
 
 func (s *BcryptTestSuite) TestIsNotEqual() {
-	password := user.PasswordWithValidValue()
-
-	plain := password.Value
+	plain := services.Create.LoremIpsumWord()
 
 	hashed, err := s.sut.Hash(plain)
 
 	s.NoError(err)
 
-	isNotEqual := s.sut.IsNotEqual(hashed, plain)
-
-	s.False(isNotEqual)
+	s.False(s.sut.IsNotEqual(hashed, plain))
 }
 
 func TestIntegrationBcryptSuite(t *testing.T) {

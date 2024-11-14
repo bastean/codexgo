@@ -11,10 +11,12 @@ import (
 )
 
 var Service = &struct {
-	RabbitMQ, InMemory string
+	RabbitMQ, EventBus, CommandBus, QueryBus string
 }{
-	RabbitMQ: log.Service("RabbitMQ"),
-	InMemory: log.Service("InMemory"),
+	RabbitMQ:   log.Service("RabbitMQ"),
+	EventBus:   log.Service("EventBus"),
+	CommandBus: log.Service("CommandBus"),
+	QueryBus:   log.Service("QueryBus"),
 }
 
 var (

@@ -4,6 +4,16 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
+var (
+	Panic    = errors.Panic
+	BubbleUp = errors.BubbleUp
+)
+
+var (
+	As = errors.As
+	Is = errors.Is
+)
+
 type (
 	Bubble = errors.Bubble
 	Meta   = errors.Meta
@@ -16,16 +26,6 @@ type (
 	InvalidValue = errors.InvalidValue
 	AlreadyExist = errors.AlreadyExist
 	NotExist     = errors.NotExist
-)
-
-var (
-	Panic    = errors.Panic
-	BubbleUp = errors.BubbleUp
-)
-
-var (
-	As = errors.As
-	Is = errors.Is
 )
 
 func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {

@@ -3,9 +3,10 @@ package messages_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/stretchr/testify/suite"
 )
 
 type RecipientTestSuite struct {

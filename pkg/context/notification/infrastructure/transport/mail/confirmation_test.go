@@ -4,13 +4,14 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
-	"github.com/stretchr/testify/suite"
 )
 
 type ConfirmationTestSuite struct {

@@ -1,26 +1,27 @@
-package collection_test
+package mongodb_test
 
 import (
 	"fmt"
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/cryptographic"
-	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/collection"
-	"github.com/stretchr/testify/suite"
+	mongodb1 "github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/mongodb"
 )
 
-type UserTestSuite struct {
+type CollectionTestSuite struct {
 	suite.Suite
 	sut     repository.Repository
-	hashing *cryptographic.HashingMock
+	hashing *ciphers.HashingMock
 }
 
-func (s *UserTestSuite) SetupTest() {
+func (s *CollectionTestSuite) SetupTest() {
 	session, err := mongodb.Open(
 		os.Getenv("CODEXGO_DATABASE_MONGODB_URI"),
 		os.Getenv("CODEXGO_DATABASE_MONGODB_NAME"),
@@ -32,16 +33,16 @@ func (s *UserTestSuite) SetupTest() {
 
 	name := "users-test"
 
-	s.hashing = new(cryptographic.HashingMock)
+	s.hashing = new(ciphers.HashingMock)
 
-	s.sut, err = collection.OpenUser(session, name, s.hashing)
+	s.sut, err = mongodb1.OpenCollection(session, name, s.hashing)
 
 	if err != nil {
 		errors.Panic(err.Error(), "SetupTest")
 	}
 }
 
-func (s *UserTestSuite) TestCreate() {
+func (s *CollectionTestSuite) TestCreate() {
 	expected := user.Random()
 
 	expected.Pull()
@@ -63,14 +64,14 @@ func (s *UserTestSuite) TestCreate() {
 	s.Equal(expected, actual)
 }
 
-func (s *UserTestSuite) TestCreateErrDuplicateKey() {
-	random := user.Random()
+func (s *CollectionTestSuite) TestCreateErrDuplicateKey() {
+	account := user.Random()
 
-	s.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
+	s.hashing.On("Hash", account.Password.Value).Return(account.Password.Value)
 
-	s.NoError(s.sut.Create(random))
+	s.NoError(s.sut.Create(account))
 
-	err := s.sut.Create(random)
+	err := s.sut.Create(account)
 
 	s.hashing.AssertExpectations(s.T())
 
@@ -91,17 +92,17 @@ func (s *UserTestSuite) TestCreateErrDuplicateKey() {
 	s.EqualError(expected, actual.Error())
 }
 
-func (s *UserTestSuite) TestVerify() {
-	random := user.Random()
+func (s *CollectionTestSuite) TestVerify() {
+	account := user.Random()
 
-	s.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
+	s.hashing.On("Hash", account.Password.Value).Return(account.Password.Value)
 
-	s.NoError(s.sut.Create(random))
+	s.NoError(s.sut.Create(account))
 
-	s.NoError(s.sut.Verify(random.ID))
+	s.NoError(s.sut.Verify(account.ID))
 
 	criteria := &repository.SearchCriteria{
-		ID: random.ID,
+		ID: account.ID,
 	}
 
 	actual, err := s.sut.Search(criteria)
@@ -111,7 +112,7 @@ func (s *UserTestSuite) TestVerify() {
 	s.True(actual.Verified.Value)
 }
 
-func (s *UserTestSuite) TestUpdate() {
+func (s *CollectionTestSuite) TestUpdate() {
 	expected := user.Random()
 
 	expected.Pull()
@@ -139,17 +140,17 @@ func (s *UserTestSuite) TestUpdate() {
 	s.Equal(expected, actual)
 }
 
-func (s *UserTestSuite) TestDelete() {
-	random := user.Random()
+func (s *CollectionTestSuite) TestDelete() {
+	account := user.Random()
 
-	s.hashing.On("Hash", random.Password.Value).Return(random.Password.Value)
+	s.hashing.On("Hash", account.Password.Value).Return(account.Password.Value)
 
-	s.NoError(s.sut.Create(random))
+	s.NoError(s.sut.Create(account))
 
-	s.NoError(s.sut.Delete(random.ID))
+	s.NoError(s.sut.Delete(account.ID))
 
 	criteria := &repository.SearchCriteria{
-		ID: random.ID,
+		ID: account.ID,
 	}
 
 	_, err := s.sut.Search(criteria)
@@ -157,7 +158,7 @@ func (s *UserTestSuite) TestDelete() {
 	s.Error(err)
 }
 
-func (s *UserTestSuite) TestSearch() {
+func (s *CollectionTestSuite) TestSearch() {
 	expected := user.Random()
 
 	expected.Pull()
@@ -177,11 +178,11 @@ func (s *UserTestSuite) TestSearch() {
 	s.Equal(expected, actual)
 }
 
-func (s *UserTestSuite) TestSearchErrDocumentNotFound() {
-	random := user.Random()
+func (s *CollectionTestSuite) TestSearchErrDocumentNotFound() {
+	account := user.Random()
 
 	criteria := &repository.SearchCriteria{
-		ID: random.ID,
+		ID: account.ID,
 	}
 
 	_, err := s.sut.Search(criteria)
@@ -193,9 +194,9 @@ func (s *UserTestSuite) TestSearchErrDocumentNotFound() {
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDocumentNotFound",
-		What:  fmt.Sprintf("%s not found", random.ID.Value),
+		What:  fmt.Sprintf("%s not found", account.ID.Value),
 		Why: errors.Meta{
-			"Index": random.ID.Value,
+			"Index": account.ID.Value,
 		},
 		Who: actual.Who,
 	}}
@@ -203,6 +204,6 @@ func (s *UserTestSuite) TestSearchErrDocumentNotFound() {
 	s.EqualError(expected, actual.Error())
 }
 
-func TestIntegrationUserSuite(t *testing.T) {
-	suite.Run(t, new(UserTestSuite))
+func TestIntegrationCollectionSuite(t *testing.T) {
+	suite.Run(t, new(CollectionTestSuite))
 }

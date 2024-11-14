@@ -2,15 +2,14 @@ package delete
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/hashes"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/hashing"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
 type Case struct {
 	repository.Repository
-	hashing.Hashing
+	hashes.Hashing
 }
 
 func (c *Case) Run(id *user.ID, password *user.Password) error {
@@ -22,7 +21,7 @@ func (c *Case) Run(id *user.ID, password *user.Password) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = service.IsPasswordInvalid(c.Hashing, found.Password.Value, password.Value)
+	err = hashes.IsPasswordInvalid(c.Hashing, found.Password.Value, password.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

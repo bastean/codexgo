@@ -3,13 +3,14 @@ package confirmation_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/notification/application/confirmation"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports"
-	"github.com/stretchr/testify/suite"
 )
 
 type ConfirmationTestSuite struct {

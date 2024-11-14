@@ -1,4 +1,4 @@
-package hashing
+package hashes
 
 type Hashing interface {
 	Hash(plain string) (string, error)

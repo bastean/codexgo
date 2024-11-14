@@ -1,4 +1,4 @@
-package cryptographic
+package ciphers
 
 import (
 	"github.com/stretchr/testify/mock"
