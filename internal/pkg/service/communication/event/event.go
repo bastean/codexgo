@@ -6,14 +6,11 @@ import (
 )
 
 var (
-	Bus events.Bus
-)
-
-var (
 	NewBus = memory.NewEventBus
 )
 
 type (
-	Mapper   = memory.EventMapper
 	Consumer = events.Consumer
+	Bus      = events.Bus
+	Mapper   = memory.EventMapper
 )

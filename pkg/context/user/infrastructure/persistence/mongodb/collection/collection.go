@@ -1,4 +1,4 @@
-package mongodb
+package collection
 
 import (
 	"context"
@@ -172,7 +172,7 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 	return found, nil
 }
 
-func OpenCollection(session *mongodb.MongoDB, name string, hashing hashes.Hashing) (repository.Repository, error) {
+func Open(session *mongodb.MongoDB, name string, hashing hashes.Hashing) (repository.Repository, error) {
 	collection := session.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
@@ -192,7 +192,7 @@ func OpenCollection(session *mongodb.MongoDB, name string, hashing hashes.Hashin
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "OpenCollection",
+			Where: "Open",
 			What:  "Failure to create Indexes for User Collection",
 			Why: errors.Meta{
 				"Collection": name,

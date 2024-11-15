@@ -33,7 +33,7 @@ func Start() error {
 
 	user.Start(
 		collection,
-		communication.RabbitMQ,
+		communication.Bus,
 		bcrypt.Bcrypt,
 	)
 

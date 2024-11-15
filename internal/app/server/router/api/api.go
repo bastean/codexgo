@@ -11,8 +11,8 @@ type API struct {
 	*gin.RouterGroup
 }
 
-func (a *API) Public() {
-	public := a.Group("/")
+func (api *API) Public() {
+	public := api.Group("/")
 
 	account := public.Group("/account")
 
@@ -22,8 +22,8 @@ func (a *API) Public() {
 	account.GET("/verify/:id", user.Verify)
 }
 
-func (a *API) Private() {
-	private := a.Group("/", middleware.Authentication)
+func (api *API) Private() {
+	private := api.Group("/", middleware.Authentication)
 
 	account := private.Group("/account")
 

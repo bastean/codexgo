@@ -1,4 +1,4 @@
-package mongodb_test
+package collection_test
 
 import (
 	"fmt"
@@ -12,7 +12,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
-	mongodb1 "github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/mongodb"
+	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/mongodb/collection"
 )
 
 type CollectionTestSuite struct {
@@ -35,7 +35,7 @@ func (s *CollectionTestSuite) SetupTest() {
 
 	s.hashing = new(ciphers.HashingMock)
 
-	s.sut, err = mongodb1.OpenCollection(session, name, s.hashing)
+	s.sut, err = collection.Open(session, name, s.hashing)
 
 	if err != nil {
 		errors.Panic(err.Error(), "SetupTest")

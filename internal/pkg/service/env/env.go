@@ -48,8 +48,8 @@ const (
 )
 
 var ENV = map[key]required{
-	BROKER_RABBITMQ_URI:  true,
-	BROKER_RABBITMQ_NAME: true,
+	BROKER_RABBITMQ_URI:  false,
+	BROKER_RABBITMQ_NAME: false,
 
 	DATABASE_MONGODB_URI:  true,
 	DATABASE_MONGODB_NAME: true,
