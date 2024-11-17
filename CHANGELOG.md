@@ -1,5 +1,29 @@
 # Changelog
 
+## 4.8.0 (2024-11-17)
+
+- fix(deps): add missing dependencies ([4be4afb](https://github.com/bastean/codexgo/commit/4be4afb))
+- docs(readme): update usage description ([9368e53](https://github.com/bastean/codexgo/commit/9368e53))
+- chore(deps): upgrade ([7817341](https://github.com/bastean/codexgo/commit/7817341))
+- chore(deps): upgrade ([14880ff](https://github.com/bastean/codexgo/commit/14880ff))
+- chore(vscode): update snippets ([93a2a16](https://github.com/bastean/codexgo/commit/93a2a16))
+- feat: add vscode snippets ([7631c10](https://github.com/bastean/codexgo/commit/7631c10))
+- feat(cqrs): add in-memory command bus ([f250cc7](https://github.com/bastean/codexgo/commit/f250cc7))
+- feat(cqrs): add in-memory query bus ([095b122](https://github.com/bastean/codexgo/commit/095b122))
+- feat(service): add default event bus ([1656e91](https://github.com/bastean/codexgo/commit/1656e91))
+- refactor: move extension settings to vscode folder ([80a1e4a](https://github.com/bastean/codexgo/commit/80a1e4a))
+- refactor: use abbreviated receiver names ([becfa42](https://github.com/bastean/codexgo/commit/becfa42))
+- refactor: use error directly in string formatting ([5ce15ca](https://github.com/bastean/codexgo/commit/5ce15ca))
+- refactor(cqrs): use standard message in commands ([93750dc](https://github.com/bastean/codexgo/commit/93750dc))
+- refactor(cqrs): use standard message in queries ([9bbcbe0](https://github.com/bastean/codexgo/commit/9bbcbe0))
+- refactor(domain): use generics to create error bubbles ([10ce605](https://github.com/bastean/codexgo/commit/10ce605))
+- refactor(eda): decouple event bus from rabbitmq ([091a0c4](https://github.com/bastean/codexgo/commit/091a0c4))
+- refactor(eda): use standard message in events ([92c332b](https://github.com/bastean/codexgo/commit/92c332b))
+- refactor(presentation): change initialization of services ([4e072b7](https://github.com/bastean/codexgo/commit/4e072b7))
+- test(acceptance): add more declarative scenarios ([f8e3ba5](https://github.com/bastean/codexgo/commit/f8e3ba5))
+- test(unit): check bubble error message format ([6dbd1de](https://github.com/bastean/codexgo/commit/6dbd1de))
+- test(unit): remove unused methods ([28a0937](https://github.com/bastean/codexgo/commit/28a0937))
+
 ## [4.7.3](https://github.com/bastean/codexgo/compare/v4.7.2...v4.7.3) (2024-09-30)
 
 ### Chores
