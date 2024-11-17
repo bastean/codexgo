@@ -266,6 +266,12 @@ docker-usage:
 docker-it:
 	docker exec -it $(ID) bash
 
+compose-up:
+	${compose-env} $(ENV) up $(SERVICE)
+
+compose-down:
+	${compose-env} $(ENV) down $(SERVICE)
+
 compose-dev-down:
 	${compose-env} .env.dev down
 	${docker-rm-vol} codexgo-database-mongodb-dev
