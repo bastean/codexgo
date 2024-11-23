@@ -9,12 +9,16 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-type PasswordTestSuite struct {
+type PlainPasswordTestSuite struct {
 	suite.Suite
 }
 
-func (s *PasswordTestSuite) TestWithInvalidLength() {
-	value, err := user.PasswordWithInvalidLength()
+type CipherPasswordTestSuite struct {
+	suite.Suite
+}
+
+func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
+	value, err := user.PlainPasswordWithInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -22,7 +26,7 @@ func (s *PasswordTestSuite) TestWithInvalidLength() {
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "NewPassword",
+		Where: "NewPlainPassword",
 		What:  "Password must be between 8 to 64 characters",
 		Why: errors.Meta{
 			"Password": value,
@@ -32,6 +36,29 @@ func (s *PasswordTestSuite) TestWithInvalidLength() {
 	s.EqualError(expected, actual.Error())
 }
 
-func TestUnitPasswordSuite(t *testing.T) {
-	suite.Run(t, new(PasswordTestSuite))
+func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
+	value, err := user.CipherPasswordWithInvalidValue()
+
+	var actual *errors.Internal
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.Internal{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "NewCipherPassword",
+		What:  "Cipher Password is required",
+		Why: errors.Meta{
+			"Password": value,
+		},
+	}}
+
+	s.EqualError(expected, actual.Error())
+}
+
+func TestUnitPlainPasswordSuite(t *testing.T) {
+	suite.Run(t, new(PlainPasswordTestSuite))
+}
+
+func TestUnitCipherPasswordSuite(t *testing.T) {
+	suite.Run(t, new(CipherPasswordTestSuite))
 }

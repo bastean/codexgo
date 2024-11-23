@@ -2,16 +2,30 @@ package create
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/hashes"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
 type Case struct {
+	hashes.Hashing
 	repository.Repository
 }
 
-func (c *Case) Run(account *user.User) error {
-	err := c.Repository.Create(account)
+func (c *Case) Run(aggregate *user.User) error {
+	hashed, err := c.Hashing.Hash(aggregate.PlainPassword.Value)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
+	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
+	err = c.Repository.Create(aggregate)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

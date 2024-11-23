@@ -12,8 +12,8 @@ type Case struct {
 	hashes.Hashing
 }
 
-func (c *Case) Run(email *user.Email, password *user.Password) (*user.User, error) {
-	found, err := c.Repository.Search(&repository.SearchCriteria{
+func (c *Case) Run(email *user.Email, plain *user.PlainPassword) (*user.User, error) {
+	aggregate, err := c.Repository.Search(&repository.SearchCriteria{
 		Email: email,
 	})
 
@@ -21,11 +21,11 @@ func (c *Case) Run(email *user.Email, password *user.Password) (*user.User, erro
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	err = hashes.IsPasswordInvalid(c.Hashing, found.Password.Value, password.Value)
+	err = hashes.IsPasswordInvalid(c.Hashing, aggregate.CipherPassword.Value, plain.Value)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	return found, nil
+	return aggregate, nil
 }

@@ -12,8 +12,8 @@ type Case struct {
 	hashes.Hashing
 }
 
-func (c *Case) Run(id *user.ID, password *user.Password) error {
-	found, err := c.Repository.Search(&repository.SearchCriteria{
+func (c *Case) Run(id *user.ID, plain *user.PlainPassword) error {
+	aggregate, err := c.Repository.Search(&repository.SearchCriteria{
 		ID: id,
 	})
 
@@ -21,13 +21,13 @@ func (c *Case) Run(id *user.ID, password *user.Password) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = hashes.IsPasswordInvalid(c.Hashing, found.Password.Value, password.Value)
+	err = hashes.IsPasswordInvalid(c.Hashing, aggregate.CipherPassword.Value, plain.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = c.Repository.Delete(found.ID)
+	err = c.Repository.Delete(aggregate.ID)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

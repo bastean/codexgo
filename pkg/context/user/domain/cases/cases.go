@@ -12,15 +12,15 @@ type (
 		Run(*user.ID) (*user.User, error)
 	}
 	Update interface {
-		Run(*user.User, *user.Password) error
+		Run(*user.User, *user.PlainPassword) error
 	}
 	Delete interface {
-		Run(*user.ID, *user.Password) error
+		Run(*user.ID, *user.PlainPassword) error
 	}
 	Verify interface {
 		Run(*user.ID) error
 	}
 	Login interface {
-		Run(*user.Email, *user.Password) (*user.User, error)
+		Run(*user.Email, *user.PlainPassword) (*user.User, error)
 	}
 )

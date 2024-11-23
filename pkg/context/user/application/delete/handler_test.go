@@ -39,21 +39,23 @@ func (s *DeleteTestSuite) SetupTest() {
 }
 
 func (s *DeleteTestSuite) TestHandle() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
+
+	plain := user.PlainPasswordWithValidValue()
 
 	criteria := &repository.SearchCriteria{
-		ID: account.ID,
+		ID: aggregate.ID,
 	}
 
-	s.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(aggregate)
 
-	s.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
+	s.hashing.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
-	s.repository.On("Delete", account.ID)
+	s.repository.On("Delete", aggregate.ID)
 
 	attributes := &delete.CommandAttributes{
-		ID:       account.ID.Value,
-		Password: account.Password.Value,
+		ID:       aggregate.ID.Value,
+		Password: plain.Value,
 	}
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)

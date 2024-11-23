@@ -5,20 +5,38 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-func PasswordWithValidValue() *Password {
-	value, err := NewPassword(services.Create.Regex(`^[\W\w]{8,64}$`))
+func PlainPasswordWithValidValue() *PlainPassword {
+	value, err := NewPlainPassword(services.Create.Regex(`^[\W\w]{8,64}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "PasswordWithValidValue")
+		errors.Panic(err.Error(), "PlainPasswordWithValidValue")
 	}
 
 	return value
 }
 
-func PasswordWithInvalidLength() (string, error) {
+func PlainPasswordWithInvalidLength() (string, error) {
 	value := "x"
 
-	_, err := NewPassword(value)
+	_, err := NewPlainPassword(value)
+
+	return value, err
+}
+
+func CipherPasswordWithValidValue() *CipherPassword {
+	value, err := NewCipherPassword(services.Create.Regex(`^.{8,64}$`))
+
+	if err != nil {
+		errors.Panic(err.Error(), "CipherPasswordWithValidValue")
+	}
+
+	return value
+}
+
+func CipherPasswordWithInvalidValue() (string, error) {
+	var value string
+
+	_, err := NewCipherPassword(value)
 
 	return value, err
 }

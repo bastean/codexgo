@@ -52,15 +52,15 @@ func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 
 	email, errEmail := user.NewEmail(attributes.Email)
 
-	password, errPassword := user.NewPassword(attributes.Password)
+	plain, errPlain := user.NewPlainPassword(attributes.Password)
 
-	err := errors.Join(errEmail, errPassword)
+	err := errors.Join(errEmail, errPlain)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	found, err := h.Login.Run(email, password)
+	found, err := h.Login.Run(email, plain)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")

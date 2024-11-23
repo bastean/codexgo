@@ -13,7 +13,8 @@ type User struct {
 	*ID
 	*Email
 	*Username
-	*Password
+	*PlainPassword
+	*CipherPassword
 	*Verified
 }
 
@@ -22,16 +23,25 @@ type Primitive struct {
 	Verified                      bool
 }
 
-func create(primitive *Primitive) (*User, error) {
+func (u *User) ToPrimitive() *Primitive {
+	return &Primitive{
+		ID:       u.ID.Value,
+		Email:    u.Email.Value,
+		Username: u.Username.Value,
+		Password: u.CipherPassword.Value,
+		Verified: u.Verified.Value,
+	}
+}
+
+func create(user *Primitive) (*User, error) {
 	root := aggregates.NewRoot()
 
-	id, errID := NewID(primitive.ID)
-	email, errEmail := NewEmail(primitive.Email)
-	username, errUsername := NewUsername(primitive.Username)
-	password, errPassword := NewPassword(primitive.Password)
-	verified, errVerified := NewVerified(primitive.Verified)
+	id, errID := NewID(user.ID)
+	email, errEmail := NewEmail(user.Email)
+	username, errUsername := NewUsername(user.Username)
+	verified, errVerified := NewVerified(user.Verified)
 
-	if err := errors.Join(errID, errEmail, errUsername, errPassword, errVerified); err != nil {
+	if err := errors.Join(errID, errEmail, errUsername, errVerified); err != nil {
 		return nil, errors.BubbleUp(err, "create")
 	}
 
@@ -40,19 +50,8 @@ func create(primitive *Primitive) (*User, error) {
 		ID:       id,
 		Email:    email,
 		Username: username,
-		Password: password,
 		Verified: verified,
 	}, nil
-}
-
-func (u *User) ToPrimitive() *Primitive {
-	return &Primitive{
-		ID:       u.ID.Value,
-		Email:    u.Email.Value,
-		Username: u.Username.Value,
-		Password: u.Password.Value,
-		Verified: u.Verified.Value,
-	}
 }
 
 func FromPrimitive(primitive *Primitive) (*User, error) {
@@ -62,17 +61,33 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 
+	password, err := NewCipherPassword(primitive.Password)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "FromPrimitive")
+	}
+
+	user.CipherPassword = password
+
 	return user, nil
 }
 
-func New(primitive *Primitive) (*User, error) {
-	primitive.Verified = false
+func FromRaw(raw *Primitive) (*User, error) {
+	raw.Verified = false
 
-	aggregate, err := create(primitive)
+	aggregate, err := create(raw)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "New")
+		return nil, errors.BubbleUp(err, "FromRaw")
 	}
+
+	password, err := NewPlainPassword(raw.Password)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "FromRaw")
+	}
+
+	aggregate.PlainPassword = password
 
 	aggregate.Record(messages.New[events.Event](
 		user.CreatedSucceededKey,

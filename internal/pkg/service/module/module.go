@@ -23,7 +23,6 @@ func Start() error {
 	collection, err := user.OpenCollection(
 		persistence.MongoDB,
 		user.CollectionName,
-		bcrypt.Bcrypt,
 	)
 
 	if err != nil {

@@ -36,7 +36,7 @@ func (h *Handler) Handle(command *commands.Command) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	account, err := user.New(&user.Primitive{
+	aggregate, err := user.FromRaw(&user.Primitive{
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,
@@ -47,13 +47,13 @@ func (h *Handler) Handle(command *commands.Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	err = h.Create.Run(account)
+	err = h.Create.Run(aggregate)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	for _, event := range account.Pull() {
+	for _, event := range aggregate.Pull() {
 		err = h.Bus.Publish(event)
 
 		if err != nil {

@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
@@ -17,8 +16,7 @@ import (
 
 type CollectionTestSuite struct {
 	suite.Suite
-	sut     repository.Repository
-	hashing *ciphers.HashingMock
+	sut repository.Repository
 }
 
 func (s *CollectionTestSuite) SetupTest() {
@@ -33,9 +31,7 @@ func (s *CollectionTestSuite) SetupTest() {
 
 	name := "users-test"
 
-	s.hashing = new(ciphers.HashingMock)
-
-	s.sut, err = collection.Open(session, name, s.hashing)
+	s.sut, err = collection.Open(session, name)
 
 	if err != nil {
 		errors.Panic(err.Error(), "SetupTest")
@@ -43,15 +39,9 @@ func (s *CollectionTestSuite) SetupTest() {
 }
 
 func (s *CollectionTestSuite) TestCreate() {
-	expected := user.Random()
-
-	expected.Pull()
-
-	s.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+	expected := user.RandomPrimitive()
 
 	s.NoError(s.sut.Create(expected))
-
-	s.hashing.AssertExpectations(s.T())
 
 	criteria := &repository.SearchCriteria{
 		ID: expected.ID,
@@ -65,15 +55,11 @@ func (s *CollectionTestSuite) TestCreate() {
 }
 
 func (s *CollectionTestSuite) TestCreateErrDuplicateKey() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
 
-	s.hashing.On("Hash", account.Password.Value).Return(account.Password.Value)
+	s.NoError(s.sut.Create(aggregate))
 
-	s.NoError(s.sut.Create(account))
-
-	err := s.sut.Create(account)
-
-	s.hashing.AssertExpectations(s.T())
+	err := s.sut.Create(aggregate)
 
 	var actual *errors.AlreadyExist
 
@@ -93,16 +79,14 @@ func (s *CollectionTestSuite) TestCreateErrDuplicateKey() {
 }
 
 func (s *CollectionTestSuite) TestVerify() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
 
-	s.hashing.On("Hash", account.Password.Value).Return(account.Password.Value)
+	s.NoError(s.sut.Create(aggregate))
 
-	s.NoError(s.sut.Create(account))
-
-	s.NoError(s.sut.Verify(account.ID))
+	s.NoError(s.sut.Verify(aggregate.ID))
 
 	criteria := &repository.SearchCriteria{
-		ID: account.ID,
+		ID: aggregate.ID,
 	}
 
 	actual, err := s.sut.Search(criteria)
@@ -113,21 +97,13 @@ func (s *CollectionTestSuite) TestVerify() {
 }
 
 func (s *CollectionTestSuite) TestUpdate() {
-	expected := user.Random()
-
-	expected.Pull()
-
-	s.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+	expected := user.RandomPrimitive()
 
 	s.NoError(s.sut.Create(expected))
 
-	expected.Password = user.PasswordWithValidValue()
-
-	s.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+	expected.CipherPassword = user.CipherPasswordWithValidValue()
 
 	s.NoError(s.sut.Update(expected))
-
-	s.hashing.AssertExpectations(s.T())
 
 	criteria := &repository.SearchCriteria{
 		ID: expected.ID,
@@ -141,16 +117,14 @@ func (s *CollectionTestSuite) TestUpdate() {
 }
 
 func (s *CollectionTestSuite) TestDelete() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
 
-	s.hashing.On("Hash", account.Password.Value).Return(account.Password.Value)
+	s.NoError(s.sut.Create(aggregate))
 
-	s.NoError(s.sut.Create(account))
-
-	s.NoError(s.sut.Delete(account.ID))
+	s.NoError(s.sut.Delete(aggregate.ID))
 
 	criteria := &repository.SearchCriteria{
-		ID: account.ID,
+		ID: aggregate.ID,
 	}
 
 	_, err := s.sut.Search(criteria)
@@ -159,11 +133,7 @@ func (s *CollectionTestSuite) TestDelete() {
 }
 
 func (s *CollectionTestSuite) TestSearch() {
-	expected := user.Random()
-
-	expected.Pull()
-
-	s.hashing.On("Hash", expected.Password.Value).Return(expected.Password.Value)
+	expected := user.RandomPrimitive()
 
 	s.NoError(s.sut.Create(expected))
 
@@ -179,10 +149,10 @@ func (s *CollectionTestSuite) TestSearch() {
 }
 
 func (s *CollectionTestSuite) TestSearchErrDocumentNotFound() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
 
 	criteria := &repository.SearchCriteria{
-		ID: account.ID,
+		ID: aggregate.ID,
 	}
 
 	_, err := s.sut.Search(criteria)
@@ -194,9 +164,9 @@ func (s *CollectionTestSuite) TestSearchErrDocumentNotFound() {
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleDocumentNotFound",
-		What:  fmt.Sprintf("%s not found", account.ID.Value),
+		What:  fmt.Sprintf("%s not found", aggregate.ID.Value),
 		Why: errors.Meta{
-			"Index": account.ID.Value,
+			"Index": aggregate.ID.Value,
 		},
 		Who: actual.Who,
 	}}

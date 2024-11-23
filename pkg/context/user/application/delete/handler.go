@@ -36,15 +36,15 @@ func (h *Handler) Handle(command *commands.Command) error {
 
 	id, errID := user.NewID(attributes.ID)
 
-	password, errPassword := user.NewPassword(attributes.Password)
+	plain, errPlain := user.NewPlainPassword(attributes.Password)
 
-	err := errors.Join(errID, errPassword)
+	err := errors.Join(errID, errPlain)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	err = h.Delete.Run(id, password)
+	err = h.Delete.Run(id, plain)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

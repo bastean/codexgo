@@ -56,13 +56,13 @@ func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	found, err := h.Read.Run(id)
+	aggregate, err := h.Read.Run(id)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	response := (*ResponseAttributes)(found.ToPrimitive())
+	response := (*ResponseAttributes)(aggregate.ToPrimitive())
 
 	return messages.New[queries.Response](
 		ResponseKey,

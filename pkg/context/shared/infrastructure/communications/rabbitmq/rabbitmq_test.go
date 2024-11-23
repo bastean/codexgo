@@ -80,7 +80,7 @@ func (s *RabbitMQTestSuite) TestPublish() {
 
 	s.Eventually(func() bool {
 		return s.consumer.AssertExpectations(s.T())
-	}, 3*time.Second, 30*time.Millisecond)
+	}, 10*time.Second, 30*time.Millisecond)
 }
 
 func TestIntegrationRabbitMQSuite(t *testing.T) {

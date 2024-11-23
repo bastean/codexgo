@@ -11,7 +11,7 @@ type Case struct {
 }
 
 func (c *Case) Run(id *user.ID) (*user.User, error) {
-	found, err := c.Repository.Search(&repository.SearchCriteria{
+	aggregate, err := c.Repository.Search(&repository.SearchCriteria{
 		ID: id,
 	})
 
@@ -19,5 +19,5 @@ func (c *Case) Run(id *user.ID) (*user.User, error) {
 		return nil, errors.BubbleUp(err, "Run")
 	}
 
-	return found, nil
+	return aggregate, nil
 }

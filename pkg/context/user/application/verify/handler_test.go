@@ -36,19 +36,19 @@ func (s *VerifyTestSuite) SetupTest() {
 func (s *VerifyTestSuite) TestHandle() {
 	attributes := verify.CommandRandomAttributes()
 
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
 
 	id, err := user.NewID(attributes.ID)
 
 	s.NoError(err)
 
-	account.ID = id
+	aggregate.ID = id
 
 	criteria := &repository.SearchCriteria{
 		ID: id,
 	}
 
-	s.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(aggregate)
 
 	s.repository.On("Verify", id)
 

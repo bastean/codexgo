@@ -34,7 +34,7 @@ func (h *Handler) Handle(command *commands.Command) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	account, err := user.FromPrimitive(&user.Primitive{
+	aggregate, err := user.FromRaw(&user.Primitive{
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,
@@ -45,17 +45,17 @@ func (h *Handler) Handle(command *commands.Command) error {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	var updated *user.Password
+	var updated *user.PlainPassword
 
 	if attributes.UpdatedPassword != "" {
-		updated, err = user.NewPassword(attributes.UpdatedPassword)
+		updated, err = user.NewPlainPassword(attributes.UpdatedPassword)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Handle")
 		}
 	}
 
-	err = h.Update.Run(account, updated)
+	err = h.Update.Run(aggregate, updated)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

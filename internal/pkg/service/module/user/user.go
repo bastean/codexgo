@@ -15,6 +15,7 @@ import (
 func Start(repository repository.Repository, bus event.Bus, hashing hashes.Hashing) {
 	CreateHandler = &create.Handler{
 		Create: &create.Case{
+			Hashing:    hashing,
 			Repository: repository,
 		},
 		Bus: bus,

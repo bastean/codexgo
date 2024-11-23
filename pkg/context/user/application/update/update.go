@@ -12,28 +12,38 @@ type Case struct {
 	hashes.Hashing
 }
 
-func (c *Case) Run(account *user.User, updated *user.Password) error {
-	found, err := c.Repository.Search(&repository.SearchCriteria{
-		ID: account.ID,
+func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
+	account, err := c.Repository.Search(&repository.SearchCriteria{
+		ID: aggregate.ID,
 	})
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = hashes.IsPasswordInvalid(c.Hashing, found.Password.Value, account.Password.Value)
+	err = hashes.IsPasswordInvalid(c.Hashing, account.CipherPassword.Value, aggregate.PlainPassword.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
 
 	if updated != nil {
-		account.Password = updated
+		hashed, err := c.Hashing.Hash(updated.Value)
+
+		if err != nil {
+			return errors.BubbleUp(err, "Run")
+		}
+
+		aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+
+		if err != nil {
+			return errors.BubbleUp(err, "Run")
+		}
 	}
 
-	account.Verified = found.Verified
+	aggregate.Verified = account.Verified
 
-	err = c.Repository.Update(account)
+	err = c.Repository.Update(aggregate)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

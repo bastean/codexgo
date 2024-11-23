@@ -39,25 +39,27 @@ func (s *LoginTestSuite) SetupTest() {
 }
 
 func (s *LoginTestSuite) TestHandle() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
+
+	plain := user.PlainPasswordWithValidValue()
 
 	criteria := &repository.SearchCriteria{
-		Email: account.Email,
+		Email: aggregate.Email,
 	}
 
-	s.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(aggregate)
 
-	s.hashing.On("IsNotEqual", account.Password.Value, account.Password.Value).Return(false)
+	s.hashing.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
 	expected := messages.New[queries.Response](
 		login.ResponseKey,
-		(*login.ResponseAttributes)(account.ToPrimitive()),
+		(*login.ResponseAttributes)(aggregate.ToPrimitive()),
 		new(login.ResponseMeta),
 	)
 
 	attributes := &login.QueryAttributes{
-		Email:    account.Email.Value,
-		Password: account.Password.Value,
+		Email:    aggregate.Email.Value,
+		Password: plain.Value,
 	}
 
 	query := messages.RandomWithAttributes[queries.Query](attributes, false)

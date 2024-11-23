@@ -8,23 +8,45 @@ import (
 )
 
 const (
-	PasswordMinCharactersLength = "8"
-	PasswordMaxCharactersLength = "64"
+	PlainPasswordMinCharactersLength = "8"
+	PlainPasswordMaxCharactersLength = "64"
 )
 
-type Password struct {
+type PlainPassword struct {
 	Value string `validate:"gte=8,lte=64"`
 }
 
-func NewPassword(value string) (*Password, error) {
-	valueObj := &Password{
+type CipherPassword struct {
+	Value string `validate:"required"`
+}
+
+func NewPlainPassword(value string) (*PlainPassword, error) {
+	valueObj := &PlainPassword{
 		Value: value,
 	}
 
 	if services.IsValueObjectInvalid(valueObj) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewPassword",
-			What:  fmt.Sprintf("Password must be between %s to %s characters", PasswordMinCharactersLength, PasswordMaxCharactersLength),
+			Where: "NewPlainPassword",
+			What:  fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
+			Why: errors.Meta{
+				"Password": value,
+			},
+		})
+	}
+
+	return valueObj, nil
+}
+
+func NewCipherPassword(value string) (*CipherPassword, error) {
+	valueObj := &CipherPassword{
+		Value: value,
+	}
+
+	if services.IsValueObjectInvalid(valueObj) {
+		return nil, errors.New[errors.Internal](&errors.Bubble{
+			Where: "NewCipherPassword",
+			What:  "Cipher Password is required",
 			Why: errors.Meta{
 				"Password": value,
 			},

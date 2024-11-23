@@ -34,22 +34,22 @@ func (s *ReadTestSuite) SetupTest() {
 }
 
 func (s *ReadTestSuite) TestHandle() {
-	account := user.Random()
+	aggregate := user.RandomPrimitive()
 
 	criteria := &repository.SearchCriteria{
-		ID: account.ID,
+		ID: aggregate.ID,
 	}
 
-	s.repository.On("Search", criteria).Return(account)
+	s.repository.On("Search", criteria).Return(aggregate)
 
 	expected := messages.New[queries.Response](
 		read.ResponseKey,
-		(*read.ResponseAttributes)(account.ToPrimitive()),
+		(*read.ResponseAttributes)(aggregate.ToPrimitive()),
 		new(read.ResponseMeta),
 	)
 
 	attributes := &read.QueryAttributes{
-		ID: account.ID.Value,
+		ID: aggregate.ID.Value,
 	}
 
 	query := messages.RandomWithAttributes[queries.Query](attributes, false)

@@ -41,28 +41,30 @@ func (s *UpdateTestSuite) SetupTest() {
 func (s *UpdateTestSuite) TestHandle() {
 	attributes := update.CommandRandomAttributes()
 
-	account, err := user.FromPrimitive(&user.Primitive{
+	aggregate, err := user.FromRaw(&user.Primitive{
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,
-		Password: attributes.UpdatedPassword,
+		Password: attributes.Password,
 	})
 
 	s.NoError(err)
 
-	id, err := user.NewID(attributes.ID)
-
-	s.NoError(err)
-
 	criteria := &repository.SearchCriteria{
-		ID: id,
+		ID: aggregate.ID,
 	}
 
-	s.repository.On("Search", criteria).Return(account)
+	hashed := user.CipherPasswordWithValidValue()
 
-	s.hashing.On("IsNotEqual", account.Password.Value, attributes.Password).Return(false)
+	aggregate.CipherPassword = hashed
 
-	s.repository.On("Update", account)
+	s.repository.On("Search", criteria).Return(aggregate)
+
+	s.hashing.On("IsNotEqual", aggregate.CipherPassword.Value, attributes.Password).Return(false)
+
+	s.hashing.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
+
+	s.repository.On("Update", aggregate)
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 

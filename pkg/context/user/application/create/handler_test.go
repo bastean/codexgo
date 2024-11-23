@@ -7,6 +7,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -18,6 +19,7 @@ type CreateTestSuite struct {
 	suite.Suite
 	sut        commands.Handler
 	create     cases.Create
+	hashing    *ciphers.HashingMock
 	repository *persistence.UserMock
 	bus        *communications.EventBusMock
 }
@@ -27,7 +29,10 @@ func (s *CreateTestSuite) SetupTest() {
 
 	s.repository = new(persistence.UserMock)
 
+	s.hashing = new(ciphers.HashingMock)
+
 	s.create = &create.Case{
+		Hashing:    s.hashing,
 		Repository: s.repository,
 	}
 
@@ -40,7 +45,7 @@ func (s *CreateTestSuite) SetupTest() {
 func (s *CreateTestSuite) TestHandle() {
 	attributes := create.CommandRandomAttributes()
 
-	account, err := user.New(&user.Primitive{
+	aggregate, err := user.FromRaw(&user.Primitive{
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,
@@ -49,9 +54,15 @@ func (s *CreateTestSuite) TestHandle() {
 
 	s.NoError(err)
 
-	s.repository.On("Create", account)
+	hashed := user.CipherPasswordWithValidValue()
 
-	for _, event := range account.Events {
+	s.hashing.On("Hash", aggregate.PlainPassword.Value).Return(hashed.Value)
+
+	aggregate.CipherPassword = hashed
+
+	s.repository.On("Create", aggregate)
+
+	for _, event := range aggregate.Events {
 		s.bus.On("Publish", event)
 	}
 

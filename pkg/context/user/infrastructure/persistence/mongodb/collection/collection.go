@@ -8,7 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/hashes"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
@@ -16,21 +15,12 @@ import (
 
 type Collection struct {
 	*mongo.Collection
-	hashes.Hashing
 }
 
 func (c *Collection) Create(user *user.User) error {
-	account := user.ToPrimitive()
+	aggregate := user.ToPrimitive()
 
-	hashed, err := c.Hashing.Hash(account.Password)
-
-	if err != nil {
-		return errors.BubbleUp(err, "Create")
-	}
-
-	account.Password = hashed
-
-	_, err = c.Collection.InsertOne(context.Background(), account)
+	_, err := c.Collection.InsertOne(context.Background(), aggregate)
 
 	if mongo.IsDuplicateKeyError(err) {
 		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Create")
@@ -74,19 +64,11 @@ func (c *Collection) Verify(id *user.ID) error {
 }
 
 func (c *Collection) Update(user *user.User) error {
-	updated := user.ToPrimitive()
+	aggregate := user.ToPrimitive()
 
 	filter := bson.D{{Key: "id", Value: user.ID.Value}}
 
-	hashed, err := c.Hashing.Hash(user.Password.Value)
-
-	if err != nil {
-		return errors.BubbleUp(err, "Update")
-	}
-
-	updated.Password = hashed
-
-	_, err = c.Collection.ReplaceOne(context.Background(), filter, updated)
+	_, err := c.Collection.ReplaceOne(context.Background(), filter, aggregate)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -122,8 +104,10 @@ func (c *Collection) Delete(id *user.ID) error {
 }
 
 func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, error) {
-	var filter bson.D
-	var index string
+	var (
+		filter bson.D
+		index  string
+	)
 
 	switch {
 	case criteria.ID != nil:
@@ -172,7 +156,7 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 	return found, nil
 }
 
-func Open(session *mongodb.MongoDB, name string, hashing hashes.Hashing) (repository.Repository, error) {
+func Open(session *mongodb.MongoDB, name string) (repository.Repository, error) {
 	collection := session.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
@@ -203,6 +187,5 @@ func Open(session *mongodb.MongoDB, name string, hashing hashes.Hashing) (reposi
 
 	return &Collection{
 		Collection: collection,
-		Hashing:    hashing,
 	}, nil
 }
