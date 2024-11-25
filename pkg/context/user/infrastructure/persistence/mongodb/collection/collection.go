@@ -22,11 +22,10 @@ func (c *Collection) Create(user *user.User) error {
 
 	_, err := c.Collection.InsertOne(context.Background(), aggregate)
 
-	if mongo.IsDuplicateKeyError(err) {
+	switch {
+	case mongo.IsDuplicateKeyError(err):
 		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Create")
-	}
-
-	if err != nil {
+	case err != nil:
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Create",
 			What:  "Failure to create a User",
@@ -156,7 +155,7 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 	return found, nil
 }
 
-func Open(session *mongodb.MongoDB, name string) (repository.Repository, error) {
+func Open(session *mongodb.Database, name string) (repository.Repository, error) {
 	collection := session.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{

@@ -27,18 +27,20 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
+	hashed := account.CipherPassword.Value
+
 	if updated != nil {
-		hashed, err := c.Hashing.Hash(updated.Value)
+		hashed, err = c.Hashing.Hash(updated.Value)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Run")
 		}
+	}
 
-		aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
 
-		if err != nil {
-			return errors.BubbleUp(err, "Run")
-		}
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
 	}
 
 	aggregate.Verified = account.Verified

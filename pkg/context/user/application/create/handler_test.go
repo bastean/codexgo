@@ -20,14 +20,14 @@ type CreateTestSuite struct {
 	sut        commands.Handler
 	create     cases.Create
 	hashing    *ciphers.HashingMock
-	repository *persistence.UserMock
+	repository *persistence.RepositoryMock
 	bus        *communications.EventBusMock
 }
 
 func (s *CreateTestSuite) SetupTest() {
 	s.bus = new(communications.EventBusMock)
 
-	s.repository = new(persistence.UserMock)
+	s.repository = new(persistence.RepositoryMock)
 
 	s.hashing = new(ciphers.HashingMock)
 

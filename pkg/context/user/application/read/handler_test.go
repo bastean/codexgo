@@ -18,11 +18,11 @@ type ReadTestSuite struct {
 	suite.Suite
 	sut        queries.Handler
 	read       cases.Read
-	repository *persistence.UserMock
+	repository *persistence.RepositoryMock
 }
 
 func (s *ReadTestSuite) SetupTest() {
-	s.repository = new(persistence.UserMock)
+	s.repository = new(persistence.RepositoryMock)
 
 	s.read = &read.Case{
 		Repository: s.repository,

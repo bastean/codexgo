@@ -14,12 +14,12 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
-type MongoDB struct {
+type Database struct {
 	*mongo.Client
 	*mongo.Database
 }
 
-func Open(uri, name string) (*MongoDB, error) {
+func Open(uri, name string) (*Database, error) {
 	options := options.Client().ApplyURI(uri)
 
 	session, err := mongo.Connect(context.Background(), options)
@@ -42,13 +42,13 @@ func Open(uri, name string) (*MongoDB, error) {
 		})
 	}
 
-	return &MongoDB{
+	return &Database{
 		Client:   session,
 		Database: session.Database(name),
 	}, nil
 }
 
-func Close(ctx context.Context, session *MongoDB) error {
+func Close(ctx context.Context, session *Database) error {
 	if err := session.Client.Disconnect(ctx); err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Close",

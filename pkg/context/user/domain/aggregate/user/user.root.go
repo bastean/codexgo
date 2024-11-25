@@ -61,13 +61,11 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 
-	password, err := NewCipherPassword(primitive.Password)
+	user.CipherPassword, err = NewCipherPassword(primitive.Password)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
-
-	user.CipherPassword = password
 
 	return user, nil
 }
@@ -81,13 +79,11 @@ func FromRaw(raw *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "FromRaw")
 	}
 
-	password, err := NewPlainPassword(raw.Password)
+	aggregate.PlainPassword, err = NewPlainPassword(raw.Password)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "FromRaw")
 	}
-
-	aggregate.PlainPassword = password
 
 	aggregate.Record(messages.New[events.Event](
 		user.CreatedSucceededKey,

@@ -5,7 +5,7 @@ import (
 )
 
 type (
-	MongoDB = mongodb.MongoDB
+	Database = mongodb.Database
 )
 
 var (

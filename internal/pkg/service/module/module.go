@@ -17,13 +17,25 @@ var Module = &struct {
 	User: log.Module("User"),
 }
 
+var (
+	err        error
+	Repository user.Repository
+)
+
 func Start() error {
 	log.Starting(Module.User)
 
-	collection, err := user.OpenCollection(
-		persistence.MongoDB,
-		user.CollectionName,
-	)
+	switch {
+	case persistence.MongoDB != nil:
+		Repository, err = user.OpenCollection(
+			persistence.MongoDB,
+			user.CollectionName,
+		)
+	case persistence.SQLite != nil:
+		Repository, err = user.OpenTable(
+			persistence.SQLite,
+		)
+	}
 
 	if err != nil {
 		log.CannotBeStarted(Module.User)
@@ -31,7 +43,7 @@ func Start() error {
 	}
 
 	user.Start(
-		collection,
+		Repository,
 		communication.Bus,
 		bcrypt.Bcrypt,
 	)

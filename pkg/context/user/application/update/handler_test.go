@@ -20,11 +20,11 @@ type UpdateTestSuite struct {
 	sut        commands.Handler
 	update     cases.Update
 	hashing    *ciphers.HashingMock
-	repository *persistence.UserMock
+	repository *persistence.RepositoryMock
 }
 
 func (s *UpdateTestSuite) SetupTest() {
-	s.repository = new(persistence.UserMock)
+	s.repository = new(persistence.RepositoryMock)
 
 	s.hashing = new(ciphers.HashingMock)
 
@@ -39,7 +39,11 @@ func (s *UpdateTestSuite) SetupTest() {
 }
 
 func (s *UpdateTestSuite) TestHandle() {
+	registered := user.RandomPrimitive()
+
 	attributes := update.CommandRandomAttributes()
+
+	attributes.ID = registered.ID.Value
 
 	aggregate, err := user.FromRaw(&user.Primitive{
 		ID:       attributes.ID,
@@ -54,15 +58,19 @@ func (s *UpdateTestSuite) TestHandle() {
 		ID: aggregate.ID,
 	}
 
-	hashed := user.CipherPasswordWithValidValue()
+	s.repository.On("Search", criteria).Return(registered)
 
-	aggregate.CipherPassword = hashed
+	s.hashing.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
 
-	s.repository.On("Search", criteria).Return(aggregate)
+	hashed := user.CipherPasswordWithValidValue().Value
 
-	s.hashing.On("IsNotEqual", aggregate.CipherPassword.Value, attributes.Password).Return(false)
+	s.hashing.On("Hash", attributes.UpdatedPassword).Return(hashed)
 
-	s.hashing.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
+	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+
+	s.NoError(err)
+
+	aggregate.Verified = registered.Verified
 
 	s.repository.On("Update", aggregate)
 

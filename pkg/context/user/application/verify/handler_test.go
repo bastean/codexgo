@@ -18,11 +18,11 @@ type VerifyTestSuite struct {
 	suite.Suite
 	sut        commands.Handler
 	verify     cases.Verify
-	repository *persistence.UserMock
+	repository *persistence.RepositoryMock
 }
 
 func (s *VerifyTestSuite) SetupTest() {
-	s.repository = new(persistence.UserMock)
+	s.repository = new(persistence.RepositoryMock)
 
 	s.verify = &verify.Case{
 		Repository: s.repository,

@@ -20,11 +20,11 @@ type LoginTestSuite struct {
 	sut        queries.Handler
 	login      cases.Login
 	hashing    *ciphers.HashingMock
-	repository *persistence.UserMock
+	repository *persistence.RepositoryMock
 }
 
 func (s *LoginTestSuite) SetupTest() {
-	s.repository = new(persistence.UserMock)
+	s.repository = new(persistence.RepositoryMock)
 
 	s.hashing = new(ciphers.HashingMock)
 
