@@ -6,9 +6,7 @@ import (
 
 var (
 	DatabaseMongoDBURI, DatabaseMongoDBName string
-)
 
-var (
 	DatabaseSQLiteDSN string
 )
 

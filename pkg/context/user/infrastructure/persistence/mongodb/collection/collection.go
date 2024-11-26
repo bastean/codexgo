@@ -23,8 +23,8 @@ func (c *Collection) Create(user *user.User) error {
 	_, err := c.Collection.InsertOne(context.Background(), aggregate)
 
 	switch {
-	case mongo.IsDuplicateKeyError(err):
-		return errors.BubbleUp(mongodb.HandleDuplicateKeyError(err), "Create")
+	case mongodb.IsErrDuplicateValue(err):
+		return errors.BubbleUp(mongodb.HandleErrDuplicateValue(err), "Create")
 	case err != nil:
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Create",
@@ -69,7 +69,10 @@ func (c *Collection) Update(user *user.User) error {
 
 	_, err := c.Collection.ReplaceOne(context.Background(), filter, aggregate)
 
-	if err != nil {
+	switch {
+	case mongodb.IsErrDuplicateValue(err):
+		return errors.BubbleUp(mongodb.HandleErrDuplicateValue(err), "Update")
+	case err != nil:
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Update",
 			What:  "Failure to update a User",
@@ -119,13 +122,15 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 
 	result := c.Collection.FindOne(context.Background(), filter)
 
-	if err := result.Err(); err != nil {
-		return nil, mongodb.HandleDocumentNotFound(index, err)
+	err := result.Err()
+
+	if mongodb.IsErrNotFound(err) {
+		return nil, mongodb.HandleErrNotFound(err, index)
 	}
 
 	primitive := new(user.Primitive)
 
-	err := result.Decode(primitive)
+	err = result.Decode(primitive)
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{

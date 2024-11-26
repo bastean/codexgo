@@ -5,12 +5,13 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/sqlite"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/sqlite/table"
-	"github.com/stretchr/testify/suite"
 )
 
 type TableTestSuite struct {
@@ -161,7 +162,21 @@ func (s *TableTestSuite) TestDelete() {
 
 	_, err := s.sut.Search(criteria)
 
-	s.Error(err)
+	var actual *errors.NotExist
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.NotExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "HandleErrNotFound",
+		What:  fmt.Sprintf("%s not found", aggregate.ID.Value),
+		Why: errors.Meta{
+			"Index": aggregate.ID.Value,
+		},
+		Who: actual.Who,
+	}}
+
+	s.EqualError(expected, actual.Error())
 }
 
 func (s *TableTestSuite) TestSearch() {

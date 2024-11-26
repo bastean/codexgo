@@ -62,11 +62,11 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.hashing.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
 
-	hashed := user.CipherPasswordWithValidValue().Value
+	hashed := user.CipherPasswordWithValidValue()
 
-	s.hashing.On("Hash", attributes.UpdatedPassword).Return(hashed)
+	s.hashing.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
 
-	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+	aggregate.CipherPassword = hashed
 
 	s.NoError(err)
 

@@ -54,10 +54,14 @@ func (s *CollectionTestSuite) TestCreate() {
 	s.Equal(expected, actual)
 }
 
-func (s *CollectionTestSuite) TestCreateErrDuplicateKey() {
+func (s *CollectionTestSuite) TestCreateErrDuplicateValue() {
+	registered := user.RandomPrimitive()
+
 	aggregate := user.RandomPrimitive()
 
-	s.NoError(s.sut.Create(aggregate))
+	s.NoError(s.sut.Create(registered))
+
+	aggregate.ID = registered.ID
 
 	err := s.sut.Create(aggregate)
 
@@ -67,7 +71,7 @@ func (s *CollectionTestSuite) TestCreateErrDuplicateKey() {
 
 	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleDuplicateKeyError",
+		Where: "HandleErrDuplicateValue",
 		What:  "ID already registered",
 		Why: errors.Meta{
 			"Field": "ID",
@@ -116,6 +120,36 @@ func (s *CollectionTestSuite) TestUpdate() {
 	s.Equal(expected, actual)
 }
 
+func (s *CollectionTestSuite) TestUpdateErrDuplicateValue() {
+	registered := user.RandomPrimitive()
+
+	aggregate := user.RandomPrimitive()
+
+	s.NoError(s.sut.Create(registered))
+
+	s.NoError(s.sut.Create(aggregate))
+
+	aggregate.Email = registered.Email
+
+	err := s.sut.Update(aggregate)
+
+	var actual *errors.AlreadyExist
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "HandleErrDuplicateValue",
+		What:  "Email already registered",
+		Why: errors.Meta{
+			"Field": "Email",
+		},
+		Who: actual.Who,
+	}}
+
+	s.EqualError(expected, actual.Error())
+}
+
 func (s *CollectionTestSuite) TestDelete() {
 	aggregate := user.RandomPrimitive()
 
@@ -129,7 +163,21 @@ func (s *CollectionTestSuite) TestDelete() {
 
 	_, err := s.sut.Search(criteria)
 
-	s.Error(err)
+	var actual *errors.NotExist
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.NotExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "HandleErrNotFound",
+		What:  fmt.Sprintf("%s not found", aggregate.ID.Value),
+		Why: errors.Meta{
+			"Index": aggregate.ID.Value,
+		},
+		Who: actual.Who,
+	}}
+
+	s.EqualError(expected, actual.Error())
 }
 
 func (s *CollectionTestSuite) TestSearch() {
@@ -148,7 +196,7 @@ func (s *CollectionTestSuite) TestSearch() {
 	s.Equal(expected, actual)
 }
 
-func (s *CollectionTestSuite) TestSearchErrDocumentNotFound() {
+func (s *CollectionTestSuite) TestSearchErrNotFound() {
 	aggregate := user.RandomPrimitive()
 
 	criteria := &repository.SearchCriteria{
@@ -163,7 +211,7 @@ func (s *CollectionTestSuite) TestSearchErrDocumentNotFound() {
 
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleDocumentNotFound",
+		Where: "HandleErrNotFound",
 		What:  fmt.Sprintf("%s not found", aggregate.ID.Value),
 		Why: errors.Meta{
 			"Index": aggregate.ID.Value,

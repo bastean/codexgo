@@ -60,7 +60,11 @@ func Close(ctx context.Context, session *Database) error {
 	return nil
 }
 
-func HandleDuplicateKeyError(err error) error {
+func IsErrDuplicateValue(err error) bool {
+	return mongo.IsDuplicateKeyError(err)
+}
+
+func HandleErrDuplicateValue(err error) error {
 	re := regexp.MustCompile(`{ [A-Za-z0-9]+:`)
 
 	rawField := re.FindString(err.Error())
@@ -75,7 +79,7 @@ func HandleDuplicateKeyError(err error) error {
 	}
 
 	return errors.New[errors.AlreadyExist](&errors.Bubble{
-		Where: "HandleDuplicateKeyError",
+		Where: "HandleErrDuplicateValue",
 		What:  fmt.Sprintf("%s already registered", field),
 		Why: errors.Meta{
 			"Field": field,
@@ -84,9 +88,13 @@ func HandleDuplicateKeyError(err error) error {
 	})
 }
 
-func HandleDocumentNotFound(index string, err error) error {
+func IsErrNotFound(err error) bool {
+	return err != nil
+}
+
+func HandleErrNotFound(err error, index string) error {
 	return errors.New[errors.NotExist](&errors.Bubble{
-		Where: "HandleDocumentNotFound",
+		Where: "HandleErrNotFound",
 		What:  fmt.Sprintf("%s not found", index),
 		Why: errors.Meta{
 			"Index": index,
