@@ -29,9 +29,7 @@ func Open(dsn string) (*Database, error) {
 		dsn = InMemory
 	}
 
-	session, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{
-		TranslateError: true,
-	})
+	session, err := gorm.Open(sqlite.Open(dsn))
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
