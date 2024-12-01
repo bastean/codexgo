@@ -13,7 +13,7 @@ Feature: Delete a user account
   Scenario: Login a valid existing account
     Given I am on the Home page
     * I click on the Sign in button
-    * I fill the Email with delete@example.com
+    * I fill the Email/Username with delete@example.com
     * I fill the Password with delete@example
     When I click the Sign in button
     Then I see Logged in notification

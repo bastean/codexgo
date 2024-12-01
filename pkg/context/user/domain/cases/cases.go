@@ -21,6 +21,6 @@ type (
 		Run(*user.ID) error
 	}
 	Login interface {
-		Run(*user.Email, *user.PlainPassword) (*user.User, error)
+		Run(*user.Email, *user.Username, *user.PlainPassword) (*user.User, error)
 	}
 )

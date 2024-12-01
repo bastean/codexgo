@@ -12,10 +12,17 @@ type Case struct {
 	hashes.Hashing
 }
 
-func (c *Case) Run(email *user.Email, plain *user.PlainPassword) (*user.User, error) {
-	aggregate, err := c.Repository.Search(&repository.SearchCriteria{
-		Email: email,
-	})
+func (c *Case) Run(email *user.Email, username *user.Username, plain *user.PlainPassword) (*user.User, error) {
+	criteria := new(repository.SearchCriteria)
+
+	switch {
+	case email != nil:
+		criteria.Email = email
+	case username != nil:
+		criteria.Username = username
+	}
+
+	aggregate, err := c.Repository.Search(criteria)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")

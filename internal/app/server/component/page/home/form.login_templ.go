@@ -14,18 +14,18 @@ const (
 
 func LoginFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_LoginFormInit_42b5`,
-		Function: `function __templ_LoginFormInit_42b5(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_LoginFormInit_7de9`,
+		Function: `function __templ_LoginFormInit_7de9(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
             preventLeaving: true,
             keyboardShortcuts: false,
             fields: {
-                Email: {
+                Login: {
                     rules: [
                         {
-                            type: "email"
+                            type: "notEmpty"
                         }
                     ]
                 },
@@ -45,6 +45,19 @@ func LoginFormInit(formTagID string) templ.ComponentScript {
         .api({
             action: "user_login", 
             method: "POST",
+            beforeSend: function(settings) {
+                let login = settings.data.Login;
+
+                if (_.includes(login, "@")) {
+                    settings.data.Email = login;
+                } else {
+                    settings.data.Username = login;
+                }
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -66,8 +79,8 @@ func LoginFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_LoginFormInit_42b5`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_42b5`, formTagID),
+		Call:       templ.SafeScript(`__templ_LoginFormInit_7de9`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_7de9`, formTagID),
 	}
 }
 
@@ -99,7 +112,7 @@ func LoginForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(LoginFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.login.templ`, Line: 61, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.login.templ`, Line: 74, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -122,7 +135,7 @@ func LoginForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Sign up</a></div></h1><div class=\"required field\"><label>Email</label><div class=\"ui inverted transparent left icon input\"><i class=\"envelope icon\"></i> <input type=\"text\" placeholder=\"Email\" name=\"Email\"></div></div><div class=\"required field\"><label>Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"lock icon\"></i> <input type=\"password\" placeholder=\"Password\" name=\"Password\"></div></div><div class=\"ui divider\"></div><button class=\"ui fluid primary submit button\">Sign in</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Sign up</a></div></h1><div class=\"required field\"><label>Email/Username</label><div class=\"ui inverted transparent left icon input\"><i class=\"sign in alt icon\"></i> <input type=\"text\" placeholder=\"Email/Username\" name=\"Login\"></div></div><div class=\"required field\"><label>Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"lock icon\"></i> <input type=\"password\" placeholder=\"Password\" name=\"Password\"></div></div><div class=\"ui divider\"></div><button class=\"ui fluid primary submit button\">Sign in</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

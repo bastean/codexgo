@@ -118,6 +118,9 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 	case criteria.Email != nil:
 		filter = bson.D{{Key: "email", Value: criteria.Email.Value}}
 		index = criteria.Email.Value
+	case criteria.Username != nil:
+		filter = bson.D{{Key: "username", Value: criteria.Username.Value}}
+		index = criteria.Username.Value
 	}
 
 	result := c.Collection.FindOne(context.Background(), filter)

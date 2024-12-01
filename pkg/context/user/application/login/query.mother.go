@@ -7,6 +7,7 @@ import (
 func QueryRandomAttributes() *QueryAttributes {
 	return &QueryAttributes{
 		Email:    user.EmailWithValidValue().Value,
+		Username: user.UsernameWithValidValue().Value,
 		Password: user.PlainPasswordWithValidValue().Value,
 	}
 }

@@ -13,7 +13,7 @@ Feature: Login a user account
   Scenario: Login a valid existing account
     Given I am on the Home page
     * I click on the Sign in button
-    * I fill the Email with login@example.com
+    * I fill the Email/Username with login@example.com
     * I fill the Password with login@example
     When I click the Sign in button
     Then I see Logged in notification
@@ -22,7 +22,7 @@ Feature: Login a user account
   Scenario: Login a valid non existing account
     Given I am on the Home page
     * I click on the Sign in button
-    * I fill the Email with non-existing@example.com
+    * I fill the Email/Username with non-existing@example.com
     * I fill the Password with non-existing@example
     When I click the Sign in button
     Then I see non-existing@example.com not found notification

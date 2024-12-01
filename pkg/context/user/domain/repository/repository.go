@@ -7,6 +7,7 @@ import (
 type SearchCriteria struct {
 	*user.ID
 	*user.Email
+	*user.Username
 }
 
 type Repository interface {

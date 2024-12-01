@@ -12,10 +12,10 @@ script LoginFormInit(formTagID string) {
             preventLeaving: true,
             keyboardShortcuts: false,
             fields: {
-                Email: {
+                Login: {
                     rules: [
                         {
-                            type: "email"
+                            type: "notEmpty"
                         }
                     ]
                 },
@@ -35,6 +35,19 @@ script LoginFormInit(formTagID string) {
         .api({
             action: "user_login", 
             method: "POST",
+            beforeSend: function(settings) {
+                let login = settings.data.Login;
+
+                if (_.includes(login, "@")) {
+                    settings.data.Email = login;
+                } else {
+                    settings.data.Username = login;
+                }
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -64,10 +77,10 @@ templ LoginForm() {
 			<div class="sub header">Don't have an account? <a style="cursor: pointer;" onclick={ ShowTab(RegisterTabTagID) }>Sign up</a></div>
 		</h1>
 		<div class="required field">
-			<label>Email</label>
+			<label>Email/Username</label>
 			<div class="ui inverted transparent left icon input">
-				<i class="envelope icon"></i>
-				<input type="text" placeholder="Email" name="Email"/>
+				<i class="sign in alt icon"></i>
+				<input type="text" placeholder="Email/Username" name="Login"/>
 			</div>
 		</div>
 		<div class="required field">

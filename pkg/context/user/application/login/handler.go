@@ -27,7 +27,7 @@ var ResponseKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type QueryAttributes struct {
-	Email, Password string
+	Email, Username, Password string
 }
 
 type ResponseAttributes struct {
@@ -50,17 +50,35 @@ func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 		return nil, errors.QueryAssertion("Handle")
 	}
 
-	email, errEmail := user.NewEmail(attributes.Email)
+	var (
+		err      error
+		email    *user.Email
+		username *user.Username
+	)
 
-	plain, errPlain := user.NewPlainPassword(attributes.Password)
-
-	err := errors.Join(errEmail, errPlain)
+	if attributes.Email != "" {
+		email, err = user.NewEmail(attributes.Email)
+	}
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	found, err := h.Login.Run(email, plain)
+	if attributes.Username != "" {
+		username, err = user.NewUsername(attributes.Username)
+	}
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Handle")
+	}
+
+	plain, err := user.NewPlainPassword(attributes.Password)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "Handle")
+	}
+
+	found, err := h.Login.Run(email, username, plain)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Handle")

@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func Init() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Init_24bf`,
-		Function: `function __templ_Init_24bf(){user = {
+		Name: `__templ_Init_0787`,
+		Function: `function __templ_Init_0787(){let user = {
         "user_create" : "/v4/account",
         "user_login"  : "/v4/account",
         "user_update" : "/v4/account",
@@ -39,8 +39,8 @@ func Init() templ.ComponentScript {
         return false;
     };
 }`,
-		Call:       templ.SafeScript(`__templ_Init_24bf`),
-		CallInline: templ.SafeScriptInline(`__templ_Init_24bf`),
+		Call:       templ.SafeScript(`__templ_Init_0787`),
+		CallInline: templ.SafeScriptInline(`__templ_Init_0787`),
 	}
 }
 
