@@ -29,7 +29,7 @@ func (s *OrganizationTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *OrganizationTestSuite) TestWithInvalidAlphanumeric() {
@@ -48,7 +48,7 @@ func (s *OrganizationTestSuite) TestWithInvalidAlphanumeric() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitOrganizationSuite(t *testing.T) {

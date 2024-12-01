@@ -29,7 +29,7 @@ func (s *QueryTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *QueryTestSuite) TestWithInvalidAlpha() {
@@ -48,7 +48,7 @@ func (s *QueryTestSuite) TestWithInvalidAlpha() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitQuerySuite(t *testing.T) {

@@ -54,7 +54,7 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.NoError(err)
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: aggregate.ID,
 	}
 

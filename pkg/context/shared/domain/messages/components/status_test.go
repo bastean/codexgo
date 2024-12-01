@@ -29,7 +29,7 @@ func (s *StatusTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitStatusSuite(t *testing.T) {

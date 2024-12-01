@@ -43,7 +43,7 @@ func (s *DeleteTestSuite) TestHandle() {
 
 	plain := user.PlainPasswordWithValidValue()
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: aggregate.ID,
 	}
 

@@ -43,7 +43,7 @@ func (s *LoginTestSuite) TestHandle() {
 
 	plain := user.PlainPasswordWithValidValue()
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		Email: aggregate.Email,
 	}
 

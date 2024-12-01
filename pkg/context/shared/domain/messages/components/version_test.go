@@ -29,7 +29,7 @@ func (s *VersionTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitVersionSuite(t *testing.T) {

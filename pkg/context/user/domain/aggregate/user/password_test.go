@@ -33,7 +33,7 @@ func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
@@ -52,7 +52,7 @@ func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitPlainPasswordSuite(t *testing.T) {

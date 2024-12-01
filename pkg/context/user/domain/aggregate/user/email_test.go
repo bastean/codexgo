@@ -29,7 +29,7 @@ func (s *EmailTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitEmailSuite(t *testing.T) {

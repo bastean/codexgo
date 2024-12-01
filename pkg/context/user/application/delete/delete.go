@@ -13,7 +13,7 @@ type Case struct {
 }
 
 func (c *Case) Run(id *user.ID, plain *user.PlainPassword) error {
-	aggregate, err := c.Repository.Search(&repository.SearchCriteria{
+	aggregate, err := c.Repository.Search(&repository.Criteria{
 		ID: id,
 	})
 

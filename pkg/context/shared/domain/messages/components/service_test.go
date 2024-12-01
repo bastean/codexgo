@@ -29,7 +29,7 @@ func (s *ServiceTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *ServiceTestSuite) TestWithInvalidAlphanumeric() {
@@ -48,7 +48,7 @@ func (s *ServiceTestSuite) TestWithInvalidAlphanumeric() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitServiceSuite(t *testing.T) {

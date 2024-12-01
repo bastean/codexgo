@@ -51,7 +51,7 @@ func (s *CommandBusTestSuite) TestRegisterErrDuplicateCommand() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *CommandBusTestSuite) TestDispatch() {
@@ -84,7 +84,7 @@ func (s *CommandBusTestSuite) TestDispatchErrMissingHandler() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestIntegrationCommandBusSuite(t *testing.T) {

@@ -29,7 +29,7 @@ func (s *IDTestSuite) TestWithInvalidValue() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitIDSuite(t *testing.T) {

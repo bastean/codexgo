@@ -44,7 +44,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregate.ID = id
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: id,
 	}
 

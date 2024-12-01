@@ -13,7 +13,7 @@ type Case struct {
 }
 
 func (c *Case) Run(email *user.Email, username *user.Username, plain *user.PlainPassword) (*user.User, error) {
-	criteria := new(repository.SearchCriteria)
+	criteria := new(repository.Criteria)
 
 	switch {
 	case email != nil:

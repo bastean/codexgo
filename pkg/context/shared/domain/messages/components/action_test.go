@@ -29,7 +29,7 @@ func (s *ActionTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitActionSuite(t *testing.T) {

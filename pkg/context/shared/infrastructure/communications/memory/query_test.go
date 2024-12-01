@@ -51,7 +51,7 @@ func (s *QueryBusTestSuite) TestRegisterErrDuplicateCommand() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *QueryBusTestSuite) TestAsk() {
@@ -92,7 +92,7 @@ func (s *QueryBusTestSuite) TestAskErrMissingHandler() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestIntegrationQueryBusSuite(t *testing.T) {

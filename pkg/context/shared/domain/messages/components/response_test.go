@@ -29,7 +29,7 @@ func (s *ResponseTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *ResponseTestSuite) TestWithInvalidAlpha() {
@@ -48,7 +48,7 @@ func (s *ResponseTestSuite) TestWithInvalidAlpha() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitResponseSuite(t *testing.T) {

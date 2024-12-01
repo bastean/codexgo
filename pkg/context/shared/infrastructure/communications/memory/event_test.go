@@ -60,7 +60,7 @@ func (s *EventBusTestSuite) TestPublishErrMissingConsumer() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestIntegrationEventBusSuite(t *testing.T) {

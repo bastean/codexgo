@@ -29,7 +29,7 @@ func (s *EventTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *EventTestSuite) TestWithInvalidAlpha() {
@@ -48,7 +48,7 @@ func (s *EventTestSuite) TestWithInvalidAlpha() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitEventSuite(t *testing.T) {

@@ -42,7 +42,7 @@ func (s *TableTestSuite) TestCreate() {
 
 	s.NoError(s.sut.Create(expected))
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: expected.ID,
 	}
 
@@ -78,7 +78,7 @@ func (s *TableTestSuite) TestCreateErrDuplicateValue() {
 		Who: actual.Who,
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *TableTestSuite) TestVerify() {
@@ -88,7 +88,7 @@ func (s *TableTestSuite) TestVerify() {
 
 	s.NoError(s.sut.Verify(aggregate.ID))
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: aggregate.ID,
 	}
 
@@ -108,7 +108,7 @@ func (s *TableTestSuite) TestUpdate() {
 
 	s.NoError(s.sut.Update(expected))
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: expected.ID,
 	}
 
@@ -146,7 +146,7 @@ func (s *TableTestSuite) TestUpdateErrDuplicateValue() {
 		Who: actual.Who,
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *TableTestSuite) TestDelete() {
@@ -156,7 +156,7 @@ func (s *TableTestSuite) TestDelete() {
 
 	s.NoError(s.sut.Delete(aggregate.ID))
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: aggregate.ID,
 	}
 
@@ -176,7 +176,7 @@ func (s *TableTestSuite) TestDelete() {
 		Who: actual.Who,
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *TableTestSuite) TestSearch() {
@@ -184,7 +184,7 @@ func (s *TableTestSuite) TestSearch() {
 
 	s.NoError(s.sut.Create(expected))
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: expected.ID,
 	}
 
@@ -196,7 +196,7 @@ func (s *TableTestSuite) TestSearch() {
 }
 
 func (s *TableTestSuite) TestSearchErrCriteria() {
-	criteria := new(repository.SearchCriteria)
+	criteria := new(repository.Criteria)
 
 	_, err := s.sut.Search(criteria)
 
@@ -204,19 +204,19 @@ func (s *TableTestSuite) TestSearchErrCriteria() {
 
 	s.ErrorAs(err, &actual)
 
-	expected := &errors.NotExist{Bubble: &errors.Bubble{
+	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Search",
 		What:  "Criteria not defined",
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *TableTestSuite) TestSearchErrNotFound() {
 	aggregate := user.RandomPrimitive()
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: aggregate.ID,
 	}
 
@@ -236,7 +236,7 @@ func (s *TableTestSuite) TestSearchErrNotFound() {
 		Who: actual.Who,
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestIntegrationTableSuite(t *testing.T) {

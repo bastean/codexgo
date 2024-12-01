@@ -104,7 +104,7 @@ func (t *Table) Delete(id *user.ID) error {
 	return nil
 }
 
-func (t *Table) Search(criteria *repository.SearchCriteria) (*user.User, error) {
+func (t *Table) Search(criteria *repository.Criteria) (*user.User, error) {
 	var (
 		filter *User
 		index  string

@@ -105,7 +105,7 @@ func (c *Collection) Delete(id *user.ID) error {
 	return nil
 }
 
-func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, error) {
+func (c *Collection) Search(criteria *repository.Criteria) (*user.User, error) {
 	var (
 		filter bson.D
 		index  string

@@ -36,7 +36,7 @@ func (s *ReadTestSuite) SetupTest() {
 func (s *ReadTestSuite) TestHandle() {
 	aggregate := user.RandomPrimitive()
 
-	criteria := &repository.SearchCriteria{
+	criteria := &repository.Criteria{
 		ID: aggregate.ID,
 	}
 

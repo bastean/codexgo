@@ -29,7 +29,7 @@ func (s *UsernameTestSuite) TestWithInvalidLength() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func (s *UsernameTestSuite) TestWithInvalidAlphanumeric() {
@@ -48,7 +48,7 @@ func (s *UsernameTestSuite) TestWithInvalidAlphanumeric() {
 		},
 	}}
 
-	s.EqualError(expected, actual.Error())
+	s.Equal(expected, actual)
 }
 
 func TestUnitUsernameSuite(t *testing.T) {
