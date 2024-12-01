@@ -68,10 +68,11 @@ go install github.com/bastean/codexgo/v4/cmd/codexgo@latest
 >
 > - We need to create an `.env` file where we have our own values defined.
 >   - In the [.env.example.cli](deployments/.env.example.cli) file, we can see the values that can be used.
->     - By omitting `CODEXGO_SMTP_*`, the link to confirm the account is sent through the Terminal with the following message: _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
+>     - If `CODEXGO_SMTP_*` is omitted, the link to confirm the account is sent through the Terminal with the following message: _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
 >       - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
->     - By omitting `CODEXGO_BROKER_*`, an in-memory event bus will be used.
->     - The only third-party service needed is the database `CODEXGO_DATABASE_*`, but in the next versions I will add a local implementation.
+>     - If `CODEXGO_BROKER_*` is omitted, an in-memory event bus will be used.
+>     - If `CODEXGO_DATABASE_*` is omitted, a `SQLite` in-memory database will be used.
+>       - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_SQLITE_DSN` variable.
 
 ```bash
 codexgo -h
