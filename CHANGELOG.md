@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.9.0 (2024-12-01)
+
+- docs(readme): add sqlite implementation ([864e7c6](https://github.com/bastean/codexgo/commit/864e7c6))
+- fix(mongodb): check duplicate value error when updating a document ([bd59245](https://github.com/bastean/codexgo/commit/bd59245))
+- fix(sqlite): add username in search criteria ([31b1070](https://github.com/bastean/codexgo/commit/31b1070))
+- fix(sqlite): remove gorm error translation ([12009a4](https://github.com/bastean/codexgo/commit/12009a4))
+- chore(deps): upgrade ([e01098f](https://github.com/bastean/codexgo/commit/e01098f))
+- chore(devcontainer): add python feature for dependencies that need it ([0b146a6](https://github.com/bastean/codexgo/commit/0b146a6))
+- test: change error assertions ([25b8596](https://github.com/bastean/codexgo/commit/25b8596))
+- feat: add user repository sqlite adapter ([1388999](https://github.com/bastean/codexgo/commit/1388999))
+- feat: allow login with username ([750c13c](https://github.com/bastean/codexgo/commit/750c13c))
+- refactor(context): move responsibility for password hashing to use cases ([3b08b43](https://github.com/bastean/codexgo/commit/3b08b43))
+
 ## 4.8.0 (2024-11-17)
 
 - fix(deps): add missing dependencies ([4be4afb](https://github.com/bastean/codexgo/commit/4be4afb))
