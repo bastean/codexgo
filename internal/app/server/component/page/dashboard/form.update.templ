@@ -59,7 +59,7 @@ script UpdateFormInit(formTagID string) {
                 Password: {
                     rules: [
                         {
-                            type: "empty",
+                            type: "notEmpty",
                             prompt: "{name} is required to update the account settings"
                         },
                         {

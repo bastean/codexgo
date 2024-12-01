@@ -117,6 +117,14 @@ func (t *Table) Search(criteria *repository.SearchCriteria) (*user.User, error) 
 	case criteria.Email != nil:
 		filter = &User{Email: criteria.Email.Value}
 		index = criteria.Email.Value
+	case criteria.Username != nil:
+		filter = &User{Username: criteria.Username.Value}
+		index = criteria.Username.Value
+	default:
+		return nil, errors.New[errors.Internal](&errors.Bubble{
+			Where: "Search",
+			What:  "Criteria not defined",
+		})
 	}
 
 	primitive := new(user.Primitive)

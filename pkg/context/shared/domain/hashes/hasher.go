@@ -1,6 +1,6 @@
 package hashes
 
-type Hashing interface {
+type Hasher interface {
 	Hash(plain string) (string, error)
 	IsNotEqual(hashed, plain string) bool
 }

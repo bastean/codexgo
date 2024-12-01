@@ -121,6 +121,11 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 	case criteria.Username != nil:
 		filter = bson.D{{Key: "username", Value: criteria.Username.Value}}
 		index = criteria.Username.Value
+	default:
+		return nil, errors.New[errors.Internal](&errors.Bubble{
+			Where: "Search",
+			What:  "Criteria not defined",
+		})
 	}
 
 	result := c.Collection.FindOne(context.Background(), filter)
@@ -146,7 +151,7 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 		})
 	}
 
-	found, err := user.FromPrimitive(primitive)
+	aggregate, err := user.FromPrimitive(primitive)
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
@@ -160,7 +165,7 @@ func (c *Collection) Search(criteria *repository.SearchCriteria) (*user.User, er
 		})
 	}
 
-	return found, nil
+	return aggregate, nil
 }
 
 func Open(session *mongodb.Database, name string) (repository.Repository, error) {

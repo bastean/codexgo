@@ -19,18 +19,18 @@ type LoginTestSuite struct {
 	suite.Suite
 	sut        queries.Handler
 	login      cases.Login
-	hashing    *ciphers.HashingMock
+	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 }
 
 func (s *LoginTestSuite) SetupTest() {
 	s.repository = new(persistence.RepositoryMock)
 
-	s.hashing = new(ciphers.HashingMock)
+	s.hasher = new(ciphers.HasherMock)
 
 	s.login = &login.Case{
 		Repository: s.repository,
-		Hashing:    s.hashing,
+		Hasher:     s.hasher,
 	}
 
 	s.sut = &login.Handler{
@@ -49,7 +49,7 @@ func (s *LoginTestSuite) TestHandle() {
 
 	s.repository.On("Search", criteria).Return(aggregate)
 
-	s.hashing.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
+	s.hasher.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
 	expected := messages.New[queries.Response](
 		login.ResponseKey,
@@ -70,7 +70,7 @@ func (s *LoginTestSuite) TestHandle() {
 
 	s.repository.AssertExpectations(s.T())
 
-	s.hashing.AssertExpectations(s.T())
+	s.hasher.AssertExpectations(s.T())
 
 	s.EqualValues(expected, actual)
 }

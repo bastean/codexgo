@@ -12,7 +12,7 @@ import (
 
 type BcryptTestSuite struct {
 	suite.Suite
-	sut hashes.Hashing
+	sut hashes.Hasher
 }
 
 func (s *BcryptTestSuite) SetupTest() {

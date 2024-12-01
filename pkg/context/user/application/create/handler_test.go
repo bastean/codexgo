@@ -19,7 +19,7 @@ type CreateTestSuite struct {
 	suite.Suite
 	sut        commands.Handler
 	create     cases.Create
-	hashing    *ciphers.HashingMock
+	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 	bus        *communications.EventBusMock
 }
@@ -29,10 +29,10 @@ func (s *CreateTestSuite) SetupTest() {
 
 	s.repository = new(persistence.RepositoryMock)
 
-	s.hashing = new(ciphers.HashingMock)
+	s.hasher = new(ciphers.HasherMock)
 
 	s.create = &create.Case{
-		Hashing:    s.hashing,
+		Hasher:     s.hasher,
 		Repository: s.repository,
 	}
 
@@ -56,7 +56,7 @@ func (s *CreateTestSuite) TestHandle() {
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hashing.On("Hash", aggregate.PlainPassword.Value).Return(hashed.Value)
+	s.hasher.On("Hash", aggregate.PlainPassword.Value).Return(hashed.Value)
 
 	aggregate.CipherPassword = hashed
 

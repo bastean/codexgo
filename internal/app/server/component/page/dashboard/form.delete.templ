@@ -15,7 +15,7 @@ script DeleteFormInit(formTagID string) {
                 Password: {
                     rules: [
                         {
-                            type: "empty",
+                            type: "notEmpty",
                             prompt: "{name} is required to delete the account"
                         },
                         {

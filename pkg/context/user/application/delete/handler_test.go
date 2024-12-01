@@ -19,18 +19,18 @@ type DeleteTestSuite struct {
 	suite.Suite
 	sut        commands.Handler
 	delete     cases.Delete
-	hashing    *ciphers.HashingMock
+	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 }
 
 func (s *DeleteTestSuite) SetupTest() {
 	s.repository = new(persistence.RepositoryMock)
 
-	s.hashing = new(ciphers.HashingMock)
+	s.hasher = new(ciphers.HasherMock)
 
 	s.delete = &delete.Case{
 		Repository: s.repository,
-		Hashing:    s.hashing,
+		Hasher:     s.hasher,
 	}
 
 	s.sut = &delete.Handler{
@@ -49,7 +49,7 @@ func (s *DeleteTestSuite) TestHandle() {
 
 	s.repository.On("Search", criteria).Return(aggregate)
 
-	s.hashing.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
+	s.hasher.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
 	s.repository.On("Delete", aggregate.ID)
 
@@ -64,7 +64,7 @@ func (s *DeleteTestSuite) TestHandle() {
 
 	s.repository.AssertExpectations(s.T())
 
-	s.hashing.AssertExpectations(s.T())
+	s.hasher.AssertExpectations(s.T())
 }
 
 func TestUnitDeleteSuite(t *testing.T) {

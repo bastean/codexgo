@@ -9,7 +9,7 @@ import (
 
 type Case struct {
 	repository.Repository
-	hashes.Hashing
+	hashes.Hasher
 }
 
 func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
@@ -21,7 +21,7 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = hashes.IsPasswordInvalid(c.Hashing, account.CipherPassword.Value, aggregate.PlainPassword.Value)
+	err = hashes.IsPasswordInvalid(c.Hasher, account.CipherPassword.Value, aggregate.PlainPassword.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
@@ -30,7 +30,7 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 	hashed := account.CipherPassword.Value
 
 	if updated != nil {
-		hashed, err = c.Hashing.Hash(updated.Value)
+		hashed, err = c.Hasher.Hash(updated.Value)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Run")

@@ -14,8 +14,8 @@ const (
 
 func UpdateFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_UpdateFormInit_c8cd`,
-		Function: `function __templ_UpdateFormInit_c8cd(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_UpdateFormInit_023b`,
+		Function: `function __templ_UpdateFormInit_023b(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -69,7 +69,7 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
                 Password: {
                     rules: [
                         {
-                            type: "empty",
+                            type: "notEmpty",
                             prompt: "{name} is required to update the account settings"
                         },
                         {
@@ -107,8 +107,8 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_UpdateFormInit_c8cd`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_c8cd`, formTagID),
+		Call:       templ.SafeScript(`__templ_UpdateFormInit_023b`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_023b`, formTagID),
 	}
 }
 

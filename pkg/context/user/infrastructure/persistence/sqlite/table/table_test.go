@@ -195,6 +195,24 @@ func (s *TableTestSuite) TestSearch() {
 	s.Equal(expected, actual)
 }
 
+func (s *TableTestSuite) TestSearchErrCriteria() {
+	criteria := new(repository.SearchCriteria)
+
+	_, err := s.sut.Search(criteria)
+
+	var actual *errors.Internal
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.NotExist{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "Search",
+		What:  "Criteria not defined",
+	}}
+
+	s.EqualError(expected, actual.Error())
+}
+
 func (s *TableTestSuite) TestSearchErrNotFound() {
 	aggregate := user.RandomPrimitive()
 

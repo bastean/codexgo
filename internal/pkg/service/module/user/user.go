@@ -12,10 +12,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
-func Start(repository repository.Repository, bus event.Bus, hashing hashes.Hashing) {
+func Start(repository repository.Repository, bus event.Bus, hasher hashes.Hasher) {
 	CreateHandler = &create.Handler{
 		Create: &create.Case{
-			Hashing:    hashing,
+			Hasher:     hasher,
 			Repository: repository,
 		},
 		Bus: bus,
@@ -30,14 +30,14 @@ func Start(repository repository.Repository, bus event.Bus, hashing hashes.Hashi
 	UpdateHandler = &update.Handler{
 		Update: &update.Case{
 			Repository: repository,
-			Hashing:    hashing,
+			Hasher:     hasher,
 		},
 	}
 
 	DeleteHandler = &delete.Handler{
 		Delete: &delete.Case{
 			Repository: repository,
-			Hashing:    hashing,
+			Hasher:     hasher,
 		},
 	}
 
@@ -50,7 +50,7 @@ func Start(repository repository.Repository, bus event.Bus, hashing hashes.Hashi
 	LoginHandler = &login.Handler{
 		Login: &login.Case{
 			Repository: repository,
-			Hashing:    hashing,
+			Hasher:     hasher,
 		},
 	}
 }

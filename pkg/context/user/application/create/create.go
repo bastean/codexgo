@@ -8,12 +8,12 @@ import (
 )
 
 type Case struct {
-	hashes.Hashing
+	hashes.Hasher
 	repository.Repository
 }
 
 func (c *Case) Run(aggregate *user.User) error {
-	hashed, err := c.Hashing.Hash(aggregate.PlainPassword.Value)
+	hashed, err := c.Hasher.Hash(aggregate.PlainPassword.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

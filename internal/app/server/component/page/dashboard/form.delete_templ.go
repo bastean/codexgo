@@ -14,8 +14,8 @@ const (
 
 func DeleteFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_DeleteFormInit_89c1`,
-		Function: `function __templ_DeleteFormInit_89c1(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_DeleteFormInit_b376`,
+		Function: `function __templ_DeleteFormInit_b376(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -25,7 +25,7 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
                 Password: {
                     rules: [
                         {
-                            type: "empty",
+                            type: "notEmpty",
                             prompt: "{name} is required to delete the account"
                         },
                         {
@@ -71,8 +71,8 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_DeleteFormInit_89c1`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_89c1`, formTagID),
+		Call:       templ.SafeScript(`__templ_DeleteFormInit_b376`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_b376`, formTagID),
 	}
 }
 

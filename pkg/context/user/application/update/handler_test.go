@@ -19,18 +19,18 @@ type UpdateTestSuite struct {
 	suite.Suite
 	sut        commands.Handler
 	update     cases.Update
-	hashing    *ciphers.HashingMock
+	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 }
 
 func (s *UpdateTestSuite) SetupTest() {
 	s.repository = new(persistence.RepositoryMock)
 
-	s.hashing = new(ciphers.HashingMock)
+	s.hasher = new(ciphers.HasherMock)
 
 	s.update = &update.Case{
 		Repository: s.repository,
-		Hashing:    s.hashing,
+		Hasher:     s.hasher,
 	}
 
 	s.sut = &update.Handler{
@@ -60,11 +60,11 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.repository.On("Search", criteria).Return(registered)
 
-	s.hashing.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
+	s.hasher.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hashing.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
+	s.hasher.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
 
 	aggregate.CipherPassword = hashed
 
@@ -80,7 +80,7 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.repository.AssertExpectations(s.T())
 
-	s.hashing.AssertExpectations(s.T())
+	s.hasher.AssertExpectations(s.T())
 }
 
 func TestUnitUpdateSuite(t *testing.T) {
