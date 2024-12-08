@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	sut = os.Getenv("SUT_URL")
+	SUT = os.Getenv("SUT_URL")
 )
 
 var (
@@ -66,7 +66,7 @@ func SetupPlaywright() {
 		errors.Panic(err.Error(), "SetupPlaywright")
 	}
 
-	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &sut})
+	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &SUT})
 
 	if err != nil {
 		errors.Panic(err.Error(), "SetupPlaywright")

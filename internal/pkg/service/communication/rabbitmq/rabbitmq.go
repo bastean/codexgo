@@ -1,6 +1,7 @@
 package rabbitmq
 
 import (
+	"context"
 	"reflect"
 
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
@@ -33,12 +34,13 @@ type (
 	Events   = rabbitmq.Events
 )
 
-func Open(uri string, exchange string, queues rabbitmq.Queues, mapper rabbitmq.Events, logger loggers.Logger) (*rabbitmq.RabbitMQ, error) {
+func Open(uri string, exchange string, queues rabbitmq.Queues, mapper rabbitmq.Events, logger loggers.Logger, consumeCycle context.Context) (*rabbitmq.RabbitMQ, error) {
 	rmq, err := rabbitmq.Open(
 		uri,
 		exchange,
 		queues,
 		logger,
+		consumeCycle,
 	)
 
 	if err != nil {
@@ -47,7 +49,7 @@ func Open(uri string, exchange string, queues rabbitmq.Queues, mapper rabbitmq.E
 
 	for key, consumers := range mapper {
 		for _, consumer := range consumers {
-			go rmq.Subscribe(key, consumer)
+			rmq.Subscribe(key, consumer)
 		}
 	}
 

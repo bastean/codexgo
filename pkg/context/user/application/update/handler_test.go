@@ -17,7 +17,7 @@ import (
 
 type UpdateTestSuite struct {
 	suite.Suite
-	sut        commands.Handler
+	SUT        commands.Handler
 	update     cases.Update
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -33,7 +33,7 @@ func (s *UpdateTestSuite) SetupTest() {
 		Hasher:     s.hasher,
 	}
 
-	s.sut = &update.Handler{
+	s.SUT = &update.Handler{
 		Update: s.update,
 	}
 }
@@ -58,13 +58,13 @@ func (s *UpdateTestSuite) TestHandle() {
 		ID: aggregate.ID,
 	}
 
-	s.repository.On("Search", criteria).Return(registered)
+	s.repository.Mock.On("Search", criteria).Return(registered)
 
-	s.hasher.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
+	s.hasher.Mock.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hasher.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
+	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
 
 	aggregate.CipherPassword = hashed
 
@@ -72,15 +72,15 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	aggregate.Verified = registered.Verified
 
-	s.repository.On("Update", aggregate)
+	s.repository.Mock.On("Update", aggregate)
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	s.NoError(s.sut.Handle(command))
+	s.NoError(s.SUT.Handle(command))
 
-	s.repository.AssertExpectations(s.T())
+	s.repository.Mock.AssertExpectations(s.T())
 
-	s.hasher.AssertExpectations(s.T())
+	s.hasher.Mock.AssertExpectations(s.T())
 }
 
 func TestUnitUpdateSuite(t *testing.T) {

@@ -1,6 +1,7 @@
 package rabbitmq_test
 
 import (
+	"context"
 	"os"
 	"testing"
 	"time"
@@ -16,18 +17,13 @@ import (
 )
 
 type RabbitMQTestSuite struct {
-	suite.Suite
-	sut        events.Bus
-	logger     *log.Log
-	consumer   *communications.EventConsumerMock
-	queue      events.Recipient
-	routingKey events.Key
+	communications.EventBusSuite
 }
 
 func (s *RabbitMQTestSuite) SetupTest() {
 	var err error
 
-	s.routingKey = messages.NewKey(&messages.KeyComponents{
+	routingKey := messages.NewKey(&messages.KeyComponents{
 		Service: "publisher",
 		Version: "1",
 		Type:    messages.Type.Event,
@@ -36,7 +32,7 @@ func (s *RabbitMQTestSuite) SetupTest() {
 		Status:  messages.Status.Succeeded,
 	})
 
-	s.queue = messages.NewRecipient(&messages.RecipientComponents{
+	queue := messages.NewRecipient(&messages.RecipientComponents{
 		Service: "queue",
 		Entity:  "queue",
 		Action:  "assert",
@@ -45,42 +41,31 @@ func (s *RabbitMQTestSuite) SetupTest() {
 	})
 
 	queues := rabbitmq.Queues{
-		s.routingKey: &rabbitmq.Recipient{
-			Name:       s.queue,
+		routingKey: &rabbitmq.Recipient{
+			Name:       queue,
 			BindingKey: events.Key("#.event.#.test.succeeded"),
 		},
 	}
 
-	s.consumer = new(communications.EventConsumerMock)
+	logger := log.New()
 
-	s.logger = log.New()
+	consumeCycle, _ := context.WithTimeout(context.Background(), 5*time.Second)
 
-	s.sut, err = rabbitmq.Open(
+	s.EventBusSuite.Event = messages.RandomWithKey[events.Event](routingKey)
+
+	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
+
+	s.EventBusSuite.SUT, err = rabbitmq.Open(
 		os.Getenv("CODEXGO_BROKER_RABBITMQ_URI"),
 		os.Getenv("CODEXGO_BROKER_RABBITMQ_NAME"),
 		queues,
-		s.logger,
+		logger,
+		consumeCycle,
 	)
 
 	if err != nil {
 		errors.Panic(err.Error(), "SetupTest")
 	}
-}
-
-func (s *RabbitMQTestSuite) TestPublish() {
-	event := messages.RandomWithKey[events.Event](s.routingKey)
-
-	s.consumer.Mock.On("On", event)
-
-	go func() {
-		s.NoError(s.sut.Subscribe(event.Key, s.consumer))
-	}()
-
-	s.NoError(s.sut.Publish(event))
-
-	s.Eventually(func() bool {
-		return s.consumer.AssertExpectations(s.T())
-	}, 10*time.Second, 30*time.Millisecond)
 }
 
 func TestIntegrationRabbitMQSuite(t *testing.T) {

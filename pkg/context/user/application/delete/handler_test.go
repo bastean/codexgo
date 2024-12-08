@@ -17,7 +17,7 @@ import (
 
 type DeleteTestSuite struct {
 	suite.Suite
-	sut        commands.Handler
+	SUT        commands.Handler
 	delete     cases.Delete
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -33,7 +33,7 @@ func (s *DeleteTestSuite) SetupTest() {
 		Hasher:     s.hasher,
 	}
 
-	s.sut = &delete.Handler{
+	s.SUT = &delete.Handler{
 		Delete: s.delete,
 	}
 }
@@ -47,11 +47,11 @@ func (s *DeleteTestSuite) TestHandle() {
 		ID: aggregate.ID,
 	}
 
-	s.repository.On("Search", criteria).Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
+	s.hasher.Mock.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
-	s.repository.On("Delete", aggregate.ID)
+	s.repository.Mock.On("Delete", aggregate.ID)
 
 	attributes := &delete.CommandAttributes{
 		ID:       aggregate.ID.Value,
@@ -60,11 +60,11 @@ func (s *DeleteTestSuite) TestHandle() {
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	s.NoError(s.sut.Handle(command))
+	s.NoError(s.SUT.Handle(command))
 
-	s.repository.AssertExpectations(s.T())
+	s.repository.Mock.AssertExpectations(s.T())
 
-	s.hasher.AssertExpectations(s.T())
+	s.hasher.Mock.AssertExpectations(s.T())
 }
 
 func TestUnitDeleteSuite(t *testing.T) {

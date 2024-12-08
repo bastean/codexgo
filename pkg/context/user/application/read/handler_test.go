@@ -16,7 +16,7 @@ import (
 
 type ReadTestSuite struct {
 	suite.Suite
-	sut        queries.Handler
+	SUT        queries.Handler
 	read       cases.Read
 	repository *persistence.RepositoryMock
 }
@@ -28,7 +28,7 @@ func (s *ReadTestSuite) SetupTest() {
 		Repository: s.repository,
 	}
 
-	s.sut = &read.Handler{
+	s.SUT = &read.Handler{
 		Read: s.read,
 	}
 }
@@ -40,7 +40,7 @@ func (s *ReadTestSuite) TestHandle() {
 		ID: aggregate.ID,
 	}
 
-	s.repository.On("Search", criteria).Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
 	expected := messages.New[queries.Response](
 		read.ResponseKey,
@@ -54,11 +54,11 @@ func (s *ReadTestSuite) TestHandle() {
 
 	query := messages.RandomWithAttributes[queries.Query](attributes, false)
 
-	actual, err := s.sut.Handle(query)
+	actual, err := s.SUT.Handle(query)
 
 	s.NoError(err)
 
-	s.repository.AssertExpectations(s.T())
+	s.repository.Mock.AssertExpectations(s.T())
 
 	s.EqualValues(expected, actual)
 }

@@ -43,7 +43,7 @@ func RandomWithAttributes[T ~Message](attributes any, shouldRandomize bool) *T {
 	}
 }
 
-func RandomAttributes(attributes any) {
+func RandomizeAttributes(attributes any) {
 	if err := services.Create.Struct(attributes); err != nil {
 		errors.Panic(err.Error(), "RandomAttributes")
 	}

@@ -29,8 +29,9 @@ type RabbitMQ struct {
 	*amqp.Connection
 	*amqp.Channel
 	loggers.Logger
-	exchange string
-	queues   Queues
+	ConsumeCycle context.Context
+	exchange     string
+	queues       Queues
 }
 
 func (r *RabbitMQ) AddExchange(name string) error {
@@ -173,6 +174,28 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 	return nil
 }
 
+func (r *RabbitMQ) Consume(key events.Key, queue *Recipient, deliveries <-chan amqp.Delivery, consumer events.Consumer) {
+	for delivery := range deliveries {
+		event := new(events.Event)
+
+		err := r.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
+
+		if err != nil {
+			r.Logger.Error(fmt.Sprintf("Failed to deliver a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
+			continue
+		}
+
+		err = consumer.On(event)
+
+		if err != nil {
+			r.Logger.Error(fmt.Sprintf("Failed to consume a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
+			continue
+		}
+
+		delivery.Ack(false)
+	}
+}
+
 func (r *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 	queue, ok := r.queues[key]
 
@@ -187,7 +210,8 @@ func (r *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 		})
 	}
 
-	deliveries, err := r.Channel.Consume(
+	deliveries, err := r.Channel.ConsumeWithContext(
+		r.ConsumeCycle,
 		string(queue.Name),
 		"",
 		false,
@@ -209,30 +233,24 @@ func (r *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 		})
 	}
 
-	for delivery := range deliveries {
-		event := new(events.Event)
-
-		err := r.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
-
-		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failed to deliver a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
-			continue
-		}
-
-		err = consumer.On(event)
-
-		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failed to consume a Event with ID [%s] from Queue [%s]: [%s]", key, queue, err))
-			continue
-		}
-
-		delivery.Ack(false)
-	}
+	go r.Consume(key, queue, deliveries, consumer)
 
 	return nil
 }
 
 func (r *RabbitMQ) Publish(event *events.Event) error {
+	queue, ok := r.queues[event.Key]
+
+	if !ok {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Publish",
+			What:  "Failure to execute a Event without a Consumer",
+			Why: errors.Meta{
+				"Event": event.Key,
+			},
+		})
+	}
+
 	if event.ID == "" {
 		event.ID = services.UUID()
 	}
@@ -249,6 +267,7 @@ func (r *RabbitMQ) Publish(event *events.Event) error {
 			What:  "Cannot encode Event to JSON",
 			Why: errors.Meta{
 				"Exchange": r.exchange,
+				"Queue":    queue,
 				"Event":    event,
 			},
 			Who: err,
@@ -278,6 +297,7 @@ func (r *RabbitMQ) Publish(event *events.Event) error {
 			What:  "Failure to publish a Event",
 			Why: errors.Meta{
 				"Exchange": r.exchange,
+				"Queue":    queue,
 				"Event":    event,
 			},
 			Who: err,
@@ -287,7 +307,7 @@ func (r *RabbitMQ) Publish(event *events.Event) error {
 	return nil
 }
 
-func Open(uri string, exchange string, queues Queues, logger loggers.Logger) (*RabbitMQ, error) {
+func Open(uri string, exchange string, queues Queues, logger loggers.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {
@@ -309,10 +329,11 @@ func Open(uri string, exchange string, queues Queues, logger loggers.Logger) (*R
 	}
 
 	rmq := &RabbitMQ{
-		Connection: session,
-		Channel:    channel,
-		Logger:     logger,
-		queues:     make(Queues),
+		Connection:   session,
+		Channel:      channel,
+		Logger:       logger,
+		ConsumeCycle: consumeCycle,
+		queues:       make(Queues),
 	}
 
 	err = rmq.AddExchange(exchange)

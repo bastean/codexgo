@@ -17,7 +17,7 @@ import (
 
 type CreateTestSuite struct {
 	suite.Suite
-	sut        commands.Handler
+	SUT        commands.Handler
 	create     cases.Create
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -36,7 +36,7 @@ func (s *CreateTestSuite) SetupTest() {
 		Repository: s.repository,
 	}
 
-	s.sut = &create.Handler{
+	s.SUT = &create.Handler{
 		Create: s.create,
 		Bus:    s.bus,
 	}
@@ -56,23 +56,23 @@ func (s *CreateTestSuite) TestHandle() {
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hasher.On("Hash", aggregate.PlainPassword.Value).Return(hashed.Value)
+	s.hasher.Mock.On("Hash", aggregate.PlainPassword.Value).Return(hashed.Value)
 
 	aggregate.CipherPassword = hashed
 
-	s.repository.On("Create", aggregate)
+	s.repository.Mock.On("Create", aggregate)
 
 	for _, event := range aggregate.Events {
-		s.bus.On("Publish", event)
+		s.bus.Mock.On("Publish", event)
 	}
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	s.NoError(s.sut.Handle(command))
+	s.NoError(s.SUT.Handle(command))
 
-	s.repository.AssertExpectations(s.T())
+	s.repository.Mock.AssertExpectations(s.T())
 
-	s.bus.AssertExpectations(s.T())
+	s.bus.Mock.AssertExpectations(s.T())
 }
 
 func TestUnitCreateSuite(t *testing.T) {

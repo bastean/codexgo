@@ -1,6 +1,8 @@
 package communication
 
 import (
+	"context"
+
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/event"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/rabbitmq"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
@@ -39,6 +41,7 @@ func Up() error {
 				},
 			},
 			log.Log,
+			context.Background(),
 		)
 
 		if err != nil {

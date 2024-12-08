@@ -1,4 +1,4 @@
-package transports
+package transport
 
 import (
 	"github.com/stretchr/testify/mock"

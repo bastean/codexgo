@@ -16,7 +16,7 @@ import (
 
 type VerifyTestSuite struct {
 	suite.Suite
-	sut        commands.Handler
+	SUT        commands.Handler
 	verify     cases.Verify
 	repository *persistence.RepositoryMock
 }
@@ -28,7 +28,7 @@ func (s *VerifyTestSuite) SetupTest() {
 		Repository: s.repository,
 	}
 
-	s.sut = &verify.Handler{
+	s.SUT = &verify.Handler{
 		Verify: s.verify,
 	}
 }
@@ -48,15 +48,15 @@ func (s *VerifyTestSuite) TestHandle() {
 		ID: id,
 	}
 
-	s.repository.On("Search", criteria).Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.repository.On("Verify", id)
+	s.repository.Mock.On("Verify", id)
 
 	command := messages.RandomWithAttributes[commands.Command](attributes, false)
 
-	s.NoError(s.sut.Handle(command))
+	s.NoError(s.SUT.Handle(command))
 
-	s.repository.AssertExpectations(s.T())
+	s.repository.Mock.AssertExpectations(s.T())
 }
 
 func TestUnitVerifySuite(t *testing.T) {

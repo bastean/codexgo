@@ -6,22 +6,20 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/transfers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
 )
 
 type ConfirmationTestSuite struct {
-	suite.Suite
-	sut  transfers.Transfer[*user.CreatedSucceededAttributes]
-	smtp *smtp.SMTP
+	transport.OnlineSuite[*user.CreatedSucceededAttributes]
 }
 
 func (s *ConfirmationTestSuite) SetupTest() {
-	s.smtp = smtp.Open(
+	smtp := smtp.Open(
 		&smtp.Auth{
 			Host:     os.Getenv("CODEXGO_SMTP_HOST"),
 			Port:     os.Getenv("CODEXGO_SMTP_PORT"),
@@ -30,20 +28,16 @@ func (s *ConfirmationTestSuite) SetupTest() {
 		},
 	)
 
-	s.sut = &mail.Confirmation{
-		SMTP:         s.smtp,
+	s.OnlineSuite.Attributes = new(user.CreatedSucceededAttributes)
+
+	messages.RandomizeAttributes(s.Attributes)
+
+	s.OnlineSuite.Attributes.Email = services.Create.Email()
+
+	s.OnlineSuite.SUT = &mail.Confirmation{
+		SMTP:         smtp,
 		AppServerURL: os.Getenv("CODEXGO_SERVER_GIN_URL"),
 	}
-}
-
-func (s *ConfirmationTestSuite) TestSubmit() {
-	attributes := new(user.CreatedSucceededAttributes)
-
-	messages.RandomAttributes(attributes)
-
-	attributes.Email = services.Create.Email()
-
-	s.NoError(s.sut.Submit(attributes))
 }
 
 func TestIntegrationConfirmationSuite(t *testing.T) {

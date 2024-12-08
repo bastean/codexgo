@@ -17,7 +17,7 @@ import (
 
 type LoginTestSuite struct {
 	suite.Suite
-	sut        queries.Handler
+	SUT        queries.Handler
 	login      cases.Login
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -33,7 +33,7 @@ func (s *LoginTestSuite) SetupTest() {
 		Hasher:     s.hasher,
 	}
 
-	s.sut = &login.Handler{
+	s.SUT = &login.Handler{
 		Login: s.login,
 	}
 }
@@ -47,9 +47,9 @@ func (s *LoginTestSuite) TestHandle() {
 		Email: aggregate.Email,
 	}
 
-	s.repository.On("Search", criteria).Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
+	s.hasher.Mock.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
 	expected := messages.New[queries.Response](
 		login.ResponseKey,
@@ -64,13 +64,13 @@ func (s *LoginTestSuite) TestHandle() {
 
 	query := messages.RandomWithAttributes[queries.Query](attributes, false)
 
-	actual, err := s.sut.Handle(query)
+	actual, err := s.SUT.Handle(query)
 
 	s.NoError(err)
 
-	s.repository.AssertExpectations(s.T())
+	s.repository.Mock.AssertExpectations(s.T())
 
-	s.hasher.AssertExpectations(s.T())
+	s.hasher.Mock.AssertExpectations(s.T())
 
 	s.EqualValues(expected, actual)
 }
