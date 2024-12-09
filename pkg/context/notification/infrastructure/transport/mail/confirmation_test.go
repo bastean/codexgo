@@ -30,7 +30,7 @@ func (s *ConfirmationTestSuite) SetupTest() {
 
 	s.OnlineSuite.Attributes = new(user.CreatedSucceededAttributes)
 
-	messages.RandomizeAttributes(s.Attributes)
+	messages.RandomizeAttributes(s.OnlineSuite.Attributes)
 
 	s.OnlineSuite.Attributes.Email = services.Create.Email()
 

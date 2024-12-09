@@ -7,34 +7,36 @@ import (
 )
 
 type Log struct {
+	*log.Logger
 	Cyan, Red, Blue, Green *color.Color
 }
 
 func (l *Log) Debug(message string) {
-	log.Println(l.Cyan.Sprint(message))
+	l.Println(l.Cyan.Sprint(message))
 }
 
 func (l *Log) Error(message string) {
-	log.Println(l.Red.Sprint(message))
+	l.Println(l.Red.Sprint(message))
 }
 
 func (l *Log) Fatal(message string) {
-	log.Fatalln(l.Red.Sprint(message))
+	l.Fatalln(l.Red.Sprint(message))
 }
 
 func (l *Log) Info(message string) {
-	log.Println(l.Blue.Sprint(message))
+	l.Println(l.Blue.Sprint(message))
 }
 
 func (l *Log) Success(message string) {
-	log.Println(l.Green.Sprint(message))
+	l.Println(l.Green.Sprint(message))
 }
 
 func New() *Log {
 	return &Log{
-		Cyan:  color.New(color.FgCyan, color.Bold),
-		Red:   color.New(color.FgRed, color.Bold),
-		Blue:  color.New(color.FgBlue, color.Bold),
-		Green: color.New(color.FgGreen, color.Bold),
+		Logger: log.Default(),
+		Cyan:   color.New(color.FgCyan, color.Bold),
+		Red:    color.New(color.FgRed, color.Bold),
+		Blue:   color.New(color.FgBlue, color.Bold),
+		Green:  color.New(color.FgGreen, color.Bold),
 	}
 }

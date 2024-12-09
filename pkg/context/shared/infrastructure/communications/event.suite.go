@@ -12,9 +12,9 @@ import (
 
 type EventBusSuite struct {
 	suite.Suite
-	*events.Event
 	SUT      events.Bus
 	Consumer *EventConsumerMock
+	Event    *events.Event
 }
 
 func (s *EventBusSuite) TestSubscribe() {

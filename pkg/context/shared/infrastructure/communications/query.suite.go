@@ -20,7 +20,7 @@ func (s *QueryBusSuite) TestRegister() {
 	s.NoError(s.SUT.Register(messages.Random[queries.Query]().Key, s.Handler))
 }
 
-func (s *QueryBusSuite) TestRegisterErrDuplicateCommand() {
+func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
 	key := messages.Random[queries.Query]().Key
 
 	s.NoError(s.SUT.Register(key, s.Handler))
