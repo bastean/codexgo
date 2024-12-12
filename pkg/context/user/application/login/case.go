@@ -13,16 +13,10 @@ type Case struct {
 }
 
 func (c *Case) Run(email *user.Email, username *user.Username, plain *user.PlainPassword) (*user.User, error) {
-	criteria := new(repository.Criteria)
-
-	switch {
-	case email != nil:
-		criteria.Email = email
-	case username != nil:
-		criteria.Username = username
-	}
-
-	aggregate, err := c.Repository.Search(criteria)
+	aggregate, err := c.Repository.Search(&repository.Criteria{
+		Email:    email,
+		Username: username,
+	})
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Run")

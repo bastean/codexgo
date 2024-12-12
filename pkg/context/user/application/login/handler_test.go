@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
@@ -73,6 +74,30 @@ func (s *LoginTestSuite) TestHandle() {
 	s.hasher.Mock.AssertExpectations(s.T())
 
 	s.EqualValues(expected, actual)
+}
+
+func (s *LoginTestSuite) TestHandleErrMissingRequired() {
+	plain := user.PlainPasswordWithValidValue()
+
+	attributes := &login.QueryAttributes{
+		Password: plain.Value,
+	}
+
+	query := messages.RandomWithAttributes[queries.Query](attributes, false)
+
+	_, err := s.SUT.Handle(query)
+
+	var actual *errors.Failure
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.Failure{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "Handle",
+		What:  "Email or Username required",
+	}}
+
+	s.Equal(expected, actual)
 }
 
 func TestUnitLoginSuite(t *testing.T) {

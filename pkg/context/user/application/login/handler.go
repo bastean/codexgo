@@ -50,6 +50,13 @@ func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 		return nil, errors.QueryAssertion("Handle")
 	}
 
+	if attributes.Email == "" && attributes.Username == "" {
+		return nil, errors.New[errors.Failure](&errors.Bubble{
+			Where: "Handle",
+			What:  "Email or Username required",
+		})
+	}
+
 	var (
 		err      error
 		email    *user.Email
