@@ -14,6 +14,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
+const (
+	ErrNoDocuments = "no documents"
+)
+
 type Database struct {
 	*mongo.Client
 	*mongo.Database
@@ -89,7 +93,7 @@ func HandleErrDuplicateValue(err error) error {
 }
 
 func IsErrNotFound(err error) bool {
-	return err != nil
+	return err != nil && strings.Contains(err.Error(), ErrNoDocuments)
 }
 
 func HandleErrNotFound(err error, index string) error {

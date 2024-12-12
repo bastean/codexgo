@@ -132,8 +132,18 @@ func (c *Collection) Search(criteria *repository.Criteria) (*user.User, error) {
 
 	err := result.Err()
 
-	if mongodb.IsErrNotFound(err) {
+	switch {
+	case mongodb.IsErrNotFound(err):
 		return nil, mongodb.HandleErrNotFound(err, index)
+	case err != nil:
+		return nil, errors.New[errors.Internal](&errors.Bubble{
+			Where: "Search",
+			What:  "Failure to find a User",
+			Why: errors.Meta{
+				"Index": index,
+			},
+			Who: err,
+		})
 	}
 
 	primitive := new(user.Primitive)
