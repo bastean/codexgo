@@ -28,9 +28,9 @@
     "commitizen": "4.3.1",
     "cz-conventional-changelog": "3.3.0",
     "husky": "9.1.7",
-    "lint-staged": "15.2.10",
+    "lint-staged": "15.2.11",
     "npm-check-updates": "17.1.11",
-    "prettier": "3.4.1",
+    "prettier": "3.4.2",
     "release-it": "17.10.0"
   },
   "lint-staged": {
