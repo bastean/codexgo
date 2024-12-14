@@ -1,5 +1,13 @@
 # Changelog
 
+## <small>4.9.1 (2024-12-14)</small>
+
+- chore(application): rename use case files ([b06f57f](https://github.com/bastean/codexgo/commit/b06f57f))
+- chore(deps): upgrade ([7d50c12](https://github.com/bastean/codexgo/commit/7d50c12))
+- refactor(mongo): change error validation when no result is found ([b2881fb](https://github.com/bastean/codexgo/commit/b2881fb))
+- test: add test suite for logger adapters ([d9a3469](https://github.com/bastean/codexgo/commit/d9a3469))
+- test: standardize testing of adapters ([cbf53f7](https://github.com/bastean/codexgo/commit/cbf53f7))
+
 ## 4.9.0 (2024-12-01)
 
 - docs(readme): add sqlite implementation ([864e7c6](https://github.com/bastean/codexgo/commit/864e7c6))
