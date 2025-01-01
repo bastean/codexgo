@@ -21,17 +21,17 @@
     "internal/app/*"
   ],
   "devDependencies": {
-    "@commitlint/cli": "19.6.0",
+    "@commitlint/cli": "19.6.1",
     "@commitlint/config-conventional": "19.6.0",
     "@release-it/bumper": "6.0.1",
-    "@release-it/conventional-changelog": "9.0.3",
+    "@release-it/conventional-changelog": "9.0.4",
     "commitizen": "4.3.1",
     "cz-conventional-changelog": "3.3.0",
     "husky": "9.1.7",
-    "lint-staged": "15.2.11",
-    "npm-check-updates": "17.1.11",
+    "lint-staged": "15.3.0",
+    "npm-check-updates": "17.1.13",
     "prettier": "3.4.2",
-    "release-it": "17.10.0"
+    "release-it": "17.11.0"
   },
   "lint-staged": {
     "**/*": [
