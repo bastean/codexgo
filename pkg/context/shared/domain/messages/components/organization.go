@@ -20,11 +20,11 @@ type Organization struct {
 func NewOrganization(value string) (*Organization, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Organization{
+	object := &Organization{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewOrganization",
 			What:  fmt.Sprintf("Organization must be between %s to %s characters and be alphanumeric only", OrganizationMinCharactersLength, OrganizationMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewOrganization(value string) (*Organization, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

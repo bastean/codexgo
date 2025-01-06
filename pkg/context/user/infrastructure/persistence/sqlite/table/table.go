@@ -11,11 +11,12 @@ import (
 
 type User struct {
 	*gorm.Model
-	ID       string `gorm:"uniqueIndex"`
-	Email    string `gorm:"uniqueIndex"`
-	Username string `gorm:"uniqueIndex"`
-	Password string
-	Verified bool
+	Created, Updated string
+	ID               string `gorm:"uniqueIndex"`
+	Email            string `gorm:"uniqueIndex"`
+	Username         string `gorm:"uniqueIndex"`
+	Password         string
+	Verified         bool
 }
 
 type Table struct {
@@ -23,9 +24,17 @@ type Table struct {
 }
 
 func (t *Table) Create(user *user.User) error {
+	err := user.CreationStamp()
+
+	if err != nil {
+		return errors.BubbleUp(err, "Create")
+	}
+
 	aggregate := user.ToPrimitive()
 
-	err := t.DB.Create(&User{
+	err = t.DB.Create(&User{
+		Created:  aggregate.Created,
+		Updated:  aggregate.Updated,
 		ID:       aggregate.ID,
 		Email:    aggregate.Email,
 		Username: aggregate.Username,
@@ -68,7 +77,13 @@ func (t *Table) Verify(id *user.ID) error {
 }
 
 func (t *Table) Update(user *user.User) error {
-	err := t.DB.Where(&User{ID: user.ID.Value}).Updates(user.ToPrimitive()).Error
+	err := user.UpdatedStamp()
+
+	if err != nil {
+		return errors.BubbleUp(err, "Update")
+	}
+
+	err = t.DB.Where(&User{ID: user.ID.Value}).Updates(user.ToPrimitive()).Error
 
 	switch {
 	case sqlite.IsErrDuplicateValue(err):

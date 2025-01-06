@@ -20,11 +20,11 @@ type Query struct {
 func NewQuery(value string) (*Query, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Query{
+	object := &Query{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewQuery",
 			What:  fmt.Sprintf("Query must be between %s to %s characters and be alpha only", QueryMinCharactersLength, QueryMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewQuery(value string) (*Query, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

@@ -14,11 +14,11 @@ type Email struct {
 func NewEmail(value string) (*Email, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Email{
+	object := &Email{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewEmail",
 			What:  "Invalid email format",
@@ -28,5 +28,5 @@ func NewEmail(value string) (*Email, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

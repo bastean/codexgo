@@ -70,6 +70,8 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.NoError(err)
 
+	aggregate.Created = registered.Created
+	aggregate.Updated = registered.Updated
 	aggregate.Verified = registered.Verified
 
 	s.repository.Mock.On("Update", aggregate)

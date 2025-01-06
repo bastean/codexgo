@@ -52,9 +52,16 @@ func (s *LoginTestSuite) TestHandle() {
 
 	s.hasher.Mock.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
 
+	response := &login.ResponseAttributes{
+		ID:       aggregate.ID.Value,
+		Email:    aggregate.Email.Value,
+		Username: aggregate.Username.Value,
+		Verified: aggregate.Verified.Value,
+	}
+
 	expected := messages.New[queries.Response](
 		login.ResponseKey,
-		(*login.ResponseAttributes)(aggregate.ToPrimitive()),
+		response,
 		new(login.ResponseMeta),
 	)
 

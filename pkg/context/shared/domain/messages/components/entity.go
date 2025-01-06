@@ -20,11 +20,11 @@ type Entity struct {
 func NewEntity(value string) (*Entity, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Entity{
+	object := &Entity{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewEntity",
 			What:  fmt.Sprintf("Entity must be between %s to %s characters and be alpha only", EntityMinCharactersLength, EntityMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewEntity(value string) (*Entity, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

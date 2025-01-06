@@ -20,11 +20,11 @@ type Service struct {
 func NewService(value string) (*Service, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Service{
+	object := &Service{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewService",
 			What:  fmt.Sprintf("Service must be between %s to %s characters and be alphanumeric only", ServiceMinCharactersLength, ServiceMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewService(value string) (*Service, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

@@ -21,11 +21,11 @@ type CipherPassword struct {
 }
 
 func NewPlainPassword(value string) (*PlainPassword, error) {
-	valueObj := &PlainPassword{
+	object := &PlainPassword{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewPlainPassword",
 			What:  fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
@@ -35,15 +35,15 @@ func NewPlainPassword(value string) (*PlainPassword, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }
 
 func NewCipherPassword(value string) (*CipherPassword, error) {
-	valueObj := &CipherPassword{
+	object := &CipherPassword{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "NewCipherPassword",
 			What:  "Cipher Password is required",
@@ -53,5 +53,5 @@ func NewCipherPassword(value string) (*CipherPassword, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

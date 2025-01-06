@@ -20,11 +20,11 @@ type Command struct {
 func NewCommand(value string) (*Command, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Command{
+	object := &Command{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewCommand",
 			What:  fmt.Sprintf("Command must be between %s to %s characters and be alpha only", CommandMinCharactersLength, CommandMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewCommand(value string) (*Command, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

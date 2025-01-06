@@ -21,11 +21,11 @@ func NewStatus(value string) (*Status, error) {
 
 	value = strings.ToLower(value)
 
-	valueObj := &Status{
+	object := &Status{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewStatus",
 			What:  fmt.Sprintf("Status must be only one of these values: %s", strings.Join(StatusOneOf, ", ")),
@@ -35,5 +35,5 @@ func NewStatus(value string) (*Status, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

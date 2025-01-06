@@ -20,11 +20,11 @@ type Action struct {
 func NewAction(value string) (*Action, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Action{
+	object := &Action{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewAction",
 			What:  fmt.Sprintf("Action must be between %s to %s characters", ActionMinCharactersLength, ActionMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewAction(value string) (*Action, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

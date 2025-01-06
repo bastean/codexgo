@@ -16,7 +16,7 @@ type RepositorySuite struct {
 }
 
 func (s *RepositorySuite) TestCreate() {
-	expected := user.RandomPrimitive()
+	expected := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -32,9 +32,9 @@ func (s *RepositorySuite) TestCreate() {
 }
 
 func (s *RepositorySuite) TestCreateErrDuplicateValue() {
-	registered := user.RandomPrimitive()
+	registered := user.RandomRaw()
 
-	aggregate := user.RandomPrimitive()
+	aggregate := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(registered))
 
@@ -60,7 +60,7 @@ func (s *RepositorySuite) TestCreateErrDuplicateValue() {
 }
 
 func (s *RepositorySuite) TestVerify() {
-	aggregate := user.RandomPrimitive()
+	aggregate := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(aggregate))
 
@@ -78,7 +78,7 @@ func (s *RepositorySuite) TestVerify() {
 }
 
 func (s *RepositorySuite) TestUpdate() {
-	expected := user.RandomPrimitive()
+	expected := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -98,9 +98,9 @@ func (s *RepositorySuite) TestUpdate() {
 }
 
 func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
-	registered := user.RandomPrimitive()
+	registered := user.RandomRaw()
 
-	aggregate := user.RandomPrimitive()
+	aggregate := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(registered))
 
@@ -128,7 +128,7 @@ func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
 }
 
 func (s *RepositorySuite) TestDelete() {
-	aggregate := user.RandomPrimitive()
+	aggregate := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(aggregate))
 
@@ -158,7 +158,7 @@ func (s *RepositorySuite) TestDelete() {
 }
 
 func (s *RepositorySuite) TestSearch() {
-	expected := user.RandomPrimitive()
+	expected := user.RandomRaw()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -192,7 +192,7 @@ func (s *RepositorySuite) TestSearchErrCriteria() {
 }
 
 func (s *RepositorySuite) TestSearchErrNotFound() {
-	aggregate := user.RandomPrimitive()
+	aggregate := user.RandomRaw()
 
 	criteria := &repository.Criteria{
 		ID: aggregate.ID,

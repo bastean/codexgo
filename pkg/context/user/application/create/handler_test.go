@@ -45,7 +45,7 @@ func (s *CreateTestSuite) SetupTest() {
 func (s *CreateTestSuite) TestHandle() {
 	attributes := create.CommandRandomAttributes()
 
-	aggregate, err := user.FromRaw(&user.Primitive{
+	aggregate, err := user.New(&user.Primitive{
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,

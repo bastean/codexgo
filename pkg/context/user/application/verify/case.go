@@ -19,7 +19,7 @@ func (c *Case) Run(id *user.ID) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	if aggregate.Verified.Value {
+	if aggregate.IsVerified() {
 		return nil
 	}
 

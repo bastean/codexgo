@@ -38,6 +38,8 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregate := user.RandomPrimitive()
 
+	aggregate.Verified = user.VerifiedWithFalseValue()
+
 	id, err := user.NewID(attributes.ID)
 
 	s.NoError(err)

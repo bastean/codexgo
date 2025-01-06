@@ -20,11 +20,11 @@ type Username struct {
 func NewUsername(value string) (*Username, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Username{
+	object := &Username{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewUsername",
 			What:  fmt.Sprintf("Username must be between %s to %s characters and be alphanumeric only", UsernameMinCharactersLength, UsernameMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewUsername(value string) (*Username, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

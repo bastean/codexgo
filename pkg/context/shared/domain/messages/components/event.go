@@ -20,11 +20,11 @@ type Event struct {
 func NewEvent(value string) (*Event, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Event{
+	object := &Event{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewEvent",
 			What:  fmt.Sprintf("Event must be between %s to %s characters and be alpha only", EventMinCharactersLength, EventMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewEvent(value string) (*Event, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

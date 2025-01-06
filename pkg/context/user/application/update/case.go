@@ -43,6 +43,8 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
+	aggregate.Created = account.Created
+	aggregate.Updated = account.Updated
 	aggregate.Verified = account.Verified
 
 	err = c.Repository.Update(aggregate)

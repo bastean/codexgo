@@ -14,11 +14,11 @@ type Version struct {
 func NewVersion(value string) (*Version, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Version{
+	object := &Version{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewVersion",
 			What:  "Version must be numeric only",
@@ -28,5 +28,5 @@ func NewVersion(value string) (*Version, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

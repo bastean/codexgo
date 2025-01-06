@@ -21,11 +21,11 @@ func NewType(value string) (*Type, error) {
 
 	value = strings.ToLower(value)
 
-	valueObj := &Type{
+	object := &Type{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewType",
 			What:  fmt.Sprintf("Type must be only one of these values: %s", strings.Join(TypeOneOf, ", ")),
@@ -35,5 +35,5 @@ func NewType(value string) (*Type, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

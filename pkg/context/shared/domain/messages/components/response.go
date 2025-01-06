@@ -20,11 +20,11 @@ type Response struct {
 func NewResponse(value string) (*Response, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &Response{
+	object := &Response{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewResponse",
 			What:  fmt.Sprintf("Response must be between %s to %s characters and be alpha only", ResponseMinCharactersLength, ResponseMaxCharactersLength),
@@ -34,5 +34,5 @@ func NewResponse(value string) (*Response, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

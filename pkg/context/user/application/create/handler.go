@@ -36,7 +36,7 @@ func (h *Handler) Handle(command *commands.Command) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	aggregate, err := user.FromRaw(&user.Primitive{
+	aggregate, err := user.New(&user.Primitive{
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,

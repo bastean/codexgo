@@ -31,8 +31,8 @@ type QueryAttributes struct {
 }
 
 type ResponseAttributes struct {
-	ID, Email, Username, Password string
-	Verified                      bool
+	ID, Email, Username string
+	Verified            bool
 }
 
 type QueryMeta struct{}
@@ -62,7 +62,12 @@ func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 		return nil, errors.BubbleUp(err, "Handle")
 	}
 
-	response := (*ResponseAttributes)(aggregate.ToPrimitive())
+	response := &ResponseAttributes{
+		ID:       aggregate.ID.Value,
+		Email:    aggregate.Email.Value,
+		Username: aggregate.Username.Value,
+		Verified: aggregate.Verified.Value,
+	}
 
 	return messages.New[queries.Response](
 		ResponseKey,

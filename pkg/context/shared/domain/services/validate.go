@@ -8,6 +8,6 @@ var (
 	validate = validator.New(validator.WithRequiredStructEnabled()).Struct
 )
 
-func IsValueObjectInvalid(valueObj any) bool {
-	return validate(valueObj) != nil
+func IsValueObjectInvalid(object any) bool {
+	return validate(object) != nil
 }

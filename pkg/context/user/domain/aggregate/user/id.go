@@ -14,11 +14,11 @@ type ID struct {
 func NewID(value string) (*ID, error) {
 	value = strings.TrimSpace(value)
 
-	valueObj := &ID{
+	object := &ID{
 		Value: value,
 	}
 
-	if services.IsValueObjectInvalid(valueObj) {
+	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewID",
 			What:  "Invalid UUID4 format",
@@ -28,5 +28,5 @@ func NewID(value string) (*ID, error) {
 		})
 	}
 
-	return valueObj, nil
+	return object, nil
 }

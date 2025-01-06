@@ -42,9 +42,16 @@ func (s *ReadTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
+	response := &read.ResponseAttributes{
+		ID:       aggregate.ID.Value,
+		Email:    aggregate.Email.Value,
+		Username: aggregate.Username.Value,
+		Verified: aggregate.Verified.Value,
+	}
+
 	expected := messages.New[queries.Response](
 		read.ResponseKey,
-		(*read.ResponseAttributes)(aggregate.ToPrimitive()),
+		response,
 		new(read.ResponseMeta),
 	)
 

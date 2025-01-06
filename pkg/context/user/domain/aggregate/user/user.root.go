@@ -19,12 +19,15 @@ type User struct {
 }
 
 type Primitive struct {
+	Created, Updated              string
 	ID, Email, Username, Password string
 	Verified                      bool
 }
 
 func (u *User) ToPrimitive() *Primitive {
 	return &Primitive{
+		Created:  u.Created.Value,
+		Updated:  u.Updated.Value,
 		ID:       u.ID.Value,
 		Email:    u.Email.Value,
 		Username: u.Username.Value,
@@ -33,15 +36,19 @@ func (u *User) ToPrimitive() *Primitive {
 	}
 }
 
+func (u *User) IsVerified() bool {
+	return u.Verified.Value
+}
+
 func create(user *Primitive) (*User, error) {
-	root := aggregates.NewRoot()
+	root, errRoot := aggregates.NewRoot()
 
 	id, errID := NewID(user.ID)
 	email, errEmail := NewEmail(user.Email)
 	username, errUsername := NewUsername(user.Username)
 	verified, errVerified := NewVerified(user.Verified)
 
-	if err := errors.Join(errID, errEmail, errUsername, errVerified); err != nil {
+	if err := errors.Join(errRoot, errID, errEmail, errUsername, errVerified); err != nil {
 		return nil, errors.BubbleUp(err, "create")
 	}
 
@@ -55,19 +62,25 @@ func create(user *Primitive) (*User, error) {
 }
 
 func FromPrimitive(primitive *Primitive) (*User, error) {
-	user, err := create(primitive)
+	aggregate, err := create(primitive)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 
-	user.CipherPassword, err = NewCipherPassword(primitive.Password)
+	created, errCreated := aggregates.NewTime(primitive.Created)
+	updated, errUpdated := aggregates.NewTime(primitive.Updated)
+	cipherPassword, errCipherPassword := NewCipherPassword(primitive.Password)
 
-	if err != nil {
+	if err := errors.Join(errCreated, errUpdated, errCipherPassword); err != nil {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 
-	return user, nil
+	aggregate.Created = created
+	aggregate.Updated = updated
+	aggregate.CipherPassword = cipherPassword
+
+	return aggregate, nil
 }
 
 func FromRaw(raw *Primitive) (*User, error) {
@@ -83,6 +96,16 @@ func FromRaw(raw *Primitive) (*User, error) {
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "FromRaw")
+	}
+
+	return aggregate, nil
+}
+
+func New(raw *Primitive) (*User, error) {
+	aggregate, err := FromRaw(raw)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "New")
 	}
 
 	aggregate.Record(messages.New[events.Event](
