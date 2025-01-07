@@ -5,7 +5,6 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
@@ -22,7 +21,7 @@ func (s *RecipientTestSuite) TestWithValidValue() {
 		Status:  messages.Status.Succeeded,
 	}
 
-	expected := events.Recipient("user.user.send_confirmation_on_created_succeeded")
+	expected := messages.Recipient("user.user.send_confirmation_on_created_succeeded")
 
 	actual := messages.NewRecipient(components)
 

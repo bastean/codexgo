@@ -1,7 +1,6 @@
 package update
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -27,7 +26,7 @@ type Handler struct {
 	cases.Update
 }
 
-func (h *Handler) Handle(command *commands.Command) error {
+func (h *Handler) Handle(command *messages.Message) error {
 	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {

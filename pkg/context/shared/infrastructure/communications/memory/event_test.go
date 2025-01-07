@@ -16,12 +16,12 @@ type EventBusTestSuite struct {
 }
 
 func (s *EventBusTestSuite) SetupTest() {
-	s.EventBusSuite.Event = messages.Random[events.Event]()
+	s.EventBusSuite.Event = messages.Random()
 
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 
 	s.EventBusSuite.SUT = &memory.EventBus{
-		Consumers: make(map[events.Key][]events.Consumer),
+		Consumers: make(map[messages.Key][]events.Consumer),
 	}
 }
 

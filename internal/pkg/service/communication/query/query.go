@@ -19,6 +19,6 @@ type (
 	Handler = queries.Handler
 )
 
-func New(key queries.Key, attributes, meta any) *queries.Query {
-	return messages.New[queries.Query](key, attributes, meta)
+func New(key messages.Key, attributes, meta any) *messages.Message {
+	return messages.New(key, attributes, meta)
 }

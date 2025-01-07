@@ -9,7 +9,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
@@ -43,7 +42,7 @@ func (s *RabbitMQTestSuite) SetupTest() {
 	queues := rabbitmq.Queues{
 		routingKey: &rabbitmq.Recipient{
 			Name:       queue,
-			BindingKey: events.Key("#.event.#.test.succeeded"),
+			BindingKey: messages.Key("#.event.#.test.succeeded"),
 		},
 	}
 
@@ -51,7 +50,7 @@ func (s *RabbitMQTestSuite) SetupTest() {
 
 	consumeCycle, _ := context.WithTimeout(context.Background(), 5*time.Second)
 
-	s.EventBusSuite.Event = messages.RandomWithKey[events.Event](routingKey)
+	s.EventBusSuite.Event = messages.RandomWithKey(routingKey)
 
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 

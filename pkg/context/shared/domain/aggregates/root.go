@@ -2,13 +2,13 @@ package aggregates
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type Root struct {
 	Created, Updated *Time
-	Events           []*events.Event
+	Events           []*messages.Message
 }
 
 func (r *Root) CreationStamp() error {
@@ -26,7 +26,6 @@ func (r *Root) CreationStamp() error {
 	}
 
 	r.Created = created
-
 	r.Updated = created
 
 	return nil
@@ -44,20 +43,20 @@ func (r *Root) UpdatedStamp() error {
 	return nil
 }
 
-func (r *Root) Record(events ...*events.Event) {
+func (r *Root) Record(events ...*messages.Message) {
 	r.Events = append(r.Events, events...)
 }
 
-func (r *Root) Pull() []*events.Event {
+func (r *Root) Pull() []*messages.Message {
 	recorded := r.Events
 
-	r.Events = []*events.Event{}
+	r.Events = []*messages.Message{}
 
 	return recorded
 }
 
 func NewRoot() (*Root, error) {
 	return &Root{
-		Events: []*events.Event{},
+		Events: []*messages.Message{},
 	}, nil
 }

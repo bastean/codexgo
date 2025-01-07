@@ -17,11 +17,11 @@ type CommandBusSuite struct {
 }
 
 func (s *CommandBusSuite) TestRegister() {
-	s.NoError(s.SUT.Register(messages.Random[commands.Command]().Key, s.Handler))
+	s.NoError(s.SUT.Register(messages.Random().Key, s.Handler))
 }
 
 func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
-	key := messages.Random[commands.Command]().Key
+	key := messages.Random().Key
 
 	s.NoError(s.SUT.Register(key, s.Handler))
 
@@ -44,7 +44,7 @@ func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
 }
 
 func (s *CommandBusSuite) TestDispatch() {
-	command := messages.Random[commands.Command]()
+	command := messages.Random()
 
 	s.NoError(s.SUT.Register(command.Key, s.Handler))
 
@@ -56,7 +56,7 @@ func (s *CommandBusSuite) TestDispatch() {
 }
 
 func (s *CommandBusSuite) TestDispatchErrMissingHandler() {
-	command := messages.Random[commands.Command]()
+	command := messages.Random()
 
 	err := s.SUT.Dispatch(command)
 

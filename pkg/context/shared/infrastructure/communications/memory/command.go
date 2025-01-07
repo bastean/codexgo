@@ -5,17 +5,18 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
 type (
-	CommandMapper = map[commands.Key]commands.Handler
+	CommandMapper = map[messages.Key]commands.Handler
 )
 
 type CommandBus struct {
 	Handlers CommandMapper
 }
 
-func (b *CommandBus) Register(key commands.Key, handler commands.Handler) error {
+func (b *CommandBus) Register(key messages.Key, handler commands.Handler) error {
 	_, ok := b.Handlers[key]
 
 	if ok {
@@ -33,7 +34,7 @@ func (b *CommandBus) Register(key commands.Key, handler commands.Handler) error 
 	return nil
 }
 
-func (b *CommandBus) Dispatch(command *commands.Command) error {
+func (b *CommandBus) Dispatch(command *messages.Message) error {
 	handler, ok := b.Handlers[command.Key]
 
 	if !ok {

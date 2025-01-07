@@ -4,18 +4,19 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 )
 
 type (
-	QueryMapper = map[queries.Key]queries.Handler
+	QueryMapper = map[messages.Key]queries.Handler
 )
 
 type QueryBus struct {
 	Handlers QueryMapper
 }
 
-func (b *QueryBus) Register(key queries.Key, handler queries.Handler) error {
+func (b *QueryBus) Register(key messages.Key, handler queries.Handler) error {
 	_, ok := b.Handlers[key]
 
 	if ok {
@@ -33,7 +34,7 @@ func (b *QueryBus) Register(key queries.Key, handler queries.Handler) error {
 	return nil
 }
 
-func (b *QueryBus) Ask(query *queries.Query) (*queries.Response, error) {
+func (b *QueryBus) Ask(query *messages.Message) (*messages.Message, error) {
 	handler, ok := b.Handlers[query.Key]
 
 	if !ok {

@@ -5,7 +5,6 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
@@ -24,7 +23,7 @@ func (s *KeyTestSuite) TestWithValidValue() {
 		Status:       messages.Status.Succeeded,
 	}
 
-	expected := events.Key("codexgo.user.1.event.user.created.succeeded")
+	expected := messages.Key("codexgo.user.1.event.user.created.succeeded")
 
 	actual := messages.NewKey(components)
 

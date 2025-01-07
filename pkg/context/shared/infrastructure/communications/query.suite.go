@@ -17,11 +17,11 @@ type QueryBusSuite struct {
 }
 
 func (s *QueryBusSuite) TestRegister() {
-	s.NoError(s.SUT.Register(messages.Random[queries.Query]().Key, s.Handler))
+	s.NoError(s.SUT.Register(messages.Random().Key, s.Handler))
 }
 
 func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
-	key := messages.Random[queries.Query]().Key
+	key := messages.Random().Key
 
 	s.NoError(s.SUT.Register(key, s.Handler))
 
@@ -44,11 +44,11 @@ func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
 }
 
 func (s *QueryBusSuite) TestAsk() {
-	query := messages.Random[queries.Query]()
+	query := messages.Random()
 
 	s.NoError(s.SUT.Register(query.Key, s.Handler))
 
-	response := messages.Random[queries.Response]()
+	response := messages.Random()
 
 	s.Handler.Mock.On("Handle", query).Return(response)
 
@@ -64,7 +64,7 @@ func (s *QueryBusSuite) TestAsk() {
 }
 
 func (s *QueryBusSuite) TestAskErrMissingHandler() {
-	query := messages.Random[queries.Query]()
+	query := messages.Random()
 
 	_, err := s.SUT.Ask(query)
 

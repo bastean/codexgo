@@ -19,6 +19,6 @@ type (
 	Handler = commands.Handler
 )
 
-func New(key commands.Key, attributes, meta any) *commands.Command {
-	return messages.New[commands.Command](key, attributes, meta)
+func New(key messages.Key, attributes, meta any) *messages.Message {
+	return messages.New(key, attributes, meta)
 }

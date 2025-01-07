@@ -54,7 +54,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Verify", id)
 
-	command := messages.RandomWithAttributes[commands.Command](attributes, false)
+	command := messages.RandomWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

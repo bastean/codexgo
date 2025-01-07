@@ -3,22 +3,23 @@ package memory
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
 type (
-	EventMapper = map[events.Key][]events.Consumer
+	EventMapper = map[messages.Key][]events.Consumer
 )
 
 type EventBus struct {
 	Consumers EventMapper
 }
 
-func (b *EventBus) Subscribe(key events.Key, consumer events.Consumer) error {
+func (b *EventBus) Subscribe(key messages.Key, consumer events.Consumer) error {
 	b.Consumers[key] = append(b.Consumers[key], consumer)
 	return nil
 }
 
-func (b *EventBus) Publish(event *events.Event) error {
+func (b *EventBus) Publish(event *messages.Message) error {
 	consumers, ok := b.Consumers[event.Key]
 
 	if !ok {

@@ -3,7 +3,6 @@ package user
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
@@ -108,7 +107,7 @@ func New(raw *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "New")
 	}
 
-	aggregate.Record(messages.New[events.Event](
+	aggregate.Record(messages.New(
 		user.CreatedSucceededKey,
 		&user.CreatedSucceededAttributes{
 			ID:       aggregate.ID.Value,

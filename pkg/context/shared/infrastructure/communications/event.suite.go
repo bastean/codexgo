@@ -14,7 +14,7 @@ type EventBusSuite struct {
 	suite.Suite
 	SUT      events.Bus
 	Consumer *EventConsumerMock
-	Event    *events.Event
+	Event    *messages.Message
 }
 
 func (s *EventBusSuite) TestSubscribe() {
@@ -34,7 +34,7 @@ func (s *EventBusSuite) TestPublish() {
 }
 
 func (s *EventBusSuite) TestPublishErrMissingConsumer() {
-	event := messages.Random[events.Event]()
+	event := messages.Random()
 
 	err := s.SUT.Publish(event)
 

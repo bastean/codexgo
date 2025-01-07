@@ -49,7 +49,7 @@ func (s *ReadTestSuite) TestHandle() {
 		Verified: aggregate.Verified.Value,
 	}
 
-	expected := messages.New[queries.Response](
+	expected := messages.New(
 		read.ResponseKey,
 		response,
 		new(read.ResponseMeta),
@@ -59,7 +59,7 @@ func (s *ReadTestSuite) TestHandle() {
 		ID: aggregate.ID.Value,
 	}
 
-	query := messages.RandomWithAttributes[queries.Query](attributes, false)
+	query := messages.RandomWithAttributes(attributes, false)
 
 	actual, err := s.SUT.Handle(query)
 

@@ -59,7 +59,7 @@ func (s *LoginTestSuite) TestHandle() {
 		Verified: aggregate.Verified.Value,
 	}
 
-	expected := messages.New[queries.Response](
+	expected := messages.New(
 		login.ResponseKey,
 		response,
 		new(login.ResponseMeta),
@@ -70,7 +70,7 @@ func (s *LoginTestSuite) TestHandle() {
 		Password: plain.Value,
 	}
 
-	query := messages.RandomWithAttributes[queries.Query](attributes, false)
+	query := messages.RandomWithAttributes(attributes, false)
 
 	actual, err := s.SUT.Handle(query)
 
@@ -90,7 +90,7 @@ func (s *LoginTestSuite) TestHandleErrMissingRequired() {
 		Password: plain.Value,
 	}
 
-	query := messages.RandomWithAttributes[queries.Query](attributes, false)
+	query := messages.RandomWithAttributes(attributes, false)
 
 	_, err := s.SUT.Handle(query)
 

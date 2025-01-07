@@ -76,7 +76,7 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Update", aggregate)
 
-	command := messages.RandomWithAttributes[commands.Command](attributes, false)
+	command := messages.RandomWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

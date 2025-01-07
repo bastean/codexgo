@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
@@ -18,7 +19,7 @@ func (s *QueryBusTestSuite) SetupTest() {
 	s.QueryBusSuite.Handler = new(communications.QueryHandlerMock)
 
 	s.QueryBusSuite.SUT = &memory.QueryBus{
-		Handlers: make(map[queries.Key]queries.Handler),
+		Handlers: make(map[messages.Key]queries.Handler),
 	}
 }
 

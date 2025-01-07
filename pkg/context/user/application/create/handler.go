@@ -1,7 +1,6 @@
 package create
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
@@ -29,7 +28,7 @@ type Handler struct {
 	events.Bus
 }
 
-func (h *Handler) Handle(command *commands.Command) error {
+func (h *Handler) Handle(command *messages.Message) error {
 	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {

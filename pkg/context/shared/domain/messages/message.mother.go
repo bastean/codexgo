@@ -5,8 +5,8 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-func Random[T ~Message]() *T {
-	return &T{
+func Random() *Message {
+	return &Message{
 		ID:         services.Create.UUID(),
 		OccurredOn: services.Create.TimeZoneFull(),
 		Key:        Key(services.Create.LoremIpsumWord()),
@@ -15,8 +15,8 @@ func Random[T ~Message]() *T {
 	}
 }
 
-func RandomWithKey[T ~Message](key Key) *T {
-	return &T{
+func RandomWithKey(key Key) *Message {
+	return &Message{
 		ID:         services.Create.UUID(),
 		OccurredOn: services.Create.TimeZoneFull(),
 		Key:        key,
@@ -25,7 +25,7 @@ func RandomWithKey[T ~Message](key Key) *T {
 	}
 }
 
-func RandomWithAttributes[T ~Message](attributes any, shouldRandomize bool) *T {
+func RandomWithAttributes(attributes any, shouldRandomize bool) *Message {
 	if shouldRandomize {
 		err := services.Create.Struct(attributes)
 
@@ -34,7 +34,7 @@ func RandomWithAttributes[T ~Message](attributes any, shouldRandomize bool) *T {
 		}
 	}
 
-	return &T{
+	return &Message{
 		ID:         services.Create.UUID(),
 		OccurredOn: services.Create.TimeZoneFull(),
 		Key:        Key(services.Create.LoremIpsumWord()),

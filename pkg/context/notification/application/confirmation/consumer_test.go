@@ -33,7 +33,7 @@ func (s *ConfirmationTestSuite) SetupTest() {
 }
 
 func (s *ConfirmationTestSuite) TestConsumer() {
-	event := messages.RandomWithAttributes[events.Event](new(user.CreatedSucceededAttributes), true)
+	event := messages.RandomWithAttributes(new(user.CreatedSucceededAttributes), true)
 
 	s.transfer.Mock.On("Submit", event.Attributes)
 

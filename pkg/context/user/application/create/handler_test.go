@@ -66,7 +66,7 @@ func (s *CreateTestSuite) TestHandle() {
 		s.bus.Mock.On("Publish", event)
 	}
 
-	command := messages.RandomWithAttributes[commands.Command](attributes, false)
+	command := messages.RandomWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

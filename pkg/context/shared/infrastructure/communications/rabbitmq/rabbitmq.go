@@ -12,17 +12,18 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type (
 	Recipient struct {
-		Name             events.Recipient
-		BindingKey       events.Key
+		Name             messages.Recipient
+		BindingKey       messages.Key
 		Attributes, Meta reflect.Type
 	}
-	Queues = map[events.Key]*Recipient
-	Events = map[events.Key][]events.Consumer
+	Queues = map[messages.Key]*Recipient
+	Events = map[messages.Key][]events.Consumer
 )
 
 type RabbitMQ struct {
@@ -61,7 +62,7 @@ func (r *RabbitMQ) AddExchange(name string) error {
 	return nil
 }
 
-func (r *RabbitMQ) AddQueue(name events.Recipient) error {
+func (r *RabbitMQ) AddQueue(name messages.Recipient) error {
 	_, err := r.Channel.QueueDeclare(
 		string(name),
 		true,
@@ -84,7 +85,7 @@ func (r *RabbitMQ) AddQueue(name events.Recipient) error {
 	return nil
 }
 
-func (r *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routingKey events.Key, attributes, meta reflect.Type) error {
+func (r *RabbitMQ) AddQueueEventBind(queue messages.Recipient, bindingKey, routingKey messages.Key, attributes, meta reflect.Type) error {
 	err := r.Channel.QueueBind(
 		string(queue),
 		string(bindingKey),
@@ -114,7 +115,7 @@ func (r *RabbitMQ) AddQueueEventBind(queue events.Recipient, bindingKey, routing
 	return nil
 }
 
-func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *events.Event) error {
+func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *messages.Message) error {
 	received := make(map[string]json.RawMessage)
 
 	err := json.Unmarshal(data, &received)
@@ -174,9 +175,9 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 	return nil
 }
 
-func (r *RabbitMQ) Consume(key events.Key, queue *Recipient, deliveries <-chan amqp.Delivery, consumer events.Consumer) {
+func (r *RabbitMQ) Consume(key messages.Key, queue *Recipient, deliveries <-chan amqp.Delivery, consumer events.Consumer) {
 	for delivery := range deliveries {
-		event := new(events.Event)
+		event := new(messages.Message)
 
 		err := r.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
 
@@ -196,7 +197,7 @@ func (r *RabbitMQ) Consume(key events.Key, queue *Recipient, deliveries <-chan a
 	}
 }
 
-func (r *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
+func (r *RabbitMQ) Subscribe(key messages.Key, consumer events.Consumer) error {
 	queue, ok := r.queues[key]
 
 	if !ok {
@@ -238,7 +239,7 @@ func (r *RabbitMQ) Subscribe(key events.Key, consumer events.Consumer) error {
 	return nil
 }
 
-func (r *RabbitMQ) Publish(event *events.Event) error {
+func (r *RabbitMQ) Publish(event *messages.Message) error {
 	queue, ok := r.queues[event.Key]
 
 	if !ok {

@@ -3,7 +3,6 @@ package read
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
@@ -43,7 +42,7 @@ type Handler struct {
 	cases.Read
 }
 
-func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
+func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	attributes, ok := query.Attributes.(*QueryAttributes)
 
 	if !ok {
@@ -69,7 +68,7 @@ func (h *Handler) Handle(query *queries.Query) (*queries.Response, error) {
 		Verified: aggregate.Verified.Value,
 	}
 
-	return messages.New[queries.Response](
+	return messages.New(
 		ResponseKey,
 		response,
 		new(ResponseMeta),
