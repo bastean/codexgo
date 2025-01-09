@@ -45,29 +45,6 @@ func (c *Collection) Create(user *user.User) error {
 	return nil
 }
 
-func (c *Collection) Verify(id *user.ID) error {
-	filter := bson.D{{Key: "id", Value: id.Value}}
-
-	_, err := c.Collection.UpdateOne(context.Background(), filter, bson.D{
-		{Key: "$set", Value: bson.D{
-			{Key: "verified", Value: true},
-		}},
-	})
-
-	if err != nil {
-		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Verify",
-			What:  "Failure to verify a User",
-			Why: errors.Meta{
-				"ID": id.Value,
-			},
-			Who: err,
-		})
-	}
-
-	return nil
-}
-
 func (c *Collection) Update(user *user.User) error {
 	err := user.UpdatedStamp()
 

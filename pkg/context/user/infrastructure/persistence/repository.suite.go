@@ -59,24 +59,6 @@ func (s *RepositorySuite) TestCreateErrDuplicateValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *RepositorySuite) TestVerify() {
-	aggregate := user.RandomRaw()
-
-	s.NoError(s.SUT.Create(aggregate))
-
-	s.NoError(s.SUT.Verify(aggregate.ID))
-
-	criteria := &repository.Criteria{
-		ID: aggregate.ID,
-	}
-
-	actual, err := s.SUT.Search(criteria)
-
-	s.NoError(err)
-
-	s.True(actual.Verified.Value)
-}
-
 func (s *RepositorySuite) TestUpdate() {
 	expected := user.RandomRaw()
 

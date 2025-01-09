@@ -36,23 +36,29 @@ func (s *VerifyTestSuite) SetupTest() {
 func (s *VerifyTestSuite) TestHandle() {
 	attributes := verify.CommandRandomAttributes()
 
-	aggregate := user.RandomPrimitive()
+	registered := user.RandomPrimitive()
 
-	aggregate.Verified = user.VerifiedWithFalseValue()
+	registered.Verified = user.VerifiedWithFalseValue()
 
 	id, err := user.NewID(attributes.ID)
 
 	s.NoError(err)
 
-	aggregate.ID = id
+	registered.ID = id
 
 	criteria := &repository.Criteria{
 		ID: id,
 	}
 
-	s.repository.Mock.On("Search", criteria).Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(registered)
 
-	s.repository.Mock.On("Verify", id)
+	aggregate, err := user.FromPrimitive(registered.ToPrimitive())
+
+	s.NoError(err)
+
+	aggregate.Verified = user.VerifiedWithTrueValue()
+
+	s.repository.Mock.On("Update", aggregate)
 
 	command := messages.RandomWithAttributes(attributes, false)
 

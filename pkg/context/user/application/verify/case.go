@@ -23,7 +23,13 @@ func (c *Case) Run(id *user.ID) error {
 		return nil
 	}
 
-	err = c.Repository.Verify(id)
+	aggregate.Verified, err = user.NewVerified(true)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
+	err = c.Repository.Update(aggregate)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

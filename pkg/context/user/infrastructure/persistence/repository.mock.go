@@ -16,11 +16,6 @@ func (m *RepositoryMock) Create(user *user.User) error {
 	return nil
 }
 
-func (m *RepositoryMock) Verify(id *user.ID) error {
-	m.Called(id)
-	return nil
-}
-
 func (m *RepositoryMock) Update(user *user.User) error {
 	m.Called(user)
 	return nil

@@ -59,23 +59,6 @@ func (t *Table) Create(user *user.User) error {
 	return nil
 }
 
-func (t *Table) Verify(id *user.ID) error {
-	err := t.DB.Where(&User{ID: id.Value}).Updates(&User{Verified: true}).Error
-
-	if err != nil {
-		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Verify",
-			What:  "Failure to verify a User",
-			Why: errors.Meta{
-				"ID": id.Value,
-			},
-			Who: err,
-		})
-	}
-
-	return nil
-}
-
 func (t *Table) Update(user *user.User) error {
 	err := user.UpdatedStamp()
 
