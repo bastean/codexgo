@@ -1,9 +1,9 @@
 /*
- * # Fomantic UI - 2.9.4-beta.94+1ecfaf3
+ * # Fomantic UI - 2.9.4-beta.95+16949e8
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
- * Copyright 2024 Contributors
+ * Copyright 2025 Contributors
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  *
