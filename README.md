@@ -519,6 +519,7 @@ make compose-prod
   - [Fomantic-UI](https://fomantic-ui.com)
 - [RabbitMQ](https://www.rabbitmq.com/tutorials/tutorial-one-go)
 - [MongoDB](https://www.mongodb.com/docs/drivers/go)
+- [SQLite](https://gorm.io/docs/connecting_to_the_database.html#SQLite)
 
 #### Please see
 
