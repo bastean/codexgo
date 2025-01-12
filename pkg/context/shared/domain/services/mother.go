@@ -5,6 +5,8 @@ import (
 	"strings"
 
 	"github.com/brianvoe/gofakeit/v7"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/ids"
 )
 
 type mother struct {
@@ -17,6 +19,10 @@ func (m *mother) Email() string {
 	domain := "example.com"
 
 	return fmt.Sprintf("%s@%s", username, domain)
+}
+
+func (*mother) ID() string {
+	return ids.Generate()
 }
 
 var Create = &mother{

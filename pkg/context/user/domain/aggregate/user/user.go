@@ -3,12 +3,13 @@ package user
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
 type User struct {
 	*aggregates.Root
+	Verify *ID
 	*ID
 	*Email
 	*Username
@@ -19,12 +20,13 @@ type User struct {
 
 type Primitive struct {
 	Created, Updated              string
+	Verify                        string
 	ID, Email, Username, Password string
 	Verified                      bool
 }
 
 func (u *User) ToPrimitive() *Primitive {
-	return &Primitive{
+	primitive := &Primitive{
 		Created:  u.Created.Value,
 		Updated:  u.Updated.Value,
 		ID:       u.ID.Value,
@@ -33,10 +35,30 @@ func (u *User) ToPrimitive() *Primitive {
 		Password: u.CipherPassword.Value,
 		Verified: u.Verified.Value,
 	}
+
+	if u.Verify != nil {
+		primitive.Verify = u.Verify.Value
+	}
+
+	return primitive
 }
 
 func (u *User) IsVerified() bool {
 	return u.Verified.Value
+}
+
+func (u *User) ValidateVerify(token string) error {
+	if u.Verify.Value != token {
+		return errors.New[errors.Failure](&errors.Bubble{
+			Where: "ValidateVerify",
+			What:  "Tokens do not match",
+			Why: errors.Meta{
+				"Received": token,
+			},
+		})
+	}
+
+	return nil
 }
 
 func create(user *Primitive) (*User, error) {
@@ -67,17 +89,19 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 
-	created, errCreated := aggregates.NewTime(primitive.Created)
-	updated, errUpdated := aggregates.NewTime(primitive.Updated)
-	cipherPassword, errCipherPassword := NewCipherPassword(primitive.Password)
+	var errCreated, errUpdated, errCipherPassword, errVerify error
 
-	if err := errors.Join(errCreated, errUpdated, errCipherPassword); err != nil {
-		return nil, errors.BubbleUp(err, "FromPrimitive")
+	aggregate.Created, errCreated = aggregates.NewTime(primitive.Created)
+	aggregate.Updated, errUpdated = aggregates.NewTime(primitive.Updated)
+	aggregate.CipherPassword, errCipherPassword = NewCipherPassword(primitive.Password)
+
+	if primitive.Verify != "" {
+		aggregate.Verify, errVerify = NewID(primitive.Verify)
 	}
 
-	aggregate.Created = created
-	aggregate.Updated = updated
-	aggregate.CipherPassword = cipherPassword
+	if err := errors.Join(errCreated, errUpdated, errCipherPassword, errVerify); err != nil {
+		return nil, errors.BubbleUp(err, "FromPrimitive")
+	}
 
 	return aggregate, nil
 }
@@ -107,14 +131,21 @@ func New(raw *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "New")
 	}
 
+	aggregate.Verify, err = NewID(raw.Verify)
+
+	if err != nil {
+		return nil, errors.BubbleUp(err, "New")
+	}
+
 	aggregate.Record(messages.New(
-		user.CreatedSucceededKey,
-		&user.CreatedSucceededAttributes{
+		events.UserCreatedSucceededKey,
+		&events.UserCreatedSucceededAttributes{
+			Verify:   aggregate.Verify.Value,
 			ID:       aggregate.ID.Value,
 			Email:    aggregate.Email.Value,
 			Username: aggregate.Username.Value,
 		},
-		&user.CreatedSucceededMeta{},
+		&events.UserCreatedSucceededMeta{},
 	))
 
 	return aggregate, nil

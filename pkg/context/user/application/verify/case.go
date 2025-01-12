@@ -10,7 +10,7 @@ type Case struct {
 	repository.Repository
 }
 
-func (c *Case) Run(id *user.ID) error {
+func (c *Case) Run(verify, id *user.ID) error {
 	aggregate, err := c.Repository.Search(&repository.Criteria{
 		ID: id,
 	})
@@ -23,11 +23,19 @@ func (c *Case) Run(id *user.ID) error {
 		return nil
 	}
 
+	err = aggregate.ValidateVerify(verify.Value)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Run")
+	}
+
 	aggregate.Verified, err = user.NewVerified(true)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")
 	}
+
+	aggregate.Verify = nil
 
 	err = c.Repository.Update(aggregate)
 

@@ -46,6 +46,12 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	registered.ID = id
 
+	verify, err := user.NewID(attributes.Verify)
+
+	s.NoError(err)
+
+	registered.Verify = verify
+
 	criteria := &repository.Criteria{
 		ID: id,
 	}
@@ -57,6 +63,8 @@ func (s *VerifyTestSuite) TestHandle() {
 	s.NoError(err)
 
 	aggregate.Verified = user.VerifiedWithTrueValue()
+
+	aggregate.Verify = nil
 
 	s.repository.Mock.On("Update", aggregate)
 

@@ -14,8 +14,8 @@ const (
 
 func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_RegisterFormInit_7f14`,
-		Function: `function __templ_RegisterFormInit_7f14(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_RegisterFormInit_2c33`,
+		Function: `function __templ_RegisterFormInit_2c33(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -75,13 +75,6 @@ func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
         .api({
             action: "user_create", 
             method: "PUT",
-            beforeSend: function(settings) {
-                settings.data.ID = crypto.randomUUID();
-
-                settings.data = JSON.stringify(settings.data);
-        
-                return settings;
-            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -104,8 +97,8 @@ func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_RegisterFormInit_7f14`, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_7f14`, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_RegisterFormInit_2c33`, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_2c33`, formTagID, loginTabTagID),
 	}
 }
 
@@ -147,7 +140,7 @@ func RegisterForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 103, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 96, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {

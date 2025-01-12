@@ -65,13 +65,6 @@ script RegisterFormInit(formTagID, loginTabTagID string) {
         .api({
             action: "user_create", 
             method: "PUT",
-            beforeSend: function(settings) {
-                settings.data.ID = crypto.randomUUID();
-
-                settings.data = JSON.stringify(settings.data);
-        
-                return settings;
-            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",

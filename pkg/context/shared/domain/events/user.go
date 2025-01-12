@@ -1,10 +1,10 @@
-package user
+package events
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-var CreatedSucceededKey = messages.NewKey(&messages.KeyComponents{
+var UserCreatedSucceededKey = messages.NewKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Event,
@@ -13,8 +13,8 @@ var CreatedSucceededKey = messages.NewKey(&messages.KeyComponents{
 	Status:  messages.Status.Succeeded,
 })
 
-type CreatedSucceededAttributes struct {
-	ID, Email, Username string
+type UserCreatedSucceededAttributes struct {
+	Verify, ID, Email, Username string
 }
 
-type CreatedSucceededMeta struct{}
+type UserCreatedSucceededMeta struct{}

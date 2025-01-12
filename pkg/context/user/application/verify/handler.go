@@ -17,7 +17,7 @@ var CommandKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type CommandAttributes struct {
-	ID string
+	Verify, ID string
 }
 
 type CommandMeta struct{}
@@ -33,13 +33,19 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
+	verify, err := user.NewID(attributes.Verify)
+
+	if err != nil {
+		return errors.BubbleUp(err, "Handle")
+	}
+
 	id, err := user.NewID(attributes.ID)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")
 	}
 
-	err = h.Verify.Run(id)
+	err = h.Verify.Run(verify, id)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Handle")

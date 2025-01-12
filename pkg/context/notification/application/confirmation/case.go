@@ -3,14 +3,14 @@ package confirmation
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/transfer"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 )
 
 type Case struct {
-	transfer.Transfer[*user.CreatedSucceededAttributes]
+	transfer.Transfer[*events.UserCreatedSucceededAttributes]
 }
 
-func (c *Case) Run(event *user.CreatedSucceededAttributes) error {
+func (c *Case) Run(event *events.UserCreatedSucceededAttributes) error {
 	err := c.Transfer.Submit(event)
 
 	if err != nil {

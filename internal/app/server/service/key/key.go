@@ -5,5 +5,6 @@ const (
 	Exp           = "exp"
 	ID            = "id"
 	Redirect      = "Redirect"
+	Token         = "token"
 	UserID        = "userID"
 )

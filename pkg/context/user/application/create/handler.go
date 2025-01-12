@@ -18,7 +18,7 @@ var CommandKey = messages.NewKey(&messages.KeyComponents{
 })
 
 type CommandAttributes struct {
-	ID, Email, Username, Password string
+	Verify, ID, Email, Username, Password string
 }
 
 type CommandMeta struct{}
@@ -36,6 +36,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 	}
 
 	aggregate, err := user.New(&user.Primitive{
+		Verify:   attributes.Verify,
 		ID:       attributes.ID,
 		Email:    attributes.Email,
 		Username: attributes.Username,

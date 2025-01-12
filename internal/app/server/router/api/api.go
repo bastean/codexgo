@@ -19,7 +19,7 @@ func (api *API) Public() {
 	account.PUT("/", user.Create)
 	account.POST("/", user.Login)
 
-	account.GET("/verify/:id", user.Verify)
+	account.GET("/verify", user.Verify)
 }
 
 func (api *API) Private() {

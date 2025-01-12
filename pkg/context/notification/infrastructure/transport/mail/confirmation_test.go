@@ -8,14 +8,14 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
 )
 
 type ConfirmationTestSuite struct {
-	transport.OnlineSuite[*user.CreatedSucceededAttributes]
+	transport.OnlineSuite[*events.UserCreatedSucceededAttributes]
 }
 
 func (s *ConfirmationTestSuite) SetupTest() {
@@ -28,7 +28,7 @@ func (s *ConfirmationTestSuite) SetupTest() {
 		},
 	)
 
-	s.OnlineSuite.Attributes = new(user.CreatedSucceededAttributes)
+	s.OnlineSuite.Attributes = new(events.UserCreatedSucceededAttributes)
 
 	messages.RandomizeAttributes(s.OnlineSuite.Attributes)
 

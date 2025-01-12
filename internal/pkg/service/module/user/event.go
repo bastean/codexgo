@@ -1,14 +1,14 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 )
 
 var (
-	CreatedSucceededKey = user.CreatedSucceededKey
+	CreatedSucceededKey = events.UserCreatedSucceededKey
 )
 
 type (
-	CreatedSucceededAttributes = user.CreatedSucceededAttributes
-	CreatedSucceededMeta       = user.CreatedSucceededMeta
+	CreatedSucceededAttributes = events.UserCreatedSucceededAttributes
+	CreatedSucceededMeta       = events.UserCreatedSucceededMeta
 )

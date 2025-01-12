@@ -18,7 +18,7 @@ type (
 		Run(*user.ID, *user.PlainPassword) error
 	}
 	Verify interface {
-		Run(*user.ID) error
+		Run(*user.ID, *user.ID) error
 	}
 	Login interface {
 		Run(*user.Email, *user.Username, *user.PlainPassword) (*user.User, error)

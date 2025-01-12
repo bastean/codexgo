@@ -9,6 +9,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/command"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/id"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
 )
 
@@ -21,6 +22,9 @@ func Create(c *gin.Context) {
 		errs.AbortByErr(c, errs.BindingJSON(err, "Create"))
 		return
 	}
+
+	attributes.Verify = id.Generate()
+	attributes.ID = id.Generate()
 
 	err = command.Bus.Dispatch(command.New(
 		user.CreateCommandKey,

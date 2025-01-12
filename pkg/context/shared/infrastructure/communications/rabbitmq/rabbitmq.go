@@ -11,6 +11,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/ids"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
@@ -253,7 +254,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 	}
 
 	if event.ID == "" {
-		event.ID = services.UUID()
+		event.ID = ids.Generate()
 	}
 
 	if event.OccurredOn == "" {

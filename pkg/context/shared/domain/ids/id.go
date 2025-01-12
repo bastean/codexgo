@@ -1,9 +1,9 @@
-package services
+package ids
 
 import (
 	"github.com/google/uuid"
 )
 
-func UUID() string {
+func Generate() string {
 	return uuid.NewString()
 }

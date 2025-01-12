@@ -1,11 +1,9 @@
 package cases
 
-import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
-)
+import "github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 
 type (
 	Confirmation interface {
-		Run(*user.CreatedSucceededAttributes) error
+		Run(*events.UserCreatedSucceededAttributes) error
 	}
 )

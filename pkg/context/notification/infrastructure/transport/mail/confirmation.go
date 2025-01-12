@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
 )
 
@@ -15,7 +15,7 @@ type Confirmation struct {
 	AppServerURL string
 }
 
-func (c *Confirmation) Submit(attributes *user.CreatedSucceededAttributes) error {
+func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes) error {
 	var message bytes.Buffer
 
 	headers := c.Headers(attributes.Email, "Account Confirmation")
@@ -34,7 +34,7 @@ func (c *Confirmation) Submit(attributes *user.CreatedSucceededAttributes) error
 		})
 	}
 
-	link := fmt.Sprintf("%s/v4/account/verify/%s", c.AppServerURL, attributes.ID)
+	link := fmt.Sprintf("%s/v4/account/verify?token=%s&id=%s", c.AppServerURL, attributes.Verify, attributes.ID)
 
 	ConfirmationTemplate(attributes.Username, link).Render(context.Background(), &message)
 
@@ -45,6 +45,7 @@ func (c *Confirmation) Submit(attributes *user.CreatedSucceededAttributes) error
 			Where: "Submit",
 			What:  "Failure to send an account confirmation mail",
 			Why: errors.Meta{
+				"Verify ID":       attributes.Verify,
 				"User ID":         attributes.ID,
 				"SMTP Server URL": c.ServerURL,
 			},

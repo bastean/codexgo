@@ -9,7 +9,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events/user"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
@@ -17,11 +16,11 @@ type ConfirmationTestSuite struct {
 	suite.Suite
 	SUT          events.Consumer
 	confirmation cases.Confirmation
-	transfer     *transport.TransferMock[*user.CreatedSucceededAttributes]
+	transfer     *transport.TransferMock[*events.UserCreatedSucceededAttributes]
 }
 
 func (s *ConfirmationTestSuite) SetupTest() {
-	s.transfer = new(transport.TransferMock[*user.CreatedSucceededAttributes])
+	s.transfer = new(transport.TransferMock[*events.UserCreatedSucceededAttributes])
 
 	s.confirmation = &confirmation.Case{
 		Transfer: s.transfer,
@@ -33,7 +32,7 @@ func (s *ConfirmationTestSuite) SetupTest() {
 }
 
 func (s *ConfirmationTestSuite) TestConsumer() {
-	event := messages.RandomWithAttributes(new(user.CreatedSucceededAttributes), true)
+	event := messages.RandomWithAttributes(new(events.UserCreatedSucceededAttributes), true)
 
 	s.transfer.Mock.On("Submit", event.Attributes)
 

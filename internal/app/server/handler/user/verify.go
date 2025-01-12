@@ -13,16 +13,24 @@ import (
 )
 
 func Verify(c *gin.Context) {
-	id := c.Param(key.ID)
+	token := c.Query(key.Token)
+
+	if token == "" {
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.Token, "Verify"), "/")
+		return
+	}
+
+	id := c.Query(key.ID)
 
 	if id == "" {
 		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.ID, "Verify"), "/")
 		return
 	}
 
-	attributes := new(user.VerifyCommandAttributes)
-
-	attributes.ID = id
+	attributes := &user.VerifyCommandAttributes{
+		Verify: token,
+		ID:     id,
+	}
 
 	err := command.Bus.Dispatch(command.New(
 		user.VerifyCommandKey,
