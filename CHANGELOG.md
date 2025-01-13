@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.10.0 (2025-01-13)
+
+- chore(deps): upgrade ([d89072b](https://github.com/bastean/codexgo/commit/d89072b))
+- chore(deps): upgrade ([3939bc9](https://github.com/bastean/codexgo/commit/3939bc9))
+- docs(readme): add sqlite to the tech stack ([94bdc32](https://github.com/bastean/codexgo/commit/94bdc32))
+- refactor: use a random id to verify users ([5f929cf](https://github.com/bastean/codexgo/commit/5f929cf))
+- refactor(context): remove message type aliases ([6436fbb](https://github.com/bastean/codexgo/commit/6436fbb))
+- refactor(domain): remove verify method from repository ([a644d00](https://github.com/bastean/codexgo/commit/a644d00))
+- test(domain): add unit test to root aggregate ([74f3332](https://github.com/bastean/codexgo/commit/74f3332))
+- feat(context): add metadata to aggregates ([60779a3](https://github.com/bastean/codexgo/commit/60779a3))
+
 ## <small>4.9.1 (2024-12-14)</small>
 
 - chore(application): rename use case files ([b06f57f](https://github.com/bastean/codexgo/commit/b06f57f))
