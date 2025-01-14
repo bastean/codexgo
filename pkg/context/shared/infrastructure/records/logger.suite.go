@@ -5,17 +5,18 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type LoggerSuite struct {
 	suite.Suite
-	SUT    loggers.Logger
+	SUT    roles.Logger
 	Buffer *bytes.Buffer
 }
 
 func (s *LoggerSuite) TestDebug() {
-	message := loggers.RandomMessage()
+	message := services.Create.Message()
 
 	s.SUT.Debug(message)
 
@@ -23,7 +24,7 @@ func (s *LoggerSuite) TestDebug() {
 }
 
 func (s *LoggerSuite) TestError() {
-	message := loggers.RandomMessage()
+	message := services.Create.Message()
 
 	s.SUT.Error(message)
 
@@ -31,7 +32,7 @@ func (s *LoggerSuite) TestError() {
 }
 
 func (s *LoggerSuite) TestInfo() {
-	message := loggers.RandomMessage()
+	message := services.Create.Message()
 
 	s.SUT.Info(message)
 
@@ -39,7 +40,7 @@ func (s *LoggerSuite) TestInfo() {
 }
 
 func (s *LoggerSuite) TestSuccess() {
-	message := loggers.RandomMessage()
+	message := services.Create.Message()
 
 	s.SUT.Success(message)
 

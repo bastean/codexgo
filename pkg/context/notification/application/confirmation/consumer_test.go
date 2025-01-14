@@ -10,11 +10,12 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type ConfirmationTestSuite struct {
 	suite.Suite
-	SUT          events.Consumer
+	SUT          roles.EventConsumer
 	confirmation cases.Confirmation
 	transfer     *transport.TransferMock[*events.UserCreatedSucceededAttributes]
 }

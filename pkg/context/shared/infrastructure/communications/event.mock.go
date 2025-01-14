@@ -3,8 +3,8 @@ package communications
 import (
 	"github.com/stretchr/testify/mock"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type EventConsumerMock struct {
@@ -20,7 +20,7 @@ type EventBusMock struct {
 	mock.Mock
 }
 
-func (m *EventBusMock) Subscribe(key messages.Key, consumers events.Consumer) error {
+func (m *EventBusMock) Subscribe(key messages.Key, consumers roles.EventConsumer) error {
 	m.Called(key, consumers)
 	return nil
 }

@@ -1,14 +1,14 @@
-package commands
+package roles
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type Handler interface {
+type CommandHandler interface {
 	Handle(*messages.Message) error
 }
 
-type Bus interface {
-	Register(messages.Key, Handler) error
+type CommandBus interface {
+	Register(messages.Key, CommandHandler) error
 	Dispatch(*messages.Message) error
 }

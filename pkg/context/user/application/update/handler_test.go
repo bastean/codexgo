@@ -5,19 +5,18 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type UpdateTestSuite struct {
 	suite.Suite
-	SUT        commands.Handler
+	SUT        roles.CommandHandler
 	update     cases.Update
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -54,13 +53,13 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.NoError(err)
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: aggregate.ID,
 	}
 
 	s.repository.Mock.On("Search", criteria).Return(registered)
 
-	s.hasher.Mock.On("IsNotEqual", registered.CipherPassword.Value, aggregate.PlainPassword.Value).Return(false)
+	s.hasher.Mock.On("Compare", registered.CipherPassword.Value, aggregate.PlainPassword.Value)
 
 	hashed := user.CipherPasswordWithValidValue()
 

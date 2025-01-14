@@ -3,20 +3,20 @@ package memory
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type (
-	CommandMapper = map[messages.Key]commands.Handler
+	CommandMapper = map[messages.Key]roles.CommandHandler
 )
 
 type CommandBus struct {
 	Handlers CommandMapper
 }
 
-func (b *CommandBus) Register(key messages.Key, handler commands.Handler) error {
+func (b *CommandBus) Register(key messages.Key, handler roles.CommandHandler) error {
 	_, ok := b.Handlers[key]
 
 	if ok {

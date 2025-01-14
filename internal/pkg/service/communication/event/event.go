@@ -1,7 +1,7 @@
 package event
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
 )
 
@@ -10,7 +10,7 @@ var (
 )
 
 type (
-	Consumer = events.Consumer
-	Bus      = events.Bus
+	Consumer = roles.EventConsumer
+	Bus      = roles.EventBus
 	Mapper   = memory.EventMapper
 )

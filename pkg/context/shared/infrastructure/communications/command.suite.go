@@ -5,14 +5,14 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type CommandBusSuite struct {
 	suite.Suite
-	SUT     commands.Bus
+	SUT     roles.CommandBus
 	Handler *CommandHandlerMock
 }
 

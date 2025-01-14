@@ -1,7 +1,7 @@
 package id
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/ids"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
-var Generate = ids.Generate
+var Generate = services.GenerateID

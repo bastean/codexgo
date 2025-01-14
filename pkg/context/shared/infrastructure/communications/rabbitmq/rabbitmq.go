@@ -10,10 +10,8 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/ids"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
@@ -24,13 +22,13 @@ type (
 		Attributes, Meta reflect.Type
 	}
 	Queues = map[messages.Key]*Recipient
-	Events = map[messages.Key][]events.Consumer
+	Events = map[messages.Key][]roles.EventConsumer
 )
 
 type RabbitMQ struct {
 	*amqp.Connection
 	*amqp.Channel
-	loggers.Logger
+	roles.Logger
 	ConsumeCycle context.Context
 	exchange     string
 	queues       Queues
@@ -176,7 +174,7 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 	return nil
 }
 
-func (r *RabbitMQ) Consume(key messages.Key, queue *Recipient, deliveries <-chan amqp.Delivery, consumer events.Consumer) {
+func (r *RabbitMQ) Consume(key messages.Key, queue *Recipient, deliveries <-chan amqp.Delivery, consumer roles.EventConsumer) {
 	for delivery := range deliveries {
 		event := new(messages.Message)
 
@@ -198,7 +196,7 @@ func (r *RabbitMQ) Consume(key messages.Key, queue *Recipient, deliveries <-chan
 	}
 }
 
-func (r *RabbitMQ) Subscribe(key messages.Key, consumer events.Consumer) error {
+func (r *RabbitMQ) Subscribe(key messages.Key, consumer roles.EventConsumer) error {
 	queue, ok := r.queues[key]
 
 	if !ok {
@@ -254,7 +252,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 	}
 
 	if event.ID == "" {
-		event.ID = ids.Generate()
+		event.ID = services.GenerateID()
 	}
 
 	if event.OccurredOn == "" {
@@ -309,7 +307,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 	return nil
 }
 
-func Open(uri string, exchange string, queues Queues, logger loggers.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
+func Open(uri string, exchange string, queues Queues, logger roles.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {

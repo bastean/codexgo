@@ -6,17 +6,16 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type ReadTestSuite struct {
 	suite.Suite
-	SUT        queries.Handler
+	SUT        roles.QueryHandler
 	read       cases.Read
 	repository *persistence.RepositoryMock
 }
@@ -36,7 +35,7 @@ func (s *ReadTestSuite) SetupTest() {
 func (s *ReadTestSuite) TestHandle() {
 	aggregate := user.RandomPrimitive()
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: aggregate.ID,
 	}
 

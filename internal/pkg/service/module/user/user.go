@@ -1,24 +1,23 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/event"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/hashes"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
 
-func Start(repository repository.Repository, bus event.Bus, hasher hashes.Hasher) {
+func Start(repository role.Repository, bus roles.EventBus, hasher roles.Hasher) {
 	CreateHandler = &create.Handler{
 		Create: &create.Case{
 			Hasher:     hasher,
 			Repository: repository,
 		},
-		Bus: bus,
+		EventBus: bus,
 	}
 
 	ReadHandler = &read.Handler{

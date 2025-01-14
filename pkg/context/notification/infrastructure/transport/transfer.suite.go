@@ -3,13 +3,13 @@ package transport
 import (
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/transfer"
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/role"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
 
 type OnlineSuite[T any] struct {
 	suite.Suite
-	SUT        transfer.Transfer[T]
+	SUT        role.Transfer[T]
 	Attributes T
 }
 
@@ -19,7 +19,7 @@ func (s *OnlineSuite[T]) TestSubmit() {
 
 type OfflineSuite[T any] struct {
 	suite.Suite
-	SUT        transfer.Transfer[T]
+	SUT        role.Transfer[T]
 	Logger     *records.LoggerMock
 	Attributes T
 	Message    string

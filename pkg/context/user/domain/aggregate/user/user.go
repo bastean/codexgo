@@ -25,6 +25,12 @@ type Primitive struct {
 	Verified                      bool
 }
 
+type Criteria struct {
+	*ID
+	*Email
+	*Username
+}
+
 func (u *User) ToPrimitive() *Primitive {
 	primitive := &Primitive{
 		Created:  u.Created.Value,
@@ -47,8 +53,8 @@ func (u *User) IsVerified() bool {
 	return u.Verified.Value
 }
 
-func (u *User) ValidateVerify(token string) error {
-	if u.Verify.Value != token {
+func (u *User) ValidateVerify(token *ID) error {
+	if u.Verify.Value != token.Value {
 		return errors.New[errors.Failure](&errors.Bubble{
 			Where: "ValidateVerify",
 			What:  "Tokens do not match",

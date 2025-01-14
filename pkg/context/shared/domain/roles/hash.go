@@ -1,6 +1,6 @@
-package hashes
+package roles
 
 type Hasher interface {
 	Hash(plain string) (string, error)
-	IsNotEqual(hashed, plain string) bool
+	Compare(hashed, plain string) error
 }

@@ -5,19 +5,18 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type DeleteTestSuite struct {
 	suite.Suite
-	SUT        commands.Handler
+	SUT        roles.CommandHandler
 	delete     cases.Delete
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -43,13 +42,13 @@ func (s *DeleteTestSuite) TestHandle() {
 
 	plain := user.PlainPasswordWithValidValue()
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: aggregate.ID,
 	}
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
+	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value, plain.Value)
 
 	s.repository.Mock.On("Delete", aggregate.ID)
 

@@ -5,18 +5,17 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type VerifyTestSuite struct {
 	suite.Suite
-	SUT        commands.Handler
+	SUT        roles.CommandHandler
 	verify     cases.Verify
 	repository *persistence.RepositoryMock
 }
@@ -52,7 +51,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	registered.Verify = verify
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: id,
 	}
 

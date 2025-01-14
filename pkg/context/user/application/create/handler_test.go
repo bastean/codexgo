@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
@@ -17,7 +17,7 @@ import (
 
 type CreateTestSuite struct {
 	suite.Suite
-	SUT        commands.Handler
+	SUT        roles.CommandHandler
 	create     cases.Create
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -37,8 +37,8 @@ func (s *CreateTestSuite) SetupTest() {
 	}
 
 	s.SUT = &create.Handler{
-		Create: s.create,
-		Bus:    s.bus,
+		Create:   s.create,
+		EventBus: s.bus,
 	}
 }
 

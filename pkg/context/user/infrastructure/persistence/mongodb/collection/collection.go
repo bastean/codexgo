@@ -10,7 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
 
 type Collection struct {
@@ -94,7 +94,7 @@ func (c *Collection) Delete(id *user.ID) error {
 	return nil
 }
 
-func (c *Collection) Search(criteria *repository.Criteria) (*user.User, error) {
+func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 	var (
 		filter bson.D
 		index  string
@@ -167,7 +167,7 @@ func (c *Collection) Search(criteria *repository.Criteria) (*user.User, error) {
 	return aggregate, nil
 }
 
-func Open(session *mongodb.Database, name string) (repository.Repository, error) {
+func Open(session *mongodb.Database, name string) (role.Repository, error) {
 	collection := session.Database.Collection(name)
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{

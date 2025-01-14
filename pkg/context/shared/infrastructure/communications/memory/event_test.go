@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
 )
@@ -21,7 +21,7 @@ func (s *EventBusTestSuite) SetupTest() {
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 
 	s.EventBusSuite.SUT = &memory.EventBus{
-		Consumers: make(map[messages.Key][]events.Consumer),
+		Consumers: make(map[messages.Key][]roles.EventConsumer),
 	}
 }
 

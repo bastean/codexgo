@@ -5,18 +5,18 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type (
-	QueryMapper = map[messages.Key]queries.Handler
+	QueryMapper = map[messages.Key]roles.QueryHandler
 )
 
 type QueryBus struct {
 	Handlers QueryMapper
 }
 
-func (b *QueryBus) Register(key messages.Key, handler queries.Handler) error {
+func (b *QueryBus) Register(key messages.Key, handler roles.QueryHandler) error {
 	_, ok := b.Handlers[key]
 
 	if ok {

@@ -4,7 +4,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type QueryHandlerMock struct {
@@ -20,7 +20,7 @@ type QueryBusMock struct {
 	mock.Mock
 }
 
-func (m *QueryBusMock) Register(key messages.Key, handler queries.Handler) error {
+func (m *QueryBusMock) Register(key messages.Key, handler roles.QueryHandler) error {
 	m.Called(key, handler)
 	return nil
 }

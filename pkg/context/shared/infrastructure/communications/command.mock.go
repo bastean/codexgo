@@ -3,8 +3,8 @@ package communications
 import (
 	"github.com/stretchr/testify/mock"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type CommandHandlerMock struct {
@@ -20,7 +20,7 @@ type CommandBusMock struct {
 	mock.Mock
 }
 
-func (m *CommandBusMock) Register(key messages.Key, handler commands.Handler) error {
+func (m *CommandBusMock) Register(key messages.Key, handler roles.CommandHandler) error {
 	m.Called(key, handler)
 	return nil
 }

@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
@@ -17,7 +16,7 @@ type UserTestSuite struct {
 func (s *UserTestSuite) TestValidateVerifyErrDoNotMatch() {
 	aggregate := user.Random()
 
-	token := services.Create.ID()
+	token := user.IDWithValidValue()
 
 	err := aggregate.ValidateVerify(token)
 

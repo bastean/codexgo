@@ -4,7 +4,6 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 )
 
 type RepositoryMock struct {
@@ -26,7 +25,7 @@ func (m *RepositoryMock) Delete(id *user.ID) error {
 	return nil
 }
 
-func (m *RepositoryMock) Search(criteria *repository.Criteria) (*user.User, error) {
+func (m *RepositoryMock) Search(criteria *user.Criteria) (*user.User, error) {
 	args := m.Called(criteria)
 	return args.Get(0).(*user.User), nil
 }

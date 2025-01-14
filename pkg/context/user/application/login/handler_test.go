@@ -7,18 +7,17 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type LoginTestSuite struct {
 	suite.Suite
-	SUT        queries.Handler
+	SUT        roles.QueryHandler
 	login      cases.Login
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
@@ -44,13 +43,13 @@ func (s *LoginTestSuite) TestHandle() {
 
 	plain := user.PlainPasswordWithValidValue()
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		Email: aggregate.Email,
 	}
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("IsNotEqual", aggregate.CipherPassword.Value, plain.Value).Return(false)
+	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value, plain.Value)
 
 	response := &login.ResponseAttributes{
 		ID:       aggregate.ID.Value,

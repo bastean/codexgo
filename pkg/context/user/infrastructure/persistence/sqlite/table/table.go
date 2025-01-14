@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/sqlite"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
 
 type User struct {
@@ -104,7 +104,7 @@ func (t *Table) Delete(id *user.ID) error {
 	return nil
 }
 
-func (t *Table) Search(criteria *repository.Criteria) (*user.User, error) {
+func (t *Table) Search(criteria *user.Criteria) (*user.User, error) {
 	var (
 		filter *User
 		index  string
@@ -162,7 +162,7 @@ func (t *Table) Search(criteria *repository.Criteria) (*user.User, error) {
 	return user, nil
 }
 
-func Open(database *sqlite.Database) (repository.Repository, error) {
+func Open(database *sqlite.Database) (role.Repository, error) {
 	if err := database.Session.AutoMigrate(new(User)); err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			Where: "Open",

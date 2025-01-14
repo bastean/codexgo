@@ -10,6 +10,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/module/notification"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 var Service = &struct {
@@ -23,7 +24,7 @@ var Service = &struct {
 
 var (
 	err error
-	Bus event.Bus
+	Bus roles.EventBus
 )
 
 func Up() error {

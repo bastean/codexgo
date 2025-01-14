@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type Confirmation struct {
-	loggers.Logger
+	roles.Logger
 	AppServerURL string
 }
 

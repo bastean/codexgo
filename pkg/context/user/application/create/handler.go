@@ -2,8 +2,8 @@ package create
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
@@ -25,7 +25,7 @@ type CommandMeta struct{}
 
 type Handler struct {
 	cases.Create
-	events.Bus
+	roles.EventBus
 }
 
 func (h *Handler) Handle(command *messages.Message) error {
@@ -54,7 +54,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 	}
 
 	for _, event := range aggregate.Pull() {
-		err = h.Bus.Publish(event)
+		err = h.EventBus.Publish(event)
 
 		if err != nil {
 			return errors.BubbleUp(err, "Handle")

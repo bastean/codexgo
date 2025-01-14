@@ -6,13 +6,13 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type EventBusSuite struct {
 	suite.Suite
-	SUT      events.Bus
+	SUT      roles.EventBus
 	Consumer *EventConsumerMock
 	Event    *messages.Message
 }

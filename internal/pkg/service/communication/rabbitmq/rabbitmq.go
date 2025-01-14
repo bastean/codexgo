@@ -6,8 +6,8 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/loggers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
 )
 
@@ -34,7 +34,7 @@ type (
 	Events   = rabbitmq.Events
 )
 
-func Open(uri string, exchange string, queues rabbitmq.Queues, mapper rabbitmq.Events, logger loggers.Logger, consumeCycle context.Context) (*rabbitmq.RabbitMQ, error) {
+func Open(uri string, exchange string, queues rabbitmq.Queues, mapper rabbitmq.Events, logger roles.Logger, consumeCycle context.Context) (*rabbitmq.RabbitMQ, error) {
 	rmq, err := rabbitmq.Open(
 		uri,
 		exchange,

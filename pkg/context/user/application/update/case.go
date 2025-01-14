@@ -2,18 +2,18 @@ package update
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/hashes"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
 
 type Case struct {
-	repository.Repository
-	hashes.Hasher
+	role.Repository
+	roles.Hasher
 }
 
 func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
-	account, err := c.Repository.Search(&repository.Criteria{
+	account, err := c.Repository.Search(&user.Criteria{
 		ID: aggregate.ID,
 	})
 
@@ -21,7 +21,7 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 		return errors.BubbleUp(err, "Run")
 	}
 
-	err = hashes.IsPasswordInvalid(c.Hasher, account.CipherPassword.Value, aggregate.PlainPassword.Value)
+	err = c.Hasher.Compare(account.CipherPassword.Value, aggregate.PlainPassword.Value)
 
 	if err != nil {
 		return errors.BubbleUp(err, "Run")

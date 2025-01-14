@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/memory"
 )
@@ -19,7 +19,7 @@ func (s *CommandBusTestSuite) SetupTest() {
 	s.CommandBusSuite.Handler = new(communications.CommandHandlerMock)
 
 	s.CommandBusSuite.SUT = &memory.CommandBus{
-		Handlers: make(map[messages.Key]commands.Handler),
+		Handlers: make(map[messages.Key]roles.CommandHandler),
 	}
 }
 

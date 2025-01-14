@@ -7,12 +7,12 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/repository"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
 
 type RepositorySuite struct {
 	suite.Suite
-	SUT repository.Repository
+	SUT role.Repository
 }
 
 func (s *RepositorySuite) TestCreate() {
@@ -20,7 +20,7 @@ func (s *RepositorySuite) TestCreate() {
 
 	s.NoError(s.SUT.Create(expected))
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: expected.ID,
 	}
 
@@ -68,7 +68,7 @@ func (s *RepositorySuite) TestUpdate() {
 
 	s.NoError(s.SUT.Update(expected))
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: expected.ID,
 	}
 
@@ -116,7 +116,7 @@ func (s *RepositorySuite) TestDelete() {
 
 	s.NoError(s.SUT.Delete(aggregate.ID))
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: aggregate.ID,
 	}
 
@@ -144,7 +144,7 @@ func (s *RepositorySuite) TestSearch() {
 
 	s.NoError(s.SUT.Create(expected))
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: expected.ID,
 	}
 
@@ -156,7 +156,7 @@ func (s *RepositorySuite) TestSearch() {
 }
 
 func (s *RepositorySuite) TestSearchErrCriteria() {
-	criteria := new(repository.Criteria)
+	criteria := new(user.Criteria)
 
 	_, err := s.SUT.Search(criteria)
 
@@ -176,7 +176,7 @@ func (s *RepositorySuite) TestSearchErrCriteria() {
 func (s *RepositorySuite) TestSearchErrNotFound() {
 	aggregate := user.Random()
 
-	criteria := &repository.Criteria{
+	criteria := &user.Criteria{
 		ID: aggregate.ID,
 	}
 

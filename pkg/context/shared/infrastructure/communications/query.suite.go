@@ -7,12 +7,12 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
 type QueryBusSuite struct {
 	suite.Suite
-	SUT     queries.Bus
+	SUT     roles.QueryBus
 	Handler *QueryHandlerMock
 }
 

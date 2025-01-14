@@ -13,7 +13,7 @@ func (m *HasherMock) Hash(plain string) (string, error) {
 	return args.Get(0).(string), nil
 }
 
-func (m *HasherMock) IsNotEqual(hashed, plain string) bool {
-	args := m.Called(hashed, plain)
-	return args.Get(0).(bool)
+func (m *HasherMock) Compare(hashed, plain string) error {
+	m.Called(hashed, plain)
+	return nil
 }

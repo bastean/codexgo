@@ -1,14 +1,14 @@
-package events
+package roles
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
-type Consumer interface {
+type EventConsumer interface {
 	On(*messages.Message) error
 }
 
-type Bus interface {
-	Subscribe(messages.Key, Consumer) error
+type EventBus interface {
+	Subscribe(messages.Key, EventConsumer) error
 	Publish(*messages.Message) error
 }
