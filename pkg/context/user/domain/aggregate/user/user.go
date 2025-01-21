@@ -9,7 +9,7 @@ import (
 
 type User struct {
 	*aggregates.Root
-	Verify *ID
+	Verify, Reset *ID
 	*ID
 	*Email
 	*Username
@@ -20,7 +20,7 @@ type User struct {
 
 type Primitive struct {
 	Created, Updated              string
-	Verify                        string
+	Verify, Reset                 string
 	ID, Email, Username, Password string
 	Verified                      bool
 }
@@ -46,11 +46,19 @@ func (u *User) ToPrimitive() *Primitive {
 		primitive.Verify = u.Verify.Value
 	}
 
+	if u.Reset != nil {
+		primitive.Reset = u.Reset.Value
+	}
+
 	return primitive
 }
 
 func (u *User) IsVerified() bool {
 	return u.Verified.Value
+}
+
+func (u *User) HasReset() bool {
+	return u.Reset != nil
 }
 
 func (u *User) ValidateVerify(token *ID) error {
@@ -59,7 +67,21 @@ func (u *User) ValidateVerify(token *ID) error {
 			Where: "ValidateVerify",
 			What:  "Tokens do not match",
 			Why: errors.Meta{
-				"Received": token,
+				"Received": token.Value,
+			},
+		})
+	}
+
+	return nil
+}
+
+func (u *User) ValidateReset(token *ID) error {
+	if u.Reset.Value != token.Value {
+		return errors.New[errors.Failure](&errors.Bubble{
+			Where: "ValidateReset",
+			What:  "Tokens do not match",
+			Why: errors.Meta{
+				"Received": token.Value,
 			},
 		})
 	}
@@ -95,7 +117,7 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 
-	var errCreated, errUpdated, errCipherPassword, errVerify error
+	var errCreated, errUpdated, errCipherPassword, errVerify, errReset error
 
 	aggregate.Created, errCreated = aggregates.NewTime(primitive.Created)
 	aggregate.Updated, errUpdated = aggregates.NewTime(primitive.Updated)
@@ -105,7 +127,11 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 		aggregate.Verify, errVerify = NewID(primitive.Verify)
 	}
 
-	if err := errors.Join(errCreated, errUpdated, errCipherPassword, errVerify); err != nil {
+	if primitive.Reset != "" {
+		aggregate.Reset, errReset = NewID(primitive.Reset)
+	}
+
+	if err := errors.Join(errCreated, errUpdated, errCipherPassword, errVerify, errReset); err != nil {
 		return nil, errors.BubbleUp(err, "FromPrimitive")
 	}
 

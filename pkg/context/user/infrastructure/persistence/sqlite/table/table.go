@@ -12,7 +12,7 @@ import (
 type User struct {
 	*gorm.Model
 	Created, Updated string
-	Verify           string `gorm:"uniqueIndex"`
+	Verify, Reset    string
 	ID               string `gorm:"uniqueIndex"`
 	Email            string `gorm:"uniqueIndex"`
 	Username         string `gorm:"uniqueIndex"`
@@ -37,6 +37,7 @@ func (t *Table) Create(user *user.User) error {
 		Created:  aggregate.Created,
 		Updated:  aggregate.Updated,
 		Verify:   aggregate.Verify,
+		Reset:    aggregate.Reset,
 		ID:       aggregate.ID,
 		Email:    aggregate.Email,
 		Username: aggregate.Username,

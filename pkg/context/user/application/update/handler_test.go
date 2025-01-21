@@ -67,8 +67,6 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	aggregate.CipherPassword = hashed
 
-	s.NoError(err)
-
 	aggregate.Created = registered.Created
 	aggregate.Updated = registered.Updated
 	aggregate.Verified = registered.Verified

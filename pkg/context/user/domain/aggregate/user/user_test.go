@@ -29,7 +29,32 @@ func (s *UserTestSuite) TestValidateVerifyErrDoNotMatch() {
 		Where: "ValidateVerify",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
-			"Received": token,
+			"Received": token.Value,
+		},
+	}}
+
+	s.Equal(expected, actual)
+}
+
+func (s *UserTestSuite) TestValidateResetErrDoNotMatch() {
+	aggregate := user.Random()
+
+	aggregate.Reset = user.IDWithValidValue()
+
+	token := user.IDWithValidValue()
+
+	err := aggregate.ValidateReset(token)
+
+	var actual *errors.Failure
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.Failure{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "ValidateReset",
+		What:  "Tokens do not match",
+		Why: errors.Meta{
+			"Received": token.Value,
 		},
 	}}
 

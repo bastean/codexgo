@@ -10,6 +10,7 @@ func RandomPrimitive() *User {
 		Created:  aggregates.TimeWithValidValue().Value,
 		Updated:  aggregates.TimeWithValidValue().Value,
 		Verify:   IDWithValidValue().Value,
+		Reset:    IDWithValidValue().Value,
 		ID:       IDWithValidValue().Value,
 		Email:    EmailWithValidValue().Value,
 		Username: UsernameWithValidValue().Value,
@@ -44,6 +45,7 @@ func Random() *User {
 
 	user.Created = nil
 	user.Updated = nil
+	user.Reset = nil
 
 	return user
 }

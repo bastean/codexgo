@@ -20,6 +20,12 @@ type (
 	Verify interface {
 		Run(*user.ID, *user.ID) error
 	}
+	Forgot interface {
+		Run(*user.ID, *user.Email) (*user.User, error)
+	}
+	Reset interface {
+		Run(*user.ID, *user.ID, *user.PlainPassword) error
+	}
 	Login interface {
 		Run(*user.Email, *user.Username, *user.PlainPassword) (*user.User, error)
 	}

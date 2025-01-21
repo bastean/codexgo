@@ -8,4 +8,7 @@ type (
 	Confirmation interface {
 		Run(*events.UserCreatedSucceededAttributes) error
 	}
+	Password interface {
+		Run(*events.UserResetQueuedAttributes) error
+	}
 )
