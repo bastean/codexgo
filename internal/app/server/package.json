@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "fomantic-ui": "2.9.4-beta.95",
+    "fomantic-ui": "2.9.4-beta.99",
     "jquery": "3.7.1",
     "lodash": "4.17.21"
   }
