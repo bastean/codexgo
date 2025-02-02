@@ -7,14 +7,15 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/command"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/id"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 )
 
 func Create(c *gin.Context) {
-	attributes := new(user.CreateCommandAttributes)
+	attributes := new(create.CommandAttributes)
 
 	err := c.BindJSON(attributes)
 
@@ -23,13 +24,13 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	attributes.Verify = id.Generate()
-	attributes.ID = id.Generate()
+	attributes.Verify = services.GenerateID()
+	attributes.ID = services.GenerateID()
 
-	err = command.Bus.Dispatch(command.New(
-		user.CreateCommandKey,
+	err = command.Bus.Dispatch(messages.New(
+		create.CommandKey,
 		attributes,
-		new(user.CreateCommandMeta),
+		new(create.CommandMeta),
 	))
 
 	if err != nil {

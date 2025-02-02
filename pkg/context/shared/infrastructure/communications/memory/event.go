@@ -2,16 +2,13 @@ package memory
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
-type (
-	EventMapper = map[messages.Key][]roles.EventConsumer
-)
-
 type EventBus struct {
-	Consumers EventMapper
+	Consumers events.Mapper
 }
 
 func (b *EventBus) Subscribe(key messages.Key, consumer roles.EventConsumer) error {
@@ -41,24 +38,4 @@ func (b *EventBus) Publish(event *messages.Message) error {
 	}
 
 	return nil
-}
-
-func NewEventBus(mapper EventMapper) (*EventBus, error) {
-	bus := &EventBus{
-		Consumers: make(EventMapper, len(mapper)),
-	}
-
-	var err error
-
-	for key, consumers := range mapper {
-		for _, consumer := range consumers {
-			err = bus.Subscribe(key, consumer)
-
-			if err != nil {
-				return nil, errors.BubbleUp(err, "NewEventBus")
-			}
-		}
-	}
-
-	return bus, nil
 }

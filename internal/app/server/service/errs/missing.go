@@ -3,7 +3,7 @@ package errs
 import (
 	"fmt"
 
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 func MissingKey(what, where string) error {

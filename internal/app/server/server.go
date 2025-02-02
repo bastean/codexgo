@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/router"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/log"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 var Server = &struct {

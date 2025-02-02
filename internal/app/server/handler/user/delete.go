@@ -10,9 +10,10 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/command"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
 )
 
 func Delete(c *gin.Context) {
@@ -23,7 +24,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	attributes := new(user.DeleteCommandAttributes)
+	attributes := new(delete.CommandAttributes)
 
 	err := c.BindJSON(attributes)
 
@@ -34,10 +35,10 @@ func Delete(c *gin.Context) {
 
 	attributes.ID = format.ToString(id)
 
-	err = command.Bus.Dispatch(command.New(
-		user.DeleteCommandKey,
+	err = command.Bus.Dispatch(messages.New(
+		delete.CommandKey,
 		attributes,
-		new(user.DeleteCommandMeta),
+		new(delete.CommandMeta),
 	))
 
 	if err != nil {

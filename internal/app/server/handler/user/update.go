@@ -9,9 +9,10 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/command"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 )
 
 func Update(c *gin.Context) {
@@ -22,7 +23,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	attributes := new(user.UpdateCommandAttributes)
+	attributes := new(update.CommandAttributes)
 
 	err := c.BindJSON(attributes)
 
@@ -33,10 +34,10 @@ func Update(c *gin.Context) {
 
 	attributes.ID = format.ToString(id)
 
-	err = command.Bus.Dispatch(command.New(
-		user.UpdateCommandKey,
+	err = command.Bus.Dispatch(messages.New(
+		update.CommandKey,
 		attributes,
-		new(user.UpdateCommandMeta),
+		new(update.CommandMeta),
 	))
 
 	if err != nil {

@@ -5,15 +5,12 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
-type (
-	QueryMapper = map[messages.Key]roles.QueryHandler
-)
-
 type QueryBus struct {
-	Handlers QueryMapper
+	Handlers queries.Mapper
 }
 
 func (b *QueryBus) Register(key messages.Key, handler roles.QueryHandler) error {
@@ -54,22 +51,4 @@ func (b *QueryBus) Ask(query *messages.Message) (*messages.Message, error) {
 	}
 
 	return response, nil
-}
-
-func NewQueryBus(mapper QueryMapper) (*QueryBus, error) {
-	bus := &QueryBus{
-		Handlers: make(QueryMapper, len(mapper)),
-	}
-
-	var err error
-
-	for key, handler := range mapper {
-		err = bus.Register(key, handler)
-
-		if err != nil {
-			return nil, errors.BubbleUp(err, "NewQueryBus")
-		}
-	}
-
-	return bus, nil
 }

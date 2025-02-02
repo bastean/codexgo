@@ -7,9 +7,10 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/query"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/query"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 )
 
 func Dashboard(c *gin.Context) {
@@ -20,14 +21,14 @@ func Dashboard(c *gin.Context) {
 		return
 	}
 
-	attributes := new(user.ReadQueryAttributes)
+	attributes := new(read.QueryAttributes)
 
 	attributes.ID = format.ToString(id)
 
-	response, err := query.Bus.Ask(query.New(
-		user.ReadQueryKey,
+	response, err := query.Bus.Ask(messages.New(
+		read.QueryKey,
 		attributes,
-		new(user.ReadQueryMeta),
+		new(read.QueryMeta),
 	))
 
 	if err != nil {
@@ -35,7 +36,7 @@ func Dashboard(c *gin.Context) {
 		return
 	}
 
-	found, ok := response.Attributes.(*user.ReadResponseAttributes)
+	found, ok := response.Attributes.(*read.ResponseAttributes)
 
 	if !ok {
 		errs.AbortByErrWithRedirect(c, errs.Assertion("Dashboard"), "/")

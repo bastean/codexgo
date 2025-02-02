@@ -39,7 +39,7 @@ func (s *RabbitMQTestSuite) SetupTest() {
 		Status:  "succeeded",
 	})
 
-	queues := rabbitmq.Queues{
+	queues := rabbitmq.QueueMapper{
 		routingKey: &rabbitmq.Recipient{
 			Name:       queue,
 			BindingKey: messages.Key("#.event.#.test.succeeded"),
@@ -57,10 +57,15 @@ func (s *RabbitMQTestSuite) SetupTest() {
 	s.EventBusSuite.SUT, err = rabbitmq.Open(
 		os.Getenv("CODEXGO_BROKER_RABBITMQ_URI"),
 		os.Getenv("CODEXGO_BROKER_RABBITMQ_NAME"),
-		queues,
 		logger,
 		consumeCycle,
 	)
+
+	if err != nil {
+		errors.Panic(err.Error(), "SetupTest")
+	}
+
+	err = rabbitmq.AddQueueMapper(s.EventBusSuite.SUT.(*rabbitmq.RabbitMQ), queues)
 
 	if err != nil {
 		errors.Panic(err.Error(), "SetupTest")

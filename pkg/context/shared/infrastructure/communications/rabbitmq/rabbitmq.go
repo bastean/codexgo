@@ -15,14 +15,14 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
+type Recipient struct {
+	Name             messages.Recipient
+	BindingKey       messages.Key
+	Attributes, Meta reflect.Type
+}
+
 type (
-	Recipient struct {
-		Name             messages.Recipient
-		BindingKey       messages.Key
-		Attributes, Meta reflect.Type
-	}
-	Queues = map[messages.Key]*Recipient
-	Events = map[messages.Key][]roles.EventConsumer
+	QueueMapper map[messages.Key]*Recipient
 )
 
 type RabbitMQ struct {
@@ -31,7 +31,7 @@ type RabbitMQ struct {
 	roles.Logger
 	ConsumeCycle context.Context
 	exchange     string
-	queues       Queues
+	queues       QueueMapper
 }
 
 func (r *RabbitMQ) AddExchange(name string) error {
@@ -307,7 +307,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 	return nil
 }
 
-func Open(uri string, exchange string, queues Queues, logger roles.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
+func Open(uri string, exchange string, logger roles.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {
@@ -333,27 +333,13 @@ func Open(uri string, exchange string, queues Queues, logger roles.Logger, consu
 		Channel:      channel,
 		Logger:       logger,
 		ConsumeCycle: consumeCycle,
-		queues:       make(Queues),
+		queues:       make(QueueMapper),
 	}
 
 	err = rmq.AddExchange(exchange)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err, "Open")
-	}
-
-	for routingKey, queue := range queues {
-		err = rmq.AddQueue(queue.Name)
-
-		if err != nil {
-			return nil, errors.BubbleUp(err, "Open")
-		}
-
-		err = rmq.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
-
-		if err != nil {
-			return nil, errors.BubbleUp(err, "Open")
-		}
 	}
 
 	return rmq, nil
@@ -378,6 +364,26 @@ func Close(session *RabbitMQ) error {
 			What:  "Failure to close RabbitMQ connection",
 			Who:   err,
 		})
+	}
+
+	return nil
+}
+
+func AddQueueMapper(rmq *RabbitMQ, queues QueueMapper) error {
+	var err error
+
+	for routingKey, queue := range queues {
+		err = rmq.AddQueue(queue.Name)
+
+		if err != nil {
+			return errors.BubbleUp(err, "AddQueueMapper")
+		}
+
+		err = rmq.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
+
+		if err != nil {
+			return errors.BubbleUp(err, "AddQueueMapper")
+		}
 	}
 
 	return nil

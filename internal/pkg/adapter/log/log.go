@@ -55,10 +55,6 @@ func Service(service string) string {
 	return fmt.Sprintf("Service:%s", service)
 }
 
-func Module(module string) string {
-	return fmt.Sprintf("Module:%s", module)
-}
-
 func Server(app string) string {
 	return fmt.Sprintf("Server:%s", app)
 }

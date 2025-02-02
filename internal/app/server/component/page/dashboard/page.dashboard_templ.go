@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"github.com/bastean/codexgo/v4/internal/app/server/component/layout"
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 )
 
 func PageInit() templ.ComponentScript {
@@ -59,7 +59,7 @@ func Logout() templ.ComponentScript {
 	}
 }
 
-func Page(attributes *user.ReadResponseAttributes) templ.Component {
+func Page(attributes *read.ResponseAttributes) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {

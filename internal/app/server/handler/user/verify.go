@@ -7,9 +7,10 @@ import (
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/command"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 )
 
 func Verify(c *gin.Context) {
@@ -27,15 +28,15 @@ func Verify(c *gin.Context) {
 		return
 	}
 
-	attributes := &user.VerifyCommandAttributes{
+	attributes := &verify.CommandAttributes{
 		Verify: token,
 		ID:     id,
 	}
 
-	err := command.Bus.Dispatch(command.New(
-		user.VerifyCommandKey,
+	err := command.Bus.Dispatch(messages.New(
+		verify.CommandKey,
 		attributes,
-		new(user.VerifyCommandMeta),
+		new(verify.CommandMeta),
 	))
 
 	if err != nil {

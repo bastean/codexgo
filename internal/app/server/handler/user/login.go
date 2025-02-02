@@ -10,14 +10,16 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication/jwt"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/communication/query"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/module/user"
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/query"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/authentications/jwt"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 )
 
 func Login(c *gin.Context) {
-	attributes := new(user.LoginQueryAttributes)
+	attributes := new(login.QueryAttributes)
 
 	err := c.BindJSON(attributes)
 
@@ -26,10 +28,10 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	response, err := query.Bus.Ask(query.New(
-		user.LoginQueryKey,
+	response, err := query.Bus.Ask(messages.New(
+		login.QueryKey,
 		attributes,
-		new(user.LoginQueryMeta),
+		new(login.QueryMeta),
 	))
 
 	if err != nil {
@@ -37,14 +39,14 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	found, ok := response.Attributes.(*user.LoginResponseAttributes)
+	found, ok := response.Attributes.(*login.ResponseAttributes)
 
 	if !ok {
 		errs.AbortByErr(c, errs.Assertion("Login"))
 		return
 	}
 
-	token, err := jwt.Generate(jwt.Payload{
+	token, err := authentication.JWT.Generate(jwt.Payload{
 		key.Exp:    time.Now().Add((24 * time.Hour) * 7).Unix(),
 		key.UserID: found.ID,
 	})

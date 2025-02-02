@@ -17,6 +17,6 @@ func Database() {
 	DatabaseSQLiteDSN = os.Getenv(DATABASE_SQLITE_DSN)
 }
 
-func HasDatabase() bool {
+func HasMongoDB() bool {
 	return DatabaseMongoDBURI != ""
 }

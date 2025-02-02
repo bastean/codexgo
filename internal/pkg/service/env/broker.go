@@ -13,6 +13,6 @@ func Broker() {
 	BrokerRabbitMQName = os.Getenv(BROKER_RABBITMQ_NAME)
 }
 
-func HasBroker() bool {
+func HasRabbitMQ() bool {
 	return BrokerRabbitMQURI != ""
 }

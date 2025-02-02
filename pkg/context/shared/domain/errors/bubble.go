@@ -67,3 +67,7 @@ func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {
 func BubbleUp(who error, where string) error {
 	return fmt.Errorf("(%s): [%w]", where, who)
 }
+
+func IsNot(err error, target error) bool {
+	return err != nil && !Is(err, target)
+}

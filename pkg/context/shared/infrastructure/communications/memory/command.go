@@ -3,17 +3,14 @@ package memory
 import (
 	"fmt"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 )
 
-type (
-	CommandMapper = map[messages.Key]roles.CommandHandler
-)
-
 type CommandBus struct {
-	Handlers CommandMapper
+	Handlers commands.Mapper
 }
 
 func (b *CommandBus) Register(key messages.Key, handler roles.CommandHandler) error {
@@ -54,22 +51,4 @@ func (b *CommandBus) Dispatch(command *messages.Message) error {
 	}
 
 	return nil
-}
-
-func NewCommandBus(mapper CommandMapper) (*CommandBus, error) {
-	bus := &CommandBus{
-		Handlers: make(CommandMapper, len(mapper)),
-	}
-
-	var err error
-
-	for key, handler := range mapper {
-		err = bus.Register(key, handler)
-
-		if err != nil {
-			return nil, errors.BubbleUp(err, "NewCommandBus")
-		}
-	}
-
-	return bus, nil
 }

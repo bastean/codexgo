@@ -3,11 +3,11 @@ package persistence
 import (
 	"context"
 
+	"github.com/bastean/codexgo/v4/internal/pkg/adapter/log"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/persistence/mongodb"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/persistence/sqlite"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/record/log"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/sqlite"
 )
 
 var Service = &struct {
@@ -18,14 +18,14 @@ var Service = &struct {
 }
 
 var (
-	err     error
 	MongoDB *mongodb.Database
 	SQLite  *sqlite.Database
+	err     error
 )
 
 func Up() error {
 	switch {
-	case env.HasDatabase():
+	case env.HasMongoDB():
 		log.EstablishingConnectionWith(Service.MongoDB)
 
 		MongoDB, err = mongodb.Open(
@@ -57,7 +57,7 @@ func Up() error {
 
 func Down(ctx context.Context) error {
 	switch {
-	case env.HasDatabase():
+	case env.HasMongoDB():
 		log.ClosingConnectionWith(Service.MongoDB)
 
 		if err = mongodb.Close(ctx, MongoDB); err != nil {

@@ -3,7 +3,7 @@ package env
 import (
 	"os"
 
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type (
@@ -68,10 +68,10 @@ func Verify() error {
 	errs := map[key]what{}
 
 	for key, isRequired := range ENV {
-		value, exists := os.LookupEnv(key)
+		value, ok := os.LookupEnv(key)
 
 		switch {
-		case isRequired && !exists:
+		case isRequired && !ok:
 			errs[key] = "Missing"
 		case isRequired && value == "":
 			errs[key] = "Empty"

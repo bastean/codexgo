@@ -9,8 +9,8 @@ import (
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/format"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/key"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication/jwt"
-	"github.com/bastean/codexgo/v4/internal/pkg/service/errors"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 func Authentication(c *gin.Context) {
@@ -25,7 +25,7 @@ func Authentication(c *gin.Context) {
 
 	signature := strings.Split(format.ToString(token), " ")[1]
 
-	claims, err := jwt.Validate(signature)
+	claims, err := authentication.JWT.Validate(signature)
 
 	if err != nil {
 		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
