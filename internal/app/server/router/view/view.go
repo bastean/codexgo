@@ -17,6 +17,8 @@ func (v *View) Public() {
 	home := public.Group("/")
 
 	home.GET("/", page.Home)
+
+	home.GET("/reset", page.Home)
 }
 
 func (v *View) Private() {

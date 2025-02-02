@@ -13,7 +13,7 @@ type Password struct {
 }
 
 func (p *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
-	link := fmt.Sprintf("Hi %s, please reset your password through this link: %s/v4/account/reset?token=%s&id=%s", attributes.Username, p.AppServerURL, attributes.Reset, attributes.ID)
+	link := fmt.Sprintf("Hi %s, please reset your password through this link: %s/reset?token=%s&id=%s", attributes.Username, p.AppServerURL, attributes.Reset, attributes.ID)
 
 	p.Logger.Info(link)
 

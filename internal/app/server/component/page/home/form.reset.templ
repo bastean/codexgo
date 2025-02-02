@@ -1,10 +1,10 @@
-package dashboard
+package home
 
 const (
-	DeleteFormTagID = "delete"
+	ResetFormTagID = "reset"
 )
 
-script DeleteFormInit(formTagID string) {
+script ResetFormInit(formTagID, loginTabTagID string) {
     $(`#${formTagID}`)
         .form({
             on: "blur",
@@ -14,10 +14,6 @@ script DeleteFormInit(formTagID string) {
             fields: {
                 Password: {
                     rules: [
-                        {
-                            type: "notEmpty",
-                            prompt: "{name} is required to delete the account"
-                        },
                         {
                             type: "size[8..64]"
                         },
@@ -37,8 +33,19 @@ script DeleteFormInit(formTagID string) {
             }
         })
         .api({
-            action: "user_delete", 
-            method: "DELETE",
+            action: "user_reset", 
+            method: "POST",
+            beforeSend: function(settings) {
+                const params = new URLSearchParams(window.location.search);
+
+                settings.data.Reset = params.get("token");
+
+                settings.data.ID = params.get("id");
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -46,9 +53,9 @@ script DeleteFormInit(formTagID string) {
                     showProgress: "top"
                 });
 
-                 _.delay(function() {
-                    Storage.Clear();
-                    window.location.replace("/");
+                _.delay(function() {
+                    $.tab("change tab", loginTabTagID);
+                    $(".ui.mini.modal").modal("hide");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
@@ -62,15 +69,11 @@ script DeleteFormInit(formTagID string) {
     ;
 }
 
-script DeleteFormShow() {
-    $(".ui.mini.modal").modal("show");
-}
-
-templ DeleteForm() {
+templ ResetForm() {
 	<div class="ui mini inverted modal">
-		<div class="header">Delete your account</div>
+		<div class="header">Reset your password</div>
 		<div class="content">
-			<form id={ DeleteFormTagID } class="ui inverted form">
+			<form id={ ResetFormTagID } class="ui inverted form">
 				<div class="required field">
 					<label>Password</label>
 					<div class="ui inverted transparent left icon input">
@@ -86,9 +89,13 @@ templ DeleteForm() {
 					</div>
 				</div>
 				<div class="ui divider"></div>
-				<button class="ui fluid positive submit button">Approve</button>
+				<div class="ui middle aligned center aligned grid">
+					<div class="column">
+						<button class="ui fluid primary submit button">Reset</button>
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>
-	@DeleteFormInit(DeleteFormTagID)
+	@ResetFormInit(ResetFormTagID, LoginTabTagID)
 }

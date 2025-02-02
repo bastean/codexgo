@@ -8,6 +8,7 @@ import (
 const (
 	RegisterTabTagID = "tab-register"
 	LoginTabTagID    = "tab-login"
+	ForgotTabTagID   = "tab-forgot"
 )
 
 script PageInit() {
@@ -27,6 +28,12 @@ script PageInit() {
             value: true
         })
     ;
+
+   if (_.includes(window.location.pathname, "/reset")) {
+        $(".ui.mini.modal")
+            .modal("show")
+        ;
+    }
 }
 
 script ShowTab(tabTagID string) {
@@ -48,6 +55,7 @@ templ Page() {
 					<div class="right menu">
 						<a class="blue item" data-tab={ LoginTabTagID }>Sign in</a>
 						<a class="active blue item" data-tab={ RegisterTabTagID }>Sign up</a>
+						<a class="teal item" data-tab={ ForgotTabTagID }>Forgot Password?</a>
 					</div>
 				</div>
 			</div>
@@ -59,6 +67,10 @@ templ Page() {
 				<div class="ui tab basic segment" data-tab={ LoginTabTagID }>
 					@LoginForm()
 				</div>
+				<div class="ui tab basic segment" data-tab={ ForgotTabTagID }>
+					@ForgotForm()
+				</div>
+				@ResetForm()
 			</div>
 			<div class="ui looping pulsating transition bottom fixed cookie nag">
 				<div class="title">

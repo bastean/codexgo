@@ -34,7 +34,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 		})
 	}
 
-	link := fmt.Sprintf("%s/v4/account/reset?token=%s&id=%s", c.AppServerURL, attributes.Reset, attributes.ID)
+	link := fmt.Sprintf("%s/reset?token=%s&id=%s", c.AppServerURL, attributes.Reset, attributes.ID)
 
 	PasswordTemplate(attributes.Username, link).Render(context.Background(), &message)
 

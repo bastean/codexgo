@@ -25,7 +25,7 @@ func (s *PasswordTestSuite) SetupTest() {
 
 	messages.RandomizeAttributes(s.OfflineSuite.Attributes)
 
-	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please reset your password through this link: %s/v4/account/reset?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.Reset, s.OfflineSuite.Attributes.ID)
+	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please reset your password through this link: %s/reset?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.Reset, s.OfflineSuite.Attributes.ID)
 
 	s.OfflineSuite.Logger = new(records.LoggerMock)
 

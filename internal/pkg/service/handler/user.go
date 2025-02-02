@@ -11,8 +11,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/delete"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
+	"github.com/bastean/codexgo/v4/pkg/context/user/application/reset"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
@@ -29,6 +31,8 @@ var (
 	UserUpdate *update.Handler
 	UserDelete *delete.Handler
 	UserVerify *verify.Handler
+	UserForgot *forgot.Handler
+	UserReset  *reset.Handler
 )
 
 var (
@@ -65,12 +69,6 @@ func InitUser() error {
 		EventBus: event.Bus,
 	}
 
-	UserRead = &read.Handler{
-		Read: &read.Case{
-			Repository: repository,
-		},
-	}
-
 	UserUpdate = &update.Handler{
 		Update: &update.Case{
 			Repository: repository,
@@ -91,6 +89,26 @@ func InitUser() error {
 		},
 	}
 
+	UserForgot = &forgot.Handler{
+		Forgot: &forgot.Case{
+			Repository: repository,
+		},
+		EventBus: event.Bus,
+	}
+
+	UserReset = &reset.Handler{
+		Reset: &reset.Case{
+			Repository: repository,
+			Hasher:     cipher.Hasher,
+		},
+	}
+
+	UserRead = &read.Handler{
+		Read: &read.Case{
+			Repository: repository,
+		},
+	}
+
 	UserLogin = &login.Handler{
 		Login: &login.Case{
 			Repository: repository,
@@ -103,6 +121,8 @@ func InitUser() error {
 		update.CommandKey: UserUpdate,
 		delete.CommandKey: UserDelete,
 		verify.CommandKey: UserVerify,
+		forgot.CommandKey: UserForgot,
+		reset.CommandKey:  UserReset,
 	})
 
 	if err != nil {

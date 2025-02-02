@@ -6,6 +6,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/application/confirmation"
+	"github.com/bastean/codexgo/v4/pkg/context/notification/application/password"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/role"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
@@ -15,21 +16,33 @@ import (
 
 var (
 	NotificationConfirmation *confirmation.Consumer
+	NotificationPassword     *password.Consumer
 )
 
 func InitNotification() error {
 	var (
-		transfer role.Transfer[*events.UserCreatedSucceededAttributes]
+		transferConfirmation role.Transfer[*events.UserCreatedSucceededAttributes]
+		transferPassword     role.Transfer[*events.UserResetQueuedAttributes]
 	)
 
 	switch {
 	case env.HasSMTP():
-		transfer = &mail.Confirmation{
+		transferConfirmation = &mail.Confirmation{
+			SMTP:         transport.SMTP,
+			AppServerURL: env.ServerGinURL,
+		}
+
+		transferPassword = &mail.Password{
 			SMTP:         transport.SMTP,
 			AppServerURL: env.ServerGinURL,
 		}
 	default:
-		transfer = &terminal.Confirmation{
+		transferConfirmation = &terminal.Confirmation{
+			Logger:       log.Log,
+			AppServerURL: env.ServerGinURL,
+		}
+
+		transferPassword = &terminal.Password{
 			Logger:       log.Log,
 			AppServerURL: env.ServerGinURL,
 		}
@@ -37,13 +50,22 @@ func InitNotification() error {
 
 	NotificationConfirmation = &confirmation.Consumer{
 		Confirmation: &confirmation.Case{
-			Transfer: transfer,
+			Transfer: transferConfirmation,
+		},
+	}
+
+	NotificationPassword = &password.Consumer{
+		Password: &password.Case{
+			Transfer: transferPassword,
 		},
 	}
 
 	err = events.AddEventMapper(event.Bus, events.Mapper{
 		events.UserCreatedSucceededKey: {
 			NotificationConfirmation,
+		},
+		events.UserResetQueuedKey: {
+			NotificationPassword,
 		},
 	})
 

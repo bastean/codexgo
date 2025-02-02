@@ -1,0 +1,66 @@
+package home
+
+const (
+	ForgotFormTagID = "forgot"
+)
+
+script ForgotFormInit(formTagID string) {
+    $(`#${formTagID}`)
+        .form({
+            on: "blur",
+            inline: true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+            fields: {
+                Email: {
+                    rules: [
+                        {
+                            type: "email"
+                        }
+                    ]
+                }
+            }
+        })
+        .api({
+            action: "user_forgot", 
+            method: "POST",
+            onSuccess: function(response, element, xhr) {
+                $.toast({
+                    class: "success",
+                    message: response.Message,
+                    showProgress: "top"
+                });
+
+                _.delay(function() {
+                    $(`#${formTagID}`).form("reset");
+                }, 1000);
+            },
+            onFailure: function(response, element, xhr) {
+                $.toast({
+                    class: "error",
+                    message: response.Message,
+                    showProgress: "top"
+                });
+            }
+        })
+    ;
+}
+
+templ ForgotForm() {
+	<form id={ ForgotFormTagID } class="ui inverted form">
+		<h1 class="ui dividing inverted header">
+			Recover your account
+			<div class="sub header">You will receive a link to reset your password</div>
+		</h1>
+		<div class="required field">
+			<label>Email</label>
+			<div class="ui inverted transparent left icon input">
+				<i class="envelope icon"></i>
+				<input type="text" placeholder="Email" name="Email"/>
+			</div>
+		</div>
+		<div class="ui divider"></div>
+		<button class="ui fluid primary submit button">Send</button>
+	</form>
+	@ForgotFormInit(ForgotFormTagID)
+}

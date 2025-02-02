@@ -20,6 +20,9 @@ func (api *API) Public() {
 	account.POST("/", user.Login)
 
 	account.GET("/verify", user.Verify)
+
+	account.POST("/forgot", user.Forgot)
+	account.POST("/reset", user.Reset)
 }
 
 func (api *API) Private() {
