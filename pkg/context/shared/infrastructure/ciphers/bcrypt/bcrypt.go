@@ -10,6 +10,7 @@ type Bcrypt struct{}
 
 func (*Bcrypt) Hash(plain string) (string, error) {
 	salt := 10
+
 	hashed, err := bcrypt.GenerateFromPassword([]byte(plain), salt)
 
 	if err != nil {

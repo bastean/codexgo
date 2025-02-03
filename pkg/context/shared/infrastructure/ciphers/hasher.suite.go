@@ -24,9 +24,21 @@ func (s *HasherSuite) TestHash() {
 }
 
 func (s *HasherSuite) TestCompare() {
-	hashed := services.Create.LoremIpsumWord()
-
 	plain := services.Create.LoremIpsumWord()
+
+	hashed, err := s.SUT.Hash(plain)
+
+	s.NoError(err)
+
+	err = s.SUT.Compare(hashed, plain)
+
+	s.NoError(err)
+}
+
+func (s *HasherSuite) TestCompareErrDoNotMatch() {
+	plain := services.Create.LoremIpsumWord()
+
+	hashed := services.Create.LoremIpsumWord()
 
 	err := s.SUT.Compare(hashed, plain)
 
