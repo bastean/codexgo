@@ -12,7 +12,7 @@ var QueryKey = messages.NewKey(&messages.KeyComponents{
 	Version: "1",
 	Type:    messages.Type.Query,
 	Entity:  "user",
-	Query:   "logging",
+	Query:   "login",
 	Status:  messages.Status.Queued,
 })
 
@@ -21,7 +21,7 @@ var ResponseKey = messages.NewKey(&messages.KeyComponents{
 	Version:  "1",
 	Type:     messages.Type.Response,
 	Entity:   "user",
-	Response: "logging",
+	Response: "login",
 	Status:   messages.Status.Done,
 })
 

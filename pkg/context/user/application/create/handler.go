@@ -13,7 +13,7 @@ var CommandKey = messages.NewKey(&messages.KeyComponents{
 	Version: "1",
 	Type:    messages.Type.Command,
 	Entity:  "user",
-	Command: "creating",
+	Command: "create",
 	Status:  messages.Status.Queued,
 })
 

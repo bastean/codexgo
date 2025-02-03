@@ -34,7 +34,7 @@ func Reset(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, &reply.JSON{
+	c.JSON(http.StatusOK, &reply.JSON{
 		Success: true,
 		Message: "Password updated",
 	})

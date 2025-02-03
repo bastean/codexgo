@@ -37,7 +37,7 @@ func Forgot(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, &reply.JSON{
+	c.JSON(http.StatusOK, &reply.JSON{
 		Success: true,
 		Message: "Link sent. Please check your inbox",
 	})
