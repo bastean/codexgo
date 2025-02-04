@@ -4,6 +4,6 @@ import (
 	"fmt"
 )
 
-func ToString(value any) string {
+func String(value any) string {
 	return fmt.Sprintf("%v", value)
 }

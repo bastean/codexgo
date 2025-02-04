@@ -32,7 +32,7 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	attributes.ID = format.ToString(id)
+	attributes.ID = format.String(id)
 
 	err = command.Bus.Dispatch(messages.New(
 		update.CommandKey,

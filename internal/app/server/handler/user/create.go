@@ -25,6 +25,7 @@ func Create(c *gin.Context) {
 	}
 
 	attributes.Verify = services.GenerateID()
+
 	attributes.ID = services.GenerateID()
 
 	err = command.Bus.Dispatch(messages.New(

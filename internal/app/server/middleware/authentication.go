@@ -23,7 +23,7 @@ func Authentication(c *gin.Context) {
 		return
 	}
 
-	signature := strings.Split(format.ToString(token), " ")[1]
+	signature := strings.Split(format.String(token), " ")[1]
 
 	claims, err := authentication.JWT.Validate(signature)
 

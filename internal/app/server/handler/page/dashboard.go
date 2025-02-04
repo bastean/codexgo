@@ -23,7 +23,7 @@ func Dashboard(c *gin.Context) {
 
 	attributes := new(read.QueryAttributes)
 
-	attributes.ID = format.ToString(id)
+	attributes.ID = format.String(id)
 
 	response, err := query.Bus.Ask(messages.New(
 		read.QueryKey,
