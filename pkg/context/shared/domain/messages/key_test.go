@@ -31,7 +31,7 @@ func (s *KeyTestSuite) TestWithValidValue() {
 }
 
 func (s *KeyTestSuite) TestWithInvalidValue() {
-	s.Panics(func() { messages.NewKey(&messages.KeyComponents{}) })
+	s.Panics(func() { messages.NewKey(new(messages.KeyComponents)) })
 }
 
 func TestUnitKeySuite(t *testing.T) {

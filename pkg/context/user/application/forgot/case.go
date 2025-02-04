@@ -41,7 +41,7 @@ func (c *Case) Run(reset *user.ID, email *user.Email) (*user.User, error) {
 			Email:    aggregate.Email.Value,
 			Username: aggregate.Username.Value,
 		},
-		&events.UserResetQueuedMeta{},
+		new(events.UserResetQueuedMeta),
 	))
 
 	return aggregate, nil

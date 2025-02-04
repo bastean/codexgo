@@ -73,7 +73,7 @@ func (s *ForgotTestSuite) TestHandle() {
 			Email:    registered.Email.Value,
 			Username: registered.Username.Value,
 		},
-		&events.UserResetQueuedMeta{},
+		new(events.UserResetQueuedMeta),
 	))
 
 	for _, event := range registered.Events {

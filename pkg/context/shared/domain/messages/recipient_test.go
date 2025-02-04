@@ -29,7 +29,7 @@ func (s *RecipientTestSuite) TestWithValidValue() {
 }
 
 func (s *RecipientTestSuite) TestWithInvalidValue() {
-	s.Panics(func() { messages.NewRecipient(&messages.RecipientComponents{}) })
+	s.Panics(func() { messages.NewRecipient(new(messages.RecipientComponents)) })
 }
 
 func TestUnitRecipientSuite(t *testing.T) {

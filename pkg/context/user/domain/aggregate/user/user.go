@@ -177,7 +177,7 @@ func New(raw *Primitive) (*User, error) {
 			Email:    aggregate.Email.Value,
 			Username: aggregate.Username.Value,
 		},
-		&events.UserCreatedSucceededMeta{},
+		new(events.UserCreatedSucceededMeta),
 	))
 
 	return aggregate, nil
