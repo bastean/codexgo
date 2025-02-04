@@ -43,7 +43,7 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Submit",
-			What:  "Failure to send an account confirmation mail",
+			What:  "Failure to send account confirmation mail",
 			Why: errors.Meta{
 				"Verify ID":       attributes.Verify,
 				"User ID":         attributes.ID,

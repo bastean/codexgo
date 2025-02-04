@@ -43,7 +43,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			Where: "Submit",
-			What:  "Failure to send an account password mail",
+			What:  "Failure to send password reset mail",
 			Why: errors.Meta{
 				"Reset ID":        attributes.Reset,
 				"User ID":         attributes.ID,
