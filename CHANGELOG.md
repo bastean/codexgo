@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.11.0 (2025-02-05)
+
+- docs(readme): add password reset mail to showcase ([8680436](https://github.com/bastean/codexgo/commit/8680436))
+- refactor(context): rename message key ([bbff45b](https://github.com/bastean/codexgo/commit/bbff45b))
+- refactor(context): segregate role interfaces ([9abfea6](https://github.com/bastean/codexgo/commit/9abfea6))
+- refactor(context): use new on empty struct literals ([c6e30c6](https://github.com/bastean/codexgo/commit/c6e30c6))
+- refactor(internal): change initialization of services ([ea88c84](https://github.com/bastean/codexgo/commit/ea88c84))
+- refactor(presentation): change account password reset ui ([dbb89d5](https://github.com/bastean/codexgo/commit/dbb89d5))
+- refactor(server): rename string formatter ([b864943](https://github.com/bastean/codexgo/commit/b864943))
+- fix(infrastructure): change mail transfer adapter errors ([f6e3450](https://github.com/bastean/codexgo/commit/f6e3450))
+- test(cipher): add happy path test to compare ([310ffff](https://github.com/bastean/codexgo/commit/310ffff))
+- feat(context): add user account password reset logic ([95d07db](https://github.com/bastean/codexgo/commit/95d07db))
+- feat(presentation): consume user account password reset logic ([f3006b8](https://github.com/bastean/codexgo/commit/f3006b8))
+- chore(deps): upgrade ([531c138](https://github.com/bastean/codexgo/commit/531c138))
+
 ## 4.10.0 (2025-01-13)
 
 - chore(deps): upgrade ([d89072b](https://github.com/bastean/codexgo/commit/d89072b))
