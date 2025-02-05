@@ -52,6 +52,8 @@
 
 <img src="assets/readme/mail-confirm-account.png" />
 
+<img src="assets/readme/mail-reset-password.png" />
+
 </div>
 
 ## CLI
@@ -380,7 +382,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 3. Open Command Palette
 
-   - Ctrl+Shift+P
+   - F1
 
 4. Run
 
