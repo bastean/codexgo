@@ -1,7 +1,8 @@
 package home
 
 const (
-	ForgotFormTagID = "forgot"
+	ForgotFormTagID  = "forgot-form"
+	ForgotModalTagID = "forgot-modal"
 )
 
 script ForgotFormInit(formTagID string) {
@@ -47,20 +48,24 @@ script ForgotFormInit(formTagID string) {
 }
 
 templ ForgotForm() {
-	<form id={ ForgotFormTagID } class="ui inverted form">
-		<h1 class="ui dividing inverted header">
-			Recover your account
-			<div class="sub header">You will receive a link to reset your password</div>
-		</h1>
-		<div class="required field">
-			<label>Email</label>
-			<div class="ui inverted transparent left icon input">
-				<i class="envelope icon"></i>
-				<input type="text" placeholder="Email" name="Email"/>
-			</div>
+	<div id={ ForgotModalTagID } class="ui mini inverted modal">
+		<div class="content">
+			<form id={ ForgotFormTagID } class="ui inverted form">
+				<h1 class="ui dividing inverted header">
+					Recover your account
+					<div class="sub header">You will receive a link to reset your password</div>
+				</h1>
+				<div class="required field">
+					<label>Email</label>
+					<div class="ui inverted transparent left icon input">
+						<i class="envelope icon"></i>
+						<input type="text" placeholder="Email" name="Email"/>
+					</div>
+				</div>
+				<div class="ui divider"></div>
+				<button class="ui fluid primary submit button">Send</button>
+			</form>
 		</div>
-		<div class="ui divider"></div>
-		<button class="ui fluid primary submit button">Send</button>
-	</form>
+	</div>
 	@ForgotFormInit(ForgotFormTagID)
 }

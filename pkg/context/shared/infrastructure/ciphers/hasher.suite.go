@@ -49,7 +49,7 @@ func (s *HasherSuite) TestCompareErrDoNotMatch() {
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Compare",
-		What:  "Do not match",
+		What:  "Password does not match",
 	}}
 
 	s.Equal(expected, actual)

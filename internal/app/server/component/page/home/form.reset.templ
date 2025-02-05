@@ -1,7 +1,8 @@
 package home
 
 const (
-	ResetFormTagID = "reset"
+	ResetFormTagID  = "reset-form"
+	ResetModalTagID = "reset-modal"
 )
 
 script ResetFormInit(formTagID, loginTabTagID string) {
@@ -70,10 +71,12 @@ script ResetFormInit(formTagID, loginTabTagID string) {
 }
 
 templ ResetForm() {
-	<div class="ui mini inverted modal">
-		<div class="header">Reset your password</div>
+	<div id={ ResetModalTagID } class="ui mini inverted modal">
 		<div class="content">
 			<form id={ ResetFormTagID } class="ui inverted form">
+				<h1 class="ui dividing inverted header">
+					Reset your password
+				</h1>
 				<div class="required field">
 					<label>Password</label>
 					<div class="ui inverted transparent left icon input">

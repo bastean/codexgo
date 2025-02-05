@@ -12,6 +12,7 @@ Feature: User forgot password
 
   Scenario: Recover a valid existing account
     Given I am on the Home page
+    * I click on the Sign in button
     * I click on the Forgot Password? button
     * I fill the Email with forgot@example.com
     When I click the Send button
@@ -19,6 +20,7 @@ Feature: User forgot password
 
   Scenario: Recover a valid non existing account
     Given I am on the Home page
+    * I click on the Sign in button
     * I click on the Forgot Password? button
     * I fill the Email with non-existing@example.com
     When I click the Send button

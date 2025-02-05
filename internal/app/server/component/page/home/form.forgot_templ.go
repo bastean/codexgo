@@ -9,7 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	ForgotFormTagID = "forgot"
+	ForgotFormTagID  = "forgot-form"
+	ForgotModalTagID = "forgot-modal"
 )
 
 func ForgotFormInit(formTagID string) templ.ComponentScript {
@@ -81,20 +82,33 @@ func ForgotForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotFormTagID)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 50, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 51, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Recover your account<div class=\"sub header\">You will receive a link to reset your password</div></h1><div class=\"required field\"><label>Email</label><div class=\"ui inverted transparent left icon input\"><i class=\"envelope icon\"></i> <input type=\"text\" placeholder=\"Email\" name=\"Email\"></div></div><div class=\"ui divider\"></div><button class=\"ui fluid primary submit button\">Send</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"ui mini inverted modal\"><div class=\"content\"><form id=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotFormTagID)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 53, Col: 29}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Recover your account<div class=\"sub header\">You will receive a link to reset your password</div></h1><div class=\"required field\"><label>Email</label><div class=\"ui inverted transparent left icon input\"><i class=\"envelope icon\"></i> <input type=\"text\" placeholder=\"Email\" name=\"Email\"></div></div><div class=\"ui divider\"></div><button class=\"ui fluid primary submit button\">Send</button></form></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

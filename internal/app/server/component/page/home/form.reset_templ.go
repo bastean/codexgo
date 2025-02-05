@@ -9,7 +9,8 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	ResetFormTagID = "reset"
+	ResetFormTagID  = "reset-form"
+	ResetModalTagID = "reset-modal"
 )
 
 func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
@@ -104,20 +105,33 @@ func ResetForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ui mini inverted modal\"><div class=\"header\">Reset your password</div><div class=\"content\"><form id=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ResetFormTagID)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ResetModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 76, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 74, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"ui inverted form\"><div class=\"required field\"><label>Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"lock icon\"></i> <input type=\"password\" placeholder=\"Password\" name=\"Password\"></div></div><div class=\"required field\"><label>Confirm Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"redo icon\"></i> <input type=\"password\" placeholder=\"Confirm Password\" name=\"ConfirmPassword\"></div></div><div class=\"ui divider\"></div><div class=\"ui middle aligned center aligned grid\"><div class=\"column\"><button class=\"ui fluid primary submit button\">Reset</button></div></div></form></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\" class=\"ui mini inverted modal\"><div class=\"content\"><form id=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ResetFormTagID)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 76, Col: 28}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Reset your password</h1><div class=\"required field\"><label>Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"lock icon\"></i> <input type=\"password\" placeholder=\"Password\" name=\"Password\"></div></div><div class=\"required field\"><label>Confirm Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"redo icon\"></i> <input type=\"password\" placeholder=\"Confirm Password\" name=\"ConfirmPassword\"></div></div><div class=\"ui divider\"></div><div class=\"ui middle aligned center aligned grid\"><div class=\"column\"><button class=\"ui fluid primary submit button\">Reset</button></div></div></form></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

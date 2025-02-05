@@ -11,7 +11,19 @@ const (
 	ForgotTabTagID   = "tab-forgot"
 )
 
-script PageInit() {
+script ShowTab(tabTagID string) {
+    $(`.ui.menu .right .item[data-tab=${tabTagID}]`)
+        .trigger("click")
+    ;
+}
+
+script ShowModal(modalTagID string) {
+    $(`#${modalTagID}`)
+        .modal("show")
+    ;
+}
+
+script PageInit(resetModalTagID string) {
     $(".ui.container")
         .transition("fade in", "3s")
     ;
@@ -30,14 +42,13 @@ script PageInit() {
     ;
 
    if (_.includes(window.location.pathname, "/reset")) {
-        $(".ui.mini.modal")
+        $(`#${resetModalTagID}`)
+            .modal({
+                closable: false
+            })
             .modal("show")
         ;
     }
-}
-
-script ShowTab(tabTagID string) {
-   $(`.ui.menu .right .item[data-tab=${tabTagID}]`).trigger("click");
 }
 
 templ Page() {
@@ -55,7 +66,6 @@ templ Page() {
 					<div class="right menu">
 						<a class="blue item" data-tab={ LoginTabTagID }>Sign in</a>
 						<a class="active blue item" data-tab={ RegisterTabTagID }>Sign up</a>
-						<a class="teal item" data-tab={ ForgotTabTagID }>Forgot Password?</a>
 					</div>
 				</div>
 			</div>
@@ -67,9 +77,7 @@ templ Page() {
 				<div class="ui tab basic segment" data-tab={ LoginTabTagID }>
 					@LoginForm()
 				</div>
-				<div class="ui tab basic segment" data-tab={ ForgotTabTagID }>
-					@ForgotForm()
-				</div>
+				@ForgotForm()
 				@ResetForm()
 			</div>
 			<div class="ui looping pulsating transition bottom fixed cookie nag">
@@ -80,6 +88,6 @@ templ Page() {
 				<i class="close icon"></i>
 			</div>
 		</div>
-		@PageInit()
+		@PageInit(ResetModalTagID)
 	}
 }

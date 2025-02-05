@@ -28,7 +28,7 @@ func (*Bcrypt) Compare(hashed, plain string) error {
 	if err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain)); err != nil {
 		return errors.New[errors.Failure](&errors.Bubble{
 			Where: "Compare",
-			What:  "Do not match",
+			What:  "Password does not match",
 		})
 	}
 
