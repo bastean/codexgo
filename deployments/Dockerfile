@@ -6,11 +6,12 @@ WORKDIR /app
 
 RUN apt update \
  && apt upgrade -y \
- && apt install -y sudo nodejs npm
+ && apt install -y sudo unzip
 
 COPY Makefile .
 
-RUN make install-tools-dev
+RUN make upgrade-managers \
+ && make install-tools-dev
 
 FROM dev AS test
 

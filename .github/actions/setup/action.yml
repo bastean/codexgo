@@ -12,11 +12,8 @@ runs:
         go-version-file: "go.mod"
         cache-dependency-path: "go.sum"
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: "package.json"
-        cache: "npm"
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
 
     - name: Setup codexGO
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}

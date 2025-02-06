@@ -13,15 +13,14 @@ module = github.com/bastean/codexgo/v4
 
 go-tidy = go mod tidy -e
 
-#*______Node______
+#*______Bun______
 
-npx = npx --no --
-npm-ci = npm ci --legacy-peer-deps
+bun-ci = bun i --frozen-lockfile
 
-ncu = ${npx} ncu -ws -u
+ncu = bunx ncu -ws -u
 
-release-it = ${npx} release-it -V
-release-it-dry = ${npx} release-it -V -d --no-git.requireCleanWorkingDir
+release-it = bunx release-it -V
+release-it-dry = bunx release-it -V -d --no-git.requireCleanWorkingDir
 
 #*______Bash______
 
@@ -49,7 +48,7 @@ curl = curl -sSfL
 
 upgrade-managers:
 	#? sudo apt update && sudo apt upgrade -y
-	npm upgrade -g
+	${curl} https://bun.sh/install | sudo BUN_INSTALL=/usr/local bash
 
 upgrade-go:
 	go get -t -u ./cmd/... ./internal/... ./pkg/... ./scripts/...
@@ -57,15 +56,15 @@ upgrade-go:
 copydeps:
 	go run ./scripts/copydeps
 
-upgrade-node:
+upgrade-bun:
 	${ncu}
 	${ncu} fomantic-ui -t @nightly
-	npm i --legacy-peer-deps
+	bun i
 	$(MAKE) copydeps
 
 upgrade-reset:
 	${git-reset-hard}
-	${npm-ci}
+	${bun-ci}
 
 upgrade:
 	godo exec -c configs/upgrade.json
@@ -74,13 +73,13 @@ upgrade:
 
 install-scanners:
 	go install github.com/google/osv-scanner/cmd/osv-scanner@latest
-	${curl} https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin v3.63.11
-	${curl} https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.52.2
+	${curl} https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sudo sh -s -- -b /usr/local/bin
+	${curl} https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin
 
 install-linters:
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install honnef.co/go/tools/cmd/staticcheck@latest
-	npm i -g prettier
+	bun i -g prettier
 
 install-debuggers:
 	go install golang.org/x/tools/cmd/deadcode@latest
@@ -92,7 +91,7 @@ install-tools-dev: install-scanners install-linters install-debuggers
 
 install-tools-test:
 	go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
-	npm i -g concurrently wait-on
+	bun i -g concurrently wait-on
 
 install-tooling: install-tools-dev install-tools-test
 
@@ -102,7 +101,7 @@ install-tooling-ci: install-tools-dev
 
 download-dependencies:
 	go mod download
-	${npm-ci}
+	${bun-ci}
 
 #*______Generate______
 
@@ -114,7 +113,7 @@ generate-required:
 #*______Restore______
 
 restore:
-	${npx} husky init
+	bunx husky init
 	git restore .
 
 #*______Init______
@@ -167,13 +166,13 @@ lint:
 	go mod tidy
 	goimports -l -w -local ${module} .
 	gofmt -l -s -w .
-	${npx} prettier --no-config --ignore-unknown --write .
+	bunx prettier --no-config --ignore-unknown --write .
 	templ fmt .
 	$(MAKE) generate-required
 
 lint-check:
 	staticcheck ./...
-	${npx} prettier --check .
+	bunx prettier --check .
 
 #*______Debug______
 
@@ -192,10 +191,10 @@ test-clean: generate-required
 	mkdir -p test/report
 
 test-codegen:
-	${npx} playwright codegen ${url-server}
+	bunx playwright codegen ${url-server}
 
 test-sync:
-	${npx} concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' '${npx} wait-on -l ${url-server}/health && $(TEST_SYNC)'
+	bunx concurrently -s first -k --names 'SUT,TEST' '$(MAKE) test-sut' 'bunx wait-on -l ${url-server}/health && $(TEST_SYNC)'
 
 test-unit: test-clean
 	${bash} 'go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log'
@@ -247,7 +246,7 @@ release-dry-changelog:
 #*______Git______
 
 commit:
-	${npx} cz
+	bunx cz
 
 WARNING-git-forget:
 	git rm -r --cached .

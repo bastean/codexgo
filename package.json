@@ -13,10 +13,6 @@
   "bugs": {
     "url": "https://github.com/bastean/codexgo/issues"
   },
-  "engines": {
-    "node": ">=20",
-    "npm": ">=10"
-  },
   "workspaces": [
     "internal/app/*"
   ],
@@ -119,6 +115,7 @@
       },
       "@release-it/bumper": {
         "out": [
+          "internal/**/package.json",
           "internal/**/manifest.json"
         ]
       }

@@ -1,7 +1,7 @@
 services:
   broker-rabbitmq:
     container_name: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_NAME}
-    image: rabbitmq:3-management
+    image: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${CODEXGO_BROKER_RABBITMQ_ADMIN_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${CODEXGO_BROKER_RABBITMQ_ADMIN_PASSWORD}
@@ -17,7 +17,7 @@ services:
 
   database-mongodb:
     container_name: ${CODEXGO_DATABASE_MONGODB_CONTAINER_NAME}
-    image: mongo:4.4
+    image: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD}
@@ -28,7 +28,7 @@ services:
       - database-mongodb:/data/db
     restart: ${CODEXGO_DATABASE_MONGODB_CONTAINER_RESTART}
     healthcheck:
-      test: echo 'db.runCommand({serverStatus:1}).ok' | mongo admin -u ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME} -p ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD} --quiet | grep 1
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongosh admin -u ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME} -p ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD} --quiet | grep 1
       interval: 12s
       timeout: 12s
       retries: 12
