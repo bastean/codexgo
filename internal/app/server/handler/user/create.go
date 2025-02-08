@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
@@ -14,23 +15,39 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 )
 
-func Create(c *gin.Context) {
-	attributes := new(create.CommandAttributes)
+type CreateData struct {
+	*create.CommandAttributes
+	*captcha.Data
+}
 
-	err := c.BindJSON(attributes)
+func Create(c *gin.Context) {
+	data := new(CreateData)
+
+	err := c.BindJSON(data)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err, "Create"))
 		return
 	}
 
-	attributes.Verify = services.GenerateID()
+	err = captcha.Verify(data.CaptchaID, data.CaptchaAnswer)
 
-	attributes.ID = services.GenerateID()
+	if err != nil {
+		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))
+		return
+	}
+
+	captcha.Clear(data.CaptchaID)
 
 	err = command.Bus.Dispatch(messages.New(
 		create.CommandKey,
-		attributes,
+		&create.CommandAttributes{
+			Verify:   services.GenerateID(),
+			ID:       services.GenerateID(),
+			Email:    data.Email,
+			Username: data.Username,
+			Password: data.Password,
+		},
 		new(create.CommandMeta),
 	))
 

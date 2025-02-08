@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"github.com/bastean/codexgo/v4/internal/app/server/component/layout"
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts"
+	"github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
 )
 
 const (
@@ -40,6 +41,18 @@ func ShowModal(modalTagID string) templ.ComponentScript {
 }`,
 		Call:       templ.SafeScript(`__templ_ShowModal_42f8`, modalTagID),
 		CallInline: templ.SafeScriptInline(`__templ_ShowModal_42f8`, modalTagID),
+	}
+}
+
+func Submit(formTagID string) templ.ComponentScript {
+	return templ.ComponentScript{
+		Name: `__templ_Submit_5ad3`,
+		Function: `function __templ_Submit_5ad3(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+        .form("submit")
+    ;
+}`,
+		Call:       templ.SafeScript(`__templ_Submit_5ad3`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_Submit_5ad3`, formTagID),
 	}
 }
 
@@ -77,7 +90,7 @@ func PageInit(resetModalTagID string) templ.ComponentScript {
 	}
 }
 
-func Page() templ.Component {
+func Page(register, forgot *captcha.Captcha) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -117,7 +130,7 @@ func Page() templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 67, Col: 51}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 74, Col: 51}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -130,7 +143,7 @@ func Page() templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 68, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 75, Col: 61}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -143,7 +156,7 @@ func Page() templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 73, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 80, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -153,7 +166,7 @@ func Page() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = RegisterForm().Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = RegisterForm(register).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -168,7 +181,7 @@ func Page() templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 77, Col: 62}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 84, Col: 62}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -186,7 +199,7 @@ func Page() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = ForgotForm().Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = ForgotForm(forgot).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

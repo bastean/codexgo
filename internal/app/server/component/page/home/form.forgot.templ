@@ -1,5 +1,7 @@
 package home
 
+import "github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
+
 const (
 	ForgotFormTagID  = "forgot-form"
 	ForgotModalTagID = "forgot-modal"
@@ -19,12 +21,26 @@ script ForgotFormInit(formTagID string) {
                             type: "email"
                         }
                     ]
+                },
+                CaptchaAnswer: {
+                    rules: [
+                        {
+                            type: "notEmpty"
+                        }
+                    ]
                 }
             }
         })
         .api({
             action: "user_forgot", 
             method: "POST",
+            beforeSend: function(settings) {
+                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -47,7 +63,7 @@ script ForgotFormInit(formTagID string) {
     ;
 }
 
-templ ForgotForm() {
+templ ForgotForm(captcha *captcha.Captcha) {
 	<div id={ ForgotModalTagID } class="ui mini inverted modal">
 		<div class="content">
 			<form id={ ForgotFormTagID } class="ui inverted form">
@@ -62,6 +78,8 @@ templ ForgotForm() {
 						<input type="text" placeholder="Email" name="Email"/>
 					</div>
 				</div>
+				<div class="ui divider"></div>
+				@CaptchaForm(captcha)
 				<div class="ui divider"></div>
 				<button class="ui fluid primary submit button">Send</button>
 			</form>

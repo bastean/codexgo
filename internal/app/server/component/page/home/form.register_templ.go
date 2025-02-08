@@ -8,14 +8,24 @@ package home
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
+
 const (
-	RegisterFormTagID = "register"
+	RegisterFormTagID   = "register-form"
+	RegisterSubmitTagID = "register-submit"
 )
 
-func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
+func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_RegisterFormInit_2c33`,
-		Function: `function __templ_RegisterFormInit_2c33(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_RegisterFormInit_e044`,
+		Function: `function __templ_RegisterFormInit_e044(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
+        .popup({
+            position: "top center",
+            hoverable: true
+        })
+    ;
+
+    $(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -69,12 +79,26 @@ func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
                             prompt: "Terms and Conditions must be checked"
                         }
                     ]
+                },
+                CaptchaAnswer: {
+                    rules: [
+                        {
+                            type: "notEmpty"
+                        }
+                    ]
                 }
             }
         })
         .api({
             action: "user_create", 
             method: "PUT",
+            beforeSend: function(settings) {
+                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+
+                settings.data = JSON.stringify(settings.data);
+
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -97,22 +121,12 @@ func RegisterFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_RegisterFormInit_2c33`, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_2c33`, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_RegisterFormInit_e044`, submitTagID, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_e044`, submitTagID, formTagID, loginTabTagID),
 	}
 }
 
-func ShowTerms(modalTagID string) templ.ComponentScript {
-	return templ.ComponentScript{
-		Name: `__templ_ShowTerms_42f0`,
-		Function: `function __templ_ShowTerms_42f0(modalTagID){$(` + "`" + `#${modalTagID}` + "`" + `).modal("show");
-}`,
-		Call:       templ.SafeScript(`__templ_ShowTerms_42f0`, modalTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ShowTerms_42f0`, modalTagID),
-	}
-}
-
-func RegisterForm() templ.Component {
+func RegisterForm(captcha *captcha.Captcha) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -140,7 +154,7 @@ func RegisterForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 96, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 116, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -167,7 +181,7 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowTerms(TermsModalTagID))
+		templ_7745c5c3_Err = templ.RenderScriptItems(ctx, templ_7745c5c3_Buffer, ShowModal(TermsModalTagID))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -175,16 +189,37 @@ func RegisterForm() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 templ.ComponentScript = ShowTerms(TermsModalTagID)
+		var templ_7745c5c3_Var4 templ.ComponentScript = ShowModal(TermsModalTagID)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var4.Call)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\">I agree to the <a><b>Terms and Conditions</b></a></label></div></div><button class=\"ui fluid primary submit button\">Sign up</button></div></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "\">I agree to the <a><b>Terms and Conditions</b></a></label></div></div><button id=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RegisterFormInit(RegisterFormTagID, LoginTabTagID).Render(ctx, templ_7745c5c3_Buffer)
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterSubmitTagID)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 158, Col: 36}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" class=\"ui fluid primary submit button\">Sign up</button><div class=\"ui inverted basic popup\"><div class=\"header\">Verify Captcha</div><div class=\"ui divider\"></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CaptchaForm(captcha).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div></div></div></form>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = RegisterFormInit(RegisterSubmitTagID, RegisterFormTagID, LoginTabTagID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -8,6 +8,8 @@ package home
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+import "github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
+
 const (
 	ForgotFormTagID  = "forgot-form"
 	ForgotModalTagID = "forgot-modal"
@@ -15,8 +17,8 @@ const (
 
 func ForgotFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ForgotFormInit_9808`,
-		Function: `function __templ_ForgotFormInit_9808(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ForgotFormInit_b258`,
+		Function: `function __templ_ForgotFormInit_b258(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -29,12 +31,26 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
                             type: "email"
                         }
                     ]
+                },
+                CaptchaAnswer: {
+                    rules: [
+                        {
+                            type: "notEmpty"
+                        }
+                    ]
                 }
             }
         })
         .api({
             action: "user_forgot", 
             method: "POST",
+            beforeSend: function(settings) {
+                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -56,12 +72,12 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ForgotFormInit_9808`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_9808`, formTagID),
+		Call:       templ.SafeScript(`__templ_ForgotFormInit_b258`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_b258`, formTagID),
 	}
 }
 
-func ForgotForm() templ.Component {
+func ForgotForm(captcha *captcha.Captcha) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -89,7 +105,7 @@ func ForgotForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 51, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 67, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -102,13 +118,21 @@ func ForgotForm() templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 53, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 69, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Recover your account<div class=\"sub header\">You will receive a link to reset your password</div></h1><div class=\"required field\"><label>Email</label><div class=\"ui inverted transparent left icon input\"><i class=\"envelope icon\"></i> <input type=\"text\" placeholder=\"Email\" name=\"Email\"></div></div><div class=\"ui divider\"></div><button class=\"ui fluid primary submit button\">Send</button></form></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Recover your account<div class=\"sub header\">You will receive a link to reset your password</div></h1><div class=\"required field\"><label>Email</label><div class=\"ui inverted transparent left icon input\"><i class=\"envelope icon\"></i> <input type=\"text\" placeholder=\"Email\" name=\"Email\"></div></div><div class=\"ui divider\"></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = CaptchaForm(captcha).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"ui divider\"></div><button class=\"ui fluid primary submit button\">Send</button></form></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

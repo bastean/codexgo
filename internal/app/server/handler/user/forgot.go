@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
@@ -14,21 +15,36 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
 )
 
-func Forgot(c *gin.Context) {
-	attributes := new(forgot.CommandAttributes)
+type ForgotData struct {
+	*forgot.CommandAttributes
+	*captcha.Data
+}
 
-	err := c.BindJSON(attributes)
+func Forgot(c *gin.Context) {
+	data := new(ForgotData)
+
+	err := c.BindJSON(data)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err, "Forgot"))
 		return
 	}
 
-	attributes.Reset = services.GenerateID()
+	err = captcha.Verify(data.CaptchaID, data.CaptchaAnswer)
+
+	if err != nil {
+		errs.AbortByErr(c, errors.BubbleUp(err, "Forgot"))
+		return
+	}
+
+	captcha.Clear(data.CaptchaID)
 
 	err = command.Bus.Dispatch(messages.New(
 		forgot.CommandKey,
-		attributes,
+		&forgot.CommandAttributes{
+			Reset: services.GenerateID(),
+			Email: data.Email,
+		},
 		new(forgot.CommandMeta),
 	))
 

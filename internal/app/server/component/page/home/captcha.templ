@@ -1,0 +1,21 @@
+package home
+
+import "github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
+
+templ CaptchaForm(captcha *captcha.Captcha) {
+	<div class="ui move up reveal">
+		<div class="visible content">
+			<div class="ui basic segment" style="height: 115px; width: 380px; backdrop-filter: blur(8px);"></div>
+		</div>
+		<div class="hidden content">
+			<img class="ui fluid image" src={ captcha.Image } alt="Captcha"/>
+			<input class="ui input" style="display:none !important;" value={ captcha.ID } name="CaptchaID"/>
+		</div>
+	</div>
+	<div class="required field">
+		<div class="ui inverted transparent left icon input">
+			<i class="robot icon"></i>
+			<input type="text" placeholder="Answer" name="CaptchaAnswer"/>
+		</div>
+	</div>
+}

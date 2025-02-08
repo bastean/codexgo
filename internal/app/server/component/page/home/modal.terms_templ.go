@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	TermsModalTagID = "terms"
+	TermsModalTagID = "terms-modal"
 )
 
 func TermsModal() templ.Component {

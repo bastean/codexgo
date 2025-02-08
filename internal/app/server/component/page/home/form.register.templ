@@ -1,10 +1,20 @@
 package home
 
+import "github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
+
 const (
-	RegisterFormTagID = "register"
+	RegisterFormTagID   = "register-form"
+	RegisterSubmitTagID = "register-submit"
 )
 
-script RegisterFormInit(formTagID, loginTabTagID string) {
+script RegisterFormInit(submitTagID, formTagID, loginTabTagID string) {
+    $(`#${submitTagID}`)
+        .popup({
+            position: "top center",
+            hoverable: true
+        })
+    ;
+
     $(`#${formTagID}`)
         .form({
             on: "blur",
@@ -59,12 +69,26 @@ script RegisterFormInit(formTagID, loginTabTagID string) {
                             prompt: "Terms and Conditions must be checked"
                         }
                     ]
+                },
+                CaptchaAnswer: {
+                    rules: [
+                        {
+                            type: "notEmpty"
+                        }
+                    ]
                 }
             }
         })
         .api({
             action: "user_create", 
             method: "PUT",
+            beforeSend: function(settings) {
+                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+
+                settings.data = JSON.stringify(settings.data);
+
+                return settings;
+            },
             onSuccess: function(response, element, xhr) {
                 $.toast({
                     class: "success",
@@ -88,11 +112,7 @@ script RegisterFormInit(formTagID, loginTabTagID string) {
     ;
 }
 
-script ShowTerms(modalTagID string) {
-    $(`#${modalTagID}`).modal("show");
-}
-
-templ RegisterForm() {
+templ RegisterForm(captcha *captcha.Captcha) {
 	<form id={ RegisterFormTagID } class="ui inverted form">
 		<h1 class="ui dividing inverted header">
 			Create an account
@@ -132,12 +152,17 @@ templ RegisterForm() {
 				<div class="inline required field">
 					<div class="ui inverted checkbox">
 						<input type="checkbox" name="Terms"/>
-						<label style="cursor: pointer;" onclick={ ShowTerms(TermsModalTagID) }>I agree to the <a><b>Terms and Conditions</b></a></label>
+						<label style="cursor: pointer;" onclick={ ShowModal(TermsModalTagID) }>I agree to the <a><b>Terms and Conditions</b></a></label>
 					</div>
 				</div>
-				<button class="ui fluid primary submit button">Sign up</button>
+				<button id={ RegisterSubmitTagID } class="ui fluid primary submit button">Sign up</button>
+				<div class="ui inverted basic popup">
+					<div class="header">Verify Captcha</div>
+					<div class="ui divider"></div>
+					@CaptchaForm(captcha)
+				</div>
 			</div>
 		</div>
 	</form>
-	@RegisterFormInit(RegisterFormTagID, LoginTabTagID)
+	@RegisterFormInit(RegisterSubmitTagID, RegisterFormTagID, LoginTabTagID)
 }

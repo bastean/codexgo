@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	LoginFormTagID = "login"
+	LoginFormTagID = "login-form"
 )
 
 func LoginFormInit(formTagID string) templ.ComponentScript {
