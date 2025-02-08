@@ -4,13 +4,13 @@
   "features": {
     "ghcr.io/devcontainers/features/sshd:1": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers-extra/features/go-task:1": {},
     "ghcr.io/devcontainers/features/go:1": {
       "version": "1.23"
     }
   },
   "forwardPorts": [2222],
-  "postCreateCommand": "USER_PASSWORD=vscode make devcontainer && make init",
+  "postCreateCommand": "task devcontainer-vscode-vscode",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,10 +22,10 @@
         "golang.go",
         "Gruntfuggly.todo-tree",
         "ms-azuretools.vscode-docker",
-        "ms-vscode.makefile-tools",
         "redhat.vscode-yaml",
         "streetsidesoftware.code-spell-checker",
         "tamasfe.even-better-toml",
+        "task.vscode-task",
         "thejltres.fomantic-ui-snippets"
       ]
     }

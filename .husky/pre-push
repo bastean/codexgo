@@ -1,1 +1,1 @@
-make scan-leaks-local
+task scan-leaks-local

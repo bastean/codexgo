@@ -122,11 +122,11 @@
     },
     "hooks": {
       "before:init": [
-        "make lint-check",
-        "make test-unit"
+        "task lint-check",
+        "task test-unit"
       ],
       "before:release": [
-        "make lint",
+        "task lint",
         "git add . --update"
       ],
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}"

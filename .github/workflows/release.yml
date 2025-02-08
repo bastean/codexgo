@@ -52,7 +52,7 @@ jobs:
           git_tag_gpgsign: true
 
       - name: Generate Release
-        run: OPTIONS="$STATUS_ARG $BUMP_ARG $DRY_ARG" make release-ci
+        run: OPTIONS="$STATUS_ARG $BUMP_ARG $DRY_ARG" task release-ci
         env:
           STATUS_ARG: ${{ fromJSON('{"alpha":"--preRelease=alpha", "beta":"--preRelease=beta", "stable":""}')[github.event.inputs.status] }}
           BUMP_ARG: ${{ fromJSON('{"patch":"-i patch", "minor":"-i minor", "major":"-i major", "auto":""}')[github.event.inputs.bump] }}

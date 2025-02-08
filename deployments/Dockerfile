@@ -6,22 +6,23 @@ WORKDIR /app
 
 RUN apt update \
  && apt upgrade -y \
- && apt install -y sudo unzip
+ && apt install -y sudo unzip \
+ && go install github.com/go-task/task/v3/cmd/task@latest
 
-COPY Makefile .
+COPY Taskfile.yml .
 
-RUN make upgrade-managers \
- && make install-tools-dev
+RUN task upgrade-managers \
+ && task install-tools-dev
 
 FROM dev AS test
 
-RUN make install-tools-test
+RUN task install-tools-test
 
 FROM dev AS build
 
 COPY . .
 
-RUN make build
+RUN task build
 
 FROM golang:1.23-bookworm AS prod
 

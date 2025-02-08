@@ -5,27 +5,27 @@
     },
     {
       "Title": "Linting...",
-      "Commands": [{ "Name": "make", "Args": ["lint"] }]
+      "Commands": [{ "Name": "task", "Args": ["lint"] }]
     },
     {
       "Title": "Upgrading Go",
-      "Commands": [{ "Name": "make", "Args": ["upgrade-go"] }]
+      "Commands": [{ "Name": "task", "Args": ["upgrade-go"] }]
     },
     {
       "Title": "Upgrading Node",
-      "Commands": [{ "Name": "make", "Args": ["upgrade-node"] }]
+      "Commands": [{ "Name": "task", "Args": ["upgrade-node"] }]
     },
     {
       "Title": "Upgrading Tooling",
-      "Commands": [{ "Name": "make", "Args": ["install-tooling"] }]
+      "Commands": [{ "Name": "task", "Args": ["install-tooling"] }]
     },
     {
       "Title": "Linting...",
-      "Commands": [{ "Name": "make", "Args": ["lint"] }]
+      "Commands": [{ "Name": "task", "Args": ["lint"] }]
     },
     {
       "Title": "Testing...",
-      "Commands": [{ "Name": "make", "Args": ["test-unit"] }]
+      "Commands": [{ "Name": "task", "Args": ["test-unit"] }]
     },
     {
       "Title": "Committing upgrades",

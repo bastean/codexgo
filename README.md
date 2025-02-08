@@ -106,7 +106,7 @@ Usage: codexgo [flags]
 >   - We can define our own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
 
 ```bash
-make demo
+task demo
 ```
 
 ## Features
@@ -128,7 +128,7 @@ make demo
 - Commit message helper using [Commitizen](https://github.com/commitizen/cz-cli).
   - Interactive prompt that allows you to write commits following the [Conventional Commits](https://www.conventionalcommits.org) rules:
     ```bash
-    make commit
+    task commit
     ```
 
 ### Scanners
@@ -395,14 +395,13 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 1. System Requirements
 
    - [Go](https://go.dev/doc/install)
-   - [Node](https://nodejs.org/en/download)
-   - [Make](https://www.gnu.org/software/make)
+   - [Task](https://taskfile.dev/installation)
    - [Docker](https://docs.docker.com/get-docker)
 
 2. Run
 
    ```bash
-   make init
+   task init
    ```
 
 ### ZIP
@@ -418,7 +417,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 && mv codexgo-main <repository> \
 && rm main.zip \
 && cd <repository> \
-&& make genesis \
+&& task genesis \
 && git commit -m "feat(genesis): codexgo" \
 && git branch -M main \
 && git remote add github https://github.com/<user>/<repository>.git \
@@ -476,7 +475,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 #### Development
 
 ```bash
-make compose-dev
+task compose-dev
 ```
 
 #### Tests
@@ -484,31 +483,31 @@ make compose-dev
 ##### Unit
 
 ```bash
-make test-unit
+task test-unit
 ```
 
 ##### Integration
 
 ```bash
-make compose-test-integration
+task compose-test-integration
 ```
 
 ##### Acceptance
 
 ```bash
-make compose-test-acceptance
+task compose-test-acceptance
 ```
 
 ##### Unit / Integration / Acceptance
 
 ```bash
-make compose-tests
+task compose-tests
 ```
 
 #### Production
 
 ```bash
-make compose-prod
+task compose-prod
 ```
 
 ## Tech Stack

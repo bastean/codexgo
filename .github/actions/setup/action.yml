@@ -12,9 +12,9 @@ runs:
         go-version-file: "go.mod"
         cache-dependency-path: "go.sum"
 
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v2
+    - name: Setup Task
+      uses: arduino/setup-task@v2
 
     - name: Setup codexGO
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
-      run: make init-ci
+      run: task init-ci

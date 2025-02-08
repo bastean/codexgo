@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "ms-vscode-remote.remote-containers",
+    "ms-vscode-remote.remote-wsl",
 
     "a-h.templ",
     "aaron-bond.better-comments",
@@ -10,10 +11,10 @@
     "golang.go",
     "Gruntfuggly.todo-tree",
     "ms-azuretools.vscode-docker",
-    "ms-vscode.makefile-tools",
     "redhat.vscode-yaml",
     "streetsidesoftware.code-spell-checker",
     "tamasfe.even-better-toml",
+    "task.vscode-task",
     "thejltres.fomantic-ui-snippets"
   ]
 }

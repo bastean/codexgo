@@ -1,0 +1,535 @@
+version: "3"
+
+vars:
+  #* URL
+  URL_SERVER: http://localhost:8080
+  URL_GITHUB: https://github.com/bastean/codexgo
+
+  #* Go
+  GO_MODULE: github.com/bastean/codexgo/v4
+
+  #* Prompt
+  PROMPT_WARNING: This is a dangerous command... Do you want to continue?
+
+tasks:
+  #* Bin
+  bash:
+    internal: true
+    requires:
+      vars: ["CMD"]
+    cmd: bash -o pipefail -c '{{.CMD}}'
+
+  curl:
+    internal: true
+    requires:
+      vars: ["URL", "PIPE"]
+    cmd: curl -sSfL {{.URL}} | {{.PIPE}}
+
+  bun-ci:
+    internal: true
+    cmd: bun i --frozen-lockfile
+
+  ncu:
+    internal: true
+    cmd: bunx ncu -ws -u {{.FILTERS}}
+
+  release-it:
+    internal: true
+    cmd: bunx release-it -V {{.OPTIONS}}
+
+  release-it-dry:
+    internal: true
+    cmd: bunx release-it -V -d --no-git.requireCleanWorkingDir {{.OPTIONS}}
+
+  compose-env:
+    internal: true
+    requires:
+      vars: ["OPTIONS"]
+    dir: deployments
+    cmd: docker compose --env-file {{.OPTIONS}}
+
+  docker-rm-vol:
+    internal: true
+    requires:
+      vars: ["VOLUME"]
+    cmd: docker volume rm -f {{.VOLUME}}
+
+  docker-rm-img:
+    internal: true
+    requires:
+      vars: ["IMAGE"]
+    cmd: docker rmi -f {{.IMAGE}}
+
+  git-reset-hard:
+    internal: true
+    cmd: git reset --hard HEAD
+
+  #* Upgrade
+  upgrade-managers:
+    cmds:
+      - sudo apt update
+      #? - sudo apt upgrade -y
+      - sudo apt install -y python3
+      - task: curl
+        vars:
+          URL: https://bun.sh/install
+          PIPE: sudo BUN_INSTALL=/usr/local bash
+
+  upgrade-go: go get -t -u ./cmd/... ./internal/... ./pkg/... ./scripts/...
+
+  copydeps: go run ./scripts/copydeps
+
+  upgrade-bun:
+    cmds:
+      - task: ncu
+      - task: ncu
+        vars:
+          FILTERS: fomantic-ui -t @nightly
+      - bun i
+      - task: copydeps
+
+  upgrade-reset:
+    cmds:
+      - task: git-reset-hard
+      - task: bun-ci
+
+  upgrade: godo exec -c configs/upgrade.json
+
+  #* Install
+  install-scanners:
+    cmds:
+      - go install github.com/google/osv-scanner/cmd/osv-scanner@latest
+      - task: curl
+        vars:
+          URL: https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh
+          PIPE: sudo sh -s -- -b /usr/local/bin
+      - task: curl
+        vars:
+          URL: https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh
+          PIPE: sudo sh -s -- -b /usr/local/bin
+
+  install-linters:
+    cmds:
+      - go install golang.org/x/tools/cmd/goimports@latest
+      - go install honnef.co/go/tools/cmd/staticcheck@latest
+      - bun i -g prettier
+
+  install-debuggers:
+    cmds:
+      - go install golang.org/x/tools/cmd/deadcode@latest
+
+  install-tools-dev:
+    cmds:
+      - task: install-scanners
+      - task: install-linters
+      - task: install-debuggers
+      - go install github.com/bastean/godo/cmd/godo@v0.2.0
+      - go install github.com/air-verse/air@latest
+      - go install github.com/a-h/templ/cmd/templ@latest
+
+  install-tools-test:
+    cmds:
+      - go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
+      - bun i -g concurrently wait-on
+
+  install-tooling:
+    cmds:
+      - task: install-tools-dev
+      - task: install-tools-test
+
+  install-tooling-ci:
+    cmds:
+      - task: install-tools-dev
+
+  #* Download
+  download-dependencies:
+    cmds:
+      - go mod download
+      - task: bun-ci
+
+  #* Generate
+  generate-required:
+    cmds:
+      - go generate ./...
+      - find . -name "*_templ.go" -type f -delete
+      - templ generate
+
+  #* Restore
+  restore:
+    cmds:
+      - bunx husky init
+      - git restore .
+
+  #* Init
+  init:
+    cmds:
+      - task: upgrade-managers
+      - task: install-tooling
+      - task: download-dependencies
+      - task: copydeps
+      - task: generate-required
+      - task: restore
+
+  init-ci:
+    cmds:
+      - task: upgrade-managers
+      - task: install-tooling-ci
+      - task: download-dependencies
+      - task: generate-required
+      - task: restore
+
+  genesis:
+    cmds:
+      - git init
+      - git add .
+      - task: init
+
+  #* ENV
+  syncenv-reset:
+    cmds:
+      - task: git-reset-hard
+
+  syncenv:
+    dir: deployments
+    cmd: go run ../scripts/syncenv
+
+  #* Scan
+  scan-leaks-local:
+    cmds:
+      - sudo trufflehog git file://. --only-verified
+      - trivy repo --scanners secret .
+
+  scan-leaks-remote:
+    cmds:
+      - sudo trufflehog git {{.URL_GITHUB}} --only-verified
+      - trivy repo --scanners secret {{.URL_GITHUB}}
+
+  scan-vulns-local:
+    cmds:
+      - osv-scanner --call-analysis=all -r .
+      - trivy repo --scanners vuln .
+
+  scan-misconfigs-local:
+    cmds:
+      - trivy repo --scanners misconfig .
+
+  scan-leaks:
+    cmds:
+      - task: scan-leaks-local
+      - task: scan-leaks-remote
+
+  scan-vulns:
+    cmds:
+      - task: scan-vulns-local
+
+  scan-misconfigs:
+    cmds:
+      - task: scan-misconfigs-local
+
+  scans:
+    cmds:
+      - task: scan-leaks
+      - task: scan-vulns
+      - task: scan-misconfigs
+
+  #* Lint/Format
+  lint:
+    cmds:
+      - go mod tidy
+      - goimports -l -w -local {{.GO_MODULE}} .
+      - gofmt -l -s -w .
+      - bunx prettier --no-config --ignore-unknown --write .
+      - templ fmt .
+      - task: generate-required
+
+  lint-check:
+    cmds:
+      - staticcheck ./...
+      - bunx prettier --check .
+
+  #* Debug
+  debug-dead: deadcode -test ./...
+
+  debugs:
+    cmds:
+      - task: debug-dead
+
+  #* Test
+  test-sut: air
+
+  test-clean:
+    cmds:
+      - task: generate-required
+      - go clean -testcache
+      - mkdir -p test/report
+
+  test-codegen: bunx playwright codegen {{.URL_SERVER}}
+
+  test-sync:
+    requires:
+      vars: ["TEST_SYNC"]
+    cmd: bunx concurrently -s first -k --names 'SUT,TEST' 'task test-sut' 'bunx wait-on -l {{.URL_SERVER}}/health && {{.TEST_SYNC}}'
+
+  test-unit:
+    cmds:
+      - task: test-clean
+      - task: bash
+        vars:
+          CMD: go test -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log
+
+  test-integration:
+    cmds:
+      - task: test-clean
+      - task: bash
+        vars:
+          CMD: go test -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log
+
+  test-acceptance-sync:
+    cmds:
+      - task: bash
+        vars:
+          CMD: SUT_URL="{{.URL_SERVER}}" go test -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
+
+  test-acceptance:
+    cmds:
+      - task: test-clean
+      - task: test-sync
+        vars:
+          TEST_SYNC: task test-acceptance-sync
+
+  tests-sync:
+    cmds:
+      - task: bash
+        vars:
+          CMD: SUT_URL="{{.URL_SERVER}}" go test -v -cover ./... |& tee test/report/report.log
+
+  tests:
+    cmds:
+      - task: test-clean
+      - task: test-sync
+        vars:
+          TEST_SYNC: task tests-sync
+
+  #* Build
+  build:
+    cmds:
+      - task: lint
+      - rm -rf build/
+      - go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
+
+  #* Release
+  release:
+    cmds:
+      - task: release-it
+
+  release-alpha:
+    cmds:
+      - task: release-it
+        vars:
+          OPTIONS: --preRelease=alpha
+
+  release-beta:
+    cmds:
+      - task: release-it
+        vars:
+          OPTIONS: --preRelease=beta
+
+  release-ci:
+    requires:
+      vars: ["OPTIONS"]
+    cmds:
+      - task: release-it
+        vars:
+          OPTIONS: --ci --no-git.requireCleanWorkingDir {{.OPTIONS}}
+
+  release-dry:
+    cmds:
+      - task: release-it-dry
+
+  release-dry-version:
+    cmds:
+      - task: release-it-dry
+        vars:
+          OPTIONS: --release-version
+
+  release-dry-changelog:
+    cmds:
+      - task: release-it-dry
+        vars:
+          OPTIONS: --changelog
+
+  #* Git
+  commit: bunx cz
+
+  WARNING-git-forget:
+    prompt: "{{.PROMPT_WARNING}}"
+    cmds:
+      - git rm -r --cached .
+      - git add .
+
+  WARNING-git-genesis:
+    prompt: "{{.PROMPT_WARNING}}"
+    cmds:
+      - git clean -e .env* -fdx
+      - task: git-reset-hard
+      - task: init
+
+  #* Docker
+  docker-usage: docker system df
+
+  docker-it-*:
+    requires:
+      vars: ["ID"]
+    vars:
+      ID: "{{index .MATCH 0}}"
+    cmd: docker exec -it {{.ID}} bash
+
+  compose-up-*:
+    requires:
+      vars: ["ENV", "SERVICE"]
+    vars:
+      SERVICE: "{{index .MATCH 0}}"
+    cmds:
+      - task: compose-env
+        vars:
+          OPTIONS: "{{.ENV}} up {{.SERVICE}}"
+
+  compose-down-*:
+    requires:
+      vars: ["ENV", "SERVICE"]
+    vars:
+      SERVICE: "{{index .MATCH 0}}"
+    cmds:
+      - task: compose-env
+        vars:
+          OPTIONS: "{{.ENV}} down {{.SERVICE}}"
+
+  compose-dev-down:
+    cmds:
+      - task: compose-env
+        vars:
+          OPTIONS: .env.dev down
+      - task: docker-rm-vol
+        vars:
+          VOLUME: codexgo-database-mongodb-dev
+
+  compose-dev:
+    cmds:
+      - task: compose-dev-down
+      - task: compose-env
+        vars:
+          OPTIONS: .env.dev up
+
+  compose-test-down:
+    cmds:
+      - task: compose-env
+        vars:
+          OPTIONS: .env.test down
+      - task: docker-rm-vol
+        vars:
+          VOLUME: codexgo-database-mongodb-test
+
+  compose-test-integration:
+    cmds:
+      - task: compose-test-down
+      - task: compose-env
+        vars:
+          OPTIONS: .env.test --env-file .env.test.integration up --exit-code-from codexgo
+
+  compose-test-acceptance:
+    cmds:
+      - task: compose-test-down
+      - task: compose-env
+        vars:
+          OPTIONS: .env.test --env-file .env.test.acceptance up --exit-code-from codexgo
+
+  compose-tests:
+    cmds:
+      - task: compose-test-down
+      - task: compose-env
+        vars:
+          OPTIONS: .env.test up --exit-code-from codexgo
+
+  compose-prod-down:
+    cmds:
+      - task: compose-env
+        vars:
+          OPTIONS: .env.prod down
+      - task: docker-rm-img
+        vars:
+          IMAGE: codexgo
+
+  compose-prod:
+    cmds:
+      - task: compose-prod-down
+      - task: compose-env
+        vars:
+          OPTIONS: .env.prod up --exit-code-from codexgo
+
+  demo-down:
+    cmds:
+      - task: compose-env
+        vars:
+          OPTIONS: .env.demo down
+
+  demo:
+    cmds:
+      - task: demo-down
+      - task: compose-env
+        vars:
+          OPTIONS: .env.demo up --exit-code-from codexgo
+
+  compose-down:
+    cmds:
+      - task: compose-dev-down
+      - task: compose-test-down
+      - task: compose-prod-down
+      - task: demo-down
+
+  WARNING-docker-prune-soft:
+    prompt: "{{.PROMPT_WARNING}}"
+    cmds:
+      - docker system prune
+      - task: compose-down
+      - task: docker-usage
+
+  WARNING-docker-prune-hard:
+    prompt: "{{.PROMPT_WARNING}}"
+    cmds:
+      - docker system prune --volumes -a
+      - task: compose-down
+      - task: docker-usage
+
+  #* Devcontainer
+  devcontainer-*-*:
+    requires:
+      vars: ["USER", "PASSWORD"]
+    vars:
+      USER: "{{index .MATCH 0}}"
+      PASSWORD: "{{index .MATCH 1}}"
+    cmds:
+      - task: bash
+        vars:
+          CMD: echo -e "{{.PASSWORD}}\n{{.PASSWORD}}" | sudo passwd {{.USER}}
+      - task: init
+
+  connect-*-*-*:
+    requires:
+      vars: ["PORT", "USER", "HOST"]
+    vars:
+      PORT: "{{index .MATCH 0}}"
+      USER: "{{index .MATCH 1}}"
+      HOST: "{{index .MATCH 2}}"
+    cmds:
+      - ssh -p {{.PORT}} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null {{.USER}}@{{.HOST}}
+
+  #* Fix
+  fix-dev:
+    cmds:
+      - task: upgrade-go
+      - task: install-tools-dev
+
+  fix-test:
+    cmds:
+      - task: upgrade-go
+      - task: install-tools-test
