@@ -1,5 +1,10 @@
 version: "3"
 
+includes:
+  upgrade:
+    taskfile: ./configs/upgrade
+    flatten: true
+
 vars:
   #* URL
   URL_SERVER: http://localhost:8080
@@ -93,8 +98,6 @@ tasks:
       - task: git-reset-hard
       - task: bun-ci
 
-  upgrade: godo exec -c configs/upgrade.json
-
   #* Install
   install-scanners:
     cmds:
@@ -123,7 +126,6 @@ tasks:
       - task: install-scanners
       - task: install-linters
       - task: install-debuggers
-      - go install github.com/bastean/godo/cmd/godo@v0.2.0
       - go install github.com/air-verse/air@latest
       - go install github.com/a-h/templ/cmd/templ@latest
 

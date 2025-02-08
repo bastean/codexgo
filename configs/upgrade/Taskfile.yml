@@ -1,0 +1,31 @@
+version: "3"
+
+tasks:
+  prompt-*:
+    internal: true
+    silent: true
+    requires:
+      vars: ["PROMPT"]
+    vars:
+      PROMPT: "{{index .MATCH 0}}"
+    cmd: echo {{.PROMPT}}
+
+  upgrade:
+    cmds:
+      - task: prompt-"Starting upgrades..."
+      - task: prompt-"Linting..."
+      - task: lint
+      - task: prompt-"Upgrading Go"
+      - task: upgrade-go
+      - task: prompt-"Upgrading Bun"
+      - task: upgrade-bun
+      - task: prompt-"Upgrading Tooling"
+      - task: install-tooling
+      - task: prompt-"Linting..."
+      - task: lint
+      - task: prompt-"Testing..."
+      - task: test-unit
+      - task: prompt-"Committing upgrades"
+      - git add . --update
+      - 'git commit -m "chore(deps): upgrade"'
+      - task: prompt-"Upgrade completed!"
