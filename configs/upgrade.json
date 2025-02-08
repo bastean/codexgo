@@ -12,8 +12,8 @@
       "Commands": [{ "Name": "task", "Args": ["upgrade-go"] }]
     },
     {
-      "Title": "Upgrading Node",
-      "Commands": [{ "Name": "task", "Args": ["upgrade-node"] }]
+      "Title": "Upgrading Bun",
+      "Commands": [{ "Name": "task", "Args": ["upgrade-bun"] }]
     },
     {
       "Title": "Upgrading Tooling",

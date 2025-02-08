@@ -4,8 +4,8 @@
     "": {
       "name": "codexgo",
       "devDependencies": {
-        "@commitlint/cli": "19.6.1",
-        "@commitlint/config-conventional": "19.6.0",
+        "@commitlint/cli": "19.7.1",
+        "@commitlint/config-conventional": "19.7.1",
         "@release-it/bumper": "7.0.1",
         "@release-it/conventional-changelog": "10.0.0",
         "commitizen": "4.3.1",
@@ -21,7 +21,7 @@
       "name": "server",
       "version": "4.11.0",
       "devDependencies": {
-        "fomantic-ui": "2.9.4-beta.99",
+        "fomantic-ui": "2.9.4-beta.100",
         "jquery": "3.7.1",
         "lodash": "4.17.21",
       },
@@ -42,9 +42,9 @@
 
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.25.9", "", {}, "sha512-Ed61U6XJc3CVRfkERJWDz4dJwKe7iLmmJsbOGu9wSloNSFttHV0I8g6UAgb7qnK5ly5bGLPd4oXZlxCdANBOWQ=="],
 
-    "@commitlint/cli": ["@commitlint/cli@19.6.1", "", { "dependencies": { "@commitlint/format": "^19.5.0", "@commitlint/lint": "^19.6.0", "@commitlint/load": "^19.6.1", "@commitlint/read": "^19.5.0", "@commitlint/types": "^19.5.0", "tinyexec": "^0.3.0", "yargs": "^17.0.0" }, "bin": { "commitlint": "cli.js" } }, "sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ=="],
+    "@commitlint/cli": ["@commitlint/cli@19.7.1", "", { "dependencies": { "@commitlint/format": "^19.5.0", "@commitlint/lint": "^19.7.1", "@commitlint/load": "^19.6.1", "@commitlint/read": "^19.5.0", "@commitlint/types": "^19.5.0", "tinyexec": "^0.3.0", "yargs": "^17.0.0" }, "bin": { "commitlint": "cli.js" } }, "sha512-iObGjR1tE/PfDtDTEfd+tnRkB3/HJzpQqRTyofS2MPPkDn1mp3DBC8SoPDayokfAy+xKhF8+bwRCJO25Nea0YQ=="],
 
-    "@commitlint/config-conventional": ["@commitlint/config-conventional@19.6.0", "", { "dependencies": { "@commitlint/types": "^19.5.0", "conventional-changelog-conventionalcommits": "^7.0.2" } }, "sha512-DJT40iMnTYtBtUfw9ApbsLZFke1zKh6llITVJ+x9mtpHD08gsNXaIRqHTmwTZL3dNX5+WoyK7pCN/5zswvkBCQ=="],
+    "@commitlint/config-conventional": ["@commitlint/config-conventional@19.7.1", "", { "dependencies": { "@commitlint/types": "^19.5.0", "conventional-changelog-conventionalcommits": "^7.0.2" } }, "sha512-fsEIF8zgiI/FIWSnykdQNj/0JE4av08MudLTyYHm4FlLWemKoQvPNUYU2M/3tktWcCEyq7aOkDDgtjrmgWFbvg=="],
 
     "@commitlint/config-validator": ["@commitlint/config-validator@19.5.0", "", { "dependencies": { "@commitlint/types": "^19.5.0", "ajv": "^8.11.0" } }, "sha512-CHtj92H5rdhKt17RmgALhfQt95VayrUo2tSqY9g2w+laAXyk7K/Ef6uPm9tn5qSIwSmrLjKaXK9eiNuxmQrDBw=="],
 
@@ -592,7 +592,7 @@
 
     "flagged-respawn": ["flagged-respawn@2.0.0", "", {}, "sha512-Gq/a6YCi8zexmGHMuJwahTGzXlAZAOsbCVKduWXC6TlLCjjFRlExMJc4GC2NYPYZ0r/brw9P7CpRgQmlPVeOoA=="],
 
-    "fomantic-ui": ["fomantic-ui@2.9.4-beta.99", "", { "dependencies": { "@actions/core": "^1.6.0", "@fomantic/better-console": "^1.0.2", "@fomantic/gulp-concat-css": "^3.2.1", "@fomantic/gulp-concat-filenames": "^1.2.1", "@fomantic/gulp-dedupe": "^0.0.3", "@fomantic/gulp-git": "^2.11.1", "@fomantic/gulp-header": "^2.1.1", "@fomantic/gulp-plumber": "^1.2.2", "@octokit/core": "^3.6.0", "@octokit/rest": "^18.12.0", "browserslist": "^4.21.4", "del": "^6.1.1", "extend": "^3.0.2", "gulp": "^5.0.0", "gulp-autoprefixer": "^8.0.0", "gulp-chmod": "^3.0.0", "gulp-clean-css": "^4.3.0", "gulp-clone": "^2.0.1", "gulp-concat": "^2.6.1", "gulp-flatten": "^0.4.0", "gulp-if": "^3.0.0", "gulp-json-editor": "^2.4.3", "gulp-less": "^5.0.0", "gulp-print": "^5.0.0", "gulp-rename": "^1.4.0", "gulp-replace": "^1.0.0", "gulp-rtlcss": "^2.0.0", "gulp-tap": "^1.0.1", "gulp-uglify": "^3.0.1", "inquirer": "^8.2.0", "jquery": "^3.4.0", "less": "^3.12.0 || ^4.0.0", "map-stream": "^0.1.0", "merge-stream": "^2.0.0", "mkdirp": "^1.0.4", "normalize-path": "^3.0.0", "ordered-read-streams": "^1.0.1", "replace-ext": "^1.0.0", "require-dot-file": "^0.4.0", "wrench-sui": "^0.0.3", "yamljs": "^0.3.0" } }, "sha512-pH1xL49K2zg2VnBhbu4nO04oUwwEy3hyCa+FNmHfyTJVpEEaMB7NjCMu+5MTynh9HY7UBiCcAAXCoNq6h2rIBw=="],
+    "fomantic-ui": ["fomantic-ui@2.9.4-beta.100", "", { "dependencies": { "@actions/core": "^1.6.0", "@fomantic/better-console": "^1.0.2", "@fomantic/gulp-concat-css": "^3.2.1", "@fomantic/gulp-concat-filenames": "^1.2.1", "@fomantic/gulp-dedupe": "^0.0.3", "@fomantic/gulp-git": "^2.11.1", "@fomantic/gulp-header": "^2.1.1", "@fomantic/gulp-plumber": "^1.2.2", "@octokit/core": "^3.6.0", "@octokit/rest": "^18.12.0", "browserslist": "^4.21.4", "del": "^6.1.1", "extend": "^3.0.2", "gulp": "^5.0.0", "gulp-autoprefixer": "^8.0.0", "gulp-chmod": "^3.0.0", "gulp-clean-css": "^4.3.0", "gulp-clone": "^2.0.1", "gulp-concat": "^2.6.1", "gulp-flatten": "^0.4.0", "gulp-if": "^3.0.0", "gulp-json-editor": "^2.4.3", "gulp-less": "^5.0.0", "gulp-print": "^5.0.0", "gulp-rename": "^1.4.0", "gulp-replace": "^1.0.0", "gulp-rtlcss": "^2.0.0", "gulp-tap": "^1.0.1", "gulp-uglify": "^3.0.1", "inquirer": "^8.2.0", "jquery": "^3.4.0", "less": "^3.12.0 || ^4.0.0", "map-stream": "^0.1.0", "merge-stream": "^2.0.0", "mkdirp": "^1.0.4", "normalize-path": "^3.0.0", "ordered-read-streams": "^1.0.1", "replace-ext": "^1.0.0", "require-dot-file": "^0.4.0", "wrench-sui": "^0.0.3", "yamljs": "^0.3.0" } }, "sha512-Ri2zDHmlNrHfV1s2CI2mBm7hX32HHVLoAyq8ffYPyIEFtHIgCgDxmkV4dwRjucnBROyKZrVVBGZJK0gth2J/LQ=="],
 
     "for-in": ["for-in@1.0.2", "", {}, "sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ=="],
 

@@ -17,8 +17,8 @@
     "internal/app/*"
   ],
   "devDependencies": {
-    "@commitlint/cli": "19.6.1",
-    "@commitlint/config-conventional": "19.6.0",
+    "@commitlint/cli": "19.7.1",
+    "@commitlint/config-conventional": "19.7.1",
     "@release-it/bumper": "7.0.1",
     "@release-it/conventional-changelog": "10.0.0",
     "commitizen": "4.3.1",
