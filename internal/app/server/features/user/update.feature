@@ -7,6 +7,8 @@ Feature: Update a user account
     * I fill the Password with update@example
     * I fill the Confirm Password with update@example
     * I check the I agree to the terms and conditions
+    * I hover the Sign up button
+    * I fill the Answer with 00000
     When I click the Sign up button
     Then I see Account created notification
 

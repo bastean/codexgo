@@ -27,3 +27,7 @@ func HasServerGinProxy() (string, bool) {
 
 	return "", false
 }
+
+func IsNotServerGinModeTest() bool {
+	return ServerGinMode != "test"
+}

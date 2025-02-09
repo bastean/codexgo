@@ -7,6 +7,8 @@ Feature: User forgot password
     * I fill the Password with forgot@example
     * I fill the Confirm Password with forgot@example
     * I check the I agree to the terms and conditions
+    * I hover the Sign up button
+    * I fill the Answer with 00000
     When I click the Sign up button
     Then I see Account created notification
 
@@ -15,6 +17,7 @@ Feature: User forgot password
     * I click on the Sign in button
     * I click on the Forgot Password? button
     * I fill the Email with forgot@example.com
+    * I fill the Answer with 00000
     When I click the Send button
     Then I see Link sent. Please check your inbox notification
 
@@ -23,5 +26,6 @@ Feature: User forgot password
     * I click on the Sign in button
     * I click on the Forgot Password? button
     * I fill the Email with non-existing@example.com
+    * I fill the Answer with 00000
     When I click the Send button
     Then I see non-existing@example.com not found notification

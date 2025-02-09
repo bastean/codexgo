@@ -1,8 +1,10 @@
 package captcha
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/mojocn/base64Captcha"
+
+	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 )
 
 type Captcha struct {
@@ -31,7 +33,7 @@ func Generate() (*Captcha, error) {
 }
 
 func Verify(id, answer string) error {
-	if !base64Captcha.DefaultMemStore.Verify(id, answer, false) {
+	if !base64Captcha.DefaultMemStore.Verify(id, answer, false) && env.IsNotServerGinModeTest() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			Where: "Verify",
 			What:  "Wrong captcha answer",

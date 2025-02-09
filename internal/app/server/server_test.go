@@ -92,6 +92,7 @@ func SetupScenario(sc *godog.ScenarioContext) {
 
 	sc.Given(`^I fill the (.+) with (.+)$`, func(placeholder, value string) {
 		element = page.GetByRole("textbox", playwright.PageGetByRoleOptions{Name: placeholder, Exact: &exact}).Last()
+		assert.NoError(element.Click())
 		assert.NoError(element.Fill(value))
 	})
 
@@ -108,6 +109,11 @@ func SetupScenario(sc *godog.ScenarioContext) {
 	sc.Given(`^I open the (.+) menu$`, func(name string) {
 		element = page.GetByRole("heading").First()
 		assert.NoError(element.Click())
+	})
+
+	sc.Given(`^I hover the (.+) button$`, func(name string) {
+		element = page.GetByRole("button", playwright.PageGetByRoleOptions{Name: name})
+		assert.NoError(element.Hover())
 	})
 
 	sc.When(`^I click the (.+) button$`, func(name string) {

@@ -24,12 +24,6 @@ script ShowModal(modalTagID string) {
     ;
 }
 
-script Submit(formTagID string) {
-    $(`#${formTagID}`)
-        .form("submit")
-    ;
-}
-
 script PageInit(resetModalTagID string) {
     $(".ui.container")
         .transition("fade in", "3s")
