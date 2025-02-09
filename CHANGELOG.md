@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.12.0 (2025-02-09)
+
+- fix(mother): use index values directly ([36b6f3e](https://github.com/bastean/codexgo/commit/36b6f3e))
+- docs(readme): add captcha in security section ([125dc9b](https://github.com/bastean/codexgo/commit/125dc9b))
+- test(acceptance): add captcha in features ([aef8ebd](https://github.com/bastean/codexgo/commit/aef8ebd))
+- test(mother): change email generator ([07f8430](https://github.com/bastean/codexgo/commit/07f8430))
+- feat: add bun ([0b6d03b](https://github.com/bastean/codexgo/commit/0b6d03b))
+- feat: add task ([dc5e938](https://github.com/bastean/codexgo/commit/dc5e938))
+- feat(server): add captcha for register and forgot forms ([297a497](https://github.com/bastean/codexgo/commit/297a497))
+- refactor(upgrade): use task ([388f35c](https://github.com/bastean/codexgo/commit/388f35c))
+- chore(deps): upgrade ([c285749](https://github.com/bastean/codexgo/commit/c285749))
+
 ## 4.11.0 (2025-02-05)
 
 - docs(readme): add password reset mail to showcase ([8680436](https://github.com/bastean/codexgo/commit/8680436))
