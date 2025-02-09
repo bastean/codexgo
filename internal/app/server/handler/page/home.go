@@ -15,6 +15,7 @@ func Home(c *gin.Context) {
 
 	if err := errors.Join(errRegister, errForgot); err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Home"))
+		return
 	}
 
 	if err := home.Page(register, forgot).Render(c.Request.Context(), c.Writer); err != nil {

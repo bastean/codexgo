@@ -2,9 +2,16 @@ package services
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/brianvoe/gofakeit/v7"
+)
+
+var (
+	smtp   = strings.Split(os.Getenv("CODEXGO_SMTP_USERNAME"), "@")
+	user   = smtp[0]
+	domain = smtp[1]
 )
 
 type mother struct {
@@ -12,11 +19,23 @@ type mother struct {
 }
 
 func (m *mother) Email() string {
-	username := strings.Split(m.Faker.Email(), "@")[0]
+	random := strings.Split(m.Faker.Email(), "@")[0]
 
-	domain := "example.com"
-
-	return fmt.Sprintf("%s@%s", username, domain)
+	switch {
+	case len(smtp) == 2:
+		return fmt.Sprintf(
+			"%s+%s@%s",
+			user,
+			random,
+			domain,
+		)
+	default:
+		return fmt.Sprintf(
+			"%s@%s",
+			random,
+			"example.com",
+		)
+	}
 }
 
 func (m *mother) Message() string {
