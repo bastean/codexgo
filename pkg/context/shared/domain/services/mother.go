@@ -9,9 +9,7 @@ import (
 )
 
 var (
-	smtp   = strings.Split(os.Getenv("CODEXGO_SMTP_USERNAME"), "@")
-	user   = smtp[0]
-	domain = smtp[1]
+	smtp = strings.Split(os.Getenv("CODEXGO_SMTP_USERNAME"), "@")
 )
 
 type mother struct {
@@ -25,9 +23,9 @@ func (m *mother) Email() string {
 	case len(smtp) == 2:
 		return fmt.Sprintf(
 			"%s+%s@%s",
-			user,
+			smtp[0],
 			random,
-			domain,
+			smtp[1],
 		)
 	default:
 		return fmt.Sprintf(
