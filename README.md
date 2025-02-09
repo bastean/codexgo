@@ -213,13 +213,14 @@ task demo
 
 ### Security
 
+- Server log files.
+- Requests **Rate Limiting**.
+- Data **authentication** via **JWT** managed by **Session Cookies**.
+- [Captcha](https://github.com/mojocn/base64Captcha) implementation in forms.
 - Form validation at the client using [Fomantic - Form Validation](https://fomantic-ui.com/behaviors/form.html).
   - On the server, the validations are performed using the **Value Objects** defined in the **Context**.
-- Data **authentication** via **JWT** managed by **Session Cookies**.
-- Account confirmation via **Mail** or **Terminal**.
+- Account confirmation and recovery via **Mail** or **Terminal**.
 - Password hashing using [Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt).
-- Requests **Rate Limiting**.
-- Server log files.
 
 ### Scripts
 
