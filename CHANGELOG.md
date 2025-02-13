@@ -1,5 +1,12 @@
 # Changelog
 
+## <small>4.12.1 (2025-02-13)</small>
+
+- fix(task): mark upgrade taskfile as optional ([c690846](https://github.com/bastean/codexgo/commit/c690846))
+- chore(deps): upgrade ([7f22c86](https://github.com/bastean/codexgo/commit/7f22c86))
+- docs(readme): add account recovery message sent via terminal ([a2a89a7](https://github.com/bastean/codexgo/commit/a2a89a7))
+- test(acceptance): skip rate limit to avoid flaky tests ([73224ca](https://github.com/bastean/codexgo/commit/73224ca))
+
 ## 4.12.0 (2025-02-09)
 
 - fix(mother): use index values directly ([36b6f3e](https://github.com/bastean/codexgo/commit/36b6f3e))
