@@ -5,6 +5,7 @@ import (
 	"time"
 
 	ratelimit "github.com/JGLTechnologies/gin-rate-limit"
+	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,9 @@ func RateLimiter() gin.HandlerFunc {
 			&ratelimit.InMemoryOptions{
 				Rate:  time.Second,
 				Limit: 10,
+				Skip: func(c *gin.Context) bool {
+					return env.IsServerGinModeTest()
+				},
 			},
 		),
 		&ratelimit.Options{

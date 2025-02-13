@@ -33,7 +33,7 @@ func Generate() (*Captcha, error) {
 }
 
 func Verify(id, answer string) error {
-	if !base64Captcha.DefaultMemStore.Verify(id, answer, false) && env.IsNotServerGinModeTest() {
+	if !base64Captcha.DefaultMemStore.Verify(id, answer, false) && !env.IsServerGinModeTest() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			Where: "Verify",
 			What:  "Wrong captcha answer",
