@@ -70,11 +70,13 @@ go install github.com/bastean/codexgo/v4/cmd/codexgo@latest
 >
 > - We need to create an `.env` file where we have our own values defined.
 >   - In the [.env.example.cli](deployments/.env.example.cli) file, we can see the values that can be used.
->     - If `CODEXGO_SMTP_*` is omitted, the link to confirm the account is sent through the Terminal with the following message: _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
->       - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
+>     - If `CODEXGO_SMTP_*` is omitted, the links to confirm and recover the account are sent through the Terminal with the following messages:
+>       - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
+>       - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
+>     - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
 >     - If `CODEXGO_BROKER_*` is omitted, an in-memory event bus will be used.
 >     - If `CODEXGO_DATABASE_*` is omitted, a `SQLite` in-memory database will be used.
->       - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_SQLITE_DSN` variable.
+>     - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_SQLITE_DSN` variable.
 
 ```bash
 codexgo -h
@@ -102,7 +104,10 @@ Usage: codexgo [flags]
 > [!NOTE]
 >
 > - [System Requirements](#locally)
-> - In the Demo version, the link to confirm the account is sent through the Terminal with the following message: _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
+> - In the Demo version:
+>   - The links to confirm and recover the account are sent through the Terminal with the following messages:
+>     - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
+>     - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
 >   - We can define our own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
 
 ```bash
@@ -183,13 +188,18 @@ task demo
 
 - Multiple Features already pre-configured:
   - Go
-  - Node
+  - Task
   - Docker in Docker
+  - SSH
 - Extensions and their respective settings to work with:
   - Go
+  - Task
+  - Docker
   - templ
   - Cucumber
     - Gherkin
+  - YAML
+  - TOML
   - Prettier
   - Better Comments
   - Todo Tree
