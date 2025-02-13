@@ -3,6 +3,7 @@ version: "3"
 includes:
   upgrade:
     taskfile: ./configs/upgrade
+    optional: true
     flatten: true
 
 vars:
