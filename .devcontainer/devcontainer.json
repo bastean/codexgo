@@ -6,7 +6,7 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers-extra/features/go-task:1": {},
     "ghcr.io/devcontainers/features/go:1": {
-      "version": "1.23"
+      "version": "1.24"
     }
   },
   "forwardPorts": [2222],
