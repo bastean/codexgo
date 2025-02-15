@@ -58,25 +58,26 @@
 
 ## CLI
 
+### Run (Demo)
+
+```bash
+go run github.com/bastean/codexgo/v4/cmd/codexgo@latest -demo
+```
+
+> [!NOTE]
+>
+> - Demo version does not require any configuration, because the required **ENV** values are already preset.
+>   - Here we can find the **ENV** preset values that are used in the [Demo](internal/pkg/service/env/demo.go).
+> - `In-Memory` implementation will be used for EventBus, CommandBus, QueryBus and Database (`SQLite`).
+> - Links to confirm and recover the account are sent through the `Terminal` with the following messages:
+>   - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
+>   - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
+
 ### Installation
 
 ```bash
 go install github.com/bastean/codexgo/v4/cmd/codexgo@latest
 ```
-
-### Usage
-
-> [!NOTE]
->
-> - We need to create an `.env` file where we have our own values defined.
->   - In the [.env.example.cli](deployments/.env.example.cli) file, we can see the values that can be used.
->     - If `CODEXGO_SMTP_*` is omitted, the links to confirm and recover the account are sent through the Terminal with the following messages:
->       - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
->       - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
->     - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
->     - If `CODEXGO_BROKER_*` is omitted, an in-memory event bus will be used.
->     - If `CODEXGO_DATABASE_*` is omitted, a `SQLite` in-memory database will be used.
->     - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_SQLITE_DSN` variable.
 
 ```bash
 codexgo -h
@@ -93,8 +94,29 @@ Example CRUD project applying Hexagonal Architecture, DDD, EDA, CQRS, BDD, CI, a
 
 Usage: codexgo [flags]
 
+  -demo
+        Use preset ENV values
   -env string
-    	Path to ENV file (required)
+        Path to custom ENV file
+```
+
+### Usage
+
+> [!NOTE]
+>
+> - We need to create an `.env` file where we have our own values defined.
+>   - In the [.env.example.cli](deployments/.env.example.cli) file, we can see the values that can be used.
+>     - If `CODEXGO_SMTP_*` is omitted, the links to confirm and recover the account are sent through the `Terminal` with the following messages:
+>       - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
+>       - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
+>     - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
+>     - If `CODEXGO_BROKER_*` is omitted, an in-memory EventBus will be used.
+>     - `In-Memory` implementation will be used for CommandBus and QueryBus.
+>     - If `CODEXGO_DATABASE_*` is omitted, a `SQLite` in-memory database will be used.
+>     - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_SQLITE_DSN` variable.
+
+```bash
+codexgo -env path/to/.env
 ```
 
 ## Docker
@@ -105,7 +127,10 @@ Usage: codexgo [flags]
 >
 > - [System Requirements](#locally)
 > - In the Demo version:
->   - The links to confirm and recover the account are sent through the Terminal with the following messages:
+>   - `RabbitMQ` implementation will be used for the EventBus.
+>   - `In-Memory` implementation will be used for CommandBus and QueryBus.
+>   - `MongoDB` implementation will be used as Database.
+>   - Links to confirm and recover the account are sent through the `Terminal` with the following messages:
 >     - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
 >     - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
 >   - We can define our own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
@@ -220,6 +245,11 @@ task demo
 
 - Message (Event/Command):
   - Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
+
+### Server
+
+- [Progressive Web App (PWA)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable)
+  - [Manifest](internal/app/server/static/manifest.json)
 
 ### Security
 
@@ -400,6 +430,18 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    ```text
    Dev Containers: Reopen in Container
    ```
+
+5. SSH (Optional)
+
+   - We can connect to our `Dev Container` via `SSH` in the following ways:
+     - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository:
+       ```bash
+       task connect-2222-vscode-localhost
+       ```
+     - Using the SSH Client of our host:
+       ```bash
+       ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
+       ```
 
 #### Locally
 
