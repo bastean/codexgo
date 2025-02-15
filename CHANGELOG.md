@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.13.0 (2025-02-15)
+
+- docs(readme): add description about cli demo ([e205f7a](https://github.com/bastean/codexgo/commit/e205f7a))
+- feat(cli): add demo flag to run with preset env values ([08883c6](https://github.com/bastean/codexgo/commit/08883c6))
+- refactor(domain): change where of panic errors in messages ([60acb93](https://github.com/bastean/codexgo/commit/60acb93))
+- chore(go): upgrade to go1.24.0 ([898ae20](https://github.com/bastean/codexgo/commit/898ae20))
+
 ## <small>4.12.1 (2025-02-13)</small>
 
 - fix(task): mark upgrade taskfile as optional ([c690846](https://github.com/bastean/codexgo/commit/c690846))
