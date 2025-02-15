@@ -79,7 +79,7 @@ func NewKey(key *KeyComponents) Key {
 	status, errStatus := components.NewStatus(key.Status)
 
 	if err := errors.Join(errOrganization, errService, errVersion, errType, errEntity, errAction, errStatus); err != nil {
-		errors.Panic(err.Error(), "NewRoutingKey")
+		errors.Panic(err.Error(), "NewKey")
 	}
 
 	value := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s", organization.Value, service.Value, version.Value, types.Value, entity.Value, action, status.Value)
