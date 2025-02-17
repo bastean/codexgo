@@ -37,8 +37,6 @@ func Create(c *gin.Context) {
 		return
 	}
 
-	captcha.Clear(data.CaptchaID)
-
 	err = command.Bus.Dispatch(messages.New(
 		create.CommandKey,
 		&create.CommandAttributes{
@@ -55,6 +53,8 @@ func Create(c *gin.Context) {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))
 		return
 	}
+
+	captcha.Clear(data.CaptchaID)
 
 	c.JSON(http.StatusCreated, &reply.JSON{
 		Success: true,

@@ -37,8 +37,6 @@ func Forgot(c *gin.Context) {
 		return
 	}
 
-	captcha.Clear(data.CaptchaID)
-
 	err = command.Bus.Dispatch(messages.New(
 		forgot.CommandKey,
 		&forgot.CommandAttributes{
@@ -52,6 +50,8 @@ func Forgot(c *gin.Context) {
 		errs.AbortByErr(c, errors.BubbleUp(err, "Forgot"))
 		return
 	}
+
+	captcha.Clear(data.CaptchaID)
 
 	c.JSON(http.StatusOK, &reply.JSON{
 		Success: true,
