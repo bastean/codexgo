@@ -13,6 +13,11 @@ services:
     container_name: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_NAME}
     restart: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_RESTART}
     image: rabbitmq
+    pull_policy: never
+    build:
+      dockerfile_inline: |
+        FROM rabbitmq
+        RUN rabbitmq-plugins enable rabbitmq_management
     environment:
       RABBITMQ_DEFAULT_USER: ${CODEXGO_BROKER_RABBITMQ_ADMIN_USERNAME}
       RABBITMQ_DEFAULT_PASS: ${CODEXGO_BROKER_RABBITMQ_ADMIN_PASSWORD}
