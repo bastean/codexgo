@@ -19,7 +19,7 @@ func Server() {
 }
 
 func HasServerGinProxy() (string, bool) {
-	proxy := os.Getenv(DEV_AIR_PROXY_PORT)
+	proxy := os.Getenv(DEV_RELOAD_AIR_PROXY_PORT)
 
 	if proxy != "" && proxy != ServerGinPort {
 		return proxy, true

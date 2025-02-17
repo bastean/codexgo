@@ -1,6 +1,17 @@
 services:
+  smtp-mailpit:
+    profiles: [dev, test, demo]
+    network_mode: service:codexgo
+    container_name: ${CODEXGO_DEV_SMTP_MAILPIT_CONTAINER_NAME}
+    restart: ${CODEXGO_DEV_SMTP_MAILPIT_CONTAINER_RESTART}
+    image: axllent/mailpit
+    environment:
+      MP_SMTP_AUTH_ALLOW_INSECURE: true
+      MP_SMTP_AUTH_ACCEPT_ANY: true
+
   broker-rabbitmq:
     container_name: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_NAME}
+    restart: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_RESTART}
     image: rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: ${CODEXGO_BROKER_RABBITMQ_ADMIN_USERNAME}
@@ -8,7 +19,6 @@ services:
     ports:
       - ${CODEXGO_BROKER_RABBITMQ_AMQP_PORT}:5672
       - ${CODEXGO_BROKER_RABBITMQ_ADMIN_PORT}:15672
-    restart: ${CODEXGO_BROKER_RABBITMQ_CONTAINER_RESTART}
     healthcheck:
       test: rabbitmq-diagnostics -q status
       interval: 12s
@@ -17,16 +27,16 @@ services:
 
   database-mongodb:
     container_name: ${CODEXGO_DATABASE_MONGODB_CONTAINER_NAME}
+    restart: ${CODEXGO_DATABASE_MONGODB_CONTAINER_RESTART}
     image: mongo
+    command: mongod --quiet --logpath /dev/null
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD}
-    command: mongod --quiet --logpath /dev/null
-    ports:
-      - ${CODEXGO_DATABASE_MONGODB_PORT}:27017
     volumes:
       - database-mongodb:/data/db
-    restart: ${CODEXGO_DATABASE_MONGODB_CONTAINER_RESTART}
+    ports:
+      - ${CODEXGO_DATABASE_MONGODB_PORT}:27017
     healthcheck:
       test: echo 'db.runCommand({serverStatus:1}).ok' | mongosh admin -u ${CODEXGO_DATABASE_MONGODB_ROOT_USERNAME} -p ${CODEXGO_DATABASE_MONGODB_ROOT_PASSWORD} --quiet | grep 1
       interval: 12s
@@ -35,12 +45,14 @@ services:
 
   codexgo:
     container_name: ${CODEXGO_CONTAINER_NAME}
+    restart: ${CODEXGO_CONTAINER_RESTART}
     image: ${CODEXGO_CONTAINER_IMAGE_TAG}
     pull_policy: never
     build:
       context: ..
       dockerfile: deployments/Dockerfile
       target: ${CODEXGO_CONTAINER_IMAGE_BUILD_TARGET}
+    command: ${CODEXGO_CONTAINER_START}
     environment:
       CODEXGO_BROKER_RABBITMQ_URI: "amqp://${CODEXGO_BROKER_RABBITMQ_ADMIN_USERNAME}:${CODEXGO_BROKER_RABBITMQ_ADMIN_PASSWORD}@broker-rabbitmq:5672"
       CODEXGO_BROKER_RABBITMQ_NAME: ${CODEXGO_BROKER_RABBITMQ_NAME}
@@ -59,15 +71,14 @@ services:
       CODEXGO_SERVER_GIN_ALLOWED_HOSTS: ${CODEXGO_SERVER_GIN_ALLOWED_HOSTS}
       CODEXGO_SERVER_GIN_COOKIE_SECRET_KEY: ${CODEXGO_SERVER_GIN_COOKIE_SECRET_KEY}
       CODEXGO_SERVER_GIN_COOKIE_SESSION_NAME: ${CODEXGO_SERVER_GIN_COOKIE_SESSION_NAME}
-      CODEXGO_DEV_AIR_PROXY_PORT: ${CODEXGO_DEV_AIR_PROXY_PORT}
-    command: ${CODEXGO_CONTAINER_START}
-    ports:
-      - ${CODEXGO_SERVER_GIN_PORT}:${CODEXGO_SERVER_GIN_PORT}
-      - ${CODEXGO_DEV_AIR_PROXY_PORT}:${CODEXGO_DEV_AIR_PROXY_PORT}
+      CODEXGO_DEV_RELOAD_AIR_PROXY_PORT: ${CODEXGO_DEV_RELOAD_AIR_PROXY_PORT}
     volumes:
       - ${CODEXGO_CONTAINER_VOLUME}
       - codexgo-modules:/go/pkg/mod
-    restart: ${CODEXGO_CONTAINER_RESTART}
+    ports:
+      - ${CODEXGO_SERVER_GIN_PORT}:${CODEXGO_SERVER_GIN_PORT}
+      - ${CODEXGO_DEV_RELOAD_AIR_PROXY_PORT}:${CODEXGO_DEV_RELOAD_AIR_PROXY_PORT}
+      - ${CODEXGO_DEV_SMTP_MAILPIT_WEBUI_PORT}:${CODEXGO_DEV_SMTP_MAILPIT_WEBUI_PORT}
     depends_on:
       broker-rabbitmq:
         condition: service_healthy

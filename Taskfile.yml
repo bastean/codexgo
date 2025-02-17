@@ -132,6 +132,10 @@ tasks:
 
   install-tools-test:
     cmds:
+      - task: curl
+        vars:
+          URL: https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh
+          PIPE: sudo bash
       - go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
       - bun i -g concurrently wait-on
 
@@ -377,6 +381,9 @@ tasks:
       - task: git-reset-hard
       - task: init
 
+  #* Mailpit
+  mailpit: mailpit --smtp-auth-allow-insecure --smtp-auth-accept-any
+
   #* Docker
   docker-usage: docker system df
 
@@ -411,7 +418,7 @@ tasks:
     cmds:
       - task: compose-env
         vars:
-          OPTIONS: .env.dev down
+          OPTIONS: .env.demo.dev --profile dev down
       - task: docker-rm-vol
         vars:
           VOLUME: codexgo-database-mongodb-dev
@@ -421,13 +428,13 @@ tasks:
       - task: compose-dev-down
       - task: compose-env
         vars:
-          OPTIONS: .env.dev up
+          OPTIONS: .env.demo.dev --profile dev up
 
   compose-test-down:
     cmds:
       - task: compose-env
         vars:
-          OPTIONS: .env.test down
+          OPTIONS: .env.demo.test --profile test down
       - task: docker-rm-vol
         vars:
           VOLUME: codexgo-database-mongodb-test
@@ -437,27 +444,27 @@ tasks:
       - task: compose-test-down
       - task: compose-env
         vars:
-          OPTIONS: .env.test --env-file .env.test.integration up --exit-code-from codexgo
+          OPTIONS: .env.demo.test --env-file .env.demo.test.integration --profile test up --exit-code-from codexgo
 
   compose-test-acceptance:
     cmds:
       - task: compose-test-down
       - task: compose-env
         vars:
-          OPTIONS: .env.test --env-file .env.test.acceptance up --exit-code-from codexgo
+          OPTIONS: .env.demo.test --env-file .env.demo.test.acceptance --profile test up --exit-code-from codexgo
 
   compose-tests:
     cmds:
       - task: compose-test-down
       - task: compose-env
         vars:
-          OPTIONS: .env.test up --exit-code-from codexgo
+          OPTIONS: .env.demo.test --profile test up --exit-code-from codexgo
 
   compose-prod-down:
     cmds:
       - task: compose-env
         vars:
-          OPTIONS: .env.prod down
+          OPTIONS: .env.demo.prod down
       - task: docker-rm-img
         vars:
           IMAGE: codexgo
@@ -467,20 +474,20 @@ tasks:
       - task: compose-prod-down
       - task: compose-env
         vars:
-          OPTIONS: .env.prod up --exit-code-from codexgo
+          OPTIONS: .env.demo.prod up --exit-code-from codexgo
 
   demo-down:
     cmds:
       - task: compose-env
         vars:
-          OPTIONS: .env.demo down
+          OPTIONS: .env.demo --profile demo down
 
   demo:
     cmds:
       - task: demo-down
       - task: compose-env
         vars:
-          OPTIONS: .env.demo up --exit-code-from codexgo
+          OPTIONS: .env.demo --profile demo up --exit-code-from codexgo
 
   compose-down:
     cmds:
