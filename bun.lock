@@ -19,9 +19,9 @@
     },
     "internal/app/server": {
       "name": "server",
-      "version": "4.12.0",
+      "version": "4.13.0",
       "devDependencies": {
-        "fomantic-ui": "2.9.4-beta.102",
+        "fomantic-ui": "2.9.4-beta.103",
         "jquery": "3.7.1",
         "lodash": "4.17.21",
       },
@@ -566,7 +566,7 @@
 
     "flagged-respawn": ["flagged-respawn@2.0.0", "", {}, "sha512-Gq/a6YCi8zexmGHMuJwahTGzXlAZAOsbCVKduWXC6TlLCjjFRlExMJc4GC2NYPYZ0r/brw9P7CpRgQmlPVeOoA=="],
 
-    "fomantic-ui": ["fomantic-ui@2.9.4-beta.102", "", { "dependencies": { "@actions/core": "^1.6.0", "@fomantic/better-console": "^1.0.2", "@fomantic/gulp-concat-css": "^3.3.0", "@fomantic/gulp-concat-filenames": "^1.2.1", "@fomantic/gulp-dedupe": "^0.0.3", "@fomantic/gulp-git": "^2.11.1", "@fomantic/gulp-header": "^2.1.1", "@fomantic/gulp-plumber": "^1.2.2", "@octokit/core": "^3.6.0", "@octokit/rest": "^18.12.0", "browserslist": "^4.21.4", "del": "^6.1.1", "extend": "^3.0.2", "gulp": "^5.0.0", "gulp-autoprefixer": "^8.0.0", "gulp-chmod": "^3.0.0", "gulp-clean-css": "^4.3.0", "gulp-clone": "^2.0.1", "gulp-concat": "^2.6.1", "gulp-flatten": "^0.4.0", "gulp-if": "^3.0.0", "gulp-json-editor": "^2.4.3", "gulp-less": "^5.0.0", "gulp-print": "^5.0.0", "gulp-rename": "^1.4.0", "gulp-replace": "^1.0.0", "gulp-rtlcss": "^2.0.0", "gulp-tap": "^1.0.1", "gulp-uglify": "^3.0.1", "inquirer": "^8.2.0", "jquery": "^3.4.0", "less": "^3.12.0 || ^4.0.0", "map-stream": "^0.1.0", "merge-stream": "^2.0.0", "mkdirp": "^1.0.4", "normalize-path": "^3.0.0", "ordered-read-streams": "^1.0.1", "replace-ext": "^1.0.0", "require-dot-file": "^0.4.0", "wrench-sui": "^0.0.3", "yamljs": "^0.3.0" } }, "sha512-zYxZn9tTZNl0dPTUDTRQnEU1LwRw97ZDE45ShUu31TMEJ2y1ZKJEyJyR04kIeO6JfX536k+IE/zRxr454m1VSA=="],
+    "fomantic-ui": ["fomantic-ui@2.9.4-beta.103", "", { "dependencies": { "@actions/core": "^1.6.0", "@fomantic/better-console": "^1.0.2", "@fomantic/gulp-concat-css": "^3.3.0", "@fomantic/gulp-concat-filenames": "^1.2.1", "@fomantic/gulp-dedupe": "^0.0.3", "@fomantic/gulp-git": "^2.11.1", "@fomantic/gulp-header": "^2.1.1", "@fomantic/gulp-plumber": "^1.2.2", "@octokit/core": "^3.6.0", "@octokit/rest": "^18.12.0", "browserslist": "^4.21.4", "del": "^6.1.1", "extend": "^3.0.2", "gulp": "^5.0.0", "gulp-autoprefixer": "^8.0.0", "gulp-chmod": "^3.0.0", "gulp-clean-css": "^4.3.0", "gulp-clone": "^2.0.1", "gulp-concat": "^2.6.1", "gulp-flatten": "^0.4.0", "gulp-if": "^3.0.0", "gulp-json-editor": "^2.4.3", "gulp-less": "^5.0.0", "gulp-print": "^5.0.0", "gulp-rename": "^1.4.0", "gulp-replace": "^1.0.0", "gulp-rtlcss": "^2.0.0", "gulp-tap": "^1.0.1", "gulp-uglify": "^3.0.1", "inquirer": "^8.2.0", "jquery": "^3.4.0", "less": "^3.12.0 || ^4.0.0", "map-stream": "^0.1.0", "merge-stream": "^2.0.0", "mkdirp": "^1.0.4", "normalize-path": "^3.0.0", "ordered-read-streams": "^1.0.1", "replace-ext": "^1.0.0", "require-dot-file": "^0.4.0", "wrench-sui": "^0.0.3", "yamljs": "^0.3.0" } }, "sha512-GIzvTQbR8/ZBdbE3p81Ocf/UUhCxh0McAyh8hr4EZ+5sNtRDkF9YHKUTydnFNNuTBeQJq7rmnFGocWFBkzOdFA=="],
 
     "for-in": ["for-in@1.0.2", "", {}, "sha512-7EwmXrOjyL+ChxMhmG5lnW9MPt1aIeZEwKhQzoBUdTV0N3zuwWDZYVJatDvZ2OyzPUvdIAZDsCetk3coyMfcnQ=="],
 
