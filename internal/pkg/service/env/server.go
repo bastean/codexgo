@@ -18,16 +18,6 @@ func Server() {
 	ServerGinCookieSessionName = os.Getenv(SERVER_GIN_COOKIE_SESSION_NAME)
 }
 
-func HasServerGinProxy() (string, bool) {
-	proxy := os.Getenv(DEV_RELOAD_AIR_PROXY_PORT)
-
-	if proxy != "" && proxy != ServerGinPort {
-		return proxy, true
-	}
-
-	return "", false
-}
-
 func IsServerGinModeTest() bool {
 	return ServerGinMode == "test"
 }
