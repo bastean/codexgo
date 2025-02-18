@@ -71,6 +71,8 @@ func (s *CreateTestSuite) TestHandle() {
 
 	s.NoError(s.SUT.Handle(command))
 
+	s.hasher.Mock.AssertExpectations(s.T())
+
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.bus.Mock.AssertExpectations(s.T())

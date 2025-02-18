@@ -8,7 +8,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/reset"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -21,12 +20,9 @@ type ResetTestSuite struct {
 	reset      cases.Reset
 	repository *persistence.RepositoryMock
 	hasher     *ciphers.HasherMock
-	bus        *communications.EventBusMock
 }
 
 func (s *ResetTestSuite) SetupTest() {
-	s.bus = new(communications.EventBusMock)
-
 	s.repository = new(persistence.RepositoryMock)
 
 	s.hasher = new(ciphers.HasherMock)
