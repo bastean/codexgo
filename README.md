@@ -104,7 +104,7 @@ Usage: codexgo [flags]
 
 > [!NOTE]
 >
-> - We need to create an `.env` file where we have our own values defined.
+> - We can use the [.env.demo.cli](deployments/.env.demo.cli) file or we can create our own `.env` file where we define our own values.
 >   - In the [.env.example.cli](deployments/.env.example.cli) file, we can see the values that can be used.
 >     - If `CODEXGO_SMTP_*` is omitted, the links to confirm and recover the account are sent through the `Terminal` with the following messages:
 >       - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
@@ -121,19 +121,22 @@ codexgo -env path/to/.env
 
 ## Docker
 
-### Usage (Demo)
+### Run (Demo)
 
 > [!NOTE]
 >
 > - [System Requirements](#locally)
-> - In the Demo version:
+> - In the Demo version ([.env.demo](deployments/.env.demo)):
 >   - `RabbitMQ` implementation will be used for the EventBus.
+>     - **URL:** `http://localhost:15672`
+>     - **User/Password:** `codexgo-demo`
 >   - `In-Memory` implementation will be used for CommandBus and QueryBus.
 >   - `MongoDB` implementation will be used as Database.
->   - Links to confirm and recover the account are sent through the `Terminal` with the following messages:
->     - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
->     - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
->   - We can define our own **SMTP** configuration in the [.env.demo](deployments/.env.demo) file by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
+>     - **Compass:** `mongodb://codexgo-demo:codexgo-demo@localhost:27017`
+>   - `Mailpit` will be used as SMTP to receive emails with the links to confirm and recover the account.
+>     - **URL:** `http://localhost:8025`
+>   - `codexGO` Server.
+>     - **URL:** `http://localhost:8080`
 
 ```bash
 task demo
@@ -239,7 +242,7 @@ task demo
     - Build
     - Production
 - Compose
-  - Switched by ENVs.
+  - Switched by ENVs and Profiles.
 
 ### Broker
 
@@ -434,11 +437,11 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 5. SSH (Optional)
 
    - We can connect to our `Dev Container` via `SSH` in the following ways:
-     - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository:
+     - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository
        ```bash
        task connect-2222-vscode-localhost
        ```
-     - Using the SSH Client of our host:
+     - Using the SSH Client of our host
        ```bash
        ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
        ```
@@ -512,20 +515,23 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 #### ENVs
 
 > [!IMPORTANT]
-> Before running it, we must initialize the following environment variable files:
->
-> - [.env.example](deployments/.env.example)
->   - We will have to create a `.env.(dev|test|prod)` for each runtime environment.
->   - In the [.env.example.demo](deployments/.env.example.demo) file, we can see the values that can be used.
->
-> In case we only want to run the **Integration** or **Acceptance** tests, in addition to having the `.env.test` file, we must have the following files created:
->
-> - [.env.example.test.integration](deployments/.env.example.test.integration)
->   - Rename the file to `.env.test.integration`.
-> - [.env.example.test.acceptance](deployments/.env.example.test.acceptance)
->   - Rename the file to `.env.test.acceptance`.
+> If we want to modify the values inside some `.env` file, here [.env.example.demo](deployments/.env.example.demo) we can see the values that can be used.
 
-#### Development
+#### Development ([.env.demo.dev](deployments/.env.demo.dev))
+
+> [!NOTE]
+>
+> - `RabbitMQ`
+>   - **URL:** `http://localhost:15672`
+>   - **User/Password:** `codexgo-dev`
+> - `MongoDB`
+>   - **Compass:** `mongodb://codexgo-dev:codexgo-dev@localhost:27017`
+> - `Mailpit`
+>   - **URL:** `http://localhost:8025`
+> - `codexGO` Server
+>   - **URL:** `http://localhost:8080`
+> - `codexGO` Live-Reloading Server
+>   - **URL:** `http://localhost:8090`
 
 ```bash
 task compose-dev
@@ -539,25 +545,37 @@ task compose-dev
 task test-unit
 ```
 
-##### Integration
+##### Integration ([.env.demo.test](deployments/.env.demo.test) | [.env.demo.test.integration](deployments/.env.demo.test.integration))
 
 ```bash
 task compose-test-integration
 ```
 
-##### Acceptance
+##### Acceptance ([.env.demo.test](deployments/.env.demo.test) | [.env.demo.test.acceptance](deployments/.env.demo.test.acceptance))
 
 ```bash
 task compose-test-acceptance
 ```
 
-##### Unit / Integration / Acceptance
+##### Unit / Integration / Acceptance ([.env.demo.test](deployments/.env.demo.test))
 
 ```bash
 task compose-tests
 ```
 
-#### Production
+#### Production ([.env.demo.prod](deployments/.env.demo.prod))
+
+> [!NOTE]
+>
+> - We must define our own **SMTP** configuration in the `CODEXGO_SMTP_*` variables, to receive the links by mail.
+>   - By default, as there are no values set, the links will be sent through the terminal.
+> - `RabbitMQ`
+>   - **URL:** `http://localhost:15672`
+>   - **User/Password:** `codexgo`
+> - `MongoDB`
+>   - **Compass:** `mongodb://codexgo:codexgo@localhost:27017`
+> - `codexGO` Server
+>   - **URL:** `http://localhost:8080`
 
 ```bash
 task compose-prod
