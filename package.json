@@ -21,8 +21,6 @@
     "@commitlint/config-conventional": "19.7.1",
     "@release-it/bumper": "7.0.1",
     "@release-it/conventional-changelog": "10.0.0",
-    "commitizen": "4.3.1",
-    "cz-conventional-changelog": "3.3.0",
     "husky": "9.1.7",
     "lint-staged": "15.4.3",
     "npm-check-updates": "17.1.14",
@@ -37,11 +35,6 @@
     "**/*.go": [
       "gofmt -l -s -w"
     ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
   },
   "commitlint": {
     "extends": [

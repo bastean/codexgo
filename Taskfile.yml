@@ -116,7 +116,6 @@ tasks:
     cmds:
       - go install golang.org/x/tools/cmd/goimports@latest
       - go install honnef.co/go/tools/cmd/staticcheck@latest
-      - bun i -g prettier
 
   install-debuggers:
     cmds:
@@ -137,7 +136,6 @@ tasks:
           URL: https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh
           PIPE: sudo bash
       - go run github.com/playwright-community/playwright-go/cmd/playwright@latest install chromium --with-deps
-      - bun i -g concurrently wait-on
 
   install-tooling:
     cmds:
@@ -366,7 +364,7 @@ tasks:
           OPTIONS: --changelog
 
   #* Git
-  commit: bunx cz
+  commit: bunx czg
 
   WARNING-git-forget:
     prompt: "{{.PROMPT_WARNING}}"

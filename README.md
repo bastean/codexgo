@@ -158,7 +158,7 @@ task demo
     - Formatting
   - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
     - Check [Conventional Commits](https://www.conventionalcommits.org) rules
-- Commit message helper using [Commitizen](https://github.com/commitizen/cz-cli).
+- Commit message helper using [czg](https://github.com/Zhengqbbb/cz-git).
   - Interactive prompt that allows you to write commits following the [Conventional Commits](https://www.conventionalcommits.org) rules:
     ```bash
     task commit
