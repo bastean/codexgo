@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.14.0 (2025-02-18)
+
+- chore(deps): upgrade ([cffedf1](https://github.com/bastean/codexgo/commit/cffedf1))
+- docs(readme): add env demo files configuration ([802ddaa](https://github.com/bastean/codexgo/commit/802ddaa))
+- fix(rabbitmq): enable management plugin ([a3cfb98](https://github.com/bastean/codexgo/commit/a3cfb98))
+- fix(server): clear captcha only after a successful command ([205acdd](https://github.com/bastean/codexgo/commit/205acdd))
+- feat: add smtp mailpit testing tool ([9902916](https://github.com/bastean/codexgo/commit/9902916))
+
 ## 4.13.0 (2025-02-15)
 
 - docs(readme): add description about cli demo ([e205f7a](https://github.com/bastean/codexgo/commit/e205f7a))
