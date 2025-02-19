@@ -1,5 +1,12 @@
 # Changelog
 
+## <small>4.14.1 (2025-02-19)</small>
+
+- fix(git): use czg to create commit messages ([3016737](https://github.com/bastean/codexgo/commit/3016737))
+- refactor(compose): use rabbitmq management image ([206d0b6](https://github.com/bastean/codexgo/commit/206d0b6))
+- refactor(server): remove air proxy log ([ce59961](https://github.com/bastean/codexgo/commit/ce59961))
+- test(unit): add missing mock assertion ([9c1e557](https://github.com/bastean/codexgo/commit/9c1e557))
+
 ## 4.14.0 (2025-02-18)
 
 - chore(deps): upgrade ([cffedf1](https://github.com/bastean/codexgo/commit/cffedf1))
