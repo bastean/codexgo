@@ -27,6 +27,9 @@
     "prettier": "3.5.1",
     "release-it": "18.1.2"
   },
+  "overrides": {
+    "conventional-changelog-conventionalcommits": "8.0.0"
+  },
   "lint-staged": {
     "**/*": [
       "trufflehog filesystem --no-update",
@@ -54,6 +57,8 @@
     },
     "plugins": {
       "@release-it/conventional-changelog": {
+        "infile": "CHANGELOG.md",
+        "header": "# Changelog",
         "preset": {
           "name": "conventionalcommits",
           "types": [
@@ -102,9 +107,7 @@
               "section": "Tests"
             }
           ]
-        },
-        "infile": "CHANGELOG.md",
-        "header": "# Changelog"
+        }
       },
       "@release-it/bumper": {
         "out": [
