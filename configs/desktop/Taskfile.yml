@@ -1,0 +1,30 @@
+version: "3"
+
+vars:
+  #* Fluxbox
+  FLUXBOX_MENU: ~/.fluxbox/menu
+
+tasks:
+  fluxbox-menu:
+    internal: true
+    requires:
+      vars: ["OLD", "NEW"]
+    cmds:
+      - task: replace
+        vars:
+          OLD: \({{.OLD}}\)\s\{.*\}
+          NEW: \({{.OLD}}\) \{ {{.NEW}} \}
+          FILE: "{{.FLUXBOX_MENU}}"
+
+  desktop:
+    vars:
+      MENU:
+        ref: dict "File Manager" "xfe" "Terminal" "terminator" "Web Browser" "chromium"
+    cmds:
+      - sudo apt install -y xfe terminator chromium
+      - for:
+          var: MENU
+        task: fluxbox-menu
+        vars:
+          OLD: "{{.KEY}}"
+          NEW: "{{.ITEM}}"

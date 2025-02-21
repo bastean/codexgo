@@ -1,15 +1,6 @@
 version: "3"
 
 tasks:
-  prompt-*:
-    internal: true
-    silent: true
-    requires:
-      vars: ["PROMPT"]
-    vars:
-      PROMPT: "{{index .MATCH 0}}"
-    cmd: echo {{.PROMPT}}
-
   upgrade:
     cmds:
       - task: prompt-"Starting upgrades..."

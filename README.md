@@ -218,6 +218,7 @@ task demo
   - Go
   - Task
   - Docker in Docker
+  - Light-weight Desktop (Fluxbox)
   - SSH
 - Extensions and their respective settings to work with:
   - Go
@@ -445,6 +446,21 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
        ```bash
        ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
        ```
+     - **Password:** `vscode`
+
+6. Desktop (Optional)
+
+   - We can connect to our `Dev Container` via `VNC` using our web browser.
+     - **URL:** `http://localhost:6080`
+     - **Password:** `vscode`
+       - No password is required to connect from the **local host**.
+     - Change the default applications of the context menu (Optional)
+       ```bash
+       task desktop
+       ```
+       - **File Manager:** `xfe`
+       - **Terminal:** `terminator`
+       - **Web Browser:** `chromium`
 
 #### Locally
 

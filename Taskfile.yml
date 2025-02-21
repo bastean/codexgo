@@ -5,6 +5,10 @@ includes:
     taskfile: ./configs/upgrade
     optional: true
     flatten: true
+  desktop:
+    taskfile: ./configs/desktop
+    optional: true
+    flatten: true
 
 vars:
   #* URL
@@ -19,6 +23,14 @@ vars:
 
 tasks:
   #* Bin
+  bashrc:
+    internal: true
+    requires:
+      vars: ["CONFIG"]
+    cmds:
+      - echo -e "{{.CONFIG}}" >> ~/.bashrc
+      - . ~/.bashrc
+
   bash:
     internal: true
     requires:
@@ -30,6 +42,21 @@ tasks:
     requires:
       vars: ["URL", "PIPE"]
     cmd: curl -sSfL {{.URL}} | {{.PIPE}}
+
+  prompt-*:
+    internal: true
+    silent: true
+    requires:
+      vars: ["PROMPT"]
+    vars:
+      PROMPT: "{{index .MATCH 0}}"
+    cmd: echo {{.PROMPT}}
+
+  replace:
+    internal: true
+    requires:
+      vars: ["OLD", "NEW", "FILE"]
+    cmd: sed -i -E 's/{{.OLD}}/{{.NEW}}/g' {{.FILE}}
 
   bun-ci:
     internal: true
