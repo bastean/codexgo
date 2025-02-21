@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.14.2](https://github.com/bastean/codexgo/compare/v4.14.1...v4.14.2) (2025-02-21)
+
+### Chores
+
+- **devcontainer:** add desktop lite feature ([baa7fe1](https://github.com/bastean/codexgo/commit/baa7fe1640a75528a7b0f400d796466a9f26f360))
+
+### Bug Fixes
+
+- **release-it:** override dependency to generate changelog ([fec0cc8](https://github.com/bastean/codexgo/commit/fec0cc804b5b5d3d7e4dd7c6e60e61922c2408e7))
+
 ## <small>4.14.1 (2025-02-19)</small>
 
 - fix(git): use czg to create commit messages ([3016737](https://github.com/bastean/codexgo/commit/3016737))
