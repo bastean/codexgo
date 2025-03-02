@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  TruffleHog:
+  Secret:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -16,10 +16,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Secret Scanning
-        uses: trufflesecurity/trufflehog@main
-        with:
-          extra_args: --only-verified
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Scan
+        run: task scan-secrets-local
 
   Lint:
     runs-on: ubuntu-latest

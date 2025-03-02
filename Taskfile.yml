@@ -226,12 +226,12 @@ tasks:
     cmd: go run ../scripts/syncenv
 
   #* Scan
-  scan-leaks-local:
+  scan-secrets-local:
     cmds:
       - sudo trufflehog git file://. --only-verified
       - trivy repo --scanners secret .
 
-  scan-leaks-remote:
+  scan-secrets-remote:
     cmds:
       - sudo trufflehog git {{.URL_GITHUB}} --only-verified
       - trivy repo --scanners secret {{.URL_GITHUB}}
@@ -245,10 +245,10 @@ tasks:
     cmds:
       - trivy repo --scanners misconfig .
 
-  scan-leaks:
+  scan-secrets:
     cmds:
-      - task: scan-leaks-local
-      - task: scan-leaks-remote
+      - task: scan-secrets-local
+      - task: scan-secrets-remote
 
   scan-vulns:
     cmds:
@@ -260,7 +260,7 @@ tasks:
 
   scans:
     cmds:
-      - task: scan-leaks
+      - task: scan-secrets
       - task: scan-vulns
       - task: scan-misconfigs
 

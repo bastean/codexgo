@@ -152,9 +152,9 @@ task demo
 
 - Hooks managed by [husky](https://github.com/typicode/husky):
   - Pre-Push:
-    - Scanning Repository for leaks using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog) and [Trivy](https://github.com/aquasecurity/trivy)
+    - Scanning Repository for secrets using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog) and [Trivy](https://github.com/aquasecurity/trivy)
   - Pre-Commit: [lint-staged](https://github.com/lint-staged/lint-staged)
-    - Scanning files for leaks using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
+    - Scanning files for secrets using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
     - Formatting
   - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
     - Check [Conventional Commits](https://www.conventionalcommits.org) rules
@@ -204,7 +204,7 @@ task demo
   - Setup Languages and Dependencies
 - Workflows running:
   - Automatically (Triggered by **Push** or **Pull requests**):
-    - Secrets Scanning ([TruffleHog Action](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#octocat-trufflehog-github-action))
+    - Secrets
     - Linting
     - Testing
   - Manually (Using the **Actions tab** on GitHub):

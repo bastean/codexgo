@@ -1,1 +1,1 @@
-task scan-leaks-local
+task scan-secrets-local
