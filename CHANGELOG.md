@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.14.3](https://github.com/bastean/codexgo/compare/v4.14.2...v4.14.3) (2025-03-02)
+
+### Chores
+
+- **deps:** upgrade ([52bd2b6](https://github.com/bastean/codexgo/commit/52bd2b6ab28121f134114ec658401e92ff60e857))
+- **git:** remove go.work.sum from ignore ([7c41ebd](https://github.com/bastean/codexgo/commit/7c41ebd34cae4fe5eecfdabd5c74087cce7f43b5))
+
+### Continuous Integration
+
+- **github:** use local scanners to find secrets ([fc02f6b](https://github.com/bastean/codexgo/commit/fc02f6b01640ef4d793cab0cd39bf2f20284b282))
+
 ## [4.14.2](https://github.com/bastean/codexgo/compare/v4.14.1...v4.14.2) (2025-02-21)
 
 ### Chores
