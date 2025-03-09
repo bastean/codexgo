@@ -22,7 +22,7 @@ type ResetTestSuite struct {
 	hasher     *ciphers.HasherMock
 }
 
-func (s *ResetTestSuite) SetupTest() {
+func (s *ResetTestSuite) SetupSuite() {
 	s.repository = new(persistence.RepositoryMock)
 
 	s.hasher = new(ciphers.HasherMock)

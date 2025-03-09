@@ -14,7 +14,7 @@ type LogTestSuite struct {
 	records.LoggerSuite
 }
 
-func (s *LogTestSuite) SetupTest() {
+func (s *LogTestSuite) SetupSuite() {
 	logger := log.New()
 
 	s.LoggerSuite.Buffer = new(bytes.Buffer)

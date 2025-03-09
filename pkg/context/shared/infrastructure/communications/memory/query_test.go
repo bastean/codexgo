@@ -15,7 +15,7 @@ type QueryBusTestSuite struct {
 	communications.QueryBusSuite
 }
 
-func (s *QueryBusTestSuite) SetupTest() {
+func (s *QueryBusTestSuite) SetupSuite() {
 	s.QueryBusSuite.Handler = new(communications.QueryHandlerMock)
 
 	s.QueryBusSuite.SUT = &memory.QueryBus{

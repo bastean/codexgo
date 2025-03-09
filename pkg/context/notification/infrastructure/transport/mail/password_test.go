@@ -18,7 +18,7 @@ type PasswordTestSuite struct {
 	transport.OnlineSuite[*events.UserResetQueuedAttributes]
 }
 
-func (s *PasswordTestSuite) SetupTest() {
+func (s *PasswordTestSuite) SetupSuite() {
 	smtp := smtp.Open(
 		&smtp.Auth{
 			Host:     os.Getenv("CODEXGO_SMTP_HOST"),

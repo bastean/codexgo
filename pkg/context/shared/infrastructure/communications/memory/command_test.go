@@ -15,7 +15,7 @@ type CommandBusTestSuite struct {
 	communications.CommandBusSuite
 }
 
-func (s *CommandBusTestSuite) SetupTest() {
+func (s *CommandBusTestSuite) SetupSuite() {
 	s.CommandBusSuite.Handler = new(communications.CommandHandlerMock)
 
 	s.CommandBusSuite.SUT = &memory.CommandBus{

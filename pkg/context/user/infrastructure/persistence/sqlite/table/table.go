@@ -69,7 +69,19 @@ func (t *Table) Update(user *user.User) error {
 		return errors.BubbleUp(err, "Update")
 	}
 
-	err = t.DB.Where(&User{ID: user.ID.Value}).Updates(user.ToPrimitive()).Error
+	aggregate := user.ToPrimitive()
+
+	err = t.DB.Where(&User{ID: user.ID.Value}).Save(&User{
+		Created:  aggregate.Created,
+		Updated:  aggregate.Updated,
+		Verify:   aggregate.Verify,
+		Reset:    aggregate.Reset,
+		ID:       aggregate.ID,
+		Email:    aggregate.Email,
+		Username: aggregate.Username,
+		Password: aggregate.Password,
+		Verified: aggregate.Verified,
+	}).Error
 
 	switch {
 	case sqlite.IsErrDuplicateValue(err):

@@ -18,7 +18,7 @@ type ConfirmationTestSuite struct {
 	transport.OfflineSuite[*events.UserCreatedSucceededAttributes]
 }
 
-func (s *ConfirmationTestSuite) SetupTest() {
+func (s *ConfirmationTestSuite) SetupSuite() {
 	appServerURL := os.Getenv("CODEXGO_SERVER_GIN_URL")
 
 	s.OfflineSuite.Attributes = new(events.UserCreatedSucceededAttributes)

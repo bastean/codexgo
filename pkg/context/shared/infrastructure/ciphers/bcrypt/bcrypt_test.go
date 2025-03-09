@@ -13,7 +13,7 @@ type BcryptTestSuite struct {
 	ciphers.HasherSuite
 }
 
-func (s *BcryptTestSuite) SetupTest() {
+func (s *BcryptTestSuite) SetupSuite() {
 	s.HasherSuite.SUT = new(bcrypt.Bcrypt)
 }
 

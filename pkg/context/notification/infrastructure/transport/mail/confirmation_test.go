@@ -18,7 +18,7 @@ type ConfirmationTestSuite struct {
 	transport.OnlineSuite[*events.UserCreatedSucceededAttributes]
 }
 
-func (s *ConfirmationTestSuite) SetupTest() {
+func (s *ConfirmationTestSuite) SetupSuite() {
 	smtp := smtp.Open(
 		&smtp.Auth{
 			Host:     os.Getenv("CODEXGO_SMTP_HOST"),

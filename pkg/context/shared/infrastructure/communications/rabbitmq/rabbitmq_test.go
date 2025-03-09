@@ -19,7 +19,7 @@ type RabbitMQTestSuite struct {
 	communications.EventBusSuite
 }
 
-func (s *RabbitMQTestSuite) SetupTest() {
+func (s *RabbitMQTestSuite) SetupSuite() {
 	var err error
 
 	routingKey := messages.NewKey(&messages.KeyComponents{
@@ -62,13 +62,13 @@ func (s *RabbitMQTestSuite) SetupTest() {
 	)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupTest")
+		errors.Panic(err.Error(), "SetupSuite")
 	}
 
 	err = rabbitmq.AddQueueMapper(s.EventBusSuite.SUT.(*rabbitmq.RabbitMQ), queues)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupTest")
+		errors.Panic(err.Error(), "SetupSuite")
 	}
 }
 

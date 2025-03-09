@@ -18,7 +18,7 @@ type PasswordTestSuite struct {
 	transport.OfflineSuite[*events.UserResetQueuedAttributes]
 }
 
-func (s *PasswordTestSuite) SetupTest() {
+func (s *PasswordTestSuite) SetupSuite() {
 	appServerURL := os.Getenv("CODEXGO_SERVER_GIN_URL")
 
 	s.OfflineSuite.Attributes = new(events.UserResetQueuedAttributes)

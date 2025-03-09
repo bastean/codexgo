@@ -23,7 +23,7 @@ type LoginTestSuite struct {
 	repository *persistence.RepositoryMock
 }
 
-func (s *LoginTestSuite) SetupTest() {
+func (s *LoginTestSuite) SetupSuite() {
 	s.repository = new(persistence.RepositoryMock)
 
 	s.hasher = new(ciphers.HasherMock)

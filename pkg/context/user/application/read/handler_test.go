@@ -20,7 +20,7 @@ type ReadTestSuite struct {
 	repository *persistence.RepositoryMock
 }
 
-func (s *ReadTestSuite) SetupTest() {
+func (s *ReadTestSuite) SetupSuite() {
 	s.repository = new(persistence.RepositoryMock)
 
 	s.read = &read.Case{

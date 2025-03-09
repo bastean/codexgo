@@ -15,7 +15,7 @@ type EventBusTestSuite struct {
 	communications.EventBusSuite
 }
 
-func (s *EventBusTestSuite) SetupTest() {
+func (s *EventBusTestSuite) SetupSuite() {
 	s.EventBusSuite.Event = messages.Random()
 
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)

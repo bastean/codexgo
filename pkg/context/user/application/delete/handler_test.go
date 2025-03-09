@@ -22,7 +22,7 @@ type DeleteTestSuite struct {
 	repository *persistence.RepositoryMock
 }
 
-func (s *DeleteTestSuite) SetupTest() {
+func (s *DeleteTestSuite) SetupSuite() {
 	s.repository = new(persistence.RepositoryMock)
 
 	s.hasher = new(ciphers.HasherMock)

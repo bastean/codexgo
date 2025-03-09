@@ -20,7 +20,7 @@ type VerifyTestSuite struct {
 	repository *persistence.RepositoryMock
 }
 
-func (s *VerifyTestSuite) SetupTest() {
+func (s *VerifyTestSuite) SetupSuite() {
 	s.repository = new(persistence.RepositoryMock)
 
 	s.verify = &verify.Case{

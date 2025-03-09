@@ -20,7 +20,7 @@ type PasswordTestSuite struct {
 	transfer *transport.TransferMock[*events.UserResetQueuedAttributes]
 }
 
-func (s *PasswordTestSuite) SetupTest() {
+func (s *PasswordTestSuite) SetupSuite() {
 	s.transfer = new(transport.TransferMock[*events.UserResetQueuedAttributes])
 
 	s.password = &password.Case{

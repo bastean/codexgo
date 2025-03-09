@@ -20,7 +20,7 @@ type ConfirmationTestSuite struct {
 	transfer     *transport.TransferMock[*events.UserCreatedSucceededAttributes]
 }
 
-func (s *ConfirmationTestSuite) SetupTest() {
+func (s *ConfirmationTestSuite) SetupSuite() {
 	s.transfer = new(transport.TransferMock[*events.UserCreatedSucceededAttributes])
 
 	s.confirmation = &confirmation.Case{

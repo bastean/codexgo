@@ -24,7 +24,7 @@ type CreateTestSuite struct {
 	bus        *communications.EventBusMock
 }
 
-func (s *CreateTestSuite) SetupTest() {
+func (s *CreateTestSuite) SetupSuite() {
 	s.bus = new(communications.EventBusMock)
 
 	s.repository = new(persistence.RepositoryMock)

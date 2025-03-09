@@ -16,14 +16,14 @@ type CollectionTestSuite struct {
 	persistence.RepositorySuite
 }
 
-func (s *CollectionTestSuite) SetupTest() {
+func (s *CollectionTestSuite) SetupSuite() {
 	session, err := mongodb.Open(
 		os.Getenv("CODEXGO_DATABASE_MONGODB_URI"),
 		os.Getenv("CODEXGO_DATABASE_MONGODB_NAME"),
 	)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupTest")
+		errors.Panic(err.Error(), "SetupSuite")
 	}
 
 	name := "users-test"
@@ -31,7 +31,7 @@ func (s *CollectionTestSuite) SetupTest() {
 	s.RepositorySuite.SUT, err = collection.Open(session, name)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupTest")
+		errors.Panic(err.Error(), "SetupSuite")
 	}
 }
 

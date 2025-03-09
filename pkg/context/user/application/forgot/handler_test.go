@@ -23,7 +23,7 @@ type ForgotTestSuite struct {
 	bus        *communications.EventBusMock
 }
 
-func (s *ForgotTestSuite) SetupTest() {
+func (s *ForgotTestSuite) SetupSuite() {
 	s.bus = new(communications.EventBusMock)
 
 	s.repository = new(persistence.RepositoryMock)
