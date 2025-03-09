@@ -51,7 +51,7 @@ jobs:
           git_commit_gpgsign: true
           git_tag_gpgsign: true
 
-      - name: Generate Release
+      - name: Release
         run: OPTIONS="$STATUS_ARG $BUMP_ARG $DRY_ARG" task release-ci
         env:
           STATUS_ARG: ${{ fromJSON('{"alpha":"--preRelease=alpha", "beta":"--preRelease=beta", "stable":""}')[github.event.inputs.status] }}

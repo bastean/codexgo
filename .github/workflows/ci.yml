@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  Secret:
+  Scan:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -19,8 +19,14 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Scan
+      - name: Secret
         run: task scan-secrets-local
+
+      - name: Vulnerability
+        run: task scan-vulns-local
+
+      - name: Misconfiguration
+        run: task scan-misconfigs-local
 
   Lint:
     runs-on: ubuntu-latest
