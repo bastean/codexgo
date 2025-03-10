@@ -93,6 +93,16 @@ tasks:
       vars: ["IMAGE"]
     cmd: docker rmi -f {{.IMAGE}}
 
+  trufflehog-git:
+    requires:
+      vars: ["URI"]
+    cmd: sudo trufflehog git {{.URI}} --only-verified --fail
+
+  trivy-repo:
+    requires:
+      vars: ["SCANNERS"]
+    cmd: trivy repo --skip-dirs vendor --skip-dirs node_modules --skip-dirs dist --exit-code 1 --scanners {{.SCANNERS}}
+
   git-reset-hard:
     internal: true
     cmd: git reset --hard HEAD
@@ -228,22 +238,34 @@ tasks:
   #* Scan
   scan-secrets-local:
     cmds:
-      - sudo trufflehog git file://. --only-verified
-      - trivy repo --scanners secret .
+      - task: trufflehog-git
+        vars:
+          URI: file://.
+      - task: trivy-repo
+        vars:
+          SCANNERS: secret .
 
   scan-secrets-remote:
     cmds:
-      - sudo trufflehog git {{.URL_GITHUB}} --only-verified
-      - trivy repo --scanners secret {{.URL_GITHUB}}
+      - task: trufflehog-git
+        vars:
+          URI: "{{.URL_GITHUB}}"
+      - task: trivy-repo
+        vars:
+          SCANNERS: secret {{.URL_GITHUB}}
 
   scan-vulns-local:
     cmds:
       - osv-scanner --call-analysis=all -r .
-      - trivy repo --scanners vuln .
+      - task: trivy-repo
+        vars:
+          SCANNERS: vuln .
 
   scan-misconfigs-local:
     cmds:
-      - trivy repo --scanners misconfig .
+      - task: trivy-repo
+        vars:
+          SCANNERS: misconfig .
 
   scan-secrets:
     cmds:

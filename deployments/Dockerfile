@@ -30,6 +30,15 @@ WORKDIR /app
 
 COPY --from=build app/deployments/run.sh run
 
-RUN chmod +x run
-
 COPY --from=build app/build/codexgo .
+
+RUN mkdir -p logs \
+ && groupadd -r codex \
+ && useradd -g codex -r codexgo \
+ && chown -R codexgo:codex /app \
+ && chmod -R 740 /app
+
+USER codexgo
+
+HEALTHCHECK --interval=12s --timeout=12s --retries=12 \
+    CMD curl -sSfI http://localhost:8080/health || exit 1
