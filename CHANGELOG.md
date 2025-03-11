@@ -1,5 +1,37 @@
 # Changelog
 
+## [4.14.4](https://github.com/bastean/codexgo/compare/v4.14.3...v4.14.4) (2025-03-11)
+
+### Chores
+
+- **deps:** upgrade ([e18d9a6](https://github.com/bastean/codexgo/commit/e18d9a64bdb8141845279739b4d5f9503cb88cec))
+- **task:** add workflow with git branches ([f8825d1](https://github.com/bastean/codexgo/commit/f8825d1fc068a8be433d4bfca8fd49dacc5e7932))
+
+### Continuous Integration
+
+- add scans for vulnerabilities and misconfigurations ([c259155](https://github.com/bastean/codexgo/commit/c2591555a83b693cf13e70dace0fecb9e25dc9ff))
+
+### Documentation
+
+- **readme:** add repository initialization from zip ([724804a](https://github.com/bastean/codexgo/commit/724804a5984fd75f4e8762738e229b3574f7e1e6))
+
+### Bug Fixes
+
+- **docker:** resolve misconfiguration detected by trivy ([aae6f16](https://github.com/bastean/codexgo/commit/aae6f16e201a5b0d3c8df7216374b3114cac295f))
+
+### Refactors
+
+- **domain:** use appendf in the why bubble field ([1c21556](https://github.com/bastean/codexgo/commit/1c21556dc7a4d10fdcc2382903f25a58bb8a7692))
+
+### Styles
+
+- **cmd:** rename file main to codex ([9588c8b](https://github.com/bastean/codexgo/commit/9588c8bcb30539fb685b20b779d5f0614ed095c8))
+
+### Tests
+
+- reuse setup across all test cases in the suite ([a30e6ee](https://github.com/bastean/codexgo/commit/a30e6eefb7cf4fb13c17c1062c1714693b049cbe))
+- use data race detector ([eccb9c1](https://github.com/bastean/codexgo/commit/eccb9c1c52c546c8ae823ec190bdfd43e1de45ba))
+
 ## [4.14.3](https://github.com/bastean/codexgo/compare/v4.14.2...v4.14.3) (2025-03-02)
 
 ### Chores
