@@ -205,6 +205,8 @@ task demo
 - Workflows running:
   - Automatically (Triggered by **Push** or **Pull requests**):
     - Secrets
+    - Vulnerabilities
+    - Misconfigurations
     - Linting
     - Testing
   - Manually (Using the **Actions tab** on GitHub):
@@ -496,6 +498,180 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 && git push -u github main \
 && git status
 ```
+
+<details>
+
+<summary>Repository initialization from ZIP (Optional)</summary>
+
+## Design
+
+#### Icons (Template: [Icon Safe Zone SVG](https://www.w3.org/TR/appmanifest/images/icon-safe-zone.svg))
+
+- `pwa-maskable.png` (512x512)
+- `pwa-any.png` (512x512)
+- `apple-touch-icon.png` (192x192)
+- `favicon.png` (192x192)
+
+#### Readme
+
+- `logo.png`
+
+#### Social Preview (Template: [GitHub Repository > Settings > General > Social preview > Download template]())
+
+- `social-preview.png`
+
+#### Mocks
+
+- Wireframe
+- UML
+
+## Repository
+
+#### Genesis
+
+- Run initialization from `ZIP` ([codexGO](https://github.com/bastean/codexgo#zip))
+
+- Cleanup
+
+  - `CHANGELOG`
+  - Everything not required
+
+- Add `<repository>` > `assets/`
+
+  - Compress `assets`
+
+- Update `#colors` > `#<repository>`
+
+- Update (`codexgo/v*`|`codexgo`|`codexGO`) > `<repository>`
+
+  - `Source Code`, `Files` & `Folders`
+
+- Update `README`
+
+  - Update `Logo`
+  - Update `Description`
+  - Add `Disclaimer`
+    ```markdown
+    > [!IMPORTANT]
+    >
+    > `<repository>` is still in the early stages of development.
+    ```
+  - Update `Tech Stack`
+  - Remove all other sections, except:
+    - `Logo`, `Description`, `Disclaimer`, `Badges`, `Tech Stack`, `Contributing` & `License`
+  - Change `v*.*.*` > `v0.0.0`
+
+- Upgrade, Commit & Push
+  ```bash
+    task git-update-"<repository>"
+  ```
+
+## GitHub
+
+#### Settings
+
+- Rulesets
+
+  - `New branch ruleset`
+    - Ruleset Name \*
+      - Branches
+    - Enforcement status
+      - Active
+    - Target branches
+      - Include by pattern
+        - `main`
+        - `v*`
+    - Branch rules
+      - Restrict deletions
+      - Require signed commits (Optional)
+      - Block force pushes
+  - `New tag ruleset`
+    - Ruleset Name \*
+      - Tags
+    - Enforcement status
+      - Active
+    - Target tags
+      - Include by pattern
+        - `v*`
+    - Tag rules
+      - Restrict deletions
+      - Require signed commits (Optional)
+      - Block force pushes
+
+- Actions
+
+  - General
+    - Workflow permissions
+      - Read and write permissions
+
+- Secrets and variables
+
+  - Actions
+    - New repository secret
+      - `BOT_GPG_PASSPHRASE`
+      - `BOT_GPG_PRIVATE_KEY`
+        ```bash
+        gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
+        ```
+
+- Social preview
+
+  - Upload an image…
+
+#### Actions
+
+- Workflows
+
+  - Release
+    - Run workflow
+      - Use workflow from
+        - Branch: `main`
+      - Status
+        - `alpha`
+      - Bump
+        - `minor`
+    - Pre-release
+      - `v0.1.0-alpha.0`
+
+## ...`v0` > `dev0.1.0` > `ci/dev0.1.0` > `main` > `v0`...
+
+Create `v0` branch.
+
+```bash
+task git-v0
+```
+
+Create development branch `dev0.1.0` from `v0`.
+
+```bash
+task git-dev0.1.0
+```
+
+Create branch `ci/dev0.1.0` from `dev0.1.0` to ensure that the workflows run correctly with the new changes before merging them with main.
+
+```bash
+task git-ci-dev0.1.0
+```
+
+Once the workflows have been successfully passed, the new changes from `ci/dev0.1.0` will be merged into main.
+
+```bash
+task git-main-ci-dev0.1.0
+```
+
+After releasing the new version `v0.1.0`, the `main` and `v0` branches in our local repository will be updated.
+
+```bash
+task git-release-v0
+```
+
+To end the cycle, the `dev0.1.0` and `ci/dev0.1.0` branches will be deleted.
+
+```bash
+task git-cleanup-dev0.1.0
+```
+
+</details>
 
 ### GitHub Repository
 
