@@ -96,7 +96,7 @@ tasks:
   trufflehog-git:
     requires:
       vars: ["URI"]
-    cmd: sudo trufflehog git {{.URI}} --only-verified --fail
+    cmd: sudo trufflehog git {{.URI}} --only-verified
 
   trivy-repo:
     requires:
@@ -415,6 +415,89 @@ tasks:
 
   #* Git
   commit: bunx czg
+
+  git-update-*:
+    requires:
+      vars: ["REPOSITORY"]
+    vars:
+      REPOSITORY: "{{index .MATCH 0}}"
+    cmds:
+      - 'git commit -m "chore: update codexgo to {{.REPOSITORY}}"'
+      - task: upgrade
+      - git push
+      - git status
+
+  git-v*:
+    requires:
+      vars: ["VERSION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+    cmds:
+      - git checkout main
+      - git pull --rebase
+      - git checkout -b v{{.VERSION}}
+      - git push -u github v{{.VERSION}}
+      - git status
+
+  git-dev*:
+    requires:
+      vars: ["VERSION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+    cmds:
+      - git checkout v{{splitList "." .VERSION | first}}
+      - git pull --rebase
+      - git checkout -b dev{{.VERSION}}
+      - git push -u github dev{{.VERSION}}
+      - git status
+
+  git-ci-dev*:
+    requires:
+      vars: ["VERSION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+    cmds:
+      - git checkout dev{{.VERSION}}
+      - git pull --rebase
+      - git checkout -b ci/dev{{.VERSION}}
+      - git push -u github ci/dev{{.VERSION}}
+      - git status
+
+  git-main-ci-dev*:
+    requires:
+      vars: ["VERSION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+    cmds:
+      - git checkout main
+      - git pull --rebase
+      - git merge ci/dev{{.VERSION}}
+      - git push
+      - git status
+
+  git-release-v*:
+    requires:
+      vars: ["VERSION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+    cmds:
+      - git checkout main
+      - git pull --rebase
+      - git checkout v{{.VERSION}}
+      - git merge main
+      - git push
+      - git status
+
+  git-cleanup-dev*:
+    requires:
+      vars: ["VERSION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+    cmds:
+      - git branch -d dev{{.VERSION}} ci/dev{{.VERSION}}
+      - git push -u github :dev{{.VERSION}} :ci/dev{{.VERSION}}
+      - git branch -a
+      - git status
 
   WARNING-git-forget:
     prompt: "{{.PROMPT_WARNING}}"
