@@ -84,8 +84,7 @@ func HandleErrDuplicateValue(err error) error {
 
 	field := toTitle.String(strings.Split(err.Error(), ".")[1])
 
-	switch field {
-	case "Id":
+	if field == "Id" {
 		field = strings.ToUpper(field)
 	}
 

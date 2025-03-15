@@ -17,14 +17,11 @@ var (
 )
 
 func Up() error {
-	switch {
-	default:
-		log.Starting(Service.JWT)
+	log.Starting(Service.JWT)
 
-		JWT = jwt.New(env.JWTSecretKey)
+	JWT = jwt.New(env.JWTSecretKey)
 
-		log.Started(Service.JWT)
-	}
+	log.Started(Service.JWT)
 
 	return nil
 }

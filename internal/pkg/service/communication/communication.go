@@ -64,34 +64,27 @@ func Up() error {
 		log.Started(Service.MemoryEventBus)
 	}
 
-	switch {
-	default:
-		log.Starting(Service.MemoryCommandBus)
+	log.Starting(Service.MemoryCommandBus)
 
-		command.Bus = &memory.CommandBus{
-			Handlers: commands.Mapper{},
-		}
-
-		log.Started(Service.MemoryCommandBus)
+	command.Bus = &memory.CommandBus{
+		Handlers: commands.Mapper{},
 	}
 
-	switch {
-	default:
-		log.Starting(Service.MemoryQueryBus)
+	log.Started(Service.MemoryCommandBus)
 
-		query.Bus = &memory.QueryBus{
-			Handlers: queries.Mapper{},
-		}
+	log.Starting(Service.MemoryQueryBus)
 
-		log.Started(Service.MemoryQueryBus)
+	query.Bus = &memory.QueryBus{
+		Handlers: queries.Mapper{},
 	}
+
+	log.Started(Service.MemoryQueryBus)
 
 	return nil
 }
 
 func Down() error {
-	switch {
-	case env.HasRabbitMQ():
+	if env.HasRabbitMQ() {
 		log.ClosingConnectionWith(Service.RabbitMQEventBus)
 
 		if err = rabbitmq.Close(event.Bus.(*rabbitmq.RabbitMQ)); err != nil {
