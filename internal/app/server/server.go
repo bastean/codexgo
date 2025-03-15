@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/router"
 	"github.com/bastean/codexgo/v4/internal/pkg/adapter/log"
@@ -28,8 +29,11 @@ func Up() error {
 	log.Starting(Server.Gin)
 
 	App = &http.Server{
-		Addr:    ":" + env.ServerGinPort,
-		Handler: router.New(&Files),
+		Addr:         ":" + env.ServerGinPort,
+		Handler:      router.New(&Files),
+		ReadTimeout:  15 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		IdleTimeout:  time.Minute,
 	}
 
 	log.Started(Server.Gin)

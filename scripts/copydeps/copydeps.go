@@ -39,7 +39,7 @@ func Panic(who error, what, where string) {
 }
 
 func CreateDirectory(path string) {
-	err := os.MkdirAll(path, os.ModePerm)
+	err := os.MkdirAll(path, 0600)
 
 	if err != nil {
 		Panic(err, fmt.Sprintf("failed to create \"%s\"", path), "CreateDirectory")
@@ -55,7 +55,7 @@ func CopyFile(filename, sourcePath, targetPath string) {
 		Panic(err, fmt.Sprintf("failed to read \"%s\" from \"%s\"", filename, sourcePath), "CopyFile")
 	}
 
-	err = os.WriteFile(filepath.Join(targetPath, filepath.Base(filename)), data, os.ModePerm)
+	err = os.WriteFile(filepath.Join(targetPath, filepath.Base(filename)), data, 0600)
 
 	if err != nil {
 		Panic(err, fmt.Sprintf("failed to write \"%s\" on \"%s\"", filename, targetPath), "CopyFile")

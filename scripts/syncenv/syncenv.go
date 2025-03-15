@@ -70,7 +70,7 @@ func BackupEnvFiles() {
 				Panic(err, "BackupEnvFiles")
 			}
 
-			err = os.WriteFile(file.Name()+".tmp", data, 0644)
+			err = os.WriteFile(file.Name()+".tmp", data, 0600)
 
 			if err != nil {
 				Panic(err, "BackupEnvFiles")
