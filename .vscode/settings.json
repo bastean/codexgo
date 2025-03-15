@@ -17,6 +17,7 @@
   "emmet.includeLanguages": {
     "templ": "html"
   },
+  "go.lintTool": "golangci-lint",
   "go.toolsManagement.autoUpdate": true,
   "gopls": {
     "ui.semanticTokens": true

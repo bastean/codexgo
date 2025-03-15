@@ -58,9 +58,25 @@ tasks:
       vars: ["OLD", "NEW", "FILE"]
     cmd: sed -i -E 's/{{.OLD}}/{{.NEW}}/g' {{.FILE}}
 
+  go-install:
+    internal: true
+    requires:
+      vars: ["PACKAGES"]
+    cmds:
+      - for: { var: PACKAGES, as: PACKAGE }
+        cmd: go install {{.PACKAGE}}
+
   bun-ci:
     internal: true
     cmd: bun i --frozen-lockfile
+
+  prettier-*:
+    internal: true
+    requires:
+      vars: ["ACTION"]
+    vars:
+      ACTION: "{{index .MATCH 0}}"
+    cmd: bunx prettier --no-config --ignore-unknown --{{.ACTION}} .
 
   ncu:
     internal: true
@@ -94,11 +110,13 @@ tasks:
     cmd: docker rmi -f {{.IMAGE}}
 
   trufflehog-git:
+    internal: true
     requires:
       vars: ["URI"]
     cmd: sudo trufflehog git {{.URI}} --only-verified
 
   trivy-repo:
+    internal: true
     requires:
       vars: ["SCANNERS"]
     cmd: trivy repo --skip-dirs vendor --skip-dirs node_modules --skip-dirs dist --exit-code 1 --scanners {{.SCANNERS}}
@@ -139,7 +157,9 @@ tasks:
   #* Install
   install-scanners:
     cmds:
-      - go install github.com/google/osv-scanner/cmd/osv-scanner@latest
+      - task: go-install
+        vars:
+          PACKAGES: github.com/google/osv-scanner/cmd/osv-scanner@latest
       - task: curl
         vars:
           URL: https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh
@@ -151,20 +171,27 @@ tasks:
 
   install-linters:
     cmds:
-      - go install golang.org/x/tools/cmd/goimports@latest
-      - go install honnef.co/go/tools/cmd/staticcheck@latest
+      - task: curl
+        vars:
+          URL: https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh
+          PIPE: sudo sh -s -- -b /usr/local/bin
 
   install-debuggers:
     cmds:
-      - go install golang.org/x/tools/cmd/deadcode@latest
+      - task: go-install
+        vars:
+          PACKAGES: golang.org/x/tools/cmd/deadcode@latest
 
   install-tools-dev:
     cmds:
       - task: install-scanners
       - task: install-linters
       - task: install-debuggers
-      - go install github.com/air-verse/air@latest
-      - go install github.com/a-h/templ/cmd/templ@latest
+      - task: go-install
+        vars:
+          PACKAGES:
+            - github.com/air-verse/air@latest
+            - github.com/a-h/templ/cmd/templ@latest
 
   install-tools-test:
     cmds:
@@ -195,6 +222,7 @@ tasks:
       - go generate ./...
       - find . -name "*_templ.go" -type f -delete
       - templ generate
+      - templ fmt .
 
   #* Restore
   restore:
@@ -291,16 +319,14 @@ tasks:
     cmds:
       - go mod tidy
       - go mod verify
-      - goimports -l -w -local {{.GO_MODULE}} .
-      - gofmt -l -s -w .
-      - bunx prettier --no-config --ignore-unknown --write .
-      - templ fmt .
+      - golangci-lint run --fix
+      - task: prettier-write
       - task: generate-required
 
   lint-check:
     cmds:
-      - staticcheck ./...
-      - bunx prettier --check .
+      - golangci-lint run
+      - task: prettier-check
 
   #* Debug
   debug-dead: deadcode -test ./...

@@ -1,0 +1,37 @@
+linters:
+  enable:
+    - errcheck
+    - gocyclo
+    - gosec
+    - ineffassign
+    - prealloc
+    - unused
+    #! AutoFix
+    - gocritic
+    - gofmt
+    - goimports
+    - gosimple
+    - govet
+    - perfsprint
+    - staticcheck
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+  #! AutoFix
+  gocritic:
+    disabled-checks:
+      - commentFormatting
+  goimports:
+    local-prefixes: github.com/bastean/codexgo/v4
+
+issues:
+  exclude-dirs:
+    - dist
+    - ignore
+    - node_modules
+    - temp
+    - tmp
+
+run:
+  relative-path-mode: gomod
