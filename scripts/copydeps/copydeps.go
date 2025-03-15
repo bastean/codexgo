@@ -39,7 +39,7 @@ func Panic(who error, what, where string) {
 }
 
 func CreateDirectory(path string) {
-	err := os.MkdirAll(path, 0600)
+	err := os.MkdirAll(path, 0700)
 
 	if err != nil {
 		Panic(err, fmt.Sprintf("failed to create \"%s\"", path), "CreateDirectory")
