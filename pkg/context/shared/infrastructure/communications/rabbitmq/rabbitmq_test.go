@@ -48,7 +48,7 @@ func (s *RabbitMQTestSuite) SetupSuite() {
 
 	logger := log.New()
 
-	consumeCycle, _ := context.WithTimeout(context.Background(), 5*time.Second)
+	consumeCycle, _ := context.WithTimeout(context.Background(), 5*time.Second) //nolint:govet
 
 	s.EventBusSuite.Event = messages.RandomWithKey(routingKey)
 
