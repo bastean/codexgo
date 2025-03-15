@@ -52,57 +52,57 @@ func Logo() {
 }
 
 func Service(service string) string {
-	return fmt.Sprintf("Service:%s", service)
+	return "Service:" + service
 }
 
 func Server(app string) string {
-	return fmt.Sprintf("Server:%s", app)
+	return "Server:" + app
 }
 
 func Starting(service string) {
-	Info(fmt.Sprintf("Starting %s...", service))
+	Info("Starting " + service + "...")
 }
 
 func Started(service string) {
-	Success(fmt.Sprintf("%s started", service))
+	Success(service + " started")
 }
 
 func CannotBeStarted(service string) {
-	Error(fmt.Sprintf("%s cannot be started", service))
+	Error(service + " cannot be started")
 }
 
 func Stopping(service string) {
-	Info(fmt.Sprintf("Stopping %s...", service))
+	Info("Stopping " + service + "...")
 }
 
 func Stopped(service string) {
-	Success(fmt.Sprintf("%s stopped", service))
+	Success(service + " stopped")
 }
 
 func CannotBeStopped(service string) {
-	Error(fmt.Sprintf("%s cannot be stopped", service))
+	Error(service + " cannot be stopped")
 }
 
 func EstablishingConnectionWith(service string) {
-	Info(fmt.Sprintf("Establishing connection with %s...", service))
+	Info("Establishing connection with " + service + "...")
 }
 
 func ConnectionEstablishedWith(service string) {
-	Success(fmt.Sprintf("Connection established with %s", service))
+	Success("Connection established with " + service)
 }
 
 func ConnectionFailedWith(service string) {
-	Error(fmt.Sprintf("Connection failed with %s", service))
+	Error("Connection failed with " + service)
 }
 
 func ClosingConnectionWith(service string) {
-	Info(fmt.Sprintf("Closing connection with %s...", service))
+	Info("Closing connection with " + service + "...")
 }
 
 func ConnectionClosedWith(service string) {
-	Success(fmt.Sprintf("Connection closed with %s", service))
+	Success("Connection closed with " + service)
 }
 
 func DisconnectionFailedWith(service string) {
-	Error(fmt.Sprintf("Disconnection failed with %s", service))
+	Error("Disconnection failed with " + service)
 }

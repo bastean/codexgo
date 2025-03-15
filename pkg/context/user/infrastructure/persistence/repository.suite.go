@@ -1,8 +1,6 @@
 package persistence
 
 import (
-	"fmt"
-
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
@@ -129,7 +127,7 @@ func (s *RepositorySuite) TestDelete() {
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleErrNotFound",
-		What:  fmt.Sprintf("%s not found", aggregate.ID.Value),
+		What:  aggregate.ID.Value + " not found",
 		Why: errors.Meta{
 			"Index": aggregate.ID.Value,
 		},
@@ -189,7 +187,7 @@ func (s *RepositorySuite) TestSearchErrNotFound() {
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleErrNotFound",
-		What:  fmt.Sprintf("%s not found", aggregate.ID.Value),
+		What:  aggregate.ID.Value + " not found",
 		Why: errors.Meta{
 			"Index": aggregate.ID.Value,
 		},

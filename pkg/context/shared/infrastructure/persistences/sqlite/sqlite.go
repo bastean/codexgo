@@ -1,7 +1,6 @@
 package sqlite
 
 import (
-	"fmt"
 	"strings"
 
 	"golang.org/x/text/cases"
@@ -90,7 +89,7 @@ func HandleErrDuplicateValue(err error) error {
 
 	return errors.New[errors.AlreadyExist](&errors.Bubble{
 		Where: "HandleErrDuplicateValue",
-		What:  fmt.Sprintf("%s already registered", field),
+		What:  field + " already registered",
 		Why: errors.Meta{
 			"Field": field,
 		},
@@ -109,7 +108,7 @@ func IsErrNotFound(err error) bool {
 func HandleErrNotFound(err error, index string) error {
 	return errors.New[errors.NotExist](&errors.Bubble{
 		Where: "HandleErrNotFound",
-		What:  fmt.Sprintf("%s not found", index),
+		What:  index + " not found",
 		Why: errors.Meta{
 			"Index": index,
 		},

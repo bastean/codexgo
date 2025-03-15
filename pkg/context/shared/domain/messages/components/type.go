@@ -1,7 +1,6 @@
 package components
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
@@ -28,7 +27,7 @@ func NewType(value string) (*Type, error) {
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
 			Where: "NewType",
-			What:  fmt.Sprintf("Type must be only one of these values: %s", strings.Join(TypeOneOf, ", ")),
+			What:  "Type must be only one of these values: " + strings.Join(TypeOneOf, ", "),
 			Why: errors.Meta{
 				"Type": value,
 			},

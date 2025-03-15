@@ -1,13 +1,13 @@
 package errors_test
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type BubbleTestSuite struct {
@@ -15,6 +15,8 @@ type BubbleTestSuite struct {
 }
 
 func (s *BubbleTestSuite) TestWithValidValue() {
+	errThirdParty := services.Create.Error()
+
 	bubble := &errors.Bubble{
 		When:  time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC),
 		Where: "TestWithValidValue",
@@ -22,10 +24,10 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 		Why: errors.Meta{
 			"Case": "Happy path",
 		},
-		Who: fmt.Errorf("third-party error"),
+		Who: errThirdParty,
 	}
 
-	expected := "2009-11-10T23:00:00Z (TestWithValidValue): Test Case: {\"Case\":\"Happy path\"}: [third-party error]"
+	expected := "2009-11-10T23:00:00Z (TestWithValidValue): Test Case: {\"Case\":\"Happy path\"}: [" + errThirdParty.Error() + "]"
 
 	err := errors.New[errors.Default](bubble)
 
