@@ -30,10 +30,21 @@ func RestoreEnvFilesBackup() {
 		panic(err)
 	}
 
+	var renamed, oldPath, newPath string
+
 	for _, file := range files {
 		if envFileBackupRegex.MatchString(file.Name()) {
-			renamed, _ := strings.CutSuffix(file.Name(), ".tmp")
-			os.Rename(filepath.Join(envFilesDir, file.Name()), filepath.Join(envFilesDir, renamed))
+			renamed, _ = strings.CutSuffix(file.Name(), ".tmp")
+
+			oldPath = filepath.Join(envFilesDir, file.Name())
+
+			newPath = filepath.Join(envFilesDir, renamed)
+
+			err = os.Rename(oldPath, newPath)
+
+			if err != nil {
+				log.Printf("Failed to rename \"%s\" to \"%s\"", oldPath, newPath)
+			}
 		}
 	}
 }

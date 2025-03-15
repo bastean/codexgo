@@ -9,7 +9,7 @@ import (
 )
 
 func AbortByErr(c *gin.Context, err error) {
-	c.Error(err)
+	_ = c.Error(err)
 	c.Abort()
 }
 

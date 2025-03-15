@@ -27,8 +27,9 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 			Where: "Submit",
 			What:  "Failure to write message headers",
 			Why: errors.Meta{
-				"Headers": headers,
-				"User ID": attributes.ID,
+				"Headers":   headers,
+				"Verify ID": attributes.Verify,
+				"User ID":   attributes.ID,
 			},
 			Who: err,
 		})
@@ -36,7 +37,19 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 
 	link := fmt.Sprintf("%s/v4/account/verify?token=%s&id=%s", c.AppServerURL, attributes.Verify, attributes.ID)
 
-	ConfirmationTemplate(attributes.Username, link).Render(context.Background(), &message)
+	err = ConfirmationTemplate(attributes.Username, link).Render(context.Background(), &message)
+
+	if err != nil {
+		return errors.New[errors.Internal](&errors.Bubble{
+			Where: "Submit",
+			What:  "Failure to render account confirmation mail",
+			Why: errors.Meta{
+				"Verify ID": attributes.Verify,
+				"User ID":   attributes.ID,
+			},
+			Who: err,
+		})
+	}
 
 	err = c.SendMail([]string{attributes.Email}, message.Bytes())
 
@@ -45,9 +58,9 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 			Where: "Submit",
 			What:  "Failure to send account confirmation mail",
 			Why: errors.Meta{
+				"SMTP Server URL": c.ServerURL,
 				"Verify ID":       attributes.Verify,
 				"User ID":         attributes.ID,
-				"SMTP Server URL": c.ServerURL,
 			},
 			Who: err,
 		})

@@ -39,7 +39,7 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 }
 
 func (s *BubbleTestSuite) TestWithInvalidValue() {
-	s.Panics(func() { errors.New[errors.Default](new(errors.Bubble)) })
+	s.Panics(func() { _ = errors.New[errors.Default](new(errors.Bubble)) })
 }
 
 func TestUnitBubbleSuite(t *testing.T) {

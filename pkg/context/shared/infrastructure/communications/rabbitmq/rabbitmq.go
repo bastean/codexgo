@@ -192,7 +192,12 @@ func (r *RabbitMQ) Consume(key messages.Key, queue *Recipient, deliveries <-chan
 			continue
 		}
 
-		delivery.Ack(false)
+		err = delivery.Ack(false)
+
+		if err != nil {
+			r.Logger.Error(fmt.Sprintf("Failed to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", key, queue, err))
+			continue
+		}
 	}
 }
 
