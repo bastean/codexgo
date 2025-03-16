@@ -635,7 +635,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
 ## ...`v0` > `dev0.1.0` > `ci/dev0.1.0` > `main` > `v0`...
 
-Create `v0` branch.
+Create `v0` branch from `main`.
 
 ```bash
 task git-v0
@@ -647,22 +647,22 @@ Create development branch `dev0.1.0` from `v0`.
 task git-dev0.1.0
 ```
 
-Create branch `ci/dev0.1.0` from `dev0.1.0` to ensure that the workflows run correctly with the new changes before merging them with main.
+Create branch `ci/dev0.1.0` from `dev0.1.0` to ensure that the workflows run correctly with the new changes before merging them with `main`.
 
 ```bash
-task git-ci-dev0.1.0
+task git-ci/dev0.1.0
 ```
 
-Once the workflows have been successfully passed, the new changes from `ci/dev0.1.0` will be merged into main.
+Once the workflows have been successfully passed, the new changes from `ci/dev0.1.0` will be merged into `main`.
 
 ```bash
-task git-main-ci-dev0.1.0
+task git-main-ci/dev0.1.0
 ```
 
 After releasing the new version `v0.1.0`, the `main` and `v0` branches in our local repository will be updated.
 
 ```bash
-task git-release-v0
+task git-pull-v0
 ```
 
 To end the cycle, the `dev0.1.0` and `ci/dev0.1.0` branches will be deleted.

@@ -481,7 +481,7 @@ tasks:
       - git push -u github dev{{.VERSION}}
       - git status
 
-  git-ci-dev*:
+  git-ci/dev*:
     requires:
       vars: ["VERSION"]
     vars:
@@ -493,7 +493,7 @@ tasks:
       - git push -u github ci/dev{{.VERSION}}
       - git status
 
-  git-main-ci-dev*:
+  git-main-ci/dev*:
     requires:
       vars: ["VERSION"]
     vars:
@@ -505,7 +505,7 @@ tasks:
       - git push
       - git status
 
-  git-release-v*:
+  git-pull-v*:
     requires:
       vars: ["VERSION"]
     vars:
