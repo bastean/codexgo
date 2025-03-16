@@ -3,6 +3,11 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
+      dry:
+        type: boolean
+        description: Dry Release
+        default: false
+
       status:
         type: choice
         description: Status
@@ -22,9 +27,9 @@ on:
           - auto
         default: auto
 
-      dry:
+      gpgsign:
         type: boolean
-        description: Dry Release
+        description: GPG Sign
         default: false
 
 jobs:
@@ -40,7 +45,20 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Import GPG Key
+      - name: Release
+        if: ${{ github.event.inputs.gpgsign == 'false' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          OPTIONS="$STATUS_ARG $BUMP_ARG $DRY_ARG" task release-ci
+        env:
+          STATUS_ARG: ${{ fromJSON('{"alpha":"--preRelease=alpha", "beta":"--preRelease=beta", "stable":""}')[github.event.inputs.status] }}
+          BUMP_ARG: ${{ fromJSON('{"patch":"-i patch", "minor":"-i minor", "major":"-i major", "auto":""}')[github.event.inputs.bump] }}
+          DRY_ARG: ${{ github.event.inputs.dry == 'true' && '-d' || '' }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: (GPG) Setup
+        if: ${{ github.event.inputs.gpgsign == 'true' }}
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -51,7 +69,8 @@ jobs:
           git_commit_gpgsign: true
           git_tag_gpgsign: true
 
-      - name: Release
+      - name: (GPG) Release
+        if: ${{ github.event.inputs.gpgsign == 'true' }}
         run: OPTIONS="$STATUS_ARG $BUMP_ARG $DRY_ARG" task release-ci
         env:
           STATUS_ARG: ${{ fromJSON('{"alpha":"--preRelease=alpha", "beta":"--preRelease=beta", "stable":""}')[github.event.inputs.status] }}
