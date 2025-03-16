@@ -37,4 +37,5 @@ issues:
     - tmp
 
 run:
+  timeout: 0s
   relative-path-mode: gomod
