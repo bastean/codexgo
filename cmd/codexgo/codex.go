@@ -40,8 +40,8 @@ func main() {
 	log.Starting(Apps)
 
 	go func() {
-		if err := server.Up(); err != nil {
-			log.Fatal(err.Error())
+		if errServer := server.Up(); errServer != nil {
+			log.Fatal(errServer.Error())
 		}
 	}()
 
