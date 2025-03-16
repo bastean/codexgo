@@ -14,8 +14,8 @@ func RateLimiter() gin.HandlerFunc {
 	return ratelimit.RateLimiter(
 		ratelimit.InMemoryStore(
 			&ratelimit.InMemoryOptions{
-				Rate:  time.Second,
-				Limit: 10,
+				Rate:  time.Minute,
+				Limit: 120,
 				Skip: func(c *gin.Context) bool {
 					return env.IsServerGinModeTest()
 				},
