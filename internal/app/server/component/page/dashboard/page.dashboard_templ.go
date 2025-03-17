@@ -92,7 +92,7 @@ func Page(attributes *read.ResponseAttributes) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ui centered grid container\" style=\"height: 100%;\"><div class=\"sixteen wide column\"><div class=\"ui inverted secondary menu\"><div class=\"header item\"><a href=\"https://github.com/bastean/codexgo\" rel=\"noopener noreferrer\" target=\"_blank\"><img class=\"ui small image\" src=\"/public/static/assets/logo.png\"></a></div><div class=\"right menu\"><h4 class=\"ui inverted header\"><img class=\"ui avatar image\" src=\"/public/static/assets/favicon.png\"><div class=\"content\"><div class=\"ui inverted dropdown\"><div class=\"text\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"ui centered grid container\" style=\"height: 100%;\"><div class=\"sixteen wide column\"><div class=\"ui inverted secondary menu\"><div class=\"header item\"><a href=\"https://github.com/bastean/codexgo\" rel=\"noopener noreferrer\" target=\"_blank\"><img class=\"ui small image\" src=\"/public/static/assets/logo.png\"></a></div><div class=\"right menu\"><h4 class=\"ui inverted header\"><img class=\"ui avatar image\" src=\"/public/static/assets/favicon-512.png\"><div class=\"content\"><div class=\"ui inverted dropdown\"><div class=\"text\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
