@@ -1,5 +1,39 @@
 # Changelog
 
+## [4.15.0](https://github.com/bastean/codexgo/compare/v4.14.4...v4.15.0) (2025-03-17)
+
+### Chores
+
+- add golangci-lint ([1b7f35e](https://github.com/bastean/codexgo/commit/1b7f35e1c81a8e6eff043b5a404a57814dd9b592))
+- **copydeps:** run script to update file permissions ([ae5a166](https://github.com/bastean/codexgo/commit/ae5a1662a4610a1bf0cb6d9afa21d5e4580c7e98))
+- **deps:** upgrade ([a6abd26](https://github.com/bastean/codexgo/commit/a6abd26b148a2be961d2416a2e1be541d234ee8a))
+- **govet:** enable shadow ([7390f94](https://github.com/bastean/codexgo/commit/7390f94b9c43e0f181abb9f20931377449c4f464))
+- **task:** rename git tasks ([a236f88](https://github.com/bastean/codexgo/commit/a236f88c13903047fe49c53c3a02b60d2b9424f5))
+
+### Documentation
+
+- **readme:** add description about workflow settings ([e661be4](https://github.com/bastean/codexgo/commit/e661be4d9f331234c98fadf7c2fecd2e1d78d3bf))
+
+### New Features
+
+- **ci:** make gpg signing optional ([ded24a8](https://github.com/bastean/codexgo/commit/ded24a89ab523a7887c9555cf2c083a8b017d66f))
+- **server:** add pwa screenshots ([8d3c2f7](https://github.com/bastean/codexgo/commit/8d3c2f73016aa1279937b3c857c57b49d3b5bfc9))
+
+### Bug Fixes
+
+- **errcheck:** resolve detected issues ([f9117f1](https://github.com/bastean/codexgo/commit/f9117f1de1b8f18ac425913a8cc1545ab80faaa2))
+- **gocritic:** resolve detected issues ([ef253c9](https://github.com/bastean/codexgo/commit/ef253c921313e8c9e837b0977346db2625095858))
+- **golangci-lint:** disable timeout ([82c6ab6](https://github.com/bastean/codexgo/commit/82c6ab6f46e21c3a6b223fd9809fc638398035c4))
+- **gosec:** resolve detected issues ([9959ab5](https://github.com/bastean/codexgo/commit/9959ab52fdd40297eaea2eb2bc61855769d7f832))
+- **govet:** resolve detected issues ([0772b53](https://github.com/bastean/codexgo/commit/0772b5316233c936f3cc7d42c43d2d3d567f5064))
+- **lint-staged:** install goimports ([6aa9f9d](https://github.com/bastean/codexgo/commit/6aa9f9dc892bbac6a6b0f57dcb21dd9adb7f07d3))
+- **perfsprint:** resolve detected issues ([876b1be](https://github.com/bastean/codexgo/commit/876b1be2898f27635f75c5ab0591b53c2d5a296e))
+- **server:** change avatar image src ([41ba191](https://github.com/bastean/codexgo/commit/41ba191e2d682ff72fd9b541ddfc1294cec39b16))
+
+### Refactors
+
+- **server:** change rate limiter to minutes ([abdc69d](https://github.com/bastean/codexgo/commit/abdc69dc23c3e13f15254ee0538987e60996e62b))
+
 ## [4.14.4](https://github.com/bastean/codexgo/compare/v4.14.3...v4.14.4) (2025-03-11)
 
 ### Chores
