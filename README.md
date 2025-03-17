@@ -155,7 +155,7 @@ task demo
     - Scanning Repository for secrets using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog) and [Trivy](https://github.com/aquasecurity/trivy)
   - Pre-Commit: [lint-staged](https://github.com/lint-staged/lint-staged)
     - Scanning files for secrets using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
-    - Formatting
+    - Formatting files using [gofmt](https://pkg.go.dev/cmd/gofmt), [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) and [Prettier](https://prettier.io/docs/en/install).
   - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
     - Check [Conventional Commits](https://www.conventionalcommits.org) rules
 - Commit message helper using [czg](https://github.com/Zhengqbbb/cz-git).
@@ -172,7 +172,7 @@ task demo
 
 ### Linters/Formatters
 
-- `*.go`: [gofmt](https://pkg.go.dev/cmd/gofmt), [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) and [staticcheck](https://staticcheck.dev/docs/getting-started).
+- `*.go`: [GolangCI-Lint](.golangci.yml).
 - `*.templ`: [templ fmt](https://templ.guide/commands-and-tools/cli#formatting-templ-files).
 - `*.feature` (Gherkin): [Cucumber extension](https://cucumber.io/docs/tools/general).
 - `*.*`: [Prettier cli/extension](https://prettier.io/docs/en/install).
@@ -354,7 +354,7 @@ It is a monolith where CRUD operations can be performed from different presentat
 
 2. `internal/pkg/service`
 
-   - It is responsible for initializing all **context** functionalities so that they are ready for use, as well as for **“mapping”** certain values to centralize all imports required for **presentations** in a single place.
+   - It is responsible for initializing all **context** functionalities so that they are ready for use, as well as for **"mapping"** certain values to centralize all imports required for **presentations** in a single place.
 
 3. `internal/app/(presentations)`
 
@@ -394,6 +394,44 @@ It is a monolith where CRUD operations can be performed from different presentat
 - **Blocks**
   - `const`, `var`, & `type`
     - We will group only those that are declared on a single line.
+
+### ...`v0` > `dev0.1.0` > `ci/dev0.1.0` > `main` > `v0`...
+
+Create `v0` branch from `main`.
+
+```bash
+task git-v0
+```
+
+Create development branch `dev0.1.0` from `v0`.
+
+```bash
+task git-dev0.1.0
+```
+
+Create branch `ci/dev0.1.0` from `dev0.1.0` to ensure that the workflows run correctly with the new changes before merging them with `main`.
+
+```bash
+task git-ci/dev0.1.0
+```
+
+Once the workflows have been successfully passed, the new changes from `ci/dev0.1.0` will be merged into `main`.
+
+```bash
+task git-main-ci/dev0.1.0
+```
+
+After releasing the new version `v0.1.0`, the `main` and `v0` branches in our local repository will be updated.
+
+```bash
+task git-pull-v0
+```
+
+To end the cycle, the `dev0.1.0` and `ci/dev0.1.0` branches will be deleted.
+
+```bash
+task git-cleanup-dev0.1.0
+```
 
 ## First Steps
 
@@ -507,10 +545,12 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
 #### Icons (Template: [Icon Safe Zone SVG](https://www.w3.org/TR/appmanifest/images/icon-safe-zone.svg))
 
-- `pwa-maskable.png` (512x512)
-- `pwa-any.png` (512x512)
-- `apple-touch-icon.png` (192x192)
-- `favicon.png` (192x192)
+- `favicon-512.png` (512x512)
+
+#### Screenshots
+
+- `desktop.png` (1536x860)
+- `mobile.png` (425x800)
 
 #### Readme
 
@@ -563,7 +603,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
 - Upgrade, Commit & Push
   ```bash
-    task git-update-"<repository>"
+  task git-update-"<repository>"
   ```
 
 ## GitHub
@@ -604,7 +644,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
     - Workflow permissions
       - Read and write permissions
 
-- Secrets and variables
+- Secrets and variables (Optional)
 
   - Actions
     - New repository secret
@@ -633,50 +673,14 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
     - Pre-release
       - `v0.1.0-alpha.0`
 
-## ...`v0` > `dev0.1.0` > `ci/dev0.1.0` > `main` > `v0`...
-
-Create `v0` branch from `main`.
-
-```bash
-task git-v0
-```
-
-Create development branch `dev0.1.0` from `v0`.
-
-```bash
-task git-dev0.1.0
-```
-
-Create branch `ci/dev0.1.0` from `dev0.1.0` to ensure that the workflows run correctly with the new changes before merging them with `main`.
-
-```bash
-task git-ci/dev0.1.0
-```
-
-Once the workflows have been successfully passed, the new changes from `ci/dev0.1.0` will be merged into `main`.
-
-```bash
-task git-main-ci/dev0.1.0
-```
-
-After releasing the new version `v0.1.0`, the `main` and `v0` branches in our local repository will be updated.
-
-```bash
-task git-pull-v0
-```
-
-To end the cycle, the `dev0.1.0` and `ci/dev0.1.0` branches will be deleted.
-
-```bash
-task git-cleanup-dev0.1.0
-```
-
 </details>
 
 ### GitHub Repository
 
 > [!IMPORTANT]
-> These settings are necessary to be able to execute the Actions Workflows.
+>
+> - **"Read and write permissions"** must be enabled to create commits and tags from the workflow, by default the user used to create them is `github-actions[bot]`, whose creations are not signed.
+>   - If we want the creation of commits and tags to be signed, we must create the specified **"Repository Secrets"**, this way by selecting `GPG Sign` when manually launching a workflow everything will be created using the information obtained from the **"GPG Key"**.
 
 #### Settings tab
 
@@ -688,7 +692,7 @@ task git-cleanup-dev0.1.0
 
     - [x] Read and write permissions
 
-##### Secrets and variables
+##### Secrets and variables (Optional)
 
 - Actions
 
@@ -792,9 +796,10 @@ task compose-prod
 
 ## Contributing
 
-- Contributions and Feedback are always welcome!
-  - [Open a new issue](https://github.com/bastean/codexgo/issues/new/choose)
+Contributions and Feedback are always welcome!
+
+- [Open a new issue](https://github.com/bastean/codexgo/issues/new/choose)
 
 ## License
 
-- [MIT](LICENSE)
+[MIT](LICENSE)
