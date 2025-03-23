@@ -16,6 +16,8 @@
 vendor
 node_modules
 package
+package-lock.json
+bun.lock
 pnpm-lock.yaml
 yarn.lock
 go.work.sum
