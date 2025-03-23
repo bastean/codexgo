@@ -601,9 +601,12 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
     - `Logo`, `Description`, `Disclaimer`, `Badges`, `Tech Stack`, `Contributing` & `License`
   - Change `v*.*.*` > `v0.0.0`
 
-- Upgrade, Commit & Push
+- Commit, Upgrade & Push
   ```bash
-  task git-update-"<repository>"
+  git commit -m "chore: update codexgo to <repository>" \
+  && task upgrade \
+  && git push \
+  && git status
   ```
 
 ## GitHub

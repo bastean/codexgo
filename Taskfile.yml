@@ -446,17 +446,6 @@ tasks:
   #* Git
   commit: bunx czg
 
-  git-update-*:
-    requires:
-      vars: ["REPOSITORY"]
-    vars:
-      REPOSITORY: "{{index .MATCH 0}}"
-    cmds:
-      - 'git commit -m "chore: update codexgo to {{.REPOSITORY}}"'
-      - task: upgrade
-      - git push
-      - git status
-
   git-v*:
     requires:
       vars: ["VERSION"]
