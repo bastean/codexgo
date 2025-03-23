@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.15.1](https://github.com/bastean/codexgo/compare/v4.15.0...v4.15.1) (2025-03-23)
+
+### Chores
+
+- **deps:** upgrade ([e0006e6](https://github.com/bastean/codexgo/commit/e0006e66826d87eb493d0a3951a0644244a2cd67))
+- **prettier:** ignore lock files ([101b0bf](https://github.com/bastean/codexgo/commit/101b0bf76c747f23bd19617693488691a70f79c5))
+- **task:** remove git update to use it without wrapping ([94cd5a4](https://github.com/bastean/codexgo/commit/94cd5a4263aedf1a62155e102e1cb152fbed5c69))
+- **vscode:** remove diff editor timeout ([7060e08](https://github.com/bastean/codexgo/commit/7060e089ba4669c419e9da535a181a5d3707edab))
+
 ## [4.15.0](https://github.com/bastean/codexgo/compare/v4.14.4...v4.15.0) (2025-03-17)
 
 ### Chores
