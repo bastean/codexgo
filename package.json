@@ -35,9 +35,8 @@
       "trufflehog filesystem --no-update",
       "prettier --no-config --ignore-unknown --write"
     ],
-    "**/!(*_templ).go": [
-      "goimports -l -w -local github.com/bastean/codexgo/v4",
-      "gofmt -l -s -w"
+    "**/*.go": [
+      "golangci-lint fmt"
     ]
   },
   "commitlint": {

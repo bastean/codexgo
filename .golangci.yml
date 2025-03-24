@@ -1,3 +1,8 @@
+version: "2"
+
+run:
+  relative-path-mode: gomod
+
 linters:
   enable:
     - errcheck
@@ -8,34 +13,50 @@ linters:
     - unused
     #! AutoFix
     - gocritic
-    - gofmt
-    - goimports
-    - gosimple
     - govet
     - perfsprint
     - staticcheck
+  settings:
+    gocyclo:
+      min-complexity: 15
+    #! AutoFix
+    gocritic:
+      disabled-checks:
+        - commentFormatting
+    govet:
+      enable:
+        - shadow
+    staticcheck:
+      checks:
+        - all
+        - -QF1008
+        #! Default
+        - -ST1000
+        - -ST1003
+        - -ST1016
+        - -ST1020
+        - -ST1021
+        - -ST1022
+  exclusions:
+    paths:
+      - dist
+      - ignore
+      - node_modules
+      - temp
+      - tmp
 
-linters-settings:
-  gocyclo:
-    min-complexity: 15
-  #! AutoFix
-  gocritic:
-    disabled-checks:
-      - commentFormatting
-  goimports:
-    local-prefixes: github.com/bastean/codexgo/v4
-  govet:
-    enable:
-      - shadow
-
-issues:
-  exclude-dirs:
-    - dist
-    - ignore
-    - node_modules
-    - temp
-    - tmp
-
-run:
-  timeout: 0s
-  relative-path-mode: gomod
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/bastean/codexgo/v4
+  exclusions:
+    paths:
+      - dist
+      - ignore
+      - node_modules
+      - temp
+      - tmp

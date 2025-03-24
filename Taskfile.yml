@@ -174,7 +174,7 @@ tasks:
       - task: curl
         vars:
           URL: https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh
-          PIPE: sudo sh -s -- -b /usr/local/bin
+          PIPE: sudo sh -s -- -b $(go env GOPATH)/bin
       - task: go-install
         vars:
           PACKAGES:
@@ -324,6 +324,7 @@ tasks:
       - go mod tidy
       - go mod verify
       - golangci-lint run --fix
+      - golangci-lint fmt
       - task: prettier-write
       - task: generate-required
 

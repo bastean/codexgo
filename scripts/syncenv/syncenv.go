@@ -125,7 +125,7 @@ func GetEnvFiles() (envFiles []string) {
 }
 
 func GetEnvFileModelVars() []string {
-	dataBytes, err := os.ReadFile(envFileModel)
+	dataBytes, err := os.ReadFile(envFileModel) //nolint:gosec
 
 	if err != nil {
 		Panic(err, "GetEnvFileModelVars")
@@ -141,7 +141,7 @@ func GetEnvFileModelVars() []string {
 }
 
 func SyncEnv(envModelVars []string, envFile string) {
-	data, err := os.ReadFile(envFile)
+	data, err := os.ReadFile(envFile) //nolint:gosec
 
 	if err != nil {
 		Panic(err, "SyncEnv")
@@ -191,7 +191,7 @@ func SyncEnv(envModelVars []string, envFile string) {
 		}
 	}
 
-	file, err := os.Create(envFile)
+	file, err := os.Create(envFile) //nolint:gosec
 
 	if err != nil {
 		Panic(err, "SyncEnv")

@@ -49,7 +49,7 @@ func CreateDirectory(path string) {
 }
 
 func CopyFile(filename, sourcePath, targetPath string) {
-	data, err := os.ReadFile(filepath.Join(sourcePath, filepath.Base(filename)))
+	data, err := os.ReadFile(filepath.Join(sourcePath, filepath.Base(filename))) //nolint:gosec
 
 	if err != nil {
 		Panic(err, fmt.Sprintf("failed to read \"%s\" from \"%s\"", filename, sourcePath), "CopyFile")
