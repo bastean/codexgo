@@ -518,6 +518,26 @@ tasks:
       - git branch -a
       - git status
 
+  git-prune: git remote prune github
+
+  git-off-c-*-*:
+    prompt: "{{.PROMPT_WARNING}}"
+    requires:
+      vars: ["TITLE", "DESCRIPTION"]
+    vars:
+      TITLE: "{{index .MATCH 0}}"
+      DESCRIPTION: "{{index .MATCH 1}}"
+    cmd: git commit -m "{{.TITLE}}" -m "{{.DESCRIPTION}}" --no-gpg-sign
+
+  git-off-t-*-*:
+    prompt: "{{.PROMPT_WARNING}}"
+    requires:
+      vars: ["VERSION", "DESCRIPTION"]
+    vars:
+      VERSION: "{{index .MATCH 0}}"
+      DESCRIPTION: "{{index .MATCH 1}}"
+    cmd: git tag -a {{.VERSION}} -m "{{.DESCRIPTION}}" --no-sign
+
   WARNING-git-forget:
     prompt: "{{.PROMPT_WARNING}}"
     cmds:
