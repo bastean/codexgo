@@ -451,7 +451,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 
 ### Initialize
 
-#### Dev Container (recommended)
+#### Dev Container **(Recommended)**
 
 1. System Requirements
 
@@ -475,7 +475,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    Dev Containers: Reopen in Container
    ```
 
-5. SSH (Optional)
+5. SSH **(Optional)**
 
    - We can connect to our `Dev Container` via `SSH` in the following ways:
      - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository
@@ -488,13 +488,13 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
        ```
      - **Password:** `vscode`
 
-6. Desktop (Optional)
+6. Desktop **(Optional)**
 
    - We can connect to our `Dev Container` via `VNC` using our web browser.
      - **URL:** `http://localhost:6080`
      - **Password:** `vscode`
        - No password is required to connect from the **local host**.
-     - Change the default applications of the context menu (Optional)
+     - Change the default applications of the context menu **(Optional)**
        ```bash
        task desktop
        ```
@@ -539,7 +539,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
 <details>
 
-<summary>Repository initialization from ZIP (Optional)</summary>
+<summary>Repository initialization from ZIP <b>(Optional)</b></summary>
 
 ## Design
 
@@ -626,7 +626,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
         - `v*`
     - Branch rules
       - Restrict deletions
-      - Require signed commits (Optional)
+      - Require signed commits **(Optional)**
       - Block force pushes
   - `New tag ruleset`
     - Ruleset Name \*
@@ -638,16 +638,10 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
         - `v*`
     - Tag rules
       - Restrict deletions
-      - Require signed commits (Optional)
+      - Require signed commits **(Optional)**
       - Block force pushes
 
-- Actions
-
-  - General
-    - Workflow permissions
-      - Read and write permissions
-
-- Secrets and variables (Optional)
+- Secrets and variables **(Optional)**
 
   - Actions
     - New repository secret
@@ -678,24 +672,14 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
 </details>
 
-### GitHub Repository
+### GitHub Actions **(Optional)**
 
 > [!IMPORTANT]
->
-> - **"Read and write permissions"** must be enabled to create commits and tags from the workflow, by default the user used to create them is `github-actions[bot]`, whose creations are not signed.
->   - If we want the creation of commits and tags to be signed, we must create the specified **"Repository Secrets"**, this way by selecting `GPG Sign` when manually launching a workflow everything will be created using the information obtained from the **"GPG Key"**.
+> By default, the user used to create commits and tags in workflows is `github-actions[bot]`, whose creations are not signed. If we want the creation of commits and tags to be signed, we must create the specified **"Repository Secrets"**, this way by selecting `GPG Sign` when manually launching a workflow everything will be created using the information obtained from the **"GPG Key"**.
 
 #### Settings tab
 
-##### Actions
-
-- General
-
-  - Workflow permissions
-
-    - [x] Read and write permissions
-
-##### Secrets and variables (Optional)
+##### Secrets and variables
 
 - Actions
 

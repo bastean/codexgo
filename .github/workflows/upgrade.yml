@@ -10,8 +10,10 @@ on:
 
 jobs:
   Dependencies:
-    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     timeout-minutes: 15
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
