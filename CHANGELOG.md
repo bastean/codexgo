@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.15.2](https://github.com/bastean/codexgo/compare/v4.15.1...v4.15.2) (2025-03-25)
+
+### Chores
+
+- **task:** add wrappers to create unsigned commits and tags ([edc7838](https://github.com/bastean/codexgo/commit/edc7838423f81517f1125223ff9dca60580aa83b))
+
+### Continuous Integration
+
+- **github:** add permissions to jobs instead of using general ones ([08780b5](https://github.com/bastean/codexgo/commit/08780b5d26695cdbb9f49c8758fcda3b214ef6eb))
+
+### Bug Fixes
+
+- **golangci-lint:** migrate to v2 ([cbfa7d1](https://github.com/bastean/codexgo/commit/cbfa7d182f34c7d547197aea04f6e3c64e0b2c41))
+
 ## [4.15.1](https://github.com/bastean/codexgo/compare/v4.15.0...v4.15.1) (2025-03-23)
 
 ### Chores
