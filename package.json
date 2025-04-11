@@ -23,7 +23,7 @@
     "@release-it/conventional-changelog": "10.0.0",
     "husky": "9.1.7",
     "lint-staged": "15.5.0",
-    "npm-check-updates": "17.1.16",
+    "npm-check-updates": "17.1.18",
     "prettier": "3.5.3",
     "release-it": "18.1.2"
   },
