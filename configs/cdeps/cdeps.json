@@ -1,0 +1,45 @@
+{
+  "Wildcards": {
+    "*.min": "^.+\\.min\\.(js|css)$",
+    "*.woff2": "^.+\\.woff2$",
+
+    "source": "node_modules",
+    "target": "internal/app/server/static/dist",
+
+    "jquery_source": "{source}/jquery/dist",
+    "jquery_target": "{target}/jquery.com",
+
+    "fomantic_source": "{source}/fomantic-ui/dist",
+    "fomantic_target": "{target}/fomantic-ui.com",
+
+    "lodash_source": "{source}/lodash",
+    "lodash_target": "{target}/lodash.com"
+  },
+  "Dependencies": [
+    {
+      "Files": ["jquery.min.js"],
+      "Source": "{jquery_source}",
+      "Target": "{jquery_target}"
+    },
+    {
+      "Files": ["semantic.min.js", "semantic.min.css"],
+      "Source": "{fomantic_source}",
+      "Target": "{fomantic_target}"
+    },
+    {
+      "Files": ["{*.min}"],
+      "Source": "{fomantic_source}/components",
+      "Target": "{fomantic_target}/components"
+    },
+    {
+      "Files": ["{*.woff2}"],
+      "Source": "{fomantic_source}/themes/default/assets/fonts",
+      "Target": "{fomantic_target}/themes/default/assets/fonts"
+    },
+    {
+      "Files": ["lodash.min.js"],
+      "Source": "{lodash_source}",
+      "Target": "{lodash_target}"
+    }
+  ]
+}

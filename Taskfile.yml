@@ -138,7 +138,7 @@ tasks:
 
   upgrade-go: go get -t -u ./cmd/... ./internal/... ./pkg/... ./scripts/...
 
-  copydeps: go run ./scripts/copydeps
+  cdeps: cdeps -c ./configs/cdeps/cdeps.json
 
   upgrade-bun:
     cmds:
@@ -147,7 +147,7 @@ tasks:
         vars:
           FILTERS: fomantic-ui -t @nightly
       - bun i
-      - task: copydeps
+      - task: cdeps
 
   upgrade-reset:
     cmds:
@@ -194,6 +194,8 @@ tasks:
       - task: go-install
         vars:
           PACKAGES:
+            - github.com/bastean/x/tools/cmd/cdeps@latest
+            - github.com/bastean/x/tools/cmd/syncenv@latest
             - github.com/air-verse/air@latest
             - github.com/a-h/templ/cmd/templ@latest
 
@@ -240,7 +242,7 @@ tasks:
       - task: upgrade-managers
       - task: install-tooling
       - task: download-dependencies
-      - task: copydeps
+      - task: cdeps
       - task: generate-required
       - task: restore
 
@@ -259,13 +261,7 @@ tasks:
       - task: init
 
   #* ENV
-  syncenv-reset:
-    cmds:
-      - task: git-reset-hard
-
-  syncenv:
-    dir: deployments
-    cmd: go run ../scripts/syncenv
+  syncenv: syncenv -e ./deployments -t ./deployments/.env.example
 
   #* Scan
   scan-secrets-local:
@@ -401,7 +397,7 @@ tasks:
     cmds:
       - task: lint
       - rm -rf build/
-      - go build -ldflags="-s -w" -o build/codexgo ./cmd/codexgo
+      - go build -ldflags="-s -w" -o ./build/codexgo ./cmd/codexgo
 
   #* Release
   release:

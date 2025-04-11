@@ -268,12 +268,15 @@ task demo
 - Account confirmation and recovery via **Mail** or **Terminal**.
 - Password hashing using [Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt).
 
+### Tools
+
+- [cDeps](https://github.com/bastean/x)
+  - Copies the files required by the browser dependencies from the **node_modules** folder and places them inside the **static** folder on the server.
+- [syncENV](https://github.com/bastean/x)
+  - Synchronize all **.env\*** files in the directory using an **.env** model.
+
 ### Scripts
 
-- [syncenv](scripts/syncenv/syncenv.go)
-  - Synchronize all **.env\*** files in the directory using an **.env** model.
-- [copydeps](scripts/copydeps/copydeps.go)
-  - Copies the files required by the browser dependencies from the **node_modules** folder and places them inside the **static** folder on the server.
 - [run](deployments/run.sh)
   - Display the logs and redirect them to a file whose name depends on the time at which the service was run.
   - Used in Production Image.
