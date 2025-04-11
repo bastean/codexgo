@@ -7,9 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  Scan:
+  Required:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,39 +19,16 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Secret
-        run: task scan-secrets-local
+      - name: Scan
+        run: |
+          task scan-secrets-local
+          task scan-vulns-local
+          task scan-misconfigs-local
 
-      - name: Vulnerability
-        run: task scan-vulns-local
-
-      - name: Misconfiguration
-        run: task scan-misconfigs-local
-
-  Lint:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Check
+      - name: Lint
         run: task lint-check
 
-  Test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup
-        uses: ./.github/actions/setup
-
-      - name: Unit
+      - name: Test
         run: task test-unit
 
       - name: Upload Report
