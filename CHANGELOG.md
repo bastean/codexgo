@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.15.3](https://github.com/bastean/codexgo/compare/v4.15.2...v4.15.3) (2025-04-11)
+
+### Chores
+
+- **deps:** upgrade ([d28e21c](https://github.com/bastean/codexgo/commit/d28e21c03d48bf2c7db0b3daf96abb822a1f21f2))
+- **task:** add cdeps and syncenv tools ([c58d220](https://github.com/bastean/codexgo/commit/c58d2204f3693caae80138c67609bb17ed241505))
+- **vscode:** add go default formatter ([c96d9ce](https://github.com/bastean/codexgo/commit/c96d9ce8d18a743c5b9928487ad5ff46113e9221))
+
+### Continuous Integration
+
+- **github:** squash ci workflow jobs into a single one ([76b7ab0](https://github.com/bastean/codexgo/commit/76b7ab04feec96cd3f7862269ec5f94b3047a793))
+
 ## [4.15.2](https://github.com/bastean/codexgo/compare/v4.15.1...v4.15.2) (2025-03-25)
 
 ### Chores

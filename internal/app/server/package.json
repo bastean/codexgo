@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "server",
-  "version": "4.15.2",
+  "version": "4.15.3",
   "devDependencies": {
     "fomantic-ui": "2.10.0-beta.18",
     "jquery": "3.7.1",
