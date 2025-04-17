@@ -26,8 +26,7 @@ func NewResponse(value string) (*Response, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewResponse",
-			What:  fmt.Sprintf("Response must be between %s to %s characters and be alpha only", ResponseMinCharactersLength, ResponseMaxCharactersLength),
+			What: fmt.Sprintf("Response must be between %s to %s characters and be alpha only", ResponseMinCharactersLength, ResponseMaxCharactersLength),
 			Why: errors.Meta{
 				"Response": value,
 			},

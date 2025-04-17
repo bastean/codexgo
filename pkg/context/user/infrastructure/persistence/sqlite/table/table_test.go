@@ -22,13 +22,13 @@ func (s *TableTestSuite) SetupSuite() {
 	session, err := sqlite.Open(os.Getenv("CODEXGO_DATABASE_SQLITE_DSN"))
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupSuite")
+		errors.Panic(err)
 	}
 
 	s.RepositorySuite.SUT, err = table.Open(session)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupSuite")
+		errors.Panic(err)
 	}
 }
 

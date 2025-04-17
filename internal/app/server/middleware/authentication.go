@@ -28,7 +28,7 @@ func Authentication(c *gin.Context) {
 	claims, err := authentication.JWT.Validate(signature)
 
 	if err != nil {
-		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err, "Authentication"), "/")
+		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err), "/")
 		return
 	}
 

@@ -47,8 +47,7 @@ func (r *RabbitMQ) AddExchange(name string) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "AddExchange",
-			What:  "Failure to declare a Exchange",
+			What: "Failure to declare a Exchange",
 			Why: errors.Meta{
 				"Exchange": name,
 			},
@@ -73,8 +72,7 @@ func (r *RabbitMQ) AddQueue(name messages.Recipient) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "AddQueue",
-			What:  "Failure to declare a Queue",
+			What: "Failure to declare a Queue",
 			Why: errors.Meta{
 				"Queue": name,
 			},
@@ -95,8 +93,7 @@ func (r *RabbitMQ) AddQueueEventBind(queue messages.Recipient, bindingKey, routi
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "AddQueueEventBind",
-			What:  "Failure to bind a Queue",
+			What: "Failure to bind a Queue",
 			Why: errors.Meta{
 				"Exchange":    r.exchange,
 				"Queue":       queue,
@@ -121,9 +118,8 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Unmarshal",
-			What:  "Cannot unmarshal an Event",
-			Who:   err,
+			What: "Cannot unmarshal an Event",
+			Who:  err,
 		})
 	}
 
@@ -131,9 +127,8 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Unmarshal",
-			What:  "Cannot unmarshal an Event ID, OccurredOn & Key",
-			Who:   err,
+			What: "Cannot unmarshal an Event ID, OccurredOn & Key",
+			Who:  err,
 		})
 	}
 
@@ -146,9 +141,8 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 
 		if err != nil {
 			return errors.New[errors.Internal](&errors.Bubble{
-				Where: "Unmarshal",
-				What:  "Cannot unmarshal an Event Attributes",
-				Who:   err,
+				What: "Cannot unmarshal an Event Attributes",
+				Who:  err,
 			})
 		}
 
@@ -162,9 +156,8 @@ func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *
 
 		if err != nil {
 			return errors.New[errors.Internal](&errors.Bubble{
-				Where: "Unmarshal",
-				What:  "Cannot unmarshal an Event Meta",
-				Who:   err,
+				What: "Cannot unmarshal an Event Meta",
+				Who:  err,
 			})
 		}
 
@@ -205,8 +198,7 @@ func (r *RabbitMQ) Subscribe(key messages.Key, consumer roles.EventConsumer) err
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Subscribe",
-			What:  "Queue is not declared",
+			What: "Queue is not declared",
 			Why: errors.Meta{
 				"Exchange": r.exchange,
 				"Event":    key,
@@ -227,8 +219,7 @@ func (r *RabbitMQ) Subscribe(key messages.Key, consumer roles.EventConsumer) err
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Subscribe",
-			What:  "Failure to subscribe a Consumer",
+			What: "Failure to subscribe a Consumer",
 			Why: errors.Meta{
 				"Exchange": r.exchange,
 				"Queue":    queue,
@@ -247,8 +238,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Publish",
-			What:  "Failure to execute a Event without a Consumer",
+			What: "Failure to execute a Event without a Consumer",
 			Why: errors.Meta{
 				"Event": event.Key,
 			},
@@ -267,8 +257,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Publish",
-			What:  "Cannot encode Event to JSON",
+			What: "Cannot encode Event to JSON",
 			Why: errors.Meta{
 				"Exchange": r.exchange,
 				"Queue":    queue,
@@ -297,8 +286,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Publish",
-			What:  "Failure to publish a Event",
+			What: "Failure to publish a Event",
 			Why: errors.Meta{
 				"Exchange": r.exchange,
 				"Queue":    queue,
@@ -316,9 +304,8 @@ func Open(uri string, exchange string, logger roles.Logger, consumeCycle context
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Open",
-			What:  "Failure connecting to RabbitMQ",
-			Who:   err,
+			What: "Failure connecting to RabbitMQ",
+			Who:  err,
 		})
 	}
 
@@ -326,9 +313,8 @@ func Open(uri string, exchange string, logger roles.Logger, consumeCycle context
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Open",
-			What:  "Failure to open a Channel",
-			Who:   err,
+			What: "Failure to open a Channel",
+			Who:  err,
 		})
 	}
 
@@ -343,7 +329,7 @@ func Open(uri string, exchange string, logger roles.Logger, consumeCycle context
 	err = rmq.AddExchange(exchange)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Open")
+		return nil, errors.BubbleUp(err)
 	}
 
 	return rmq, nil
@@ -354,9 +340,8 @@ func Close(session *RabbitMQ) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Close",
-			What:  "Failure to close Channel",
-			Who:   err,
+			What: "Failure to close Channel",
+			Who:  err,
 		})
 	}
 
@@ -364,9 +349,8 @@ func Close(session *RabbitMQ) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Close",
-			What:  "Failure to close RabbitMQ connection",
-			Who:   err,
+			What: "Failure to close RabbitMQ connection",
+			Who:  err,
 		})
 	}
 
@@ -380,13 +364,13 @@ func AddQueueMapper(rmq *RabbitMQ, queues QueueMapper) error {
 		err = rmq.AddQueue(queue.Name)
 
 		if err != nil {
-			return errors.BubbleUp(err, "AddQueueMapper")
+			return errors.BubbleUp(err)
 		}
 
 		err = rmq.AddQueueEventBind(queue.Name, queue.BindingKey, routingKey, queue.Attributes, queue.Meta)
 
 		if err != nil {
-			return errors.BubbleUp(err, "AddQueueMapper")
+			return errors.BubbleUp(err)
 		}
 	}
 

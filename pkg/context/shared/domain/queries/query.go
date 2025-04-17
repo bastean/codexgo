@@ -17,7 +17,7 @@ func AddQueryMapper(bus roles.QueryBus, mapper Mapper) error {
 		err = bus.Register(key, handler)
 
 		if err != nil {
-			return errors.BubbleUp(err, "AddQueryMapper")
+			return errors.BubbleUp(err)
 		}
 	}
 

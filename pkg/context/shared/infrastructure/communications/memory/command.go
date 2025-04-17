@@ -18,8 +18,7 @@ func (b *CommandBus) Register(key messages.Key, handler roles.CommandHandler) er
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Register",
-			What:  fmt.Sprintf("%s already registered", key),
+			What: fmt.Sprintf("%s already registered", key),
 			Why: errors.Meta{
 				"Command": key,
 			},
@@ -36,8 +35,7 @@ func (b *CommandBus) Dispatch(command *messages.Message) error {
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Dispatch",
-			What:  "Failure to execute a Command without a Handler",
+			What: "Failure to execute a Command without a Handler",
 			Why: errors.Meta{
 				"Command": command.Key,
 			},
@@ -47,7 +45,7 @@ func (b *CommandBus) Dispatch(command *messages.Message) error {
 	err := handler.Handle(command)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Dispatch")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

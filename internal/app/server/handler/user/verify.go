@@ -40,7 +40,7 @@ func Verify(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Verify"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

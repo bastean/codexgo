@@ -21,8 +21,7 @@ func (b *EventBus) Publish(event *messages.Message) error {
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Publish",
-			What:  "Failure to execute a Event without a Consumer",
+			What: "Failure to execute a Event without a Consumer",
 			Why: errors.Meta{
 				"Event": event.Key,
 			},
@@ -33,7 +32,7 @@ func (b *EventBus) Publish(event *messages.Message) error {
 		err := consumer.On(event)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Publish")
+			return errors.BubbleUp(err)
 		}
 	}
 

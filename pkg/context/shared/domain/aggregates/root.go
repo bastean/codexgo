@@ -14,15 +14,14 @@ type Root struct {
 func (r *Root) CreationStamp() error {
 	if r.Created != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "CreationStamp",
-			What:  "Cannot overwrite an existing stamp",
+			What: "Cannot overwrite an existing stamp",
 		})
 	}
 
 	created, err := NewTime(services.TimeNow())
 
 	if err != nil {
-		return errors.BubbleUp(err, "CreationStamp")
+		return errors.BubbleUp(err)
 	}
 
 	r.Created = created
@@ -35,7 +34,7 @@ func (r *Root) UpdatedStamp() error {
 	updated, err := NewTime(services.TimeNow())
 
 	if err != nil {
-		return errors.BubbleUp(err, "UpdatedStamp")
+		return errors.BubbleUp(err)
 	}
 
 	r.Updated = updated

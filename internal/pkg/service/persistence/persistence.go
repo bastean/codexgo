@@ -35,7 +35,7 @@ func Up() error {
 
 		if err != nil {
 			log.ConnectionFailedWith(Service.MongoDB)
-			return errors.BubbleUp(err, "Up")
+			return errors.BubbleUp(err)
 		}
 
 		log.ConnectionEstablishedWith(Service.MongoDB)
@@ -46,7 +46,7 @@ func Up() error {
 
 		if err != nil {
 			log.CannotBeStarted(Service.SQLite)
-			return errors.BubbleUp(err, "Up")
+			return errors.BubbleUp(err)
 		}
 
 		log.Started(Service.SQLite)
@@ -62,7 +62,7 @@ func Down(ctx context.Context) error {
 
 		if err = mongodb.Close(ctx, MongoDB); err != nil {
 			log.DisconnectionFailedWith(Service.MongoDB)
-			return errors.BubbleUp(err, "Down")
+			return errors.BubbleUp(err)
 		}
 
 		log.ConnectionClosedWith(Service.MongoDB)
@@ -72,7 +72,7 @@ func Down(ctx context.Context) error {
 
 		if err = sqlite.Close(SQLite); err != nil {
 			log.CannotBeStopped(Service.SQLite)
-			return errors.BubbleUp(err, "Down")
+			return errors.BubbleUp(err)
 		}
 
 		log.Stopped(Service.SQLite)

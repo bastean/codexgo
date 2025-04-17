@@ -43,14 +43,14 @@ func Up() error {
 
 		if err != nil {
 			log.ConnectionFailedWith(Service.RabbitMQEventBus)
-			return errors.BubbleUp(err, "Up")
+			return errors.BubbleUp(err)
 		}
 
 		err = rabbitmq.AddQueueMapper(event.Bus.(*rabbitmq.RabbitMQ), event.RabbitMQueueMapper)
 
 		if err != nil {
 			log.CannotBeStarted(Service.RabbitMQEventBus)
-			return errors.BubbleUp(err, "Up")
+			return errors.BubbleUp(err)
 		}
 
 		log.ConnectionEstablishedWith(Service.RabbitMQEventBus)
@@ -89,7 +89,7 @@ func Down() error {
 
 		if err = rabbitmq.Close(event.Bus.(*rabbitmq.RabbitMQ)); err != nil {
 			log.DisconnectionFailedWith(Service.RabbitMQEventBus)
-			return errors.BubbleUp(err, "Down")
+			return errors.BubbleUp(err)
 		}
 
 		log.ConnectionClosedWith(Service.RabbitMQEventBus)

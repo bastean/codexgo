@@ -36,25 +36,25 @@ func (h *Handler) Handle(command *messages.Message) error {
 	reset, err := user.NewID(attributes.Reset)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	id, err := user.NewID(attributes.ID)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	password, err := user.NewPlainPassword(attributes.Password)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	err = h.Reset.Run(reset, id, password)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

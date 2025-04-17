@@ -14,7 +14,7 @@ func (c *Case) Run(event *events.UserResetQueuedAttributes) error {
 	err := c.Transfer.Submit(event)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

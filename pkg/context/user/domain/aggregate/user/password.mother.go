@@ -9,7 +9,7 @@ func PlainPasswordWithValidValue() *PlainPassword {
 	value, err := NewPlainPassword(services.Create.Regex(`^[\W\w]{8,64}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "PlainPasswordWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value
@@ -27,7 +27,7 @@ func CipherPasswordWithValidValue() *CipherPassword {
 	value, err := NewCipherPassword(services.Create.Regex(`^.{8,64}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "CipherPasswordWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

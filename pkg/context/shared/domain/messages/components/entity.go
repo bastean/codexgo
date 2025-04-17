@@ -26,8 +26,7 @@ func NewEntity(value string) (*Entity, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewEntity",
-			What:  fmt.Sprintf("Entity must be between %s to %s characters and be alpha only", EntityMinCharactersLength, EntityMaxCharactersLength),
+			What: fmt.Sprintf("Entity must be between %s to %s characters and be alpha only", EntityMinCharactersLength, EntityMaxCharactersLength),
 			Why: errors.Meta{
 				"Entity": value,
 			},

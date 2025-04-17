@@ -18,9 +18,8 @@ func InitDemo() error {
 		os.Setenv(SERVER_GIN_COOKIE_SESSION_NAME, "codexgo-demo"),
 	); err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "InitDemo",
-			What:  "Failure to set ENV",
-			Who:   err,
+			What: "Failure to set ENV",
+			Who:  err,
 		})
 	}
 

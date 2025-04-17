@@ -42,7 +42,7 @@ func Delete(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Delete"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

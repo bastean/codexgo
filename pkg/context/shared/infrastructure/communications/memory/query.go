@@ -18,8 +18,7 @@ func (b *QueryBus) Register(key messages.Key, handler roles.QueryHandler) error 
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Register",
-			What:  fmt.Sprintf("%s already registered", key),
+			What: fmt.Sprintf("%s already registered", key),
 			Why: errors.Meta{
 				"Query": key,
 			},
@@ -36,8 +35,7 @@ func (b *QueryBus) Ask(query *messages.Message) (*messages.Message, error) {
 
 	if !ok {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Ask",
-			What:  "Failure to execute a Query without a Handler",
+			What: "Failure to execute a Query without a Handler",
 			Why: errors.Meta{
 				"Query": query.Key,
 			},
@@ -47,7 +45,7 @@ func (b *QueryBus) Ask(query *messages.Message) (*messages.Message, error) {
 	response, err := handler.Handle(query)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Ask")
+		return nil, errors.BubbleUp(err)
 	}
 
 	return response, nil

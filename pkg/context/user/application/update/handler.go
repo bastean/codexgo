@@ -41,7 +41,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	var updated *user.PlainPassword
@@ -50,14 +50,14 @@ func (h *Handler) Handle(command *messages.Message) error {
 		updated, err = user.NewPlainPassword(attributes.UpdatedPassword)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Handle")
+			return errors.BubbleUp(err)
 		}
 	}
 
 	err = h.Update.Run(aggregate, updated)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

@@ -9,7 +9,7 @@ func EmailWithValidValue() *Email {
 	value, err := NewEmail(services.Create.Email())
 
 	if err != nil {
-		errors.Panic(err.Error(), "EmailWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

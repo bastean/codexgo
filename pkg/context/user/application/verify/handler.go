@@ -36,19 +36,19 @@ func (h *Handler) Handle(command *messages.Message) error {
 	verify, err := user.NewID(attributes.Verify)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	id, err := user.NewID(attributes.ID)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	err = h.Verify.Run(verify, id)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

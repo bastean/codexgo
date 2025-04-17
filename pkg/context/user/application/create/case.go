@@ -16,19 +16,19 @@ func (c *Case) Run(aggregate *user.User) error {
 	hashed, err := c.Hasher.Hash(aggregate.PlainPassword.Value)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	err = c.Repository.Create(aggregate)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

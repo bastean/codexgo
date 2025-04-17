@@ -18,7 +18,7 @@ func AddEventMapper(bus roles.EventBus, mapper Mapper) error {
 			err = bus.Subscribe(key, consumer)
 
 			if err != nil {
-				return errors.BubbleUp(err, "AddEventMapper")
+				return errors.BubbleUp(err)
 			}
 		}
 	}

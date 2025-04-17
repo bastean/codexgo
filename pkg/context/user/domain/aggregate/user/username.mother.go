@@ -9,7 +9,7 @@ func UsernameWithValidValue() *Username {
 	value, err := NewUsername(services.Create.Regex(`^[A-Za-z0-9]{2,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "UsernameWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

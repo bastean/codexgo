@@ -52,13 +52,13 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	id, err := user.NewID(attributes.ID)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Handle")
+		return nil, errors.BubbleUp(err)
 	}
 
 	aggregate, err := h.Read.Run(id)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Handle")
+		return nil, errors.BubbleUp(err)
 	}
 
 	response := &ResponseAttributes{

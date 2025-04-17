@@ -21,7 +21,7 @@ func (c *Consumer) On(event *messages.Message) error {
 	err := c.Password.Run(account)
 
 	if err != nil {
-		return errors.BubbleUp(err, "On")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

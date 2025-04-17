@@ -9,7 +9,7 @@ func ServiceWithValidValue() *Service {
 	value, err := NewService(services.Create.Regex(`^[A-Za-z0-9]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "ServiceWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

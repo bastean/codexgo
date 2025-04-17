@@ -51,8 +51,7 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 
 	if attributes.Email == "" && attributes.Username == "" {
 		return nil, errors.New[errors.Failure](&errors.Bubble{
-			Where: "Handle",
-			What:  "Email or Username required",
+			What: "Email or Username required",
 		})
 	}
 
@@ -67,7 +66,7 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	}
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Handle")
+		return nil, errors.BubbleUp(err)
 	}
 
 	if attributes.Username != "" {
@@ -75,19 +74,19 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	}
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Handle")
+		return nil, errors.BubbleUp(err)
 	}
 
 	plain, err := user.NewPlainPassword(attributes.Password)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Handle")
+		return nil, errors.BubbleUp(err)
 	}
 
 	aggregate, err := h.Login.Run(email, username, plain)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Handle")
+		return nil, errors.BubbleUp(err)
 	}
 
 	response := &ResponseAttributes{

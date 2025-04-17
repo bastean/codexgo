@@ -30,7 +30,7 @@ func Reset(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Reset"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

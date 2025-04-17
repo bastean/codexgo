@@ -38,8 +38,14 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 	s.Equal(expected, actual.Error())
 }
 
-func (s *BubbleTestSuite) TestWithInvalidValue() {
-	s.Panics(func() { _ = errors.New[errors.Default](new(errors.Bubble)) })
+func (s *BubbleTestSuite) TestWithoutWhere() {
+	expected := "(New): Cannot create a error Bubble if \"Where\" is not defined"
+	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.BubbleWithoutWhere()) })
+}
+
+func (s *BubbleTestSuite) TestWithoutWhat() {
+	expected := "(New): Cannot create a error Bubble if \"What\" is not defined"
+	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.BubbleWithoutWhat()) })
 }
 
 func TestUnitBubbleSuite(t *testing.T) {

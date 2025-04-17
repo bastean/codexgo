@@ -20,7 +20,7 @@ func Start() error {
 
 	if err = InitNotification(); err != nil {
 		log.CannotBeStarted(Service.Notification)
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err)
 	}
 
 	log.Started(Service.Notification)

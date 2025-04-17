@@ -9,7 +9,7 @@ func TimeWithValidValue() *Time {
 	value, err := NewTime(services.TimeNow())
 
 	if err != nil {
-		errors.Panic(err.Error(), "TimeWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

@@ -24,8 +24,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Submit",
-			What:  "Failure to write message headers",
+			What: "Failure to write message headers",
 			Why: errors.Meta{
 				"Headers":  headers,
 				"Reset ID": attributes.Reset,
@@ -41,8 +40,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Submit",
-			What:  "Failure to render password reset mail",
+			What: "Failure to render password reset mail",
 			Why: errors.Meta{
 				"Reset ID": attributes.Reset,
 				"User ID":  attributes.ID,
@@ -55,8 +53,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Submit",
-			What:  "Failure to send password reset mail",
+			What: "Failure to send password reset mail",
 			Why: errors.Meta{
 				"SMTP Server URL": c.ServerURL,
 				"Reset ID":        attributes.Reset,

@@ -9,7 +9,7 @@ func OrganizationWithValidValue() *Organization {
 	value, err := NewOrganization(services.Create.Regex(`^[A-Za-z0-9]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "OrganizationWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

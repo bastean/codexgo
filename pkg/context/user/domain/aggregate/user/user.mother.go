@@ -19,7 +19,7 @@ func RandomPrimitive() *User {
 	})
 
 	if err != nil {
-		errors.Panic(err.Error(), "RandomPrimitive")
+		errors.Panic(err)
 	}
 
 	return user
@@ -34,7 +34,7 @@ func RandomRaw() *User {
 	})
 
 	if err != nil {
-		errors.Panic(err.Error(), "RandomRaw")
+		errors.Panic(err)
 	}
 
 	return user

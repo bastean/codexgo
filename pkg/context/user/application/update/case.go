@@ -18,13 +18,13 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	err = c.Hasher.Compare(account.CipherPassword.Value, aggregate.PlainPassword.Value)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	hashed := account.CipherPassword.Value
@@ -33,14 +33,14 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 		hashed, err = c.Hasher.Hash(updated.Value)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Run")
+			return errors.BubbleUp(err)
 		}
 	}
 
 	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate.Created = account.Created
@@ -50,7 +50,7 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 	err = c.Repository.Update(aggregate)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

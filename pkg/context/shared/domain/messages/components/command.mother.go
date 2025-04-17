@@ -9,7 +9,7 @@ func CommandWithValidValue() *Command {
 	value, err := NewCommand(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "CommandWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

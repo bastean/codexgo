@@ -44,20 +44,20 @@ func (h *Handler) Handle(command *messages.Message) error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	err = h.Create.Run(aggregate)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	for _, event := range aggregate.Pull() {
 		err = h.EventBus.Publish(event)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Handle")
+			return errors.BubbleUp(err)
 		}
 	}
 

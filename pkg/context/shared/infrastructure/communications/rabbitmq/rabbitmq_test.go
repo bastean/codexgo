@@ -62,13 +62,13 @@ func (s *RabbitMQTestSuite) SetupSuite() {
 	)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupSuite")
+		errors.Panic(err)
 	}
 
 	err = rabbitmq.AddQueueMapper(s.EventBusSuite.SUT.(*rabbitmq.RabbitMQ), queues)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupSuite")
+		errors.Panic(err)
 	}
 }
 

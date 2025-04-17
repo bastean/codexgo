@@ -40,13 +40,13 @@ func (h *Handler) Handle(command *messages.Message) error {
 	err := errors.Join(errID, errPlain)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	err = h.Delete.Run(id, plain)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

@@ -16,7 +16,7 @@ func (c *Case) Run(verify, id *user.ID) error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	if aggregate.IsVerified() {
@@ -26,13 +26,13 @@ func (c *Case) Run(verify, id *user.ID) error {
 	err = aggregate.ValidateVerify(verify)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate.Verified, err = user.NewVerified(true)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate.Verify = nil
@@ -40,7 +40,7 @@ func (c *Case) Run(verify, id *user.ID) error {
 	err = c.Repository.Update(aggregate)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

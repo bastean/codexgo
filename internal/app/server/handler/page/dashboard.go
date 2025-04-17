@@ -32,7 +32,7 @@ func Dashboard(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err, "Dashboard"), "/")
+		errs.AbortByErrWithRedirect(c, errors.BubbleUp(err), "/")
 		return
 	}
 

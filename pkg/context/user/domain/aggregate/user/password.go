@@ -27,8 +27,7 @@ func NewPlainPassword(value string) (*PlainPassword, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewPlainPassword",
-			What:  fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
+			What: fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
 			Why: errors.Meta{
 				"Password": value,
 			},
@@ -45,8 +44,7 @@ func NewCipherPassword(value string) (*CipherPassword, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "NewCipherPassword",
-			What:  "Cipher Password is required",
+			What: "Cipher Password is required",
 			Why: errors.Meta{
 				"Password": value,
 			},

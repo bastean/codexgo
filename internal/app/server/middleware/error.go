@@ -61,8 +61,7 @@ func ErrorHandler() gin.HandlerFunc {
 
 			if !ok {
 				log.Error(errors.New[errors.Internal](&errors.Bubble{
-					Where: "ErrorHandler",
-					What:  "Invalid redirection Route",
+					What: "Invalid redirection Route",
 					Why: errors.Meta{
 						"Route": route,
 					},

@@ -13,8 +13,7 @@ type Time struct {
 func NewTime(value string) (*Time, error) {
 	if _, err := time.Parse(time.RFC3339Nano, value); err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "NewTime",
-			What:  "Invalid Time format",
+			What: "Invalid Time format",
 			Why: errors.Meta{
 				"Time": value,
 			},

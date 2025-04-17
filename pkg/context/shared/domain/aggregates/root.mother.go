@@ -8,7 +8,7 @@ func RootWithValidValue() *Root {
 	value, err := NewRoot()
 
 	if err != nil {
-		errors.Panic(err.Error(), "RootWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

@@ -33,7 +33,7 @@ func Create(c *gin.Context) {
 	err = captcha.Verify(data.CaptchaID, data.CaptchaAnswer)
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 
@@ -50,7 +50,7 @@ func Create(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Create"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

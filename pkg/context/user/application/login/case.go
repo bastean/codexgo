@@ -19,13 +19,13 @@ func (c *Case) Run(email *user.Email, username *user.Username, plain *user.Plain
 	})
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err)
 	}
 
 	err = c.Hasher.Compare(aggregate.CipherPassword.Value, plain.Value)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err)
 	}
 
 	return aggregate, nil

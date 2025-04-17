@@ -22,3 +22,7 @@ func CommandAssertion(where string) error {
 func QueryAssertion(where string) error {
 	return assertion("Query", where)
 }
+
+func IsNot(err, target error) bool {
+	return err != nil && !Is(err, target)
+}

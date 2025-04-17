@@ -9,7 +9,7 @@ func ResponseWithValidValue() *Response {
 	value, err := NewResponse(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "ResponseWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

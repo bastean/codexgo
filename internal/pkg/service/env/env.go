@@ -78,9 +78,8 @@ func Verify() error {
 
 	if len(errs) > 0 {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Verify",
-			What:  "Invalid ENV",
-			Why:   errs,
+			What: "Invalid ENV",
+			Why:  errs,
 		})
 	}
 
@@ -89,7 +88,7 @@ func Verify() error {
 
 func Init() error {
 	if err := Verify(); err != nil {
-		return errors.BubbleUp(err, "Init")
+		return errors.BubbleUp(err)
 	}
 
 	SMTP()

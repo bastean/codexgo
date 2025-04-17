@@ -43,13 +43,12 @@ func Up() error {
 	switch {
 	case isDemo:
 		if err = env.InitDemo(); err != nil {
-			return errors.BubbleUp(err, "Up")
+			return errors.BubbleUp(err)
 		}
 	case envFile != "":
 		if err = godotenv.Load(envFile); err != nil {
 			return errors.New[errors.Internal](&errors.Bubble{
-				Where: "Up",
-				What:  "Failure to load ENV file",
+				What: "Failure to load ENV file",
 				Why: errors.Meta{
 					"File": envFile,
 				},

@@ -24,8 +24,7 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Submit",
-			What:  "Failure to write message headers",
+			What: "Failure to write message headers",
 			Why: errors.Meta{
 				"Headers":   headers,
 				"Verify ID": attributes.Verify,
@@ -41,8 +40,7 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Submit",
-			What:  "Failure to render account confirmation mail",
+			What: "Failure to render account confirmation mail",
 			Why: errors.Meta{
 				"Verify ID": attributes.Verify,
 				"User ID":   attributes.ID,
@@ -55,8 +53,7 @@ func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Submit",
-			What:  "Failure to send account confirmation mail",
+			What: "Failure to send account confirmation mail",
 			Why: errors.Meta{
 				"SMTP Server URL": c.ServerURL,
 				"Verify ID":       attributes.Verify,

@@ -14,7 +14,7 @@ func Home(c *gin.Context) {
 	forgot, errForgot := captcha.Generate()
 
 	if err := errors.Join(errRegister, errForgot); err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Home"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

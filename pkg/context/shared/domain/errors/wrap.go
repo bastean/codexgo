@@ -5,7 +5,8 @@ import (
 )
 
 var (
-	Join = errors.Join
-	As   = errors.As
-	Is   = errors.Is
+	Standard = errors.New
+	Join     = errors.Join
+	As       = errors.As
+	Is       = errors.Is
 )

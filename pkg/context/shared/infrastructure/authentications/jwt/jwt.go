@@ -21,9 +21,8 @@ func (j *JWT) Generate(payload map[string]any) (string, error) {
 
 	if err != nil {
 		return "", errors.New[errors.Internal](&errors.Bubble{
-			Where: "Generate",
-			What:  "Failure to sign a JWT",
-			Who:   err,
+			What: "Failure to sign a JWT",
+			Who:  err,
 		})
 	}
 
@@ -40,8 +39,7 @@ func (j *JWT) Validate(signature string) (jwt.MapClaims, error) {
 	}
 
 	return nil, errors.New[errors.Failure](&errors.Bubble{
-		Where: "Validate",
-		What:  "Invalid JWT signature",
+		What: "Invalid JWT signature",
 		Why: errors.Meta{
 			"Signature": signature,
 		},

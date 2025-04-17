@@ -20,9 +20,8 @@ func Generate() (*Captcha, error) {
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Generate",
-			What:  "Failure to generate captcha",
-			Who:   err,
+			What: "Failure to generate captcha",
+			Who:  err,
 		})
 	}
 
@@ -35,8 +34,7 @@ func Generate() (*Captcha, error) {
 func Verify(id, answer string) error {
 	if !base64Captcha.DefaultMemStore.Verify(id, answer, false) && !env.IsServerGinModeTest() {
 		return errors.New[errors.Failure](&errors.Bubble{
-			Where: "Verify",
-			What:  "Wrong captcha answer",
+			What: "Wrong captcha answer",
 			Why: errors.Meta{
 				"ID": id,
 			},

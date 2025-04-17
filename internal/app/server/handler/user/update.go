@@ -41,7 +41,7 @@ func Update(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Update"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

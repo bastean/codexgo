@@ -54,7 +54,7 @@ func SetupPlaywright() {
 	pw, err = playwright.Run()
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupPlaywright")
+		errors.Panic(err)
 	}
 
 	browser, err = pw.Chromium.Launch(playwright.BrowserTypeLaunchOptions{
@@ -63,19 +63,19 @@ func SetupPlaywright() {
 	})
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupPlaywright")
+		errors.Panic(err)
 	}
 
 	browserCtx, err = browser.NewContext(playwright.BrowserNewContextOptions{BaseURL: &SUT})
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupPlaywright")
+		errors.Panic(err)
 	}
 
 	page, err = browserCtx.NewPage()
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupPlaywright")
+		errors.Panic(err)
 	}
 }
 
@@ -163,6 +163,6 @@ func TestAcceptanceServerFeatures(t *testing.T) {
 	}
 
 	if status := suite.Run(); status != 0 {
-		errors.Panic(fmt.Sprintf("Failure to run feature tests resulted in a non-zero status [%d]", status), "TestAcceptanceServerFeatures")
+		errors.Panic(fmt.Errorf("Failure to run feature tests resulted in a non-zero status [%d]", status))
 	}
 }

@@ -9,7 +9,7 @@ func IDWithValidValue() *ID {
 	value, err := NewID(services.Create.UUID())
 
 	if err != nil {
-		errors.Panic(err.Error(), "IDWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

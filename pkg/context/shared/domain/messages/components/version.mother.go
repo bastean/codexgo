@@ -9,7 +9,7 @@ func VersionWithValidValue() *Version {
 	value, err := NewVersion(services.Create.Regex(`^[0-9]{1,2}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "VersionWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

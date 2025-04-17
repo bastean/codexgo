@@ -26,8 +26,7 @@ func NewType(value string) (*Type, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewType",
-			What:  "Type must be only one of these values: " + strings.Join(TypeOneOf, ", "),
+			What: "Type must be only one of these values: " + strings.Join(TypeOneOf, ", "),
 			Why: errors.Meta{
 				"Type": value,
 			},

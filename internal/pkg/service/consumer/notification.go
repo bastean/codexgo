@@ -70,7 +70,7 @@ func InitNotification() error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "InitNotification")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

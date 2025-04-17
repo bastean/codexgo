@@ -9,7 +9,7 @@ func ActionWithValidValue() *Action {
 	value, err := NewAction(services.Create.Regex(`^[A-Za-z\s]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "ActionWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

@@ -9,7 +9,7 @@ func EventWithValidValue() *Event {
 	value, err := NewEvent(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "EventWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

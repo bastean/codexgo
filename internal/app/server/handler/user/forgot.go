@@ -33,7 +33,7 @@ func Forgot(c *gin.Context) {
 	err = captcha.Verify(data.CaptchaID, data.CaptchaAnswer)
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Forgot"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 
@@ -47,7 +47,7 @@ func Forgot(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Forgot"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

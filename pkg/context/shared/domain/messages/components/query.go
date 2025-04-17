@@ -26,8 +26,7 @@ func NewQuery(value string) (*Query, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewQuery",
-			What:  fmt.Sprintf("Query must be between %s to %s characters and be alpha only", QueryMinCharactersLength, QueryMaxCharactersLength),
+			What: fmt.Sprintf("Query must be between %s to %s characters and be alpha only", QueryMinCharactersLength, QueryMaxCharactersLength),
 			Why: errors.Meta{
 				"Query": value,
 			},

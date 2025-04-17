@@ -21,7 +21,7 @@ func (c *Collection) Create(user *user.User) error {
 	err := user.CreationStamp()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Create")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate := user.ToPrimitive()
@@ -30,11 +30,10 @@ func (c *Collection) Create(user *user.User) error {
 
 	switch {
 	case mongodb.IsErrDuplicateValue(err):
-		return errors.BubbleUp(mongodb.HandleErrDuplicateValue(err), "Create")
+		return errors.BubbleUp(mongodb.HandleErrDuplicateValue(err))
 	case err != nil:
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Create",
-			What:  "Failure to create a User",
+			What: "Failure to create a User",
 			Why: errors.Meta{
 				"ID": user.ID.Value,
 			},
@@ -49,7 +48,7 @@ func (c *Collection) Update(user *user.User) error {
 	err := user.UpdatedStamp()
 
 	if err != nil {
-		return errors.BubbleUp(err, "Update")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate := user.ToPrimitive()
@@ -60,11 +59,10 @@ func (c *Collection) Update(user *user.User) error {
 
 	switch {
 	case mongodb.IsErrDuplicateValue(err):
-		return errors.BubbleUp(mongodb.HandleErrDuplicateValue(err), "Update")
+		return errors.BubbleUp(mongodb.HandleErrDuplicateValue(err))
 	case err != nil:
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Update",
-			What:  "Failure to update a User",
+			What: "Failure to update a User",
 			Why: errors.Meta{
 				"ID": user.ID.Value,
 			},
@@ -82,8 +80,7 @@ func (c *Collection) Delete(id *user.ID) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Delete",
-			What:  "Failure to delete a User",
+			What: "Failure to delete a User",
 			Why: errors.Meta{
 				"ID": id.Value,
 			},
@@ -112,8 +109,7 @@ func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 		index = criteria.Username.Value
 	default:
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Search",
-			What:  "Criteria not defined",
+			What: "Criteria not defined",
 		})
 	}
 
@@ -126,8 +122,7 @@ func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 		return nil, mongodb.HandleErrNotFound(err, index)
 	case err != nil:
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Search",
-			What:  "Failure to find a User",
+			What: "Failure to find a User",
 			Why: errors.Meta{
 				"Index": index,
 			},
@@ -141,8 +136,7 @@ func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Search",
-			What:  "Failure to decode a result",
+			What: "Failure to decode a result",
 			Why: errors.Meta{
 				"Index": index,
 			},
@@ -154,8 +148,7 @@ func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Search",
-			What:  "Failure to create a User from a Primitive",
+			What: "Failure to create a User from a Primitive",
 			Why: errors.Meta{
 				"Index":     index,
 				"Primitive": primitive,
@@ -187,8 +180,7 @@ func Open(session *mongodb.Database, name string) (role.Repository, error) {
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Open",
-			What:  "Failure to create Indexes for User Collection",
+			What: "Failure to create Indexes for User Collection",
 			Why: errors.Meta{
 				"Collection": name,
 			},

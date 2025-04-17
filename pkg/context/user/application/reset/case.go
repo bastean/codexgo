@@ -18,25 +18,25 @@ func (c *Case) Run(reset, id *user.ID, password *user.PlainPassword) error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	err = aggregate.ValidateReset(reset)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	hashed, err := c.Hasher.Hash(password.Value)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate.Reset = nil
@@ -44,7 +44,7 @@ func (c *Case) Run(reset, id *user.ID, password *user.PlainPassword) error {
 	err = c.Repository.Update(aggregate)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

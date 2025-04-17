@@ -35,7 +35,7 @@ func Login(c *gin.Context) {
 	))
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Login"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 
@@ -52,7 +52,7 @@ func Login(c *gin.Context) {
 	})
 
 	if err != nil {
-		errs.AbortByErr(c, errors.BubbleUp(err, "Login"))
+		errs.AbortByErr(c, errors.BubbleUp(err))
 		return
 	}
 

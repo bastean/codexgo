@@ -15,9 +15,8 @@ func (*Bcrypt) Hash(plain string) (string, error) {
 
 	if err != nil {
 		return "", errors.New[errors.Internal](&errors.Bubble{
-			Where: "Hash",
-			What:  "Failure to generate a hash",
-			Who:   err,
+			What: "Failure to generate a hash",
+			Who:  err,
 		})
 	}
 
@@ -27,8 +26,7 @@ func (*Bcrypt) Hash(plain string) (string, error) {
 func (*Bcrypt) Compare(hashed, plain string) error {
 	if err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(plain)); err != nil {
 		return errors.New[errors.Failure](&errors.Bubble{
-			Where: "Compare",
-			What:  "Password does not match",
+			What: "Password does not match",
 		})
 	}
 

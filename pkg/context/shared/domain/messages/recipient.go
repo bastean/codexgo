@@ -46,7 +46,7 @@ func NewRecipient(recipient *RecipientComponents) Recipient {
 	status, errStatus := components.NewStatus(recipient.Status)
 
 	if err := errors.Join(errService, errEntity, errAction, errTrigger, errStatus); err != nil {
-		errors.Panic(err.Error(), "NewRecipient")
+		errors.Panic(err)
 	}
 
 	name := fmt.Sprintf("%s.%s.%s_on_%s_%s", service.Value, entity.Value, strings.ReplaceAll(action.Value, " ", "_"), trigger, status.Value)

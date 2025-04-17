@@ -26,8 +26,7 @@ func NewStatus(value string) (*Status, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewStatus",
-			What:  "Status must be only one of these values: " + strings.Join(StatusOneOf, ", "),
+			What: "Status must be only one of these values: " + strings.Join(StatusOneOf, ", "),
 			Why: errors.Meta{
 				"Status": value,
 			},

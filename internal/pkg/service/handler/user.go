@@ -58,7 +58,7 @@ func InitUser() error {
 	}
 
 	if err != nil {
-		return errors.BubbleUp(err, "InitUser")
+		return errors.BubbleUp(err)
 	}
 
 	UserCreate = &create.Handler{
@@ -126,7 +126,7 @@ func InitUser() error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "InitUser")
+		return errors.BubbleUp(err)
 	}
 
 	err = queries.AddQueryMapper(query.Bus, queries.Mapper{
@@ -135,7 +135,7 @@ func InitUser() error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "InitUser")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

@@ -9,7 +9,7 @@ func EntityWithValidValue() *Entity {
 	value, err := NewEntity(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "EntityWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

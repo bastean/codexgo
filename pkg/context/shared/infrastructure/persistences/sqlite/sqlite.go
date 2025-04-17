@@ -32,8 +32,7 @@ func Open(dsn string) (*Database, error) {
 
 	if err != nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
-			Where: "Open",
-			What:  "Failure opening SQLite DSN",
+			What: "Failure opening SQLite DSN",
 			Why: errors.Meta{
 				"DSN": dsn,
 			},
@@ -51,9 +50,8 @@ func Close(database *Database) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Close",
-			What:  "Failure to obtain database",
-			Who:   err,
+			What: "Failure to obtain database",
+			Who:  err,
 		})
 	}
 
@@ -61,9 +59,8 @@ func Close(database *Database) error {
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Close",
-			What:  "Failure to close database",
-			Who:   err,
+			What: "Failure to close database",
+			Who:  err,
 		})
 	}
 
@@ -88,8 +85,7 @@ func HandleErrDuplicateValue(err error) error {
 	}
 
 	return errors.New[errors.AlreadyExist](&errors.Bubble{
-		Where: "HandleErrDuplicateValue",
-		What:  field + " already registered",
+		What: field + " already registered",
 		Why: errors.Meta{
 			"Field": field,
 		},
@@ -107,8 +103,7 @@ func IsErrNotFound(err error) bool {
 
 func HandleErrNotFound(err error, index string) error {
 	return errors.New[errors.NotExist](&errors.Bubble{
-		Where: "HandleErrNotFound",
-		What:  index + " not found",
+		What: index + " not found",
 		Why: errors.Meta{
 			"Index": index,
 		},

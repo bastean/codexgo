@@ -44,9 +44,8 @@ func Up() error {
 		log.CannotBeStarted(Server.Gin)
 
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Up",
-			What:  "Failure to start Server",
-			Who:   err,
+			What: "Failure to start Server",
+			Who:  err,
 		})
 	}
 
@@ -60,9 +59,8 @@ func Down(ctx context.Context) error {
 		log.CannotBeStopped(Server.Gin)
 
 		return errors.New[errors.Internal](&errors.Bubble{
-			Where: "Down",
-			What:  "Failure to shutdown Server",
-			Who:   err,
+			What: "Failure to shutdown Server",
+			Who:  err,
 		})
 	}
 

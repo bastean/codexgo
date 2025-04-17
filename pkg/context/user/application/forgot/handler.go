@@ -38,26 +38,26 @@ func (h *Handler) Handle(command *messages.Message) error {
 	reset, err := user.NewID(attributes.Reset)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	email, err := user.NewEmail(attributes.Email)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	aggregate, err := h.Forgot.Run(reset, email)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Handle")
+		return errors.BubbleUp(err)
 	}
 
 	for _, event := range aggregate.Pull() {
 		err = h.EventBus.Publish(event)
 
 		if err != nil {
-			return errors.BubbleUp(err, "Handle")
+			return errors.BubbleUp(err)
 		}
 	}
 

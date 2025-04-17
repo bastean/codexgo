@@ -30,7 +30,7 @@ func RandomWithAttributes(attributes any, shouldRandomize bool) *Message {
 		err := services.Create.Struct(attributes)
 
 		if err != nil {
-			errors.Panic(err.Error(), "RandomWithAttributes")
+			errors.Panic(err)
 		}
 	}
 
@@ -45,6 +45,6 @@ func RandomWithAttributes(attributes any, shouldRandomize bool) *Message {
 
 func RandomizeAttributes(attributes any) {
 	if err := services.Create.Struct(attributes); err != nil {
-		errors.Panic(err.Error(), "RandomAttributes")
+		errors.Panic(err)
 	}
 }

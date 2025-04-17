@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
 )
 
 type (
@@ -54,20 +55,18 @@ func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {
 	}
 
 	if bubble.Where == "" {
-		Panic("Cannot create a error Bubble if \"Where\" is not defined", "NewBubble")
+		_, _, name := caller.Received(caller.SkipCurrent)
+
+		if name == "" {
+			Panic(Standard("Cannot create a error Bubble if \"Where\" is not defined"))
+		}
+
+		bubble.Where = name
 	}
 
 	if bubble.What == "" {
-		Panic("Cannot create a error Bubble if \"What\" is not defined", "NewBubble")
+		Panic(Standard("Cannot create a error Bubble if \"What\" is not defined"))
 	}
 
 	return &Error{bubble}
-}
-
-func BubbleUp(who error, where string) error {
-	return fmt.Errorf("(%s): [%w]", where, who)
-}
-
-func IsNot(err error, target error) bool {
-	return err != nil && !Is(err, target)
 }

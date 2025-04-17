@@ -9,7 +9,7 @@ func StatusWithValidValue() *Status {
 	value, err := NewStatus(services.Create.RandomString([]string{"queued", "succeeded", "failed", "done"}))
 
 	if err != nil {
-		errors.Panic(err.Error(), "StatusWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

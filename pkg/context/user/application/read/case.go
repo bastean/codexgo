@@ -16,7 +16,7 @@ func (c *Case) Run(id *user.ID) (*user.User, error) {
 	})
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err)
 	}
 
 	return aggregate, nil

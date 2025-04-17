@@ -17,7 +17,7 @@ func AddCommandMapper(bus roles.CommandBus, mapper Mapper) error {
 		err = bus.Register(key, handler)
 
 		if err != nil {
-			return errors.BubbleUp(err, "AddCommandMapper")
+			return errors.BubbleUp(err)
 		}
 	}
 

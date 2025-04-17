@@ -18,7 +18,7 @@ func (c *Case) Run(reset *user.ID, email *user.Email) (*user.User, error) {
 	})
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err)
 	}
 
 	if aggregate.HasReset() {
@@ -30,7 +30,7 @@ func (c *Case) Run(reset *user.ID, email *user.Email) (*user.User, error) {
 	err = c.Repository.Update(aggregate)
 
 	if err != nil {
-		return nil, errors.BubbleUp(err, "Run")
+		return nil, errors.BubbleUp(err)
 	}
 
 	aggregate.Record(messages.New(

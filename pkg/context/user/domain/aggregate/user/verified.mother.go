@@ -9,7 +9,7 @@ func VerifiedWithValidValue() *Verified {
 	value, err := NewVerified(services.Create.Bool())
 
 	if err != nil {
-		errors.Panic(err.Error(), "VerifiedWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value
@@ -19,7 +19,7 @@ func VerifiedWithTrueValue() *Verified {
 	value, err := NewVerified(true)
 
 	if err != nil {
-		errors.Panic(err.Error(), "VerifiedWithTrueValue")
+		errors.Panic(err)
 	}
 
 	return value
@@ -29,7 +29,7 @@ func VerifiedWithFalseValue() *Verified {
 	value, err := NewVerified(false)
 
 	if err != nil {
-		errors.Panic(err.Error(), "VerifiedWithFalseValue")
+		errors.Panic(err)
 	}
 
 	return value

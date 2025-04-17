@@ -23,7 +23,7 @@ func (s *CollectionTestSuite) SetupSuite() {
 	)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupSuite")
+		errors.Panic(err)
 	}
 
 	name := "users-test"
@@ -31,7 +31,7 @@ func (s *CollectionTestSuite) SetupSuite() {
 	s.RepositorySuite.SUT, err = collection.Open(session, name)
 
 	if err != nil {
-		errors.Panic(err.Error(), "SetupSuite")
+		errors.Panic(err)
 	}
 }
 

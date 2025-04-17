@@ -18,19 +18,19 @@ func (c *Case) Run(id *user.ID, plain *user.PlainPassword) error {
 	})
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	err = c.Hasher.Compare(aggregate.CipherPassword.Value, plain.Value)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	err = c.Repository.Delete(aggregate.ID)
 
 	if err != nil {
-		return errors.BubbleUp(err, "Run")
+		return errors.BubbleUp(err)
 	}
 
 	return nil

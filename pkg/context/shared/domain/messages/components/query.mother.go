@@ -9,7 +9,7 @@ func QueryWithValidValue() *Query {
 	value, err := NewQuery(services.Create.Regex(`^[A-Za-z]{1,20}$`))
 
 	if err != nil {
-		errors.Panic(err.Error(), "QueryWithValidValue")
+		errors.Panic(err)
 	}
 
 	return value

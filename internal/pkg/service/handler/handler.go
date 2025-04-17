@@ -20,7 +20,7 @@ func Start() error {
 
 	if err = InitUser(); err != nil {
 		log.CannotBeStarted(Service.User)
-		return errors.BubbleUp(err, "Start")
+		return errors.BubbleUp(err)
 	}
 
 	log.Started(Service.User)

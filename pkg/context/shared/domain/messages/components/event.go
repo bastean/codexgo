@@ -26,8 +26,7 @@ func NewEvent(value string) (*Event, error) {
 
 	if services.IsValueObjectInvalid(object) {
 		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			Where: "NewEvent",
-			What:  fmt.Sprintf("Event must be between %s to %s characters and be alpha only", EventMinCharactersLength, EventMaxCharactersLength),
+			What: fmt.Sprintf("Event must be between %s to %s characters and be alpha only", EventMinCharactersLength, EventMaxCharactersLength),
 			Why: errors.Meta{
 				"Event": value,
 			},
