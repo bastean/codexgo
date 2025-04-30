@@ -3,18 +3,19 @@ package delete
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-var CommandKey = messages.NewKey(&messages.KeyComponents{
+var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Command,
 	Entity:  "user",
-	Command: "delete",
+	Action:  "delete",
 	Status:  messages.Status.Queued,
-})
+}))
 
 type CommandAttributes struct {
 	ID, Password string
@@ -33,9 +34,9 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	id, errID := user.NewID(attributes.ID)
+	id, errID := values.New[*user.ID](attributes.ID)
 
-	plain, errPlain := user.NewPlainPassword(attributes.Password)
+	plain, errPlain := values.New[*user.PlainPassword](attributes.Password)
 
 	err := errors.Join(errID, errPlain)
 

@@ -1,6 +1,7 @@
 package login_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -38,6 +39,10 @@ func (s *LoginTestSuite) SetupSuite() {
 	}
 }
 
+func (s *LoginTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *LoginTestSuite) TestHandle() {
 	aggregate := user.RandomPrimitive()
 
@@ -49,13 +54,13 @@ func (s *LoginTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value, plain.Value)
+	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value(), plain.Value())
 
 	response := &login.ResponseAttributes{
-		ID:       aggregate.ID.Value,
-		Email:    aggregate.Email.Value,
-		Username: aggregate.Username.Value,
-		Verified: aggregate.Verified.Value,
+		ID:       aggregate.ID.Value(),
+		Email:    aggregate.Email.Value(),
+		Username: aggregate.Username.Value(),
+		Verified: aggregate.Verified.Value(),
 	}
 
 	expected := messages.New(
@@ -65,8 +70,8 @@ func (s *LoginTestSuite) TestHandle() {
 	)
 
 	attributes := &login.QueryAttributes{
-		Email:    aggregate.Email.Value,
-		Password: plain.Value,
+		Email:    aggregate.Email.Value(),
+		Password: plain.Value(),
 	}
 
 	query := messages.RandomWithAttributes(attributes, false)
@@ -86,7 +91,7 @@ func (s *LoginTestSuite) TestHandleErrMissingRequired() {
 	plain := user.PlainPasswordWithValidValue()
 
 	attributes := &login.QueryAttributes{
-		Password: plain.Value,
+		Password: plain.Value(),
 	}
 
 	query := messages.RandomWithAttributes(attributes, false)
@@ -104,6 +109,10 @@ func (s *LoginTestSuite) TestHandleErrMissingRequired() {
 	}}
 
 	s.Equal(expected, actual)
+}
+
+func (s *LoginTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitLoginSuite(t *testing.T) {

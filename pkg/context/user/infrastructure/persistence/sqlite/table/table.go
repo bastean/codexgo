@@ -52,7 +52,7 @@ func (t *Table) Create(user *user.User) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to create a User",
 			Why: errors.Meta{
-				"ID": user.ID.Value,
+				"ID": user.ID.Value(),
 			},
 			Who: err,
 		})
@@ -70,7 +70,7 @@ func (t *Table) Update(user *user.User) error {
 
 	aggregate := user.ToPrimitive()
 
-	err = t.DB.Where(&User{ID: user.ID.Value}).Save(&User{
+	err = t.DB.Where(&User{ID: user.ID.Value()}).Save(&User{
 		Created:  aggregate.Created,
 		Updated:  aggregate.Updated,
 		Verify:   aggregate.Verify,
@@ -89,7 +89,7 @@ func (t *Table) Update(user *user.User) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to update a User",
 			Why: errors.Meta{
-				"ID": user.ID.Value,
+				"ID": user.ID.Value(),
 			},
 			Who: err,
 		})
@@ -99,13 +99,13 @@ func (t *Table) Update(user *user.User) error {
 }
 
 func (t *Table) Delete(id *user.ID) error {
-	err := t.DB.Where(&User{ID: id.Value}).Unscoped().Delete(new(User)).Error
+	err := t.DB.Where(&User{ID: id.Value()}).Unscoped().Delete(new(User)).Error
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to delete a User",
 			Why: errors.Meta{
-				"ID": id.Value,
+				"ID": id.Value(),
 			},
 			Who: err,
 		})
@@ -122,14 +122,14 @@ func (t *Table) Search(criteria *user.Criteria) (*user.User, error) {
 
 	switch {
 	case criteria.ID != nil:
-		filter = &User{ID: criteria.ID.Value}
-		index = criteria.ID.Value
+		filter = &User{ID: criteria.ID.Value()}
+		index = criteria.ID.Value()
 	case criteria.Email != nil:
-		filter = &User{Email: criteria.Email.Value}
-		index = criteria.Email.Value
+		filter = &User{Email: criteria.Email.Value()}
+		index = criteria.Email.Value()
 	case criteria.Username != nil:
-		filter = &User{Username: criteria.Username.Value}
-		index = criteria.Username.Value
+		filter = &User{Username: criteria.Username.Value()}
+		index = criteria.Username.Value()
 	default:
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			What: "Criteria not defined",

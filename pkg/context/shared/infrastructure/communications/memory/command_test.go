@@ -19,7 +19,7 @@ func (s *CommandBusTestSuite) SetupSuite() {
 	s.CommandBusSuite.Handler = new(communications.CommandHandlerMock)
 
 	s.CommandBusSuite.SUT = &memory.CommandBus{
-		Handlers: make(map[messages.Key]roles.CommandHandler),
+		Handlers: make(map[*messages.Key]roles.CommandHandler),
 	}
 }
 

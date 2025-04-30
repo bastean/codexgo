@@ -6,10 +6,10 @@ import (
 
 func CommandRandomAttributes() *CommandAttributes {
 	return &CommandAttributes{
-		Verify:   user.IDWithValidValue().Value,
-		ID:       user.IDWithValidValue().Value,
-		Email:    user.EmailWithValidValue().Value,
-		Username: user.UsernameWithValidValue().Value,
-		Password: user.PlainPasswordWithValidValue().Value,
+		Verify:   user.IDWithValidValue().Value(),
+		ID:       user.IDWithValidValue().Value(),
+		Email:    user.EmailWithValidValue().Value(),
+		Username: user.UsernameWithValidValue().Value(),
+		Password: user.PlainPasswordWithValidValue().Value(),
 	}
 }

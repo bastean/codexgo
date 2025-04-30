@@ -6,8 +6,8 @@ import (
 
 func CommandRandomAttributes() *CommandAttributes {
 	return &CommandAttributes{
-		Reset:    user.IDWithValidValue().Value,
-		ID:       user.IDWithValidValue().Value,
-		Password: user.PlainPasswordWithValidValue().Value,
+		Reset:    user.IDWithValidValue().Value(),
+		ID:       user.IDWithValidValue().Value(),
+		Password: user.PlainPasswordWithValidValue().Value(),
 	}
 }

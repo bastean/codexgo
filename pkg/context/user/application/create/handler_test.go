@@ -1,6 +1,7 @@
 package create_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -42,6 +43,10 @@ func (s *CreateTestSuite) SetupSuite() {
 	}
 }
 
+func (s *CreateTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *CreateTestSuite) TestHandle() {
 	attributes := create.CommandRandomAttributes()
 
@@ -57,7 +62,7 @@ func (s *CreateTestSuite) TestHandle() {
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hasher.Mock.On("Hash", aggregate.PlainPassword.Value).Return(hashed.Value)
+	s.hasher.Mock.On("Hash", aggregate.PlainPassword.Value()).Return(hashed.Value())
 
 	aggregate.CipherPassword = hashed
 
@@ -76,6 +81,10 @@ func (s *CreateTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.bus.Mock.AssertExpectations(s.T())
+}
+
+func (s *CreateTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitCreateSuite(t *testing.T) {

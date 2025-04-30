@@ -21,7 +21,7 @@ func (c *Case) Run(id *user.ID, plain *user.PlainPassword) error {
 		return errors.BubbleUp(err)
 	}
 
-	err = c.Hasher.Compare(aggregate.CipherPassword.Value, plain.Value)
+	err = c.Hasher.Compare(aggregate.CipherPassword.Value(), plain.Value())
 
 	if err != nil {
 		return errors.BubbleUp(err)

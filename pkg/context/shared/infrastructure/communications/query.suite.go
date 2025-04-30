@@ -1,8 +1,6 @@
 package communications
 
 import (
-	"fmt"
-
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
@@ -34,7 +32,7 @@ func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Register",
-		What:  fmt.Sprintf("%s already registered", key),
+		What:  key.Value() + " already registered",
 		Why: errors.Meta{
 			"Query": key,
 		},

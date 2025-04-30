@@ -3,6 +3,7 @@ package update
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
@@ -21,23 +22,23 @@ func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
 		return errors.BubbleUp(err)
 	}
 
-	err = c.Hasher.Compare(account.CipherPassword.Value, aggregate.PlainPassword.Value)
+	err = c.Hasher.Compare(account.CipherPassword.Value(), aggregate.PlainPassword.Value())
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	hashed := account.CipherPassword.Value
+	hashed := account.CipherPassword.Value()
 
 	if updated != nil {
-		hashed, err = c.Hasher.Hash(updated.Value)
+		hashed, err = c.Hasher.Hash(updated.Value())
 
 		if err != nil {
 			return errors.BubbleUp(err)
 		}
 	}
 
-	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+	aggregate.CipherPassword, err = values.New[*user.CipherPassword](hashed)
 
 	if err != nil {
 		return errors.BubbleUp(err)

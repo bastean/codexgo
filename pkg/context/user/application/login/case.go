@@ -22,7 +22,7 @@ func (c *Case) Run(email *user.Email, username *user.Username, plain *user.Plain
 		return nil, errors.BubbleUp(err)
 	}
 
-	err = c.Hasher.Compare(aggregate.CipherPassword.Value, plain.Value)
+	err = c.Hasher.Compare(aggregate.CipherPassword.Value(), plain.Value())
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)

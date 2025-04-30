@@ -3,18 +3,19 @@ package verify
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-var CommandKey = messages.NewKey(&messages.KeyComponents{
+var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Command,
 	Entity:  "user",
-	Command: "verify",
+	Action:  "verify",
 	Status:  messages.Status.Queued,
-})
+}))
 
 type CommandAttributes struct {
 	Verify, ID string
@@ -33,13 +34,13 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	verify, err := user.NewID(attributes.Verify)
+	verify, err := values.New[*user.ID](attributes.Verify)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	id, err := user.NewID(attributes.ID)
+	id, err := values.New[*user.ID](attributes.ID)
 
 	if err != nil {
 		return errors.BubbleUp(err)

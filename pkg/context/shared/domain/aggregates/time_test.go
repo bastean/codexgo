@@ -22,7 +22,7 @@ func (s *TimeTestSuite) TestWithInvalidValue() {
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "NewTime",
+		Where: "Validate",
 		What:  "Invalid Time format",
 		Why: errors.Meta{
 			"Time": value,

@@ -47,7 +47,7 @@ func (s *EventBusSuite) TestPublishErrMissingConsumer() {
 		Where: "Publish",
 		What:  "Failure to execute a Event without a Consumer",
 		Why: errors.Meta{
-			"Event": event.Key,
+			"Event": event.Key.Value(),
 		},
 	}}
 

@@ -11,7 +11,7 @@ type EventBus struct {
 	Consumers events.Mapper
 }
 
-func (b *EventBus) Subscribe(key messages.Key, consumer roles.EventConsumer) error {
+func (b *EventBus) Subscribe(key *messages.Key, consumer roles.EventConsumer) error {
 	b.Consumers[key] = append(b.Consumers[key], consumer)
 	return nil
 }
@@ -23,7 +23,7 @@ func (b *EventBus) Publish(event *messages.Message) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to execute a Event without a Consumer",
 			Why: errors.Meta{
-				"Event": event.Key,
+				"Event": event.Key.Value(),
 			},
 		})
 	}

@@ -3,10 +3,11 @@ package user
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 func UsernameWithValidValue() *Username {
-	value, err := NewUsername(services.Create.Regex(`^[A-Za-z0-9]{2,20}$`))
+	value, err := values.New[*Username](services.Create.Regex(`^[A-Za-z0-9]{2,20}$`))
 
 	if err != nil {
 		errors.Panic(err)
@@ -18,7 +19,7 @@ func UsernameWithValidValue() *Username {
 func UsernameWithInvalidLength() (string, error) {
 	value := "x"
 
-	_, err := NewUsername(value)
+	_, err := values.New[*Username](value)
 
 	return value, err
 }
@@ -26,7 +27,7 @@ func UsernameWithInvalidLength() (string, error) {
 func UsernameWithInvalidAlphanumeric() (string, error) {
 	value := "<></>"
 
-	_, err := NewUsername(value)
+	_, err := values.New[*Username](value)
 
 	return value, err
 }

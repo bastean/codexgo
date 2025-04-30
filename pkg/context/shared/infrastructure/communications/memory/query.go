@@ -1,8 +1,6 @@
 package memory
 
 import (
-	"fmt"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/queries"
@@ -13,12 +11,12 @@ type QueryBus struct {
 	Handlers queries.Mapper
 }
 
-func (b *QueryBus) Register(key messages.Key, handler roles.QueryHandler) error {
+func (b *QueryBus) Register(key *messages.Key, handler roles.QueryHandler) error {
 	_, ok := b.Handlers[key]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			What: fmt.Sprintf("%s already registered", key),
+			What: key.Value() + " already registered",
 			Why: errors.Meta{
 				"Query": key,
 			},

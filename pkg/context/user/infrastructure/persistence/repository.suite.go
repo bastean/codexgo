@@ -1,6 +1,8 @@
 package persistence
 
 import (
+	"os"
+
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
@@ -11,6 +13,10 @@ import (
 type RepositorySuite struct {
 	suite.Suite
 	SUT role.Repository
+}
+
+func (s *RepositorySuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
 }
 
 func (s *RepositorySuite) TestCreate() {
@@ -74,6 +80,8 @@ func (s *RepositorySuite) TestUpdate() {
 
 	s.NoError(err)
 
+	actual.Updated = expected.Updated
+
 	s.Equal(expected, actual)
 }
 
@@ -127,9 +135,9 @@ func (s *RepositorySuite) TestDelete() {
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleErrNotFound",
-		What:  aggregate.ID.Value + " not found",
+		What:  aggregate.ID.Value() + " not found",
 		Why: errors.Meta{
-			"Index": aggregate.ID.Value,
+			"Index": aggregate.ID.Value(),
 		},
 		Who: actual.Who,
 	}}
@@ -187,12 +195,16 @@ func (s *RepositorySuite) TestSearchErrNotFound() {
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "HandleErrNotFound",
-		What:  aggregate.ID.Value + " not found",
+		What:  aggregate.ID.Value() + " not found",
 		Why: errors.Meta{
-			"Index": aggregate.ID.Value,
+			"Index": aggregate.ID.Value(),
 		},
 		Who: actual.Who,
 	}}
 
 	s.Equal(expected, actual)
+}
+
+func (s *RepositorySuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }

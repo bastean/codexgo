@@ -1,31 +1,26 @@
 package user
 
 import (
-	"strings"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type Email struct {
-	Value string `validate:"email"`
+	values.Object[string]
 }
 
-func NewEmail(value string) (*Email, error) {
-	value = strings.TrimSpace(value)
-
-	object := &Email{
-		Value: value,
-	}
-
-	if services.IsValueObjectInvalid(object) {
-		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
+func (e *Email) Validate() error {
+	if services.IsNotValid(e.RawValue(), "startsnotwith= ", "endsnotwith= ", "email") {
+		return errors.New[errors.InvalidValue](&errors.Bubble{
 			What: "Invalid email format",
 			Why: errors.Meta{
-				"Email": value,
+				"Email": e.RawValue(),
 			},
 		})
 	}
 
-	return object, nil
+	e.Valid()
+
+	return nil
 }

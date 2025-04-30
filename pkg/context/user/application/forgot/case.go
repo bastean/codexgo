@@ -36,10 +36,10 @@ func (c *Case) Run(reset *user.ID, email *user.Email) (*user.User, error) {
 	aggregate.Record(messages.New(
 		events.UserResetQueuedKey,
 		&events.UserResetQueuedAttributes{
-			Reset:    aggregate.Reset.Value,
-			ID:       aggregate.ID.Value,
-			Email:    aggregate.Email.Value,
-			Username: aggregate.Username.Value,
+			Reset:    aggregate.Reset.Value(),
+			ID:       aggregate.ID.Value(),
+			Email:    aggregate.Email.Value(),
+			Username: aggregate.Username.Value(),
 		},
 		new(events.UserResetQueuedMeta),
 	))

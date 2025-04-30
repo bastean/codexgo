@@ -1,12 +1,14 @@
 package reset_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/reset"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -37,14 +39,18 @@ func (s *ResetTestSuite) SetupSuite() {
 	}
 }
 
+func (s *ResetTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *ResetTestSuite) TestHandle() {
 	attributes := reset.CommandRandomAttributes()
 
-	reset, err := user.NewID(attributes.Reset)
+	reset, err := values.New[*user.ID](attributes.Reset)
 
 	s.NoError(err)
 
-	id, err := user.NewID(attributes.ID)
+	id, err := values.New[*user.ID](attributes.ID)
 
 	s.NoError(err)
 
@@ -62,7 +68,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed.Value)
+	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed.Value())
 
 	registered := *aggregate
 
@@ -79,6 +85,10 @@ func (s *ResetTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.hasher.Mock.AssertExpectations(s.T())
+}
+
+func (s *ResetTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitResetSuite(t *testing.T) {

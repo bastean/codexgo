@@ -6,30 +6,43 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type RecipientTestSuite struct {
 	suite.Suite
 }
 
+func (s *RecipientTestSuite) SetupSuite() {
+	s.Equal(messages.RExRecipientTrigger, `([a-z_]{1,20})`)
+
+	s.Equal(messages.RExRecipientComponents, `^([a-z0-9]{1,20})\.([a-z]{1,20})\.([a-z_]{1,20})_on_([a-z]{1,20})_(queued|succeeded|failed|done)$`)
+}
+
 func (s *RecipientTestSuite) TestWithValidValue() {
-	components := &messages.RecipientComponents{
+	recipient, err := values.New[*messages.Recipient](messages.ParseRecipient(&messages.RecipientComponents{
 		Service: "user",
 		Entity:  "user",
-		Action:  "send confirmation",
-		Event:   "created",
+		Trigger: "send_confirmation",
+		Action:  "created",
 		Status:  messages.Status.Succeeded,
-	}
+	}))
 
-	expected := messages.Recipient("user.user.send_confirmation_on_created_succeeded")
+	s.NoError(err)
 
-	actual := messages.NewRecipient(components)
+	actual := recipient.Value()
+
+	expected := "user.user.send_confirmation_on_created_succeeded"
 
 	s.Equal(expected, actual)
 }
 
 func (s *RecipientTestSuite) TestWithInvalidValue() {
-	s.Panics(func() { messages.NewRecipient(new(messages.RecipientComponents)) })
+	expected := "(Validate): Recipient has an invalid nomenclature"
+
+	s.PanicsWithValue(expected, func() {
+		_, _ = values.New[*messages.Recipient](messages.ParseRecipient(new(messages.RecipientComponents)))
+	})
 }
 
 func TestUnitRecipientSuite(t *testing.T) {

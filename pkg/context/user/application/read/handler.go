@@ -3,27 +3,28 @@ package read
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-var QueryKey = messages.NewKey(&messages.KeyComponents{
+var QueryKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Query,
 	Entity:  "user",
-	Query:   "read",
+	Action:  "read",
 	Status:  messages.Status.Queued,
-})
+}))
 
-var ResponseKey = messages.NewKey(&messages.KeyComponents{
-	Service:  "user",
-	Version:  "1",
-	Type:     messages.Type.Response,
-	Entity:   "user",
-	Response: "read",
-	Status:   messages.Status.Done,
-})
+var ResponseKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
+	Service: "user",
+	Version: "1",
+	Type:    messages.Type.Response,
+	Entity:  "user",
+	Action:  "read",
+	Status:  messages.Status.Done,
+}))
 
 type QueryAttributes struct {
 	ID string
@@ -49,7 +50,7 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 		return nil, errors.QueryAssertion("Handle")
 	}
 
-	id, err := user.NewID(attributes.ID)
+	id, err := values.New[*user.ID](attributes.ID)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)
@@ -62,10 +63,10 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	}
 
 	response := &ResponseAttributes{
-		ID:       aggregate.ID.Value,
-		Email:    aggregate.Email.Value,
-		Username: aggregate.Username.Value,
-		Verified: aggregate.Verified.Value,
+		ID:       aggregate.ID.Value(),
+		Email:    aggregate.Email.Value(),
+		Username: aggregate.Username.Value(),
+		Verified: aggregate.Verified.Value(),
 	}
 
 	return messages.New(

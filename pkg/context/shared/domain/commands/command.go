@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	Mapper map[messages.Key]roles.CommandHandler
+	Mapper map[*messages.Key]roles.CommandHandler
 )
 
 func AddCommandMapper(bus roles.CommandBus, mapper Mapper) error {

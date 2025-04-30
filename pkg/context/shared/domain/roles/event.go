@@ -9,6 +9,6 @@ type EventConsumer interface {
 }
 
 type EventBus interface {
-	Subscribe(messages.Key, EventConsumer) error
+	Subscribe(*messages.Key, EventConsumer) error
 	Publish(*messages.Message) error
 }

@@ -22,7 +22,7 @@ func (s *EmailTestSuite) TestWithInvalidValue() {
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "NewEmail",
+		Where: "Validate",
 		What:  "Invalid email format",
 		Why: errors.Meta{
 			"Email": value,

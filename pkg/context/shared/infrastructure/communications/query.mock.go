@@ -20,7 +20,7 @@ type QueryBusMock struct {
 	mock.Mock
 }
 
-func (m *QueryBusMock) Register(key messages.Key, handler roles.QueryHandler) error {
+func (m *QueryBusMock) Register(key *messages.Key, handler roles.QueryHandler) error {
 	m.Called(key, handler)
 	return nil
 }

@@ -20,7 +20,7 @@ type EventBusMock struct {
 	mock.Mock
 }
 
-func (m *EventBusMock) Subscribe(key messages.Key, consumers roles.EventConsumer) error {
+func (m *EventBusMock) Subscribe(key *messages.Key, consumers roles.EventConsumer) error {
 	m.Called(key, consumers)
 	return nil
 }

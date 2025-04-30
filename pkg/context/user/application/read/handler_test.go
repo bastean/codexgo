@@ -1,6 +1,7 @@
 package read_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -32,6 +33,10 @@ func (s *ReadTestSuite) SetupSuite() {
 	}
 }
 
+func (s *ReadTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *ReadTestSuite) TestHandle() {
 	aggregate := user.RandomPrimitive()
 
@@ -42,10 +47,10 @@ func (s *ReadTestSuite) TestHandle() {
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
 	response := &read.ResponseAttributes{
-		ID:       aggregate.ID.Value,
-		Email:    aggregate.Email.Value,
-		Username: aggregate.Username.Value,
-		Verified: aggregate.Verified.Value,
+		ID:       aggregate.ID.Value(),
+		Email:    aggregate.Email.Value(),
+		Username: aggregate.Username.Value(),
+		Verified: aggregate.Verified.Value(),
 	}
 
 	expected := messages.New(
@@ -55,7 +60,7 @@ func (s *ReadTestSuite) TestHandle() {
 	)
 
 	attributes := &read.QueryAttributes{
-		ID: aggregate.ID.Value,
+		ID: aggregate.ID.Value(),
 	}
 
 	query := messages.RandomWithAttributes(attributes, false)
@@ -67,6 +72,10 @@ func (s *ReadTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.EqualValues(expected, actual)
+}
+
+func (s *ReadTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitReadSuite(t *testing.T) {

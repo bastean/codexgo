@@ -9,6 +9,6 @@ type QueryHandler interface {
 }
 
 type QueryBus interface {
-	Register(messages.Key, QueryHandler) error
+	Register(*messages.Key, QueryHandler) error
 	Ask(*messages.Message) (*messages.Message, error)
 }

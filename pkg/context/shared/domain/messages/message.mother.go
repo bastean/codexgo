@@ -9,13 +9,13 @@ func Random() *Message {
 	return &Message{
 		ID:         services.Create.UUID(),
 		OccurredOn: services.Create.TimeZoneFull(),
-		Key:        Key(services.Create.LoremIpsumWord()),
+		Key:        KeyWithValidValue(),
 		Attributes: services.Create.LoremIpsumWord(),
 		Meta:       services.Create.LoremIpsumWord(),
 	}
 }
 
-func RandomWithKey(key Key) *Message {
+func RandomWithKey(key *Key) *Message {
 	return &Message{
 		ID:         services.Create.UUID(),
 		OccurredOn: services.Create.TimeZoneFull(),
@@ -37,7 +37,7 @@ func RandomWithAttributes(attributes any, shouldRandomize bool) *Message {
 	return &Message{
 		ID:         services.Create.UUID(),
 		OccurredOn: services.Create.TimeZoneFull(),
-		Key:        Key(services.Create.LoremIpsumWord()),
+		Key:        KeyWithValidValue(),
 		Attributes: attributes,
 		Meta:       services.Create.LoremIpsumWord(),
 	}

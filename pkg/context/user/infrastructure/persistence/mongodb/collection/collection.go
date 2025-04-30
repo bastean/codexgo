@@ -35,7 +35,7 @@ func (c *Collection) Create(user *user.User) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to create a User",
 			Why: errors.Meta{
-				"ID": user.ID.Value,
+				"ID": user.ID.Value(),
 			},
 			Who: err,
 		})
@@ -53,7 +53,7 @@ func (c *Collection) Update(user *user.User) error {
 
 	aggregate := user.ToPrimitive()
 
-	filter := bson.D{{Key: "id", Value: user.ID.Value}}
+	filter := bson.D{{Key: "id", Value: user.ID.Value()}}
 
 	_, err = c.Collection.ReplaceOne(context.Background(), filter, aggregate)
 
@@ -64,7 +64,7 @@ func (c *Collection) Update(user *user.User) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to update a User",
 			Why: errors.Meta{
-				"ID": user.ID.Value,
+				"ID": user.ID.Value(),
 			},
 			Who: err,
 		})
@@ -74,7 +74,7 @@ func (c *Collection) Update(user *user.User) error {
 }
 
 func (c *Collection) Delete(id *user.ID) error {
-	filter := bson.D{{Key: "id", Value: id.Value}}
+	filter := bson.D{{Key: "id", Value: id.Value()}}
 
 	_, err := c.Collection.DeleteOne(context.Background(), filter)
 
@@ -82,7 +82,7 @@ func (c *Collection) Delete(id *user.ID) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to delete a User",
 			Why: errors.Meta{
-				"ID": id.Value,
+				"ID": id.Value(),
 			},
 			Who: err,
 		})
@@ -99,14 +99,14 @@ func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 
 	switch {
 	case criteria.ID != nil:
-		filter = bson.D{{Key: "id", Value: criteria.ID.Value}}
-		index = criteria.ID.Value
+		filter = bson.D{{Key: "id", Value: criteria.ID.Value()}}
+		index = criteria.ID.Value()
 	case criteria.Email != nil:
-		filter = bson.D{{Key: "email", Value: criteria.Email.Value}}
-		index = criteria.Email.Value
+		filter = bson.D{{Key: "email", Value: criteria.Email.Value()}}
+		index = criteria.Email.Value()
 	case criteria.Username != nil:
-		filter = bson.D{{Key: "username", Value: criteria.Username.Value}}
-		index = criteria.Username.Value
+		filter = bson.D{{Key: "username", Value: criteria.Username.Value()}}
+		index = criteria.Username.Value()
 	default:
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			What: "Criteria not defined",

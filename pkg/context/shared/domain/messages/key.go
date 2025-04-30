@@ -2,11 +2,23 @@ package messages
 
 import (
 	"fmt"
-	"strings"
+	"regexp"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
+
+const (
+	RExKeyOrganization = `([a-z0-9]{1,20})`
+	RExKeyService      = `([a-z0-9]{1,20})`
+	RExKeyVersion      = `(\d+)`
+	RExKeyType         = `(event|command|query|response)`
+	RExKeyEntity       = `([a-z]{1,20})`
+	RExKeyAction       = `([a-z]{1,20})`
+	RExKeyStatus       = `(queued|succeeded|failed|done)`
+)
+
+var RExKeyComponents = fmt.Sprintf(`^%s\.%s\.%s\.%s\.%s\.%s\.%s$`, RExKeyOrganization, RExKeyService, RExKeyVersion, RExKeyType, RExKeyEntity, RExKeyAction, RExKeyStatus)
 
 var Type = struct {
 	Event, Command, Query, Response string
@@ -26,65 +38,44 @@ var Status = struct {
 	Done:      "done",
 }
 
-type (
-	Key string
-)
-
 // Terminology:
 //   - Organization = Context
 //   - Service		= Module
 //   - Entity		= Aggregate/Root
 //
 // Nomenclature of a Key:
-//   - organization.service.version.type.entity.event/command/query/response.status
+//   - (organization).(service).(version).(type).(entity).(action).(status)
 //   - codexgo.user.1.event.user.created.succeeded
 type KeyComponents struct {
-	Organization, Service, Version, Type, Entity, Event, Command, Query, Response, Status string
+	Organization, Service, Version, Type, Entity, Action, Status string
 }
 
-func NewKey(key *KeyComponents) Key {
+type Key struct {
+	values.Object[string]
+}
+
+func (k *Key) Validate() error {
+	if !regexp.MustCompile(RExKeyComponents).MatchString(k.RawValue()) {
+		errors.Panic(errors.Standard("Key has an invalid nomenclature"))
+	}
+
+	k.Valid()
+
+	return nil
+}
+
+func ParseKey(key *KeyComponents) string {
 	if key.Organization == "" {
 		key.Organization = "codexgo"
 	}
 
-	organization, errOrganization := components.NewOrganization(key.Organization)
-	service, errService := components.NewService(key.Service)
-	version, errVersion := components.NewVersion(key.Version)
-	types, errType := components.NewType(key.Type)
-	entity, errEntity := components.NewEntity(key.Entity)
-
-	event, errEvent := components.NewEvent(key.Event)
-	command, errCommand := components.NewCommand(key.Command)
-	query, errQuery := components.NewQuery(key.Query)
-	response, errResponse := components.NewResponse(key.Response)
-
-	var action string
-	var errAction error
-
-	switch key.Type {
-	case Type.Event:
-		action = event.Value
-		errAction = errEvent
-	case Type.Command:
-		action = command.Value
-		errAction = errCommand
-	case Type.Query:
-		action = query.Value
-		errAction = errQuery
-	case Type.Response:
-		action = response.Value
-		errAction = errResponse
-	}
-
-	status, errStatus := components.NewStatus(key.Status)
-
-	if err := errors.Join(errOrganization, errService, errVersion, errType, errEntity, errAction, errStatus); err != nil {
-		errors.Panic(err)
-	}
-
-	value := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s", organization.Value, service.Value, version.Value, types.Value, entity.Value, action, status.Value)
-
-	value = strings.ToLower(value)
-
-	return Key(value)
+	return fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s",
+		key.Organization,
+		key.Service,
+		key.Version,
+		key.Type,
+		key.Entity,
+		key.Action,
+		key.Status,
+	)
 }

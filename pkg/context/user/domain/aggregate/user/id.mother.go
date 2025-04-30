@@ -3,10 +3,11 @@ package user
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 func IDWithValidValue() *ID {
-	value, err := NewID(services.Create.UUID())
+	value, err := values.New[*ID](services.Create.UUID())
 
 	if err != nil {
 		errors.Panic(err)
@@ -18,7 +19,7 @@ func IDWithValidValue() *ID {
 func IDWithInvalidValue() (string, error) {
 	value := "x"
 
-	_, err := NewID(value)
+	_, err := values.New[*ID](value)
 
 	return value, err
 }

@@ -1,8 +1,6 @@
 package memory
 
 import (
-	"fmt"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/commands"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
@@ -13,12 +11,12 @@ type CommandBus struct {
 	Handlers commands.Mapper
 }
 
-func (b *CommandBus) Register(key messages.Key, handler roles.CommandHandler) error {
+func (b *CommandBus) Register(key *messages.Key, handler roles.CommandHandler) error {
 	_, ok := b.Handlers[key]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			What: fmt.Sprintf("%s already registered", key),
+			What: key.Value() + " already registered",
 			Why: errors.Meta{
 				"Command": key,
 			},

@@ -21,7 +21,7 @@ func (s *EventBusTestSuite) SetupSuite() {
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 
 	s.EventBusSuite.SUT = &memory.EventBus{
-		Consumers: make(map[messages.Key][]roles.EventConsumer),
+		Consumers: make(map[*messages.Key][]roles.EventConsumer),
 	}
 }
 

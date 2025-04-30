@@ -2,10 +2,10 @@ package user
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 const (
@@ -14,24 +14,20 @@ const (
 )
 
 type Username struct {
-	Value string `validate:"gte=2,lte=20,alphanum"`
+	values.Object[string]
 }
 
-func NewUsername(value string) (*Username, error) {
-	value = strings.TrimSpace(value)
-
-	object := &Username{
-		Value: value,
-	}
-
-	if services.IsValueObjectInvalid(object) {
-		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
+func (u *Username) Validate() error {
+	if services.IsNotValid(u.RawValue(), "startsnotwith= ", "endsnotwith= ", "gte=2", "lte=20", "alphanum") {
+		return errors.New[errors.InvalidValue](&errors.Bubble{
 			What: fmt.Sprintf("Username must be between %s to %s characters and be alphanumeric only", UsernameMinCharactersLength, UsernameMaxCharactersLength),
 			Why: errors.Meta{
-				"Username": value,
+				"Username": u.RawValue(),
 			},
 		})
 	}
 
-	return object, nil
+	u.Valid()
+
+	return nil
 }

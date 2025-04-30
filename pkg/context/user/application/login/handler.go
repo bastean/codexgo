@@ -3,27 +3,28 @@ package login
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-var QueryKey = messages.NewKey(&messages.KeyComponents{
+var QueryKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Query,
 	Entity:  "user",
-	Query:   "login",
+	Action:  "login",
 	Status:  messages.Status.Queued,
-})
+}))
 
-var ResponseKey = messages.NewKey(&messages.KeyComponents{
-	Service:  "user",
-	Version:  "1",
-	Type:     messages.Type.Response,
-	Entity:   "user",
-	Response: "login",
-	Status:   messages.Status.Done,
-})
+var ResponseKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
+	Service: "user",
+	Version: "1",
+	Type:    messages.Type.Response,
+	Entity:  "user",
+	Action:  "login",
+	Status:  messages.Status.Done,
+}))
 
 type QueryAttributes struct {
 	Email, Username, Password string
@@ -62,7 +63,7 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	)
 
 	if attributes.Email != "" {
-		email, err = user.NewEmail(attributes.Email)
+		email, err = values.New[*user.Email](attributes.Email)
 	}
 
 	if err != nil {
@@ -70,14 +71,14 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	}
 
 	if attributes.Username != "" {
-		username, err = user.NewUsername(attributes.Username)
+		username, err = values.New[*user.Username](attributes.Username)
 	}
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)
 	}
 
-	plain, err := user.NewPlainPassword(attributes.Password)
+	plain, err := values.New[*user.PlainPassword](attributes.Password)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)
@@ -90,10 +91,10 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	}
 
 	response := &ResponseAttributes{
-		ID:       aggregate.ID.Value,
-		Email:    aggregate.Email.Value,
-		Username: aggregate.Username.Value,
-		Verified: aggregate.Verified.Value,
+		ID:       aggregate.ID.Value(),
+		Email:    aggregate.Email.Value(),
+		Username: aggregate.Username.Value(),
+		Verified: aggregate.Verified.Value(),
 	}
 
 	return messages.New(

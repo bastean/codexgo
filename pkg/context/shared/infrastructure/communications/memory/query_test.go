@@ -19,7 +19,7 @@ func (s *QueryBusTestSuite) SetupSuite() {
 	s.QueryBusSuite.Handler = new(communications.QueryHandlerMock)
 
 	s.QueryBusSuite.SUT = &memory.QueryBus{
-		Handlers: make(map[messages.Key]roles.QueryHandler),
+		Handlers: make(map[*messages.Key]roles.QueryHandler),
 	}
 }
 

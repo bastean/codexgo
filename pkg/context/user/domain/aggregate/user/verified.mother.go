@@ -3,10 +3,11 @@ package user
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 func VerifiedWithValidValue() *Verified {
-	value, err := NewVerified(services.Create.Bool())
+	value, err := values.New[*Verified](services.Create.Bool())
 
 	if err != nil {
 		errors.Panic(err)
@@ -16,7 +17,7 @@ func VerifiedWithValidValue() *Verified {
 }
 
 func VerifiedWithTrueValue() *Verified {
-	value, err := NewVerified(true)
+	value, err := values.New[*Verified](true)
 
 	if err != nil {
 		errors.Panic(err)
@@ -26,7 +27,7 @@ func VerifiedWithTrueValue() *Verified {
 }
 
 func VerifiedWithFalseValue() *Verified {
-	value, err := NewVerified(false)
+	value, err := values.New[*Verified](false)
 
 	if err != nil {
 		errors.Panic(err)

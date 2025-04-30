@@ -1,31 +1,26 @@
 package user
 
 import (
-	"strings"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type ID struct {
-	Value string `validate:"uuid4"`
+	values.Object[string]
 }
 
-func NewID(value string) (*ID, error) {
-	value = strings.TrimSpace(value)
-
-	object := &ID{
-		Value: value,
-	}
-
-	if services.IsValueObjectInvalid(object) {
-		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
+func (id *ID) Validate() error {
+	if services.IsNotValid(id.RawValue(), "startsnotwith= ", "endsnotwith= ", "uuid4") {
+		return errors.New[errors.InvalidValue](&errors.Bubble{
 			What: "Invalid UUID4 format",
 			Why: errors.Meta{
-				"ID": value,
+				"ID": id.RawValue(),
 			},
 		})
 	}
 
-	return object, nil
+	id.Valid()
+
+	return nil
 }

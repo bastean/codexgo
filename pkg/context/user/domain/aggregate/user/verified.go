@@ -1,11 +1,14 @@
 package user
 
+import (
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
+)
+
 type Verified struct {
-	Value bool
+	values.Object[bool]
 }
 
-func NewVerified(value bool) (*Verified, error) {
-	return &Verified{
-		Value: value,
-	}, nil
+func (v *Verified) Validate() error {
+	v.Valid()
+	return nil
 }

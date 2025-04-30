@@ -1,12 +1,14 @@
 package verify_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
@@ -32,6 +34,10 @@ func (s *VerifyTestSuite) SetupSuite() {
 	}
 }
 
+func (s *VerifyTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *VerifyTestSuite) TestHandle() {
 	attributes := verify.CommandRandomAttributes()
 
@@ -39,13 +45,13 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregate.Verified = user.VerifiedWithFalseValue()
 
-	id, err := user.NewID(attributes.ID)
+	id, err := values.New[*user.ID](attributes.ID)
 
 	s.NoError(err)
 
 	aggregate.ID = id
 
-	verify, err := user.NewID(attributes.Verify)
+	verify, err := values.New[*user.ID](attributes.Verify)
 
 	s.NoError(err)
 
@@ -70,6 +76,10 @@ func (s *VerifyTestSuite) TestHandle() {
 	s.NoError(s.SUT.Handle(command))
 
 	s.repository.Mock.AssertExpectations(s.T())
+}
+
+func (s *VerifyTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitVerifySuite(t *testing.T) {

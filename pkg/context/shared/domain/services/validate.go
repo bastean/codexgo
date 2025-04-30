@@ -1,13 +1,15 @@
 package services
 
 import (
+	"strings"
+
 	"github.com/go-playground/validator/v10"
 )
 
 var (
-	validate = validator.New(validator.WithRequiredStructEnabled()).Struct
+	validate = validator.New().Var
 )
 
-func IsValueObjectInvalid(object any) bool {
-	return validate(object) != nil
+func IsNotValid(object any, validations ...string) bool {
+	return validate(object, strings.Join(validations, ",")) != nil
 }

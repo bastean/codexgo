@@ -1,6 +1,7 @@
 package update_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -37,12 +38,16 @@ func (s *UpdateTestSuite) SetupSuite() {
 	}
 }
 
+func (s *UpdateTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *UpdateTestSuite) TestHandle() {
 	registered := user.RandomPrimitive()
 
 	attributes := update.CommandRandomAttributes()
 
-	attributes.ID = registered.ID.Value
+	attributes.ID = registered.ID.Value()
 
 	aggregate, err := user.FromRaw(&user.Primitive{
 		ID:       attributes.ID,
@@ -59,11 +64,11 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(registered)
 
-	s.hasher.Mock.On("Compare", registered.CipherPassword.Value, aggregate.PlainPassword.Value)
+	s.hasher.Mock.On("Compare", registered.CipherPassword.Value(), aggregate.PlainPassword.Value())
 
 	hashed := user.CipherPasswordWithValidValue()
 
-	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value)
+	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value())
 
 	aggregate.CipherPassword = hashed
 
@@ -80,6 +85,10 @@ func (s *UpdateTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.hasher.Mock.AssertExpectations(s.T())
+}
+
+func (s *UpdateTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitUpdateSuite(t *testing.T) {

@@ -357,20 +357,20 @@ tasks:
       - task: test-clean
       - task: bash
         vars:
-          CMD: go test -count=1 -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log
+          CMD: GOTEST=1 go test -count=1 -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log
 
   test-integration:
     cmds:
       - task: test-clean
       - task: bash
         vars:
-          CMD: go test -count=1 -race -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log
+          CMD: GOTEST=1 go test -count=1 -race -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log
 
   test-acceptance-sync:
     cmds:
       - task: bash
         vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
+          CMD: GOTEST=1 SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
 
   test-acceptance:
     cmds:
@@ -383,7 +383,7 @@ tasks:
     cmds:
       - task: bash
         vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
+          CMD: GOTEST=1 SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
 
   tests:
     cmds:

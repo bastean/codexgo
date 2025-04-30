@@ -1,6 +1,7 @@
 package forgot_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -8,6 +9,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -38,10 +40,14 @@ func (s *ForgotTestSuite) SetupSuite() {
 	}
 }
 
+func (s *ForgotTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *ForgotTestSuite) TestHandle() {
 	attributes := forgot.CommandRandomAttributes()
 
-	email, err := user.NewEmail(attributes.Email)
+	email, err := values.New[*user.Email](attributes.Email)
 
 	s.NoError(err)
 
@@ -55,7 +61,7 @@ func (s *ForgotTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	reset, err := user.NewID(attributes.Reset)
+	reset, err := values.New[*user.ID](attributes.Reset)
 
 	s.NoError(err)
 
@@ -68,10 +74,10 @@ func (s *ForgotTestSuite) TestHandle() {
 	registered.Record(messages.New(
 		events.UserResetQueuedKey,
 		&events.UserResetQueuedAttributes{
-			Reset:    registered.Reset.Value,
-			ID:       registered.ID.Value,
-			Email:    registered.Email.Value,
-			Username: registered.Username.Value,
+			Reset:    registered.Reset.Value(),
+			ID:       registered.ID.Value(),
+			Email:    registered.Email.Value(),
+			Username: registered.Username.Value(),
 		},
 		new(events.UserResetQueuedMeta),
 	))
@@ -87,6 +93,10 @@ func (s *ForgotTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.bus.Mock.AssertExpectations(s.T())
+}
+
+func (s *ForgotTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitForgotSuite(t *testing.T) {

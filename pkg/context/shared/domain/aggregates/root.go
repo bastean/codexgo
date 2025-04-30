@@ -4,6 +4,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type Root struct {
@@ -18,7 +19,7 @@ func (r *Root) CreationStamp() error {
 		})
 	}
 
-	created, err := NewTime(services.TimeNow())
+	created, err := values.New[*Time](services.TimeNow())
 
 	if err != nil {
 		return errors.BubbleUp(err)
@@ -31,7 +32,7 @@ func (r *Root) CreationStamp() error {
 }
 
 func (r *Root) UpdatedStamp() error {
-	updated, err := NewTime(services.TimeNow())
+	updated, err := values.Replace(r.Updated, services.TimeNow())
 
 	if err != nil {
 		return errors.BubbleUp(err)

@@ -3,18 +3,19 @@ package reset
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
-var CommandKey = messages.NewKey(&messages.KeyComponents{
+var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Command,
 	Entity:  "user",
-	Command: "reset",
+	Action:  "reset",
 	Status:  messages.Status.Queued,
-})
+}))
 
 type CommandAttributes struct {
 	Reset, ID, Password string
@@ -33,19 +34,19 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	reset, err := user.NewID(attributes.Reset)
+	reset, err := values.New[*user.ID](attributes.Reset)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	id, err := user.NewID(attributes.ID)
+	id, err := values.New[*user.ID](attributes.ID)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	password, err := user.NewPlainPassword(attributes.Password)
+	password, err := values.New[*user.PlainPassword](attributes.Password)
 
 	if err != nil {
 		return errors.BubbleUp(err)

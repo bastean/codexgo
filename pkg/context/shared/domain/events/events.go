@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	Mapper map[messages.Key][]roles.EventConsumer
+	Mapper map[*messages.Key][]roles.EventConsumer
 )
 
 func AddEventMapper(bus roles.EventBus, mapper Mapper) error {

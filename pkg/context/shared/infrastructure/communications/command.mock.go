@@ -20,7 +20,7 @@ type CommandBusMock struct {
 	mock.Mock
 }
 
-func (m *CommandBusMock) Register(key messages.Key, handler roles.CommandHandler) error {
+func (m *CommandBusMock) Register(key *messages.Key, handler roles.CommandHandler) error {
 	m.Called(key, handler)
 	return nil
 }

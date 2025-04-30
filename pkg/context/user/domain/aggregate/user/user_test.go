@@ -29,7 +29,7 @@ func (s *UserTestSuite) TestValidateVerifyErrDoNotMatch() {
 		Where: "ValidateVerify",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
-			"Received": token.Value,
+			"Received": token.Value(),
 		},
 	}}
 
@@ -54,7 +54,7 @@ func (s *UserTestSuite) TestValidateResetErrDoNotMatch() {
 		Where: "ValidateReset",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
-			"Received": token.Value,
+			"Received": token.Value(),
 		},
 	}}
 

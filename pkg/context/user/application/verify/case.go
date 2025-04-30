@@ -2,6 +2,7 @@ package verify
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
@@ -29,7 +30,7 @@ func (c *Case) Run(verify, id *user.ID) error {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.Verified, err = user.NewVerified(true)
+	aggregate.Verified, err = values.New[*user.Verified](true)
 
 	if err != nil {
 		return errors.BubbleUp(err)

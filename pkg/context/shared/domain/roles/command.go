@@ -9,6 +9,6 @@ type CommandHandler interface {
 }
 
 type CommandBus interface {
-	Register(messages.Key, CommandHandler) error
+	Register(*messages.Key, CommandHandler) error
 	Dispatch(*messages.Message) error
 }

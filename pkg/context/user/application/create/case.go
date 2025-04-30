@@ -3,6 +3,7 @@ package create
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
@@ -13,13 +14,13 @@ type Case struct {
 }
 
 func (c *Case) Run(aggregate *user.User) error {
-	hashed, err := c.Hasher.Hash(aggregate.PlainPassword.Value)
+	hashed, err := c.Hasher.Hash(aggregate.PlainPassword.Value())
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.CipherPassword, err = user.NewCipherPassword(hashed)
+	aggregate.CipherPassword, err = values.New[*user.CipherPassword](hashed)
 
 	if err != nil {
 		return errors.BubbleUp(err)

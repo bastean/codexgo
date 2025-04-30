@@ -26,7 +26,7 @@ func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "NewPlainPassword",
+		Where: "Validate",
 		What:  "Password must be between 8 to 64 characters",
 		Why: errors.Meta{
 			"Password": value,
@@ -45,7 +45,7 @@ func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "NewCipherPassword",
+		Where: "Validate",
 		What:  "Cipher Password is required",
 		Why: errors.Meta{
 			"Password": value,

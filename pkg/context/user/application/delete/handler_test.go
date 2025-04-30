@@ -1,6 +1,7 @@
 package delete_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -37,6 +38,10 @@ func (s *DeleteTestSuite) SetupSuite() {
 	}
 }
 
+func (s *DeleteTestSuite) SetupTest() {
+	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
+}
+
 func (s *DeleteTestSuite) TestHandle() {
 	aggregate := user.RandomPrimitive()
 
@@ -48,13 +53,13 @@ func (s *DeleteTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value, plain.Value)
+	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value(), plain.Value())
 
 	s.repository.Mock.On("Delete", aggregate.ID)
 
 	attributes := &delete.CommandAttributes{
-		ID:       aggregate.ID.Value,
-		Password: plain.Value,
+		ID:       aggregate.ID.Value(),
+		Password: plain.Value(),
 	}
 
 	command := messages.RandomWithAttributes(attributes, false)
@@ -64,6 +69,10 @@ func (s *DeleteTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.hasher.Mock.AssertExpectations(s.T())
+}
+
+func (s *DeleteTestSuite) TearDownTest() {
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitDeleteSuite(t *testing.T) {

@@ -10,6 +10,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications/rabbitmq"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records/log"
@@ -22,27 +23,29 @@ type RabbitMQTestSuite struct {
 func (s *RabbitMQTestSuite) SetupSuite() {
 	var err error
 
-	routingKey := messages.NewKey(&messages.KeyComponents{
+	routingKey, _ := values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 		Service: "publisher",
 		Version: "1",
 		Type:    messages.Type.Event,
 		Entity:  "publisher",
-		Event:   "test",
+		Action:  "test",
 		Status:  messages.Status.Succeeded,
-	})
+	}))
 
-	queue := messages.NewRecipient(&messages.RecipientComponents{
+	queue, _ := values.New[*messages.Recipient](messages.ParseRecipient(&messages.RecipientComponents{
 		Service: "queue",
 		Entity:  "queue",
-		Action:  "assert",
-		Event:   "test",
+		Trigger: "assert",
+		Action:  "test",
 		Status:  "succeeded",
-	})
+	}))
 
-	queues := rabbitmq.QueueMapper{
-		routingKey: &rabbitmq.Recipient{
-			Name:       queue,
-			BindingKey: messages.Key("#.event.#.test.succeeded"),
+	queues := rabbitmq.Mapper{
+		routingKey: []*rabbitmq.Queue{
+			{
+				Name:       queue,
+				BindingKey: "#.event.#.test.succeeded",
+			},
 		},
 	}
 

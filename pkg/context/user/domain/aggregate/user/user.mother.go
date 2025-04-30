@@ -7,15 +7,15 @@ import (
 
 func RandomPrimitive() *User {
 	user, err := FromPrimitive(&Primitive{
-		Created:  aggregates.TimeWithValidValue().Value,
-		Updated:  aggregates.TimeWithValidValue().Value,
-		Verify:   IDWithValidValue().Value,
-		Reset:    IDWithValidValue().Value,
-		ID:       IDWithValidValue().Value,
-		Email:    EmailWithValidValue().Value,
-		Username: UsernameWithValidValue().Value,
-		Password: PlainPasswordWithValidValue().Value,
-		Verified: VerifiedWithValidValue().Value,
+		Created:  aggregates.TimeWithValidValue().Value(),
+		Updated:  aggregates.TimeWithValidValue().Value(),
+		Verify:   IDWithValidValue().Value(),
+		Reset:    IDWithValidValue().Value(),
+		ID:       IDWithValidValue().Value(),
+		Email:    EmailWithValidValue().Value(),
+		Username: UsernameWithValidValue().Value(),
+		Password: PlainPasswordWithValidValue().Value(),
+		Verified: VerifiedWithValidValue().Value(),
 	})
 
 	if err != nil {
@@ -27,10 +27,10 @@ func RandomPrimitive() *User {
 
 func RandomRaw() *User {
 	user, err := FromRaw(&Primitive{
-		ID:       IDWithValidValue().Value,
-		Email:    EmailWithValidValue().Value,
-		Username: UsernameWithValidValue().Value,
-		Password: PlainPasswordWithValidValue().Value,
+		ID:       IDWithValidValue().Value(),
+		Email:    EmailWithValidValue().Value(),
+		Username: UsernameWithValidValue().Value(),
+		Password: PlainPasswordWithValidValue().Value(),
 	})
 
 	if err != nil {

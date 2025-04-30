@@ -2,56 +2,51 @@ package messages
 
 import (
 	"fmt"
-	"strings"
+	"regexp"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages/components"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
-type (
-	Recipient string
+const (
+	RExRecipientTrigger = `([a-z_]{1,20})`
 )
+
+var RExRecipientComponents = fmt.Sprintf(`^%s\.%s\.%s_on_%s_%s$`, RExKeyService, RExKeyEntity, RExRecipientTrigger, RExKeyAction, RExKeyStatus)
+
+var Trigger = Type
 
 // Terminology:
 //   - Service = Module
 //   - Entity  = Aggregate/Root
 //
 // Nomenclature of a Recipient:
-//   - service.entity.action_on_event/command_status
+//   - (service).(entity).(trigger)_on_(action)_(status)
 //   - user.user.send_confirmation_on_created_succeeded
 type RecipientComponents struct {
-	Service, Entity, Action, Event, Command, Status string
+	Service, Entity, Trigger, Action, Status string
 }
 
-func NewRecipient(recipient *RecipientComponents) Recipient {
-	service, errService := components.NewService(recipient.Service)
-	entity, errEntity := components.NewEntity(recipient.Entity)
-	action, errAction := components.NewAction(recipient.Action)
+type Recipient struct {
+	values.Object[string]
+}
 
-	event, errEvent := components.NewEvent(recipient.Event)
-	command, errCommand := components.NewCommand(recipient.Command)
-
-	var trigger string
-	var errTrigger error
-
-	switch {
-	case recipient.Event != "":
-		trigger = event.Value
-		errTrigger = errEvent
-	case recipient.Command != "":
-		trigger = command.Value
-		errTrigger = errCommand
+func (r *Recipient) Validate() error {
+	if !regexp.MustCompile(RExRecipientComponents).MatchString(r.RawValue()) {
+		errors.Panic(errors.Standard("Recipient has an invalid nomenclature"))
 	}
 
-	status, errStatus := components.NewStatus(recipient.Status)
+	r.Valid()
 
-	if err := errors.Join(errService, errEntity, errAction, errTrigger, errStatus); err != nil {
-		errors.Panic(err)
-	}
+	return nil
+}
 
-	name := fmt.Sprintf("%s.%s.%s_on_%s_%s", service.Value, entity.Value, strings.ReplaceAll(action.Value, " ", "_"), trigger, status.Value)
-
-	name = strings.ToLower(name)
-
-	return Recipient(name)
+func ParseRecipient(recipient *RecipientComponents) string {
+	return fmt.Sprintf("%s.%s.%s_on_%s_%s",
+		recipient.Service,
+		recipient.Entity,
+		recipient.Trigger,
+		recipient.Action,
+		recipient.Status,
+	)
 }

@@ -7,7 +7,7 @@ import (
 )
 
 type (
-	Mapper map[messages.Key]roles.QueryHandler
+	Mapper map[*messages.Key]roles.QueryHandler
 )
 
 func AddQueryMapper(bus roles.QueryBus, mapper Mapper) error {

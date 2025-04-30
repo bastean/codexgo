@@ -5,6 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 const (
@@ -13,43 +14,39 @@ const (
 )
 
 type PlainPassword struct {
-	Value string `validate:"gte=8,lte=64"`
+	values.Object[string]
+}
+
+func (p *PlainPassword) Validate() error {
+	if services.IsNotValid(p.RawValue(), "gte=8", "lte=64") {
+		return errors.New[errors.InvalidValue](&errors.Bubble{
+			What: fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
+			Why: errors.Meta{
+				"Password": p.RawValue(),
+			},
+		})
+	}
+
+	p.Valid()
+
+	return nil
 }
 
 type CipherPassword struct {
-	Value string `validate:"required"`
+	values.Object[string]
 }
 
-func NewPlainPassword(value string) (*PlainPassword, error) {
-	object := &PlainPassword{
-		Value: value,
-	}
-
-	if services.IsValueObjectInvalid(object) {
-		return nil, errors.New[errors.InvalidValue](&errors.Bubble{
-			What: fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
-			Why: errors.Meta{
-				"Password": value,
-			},
-		})
-	}
-
-	return object, nil
-}
-
-func NewCipherPassword(value string) (*CipherPassword, error) {
-	object := &CipherPassword{
-		Value: value,
-	}
-
-	if services.IsValueObjectInvalid(object) {
-		return nil, errors.New[errors.Internal](&errors.Bubble{
+func (c *CipherPassword) Validate() error {
+	if services.IsNotValid(c.RawValue(), "required") {
+		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Cipher Password is required",
 			Why: errors.Meta{
-				"Password": value,
+				"Password": c.RawValue(),
 			},
 		})
 	}
 
-	return object, nil
+	c.Valid()
+
+	return nil
 }
