@@ -9,8 +9,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
 )
 
@@ -30,9 +28,9 @@ func (s *PasswordTestSuite) SetupSuite() {
 
 	s.OnlineSuite.Attributes = new(events.UserResetQueuedAttributes)
 
-	messages.RandomizeAttributes(s.OnlineSuite.Attributes)
+	transport.Mother.StructRandomize(s.OnlineSuite.Attributes)
 
-	s.OnlineSuite.Attributes.Email = services.Create.Email()
+	s.OnlineSuite.Attributes.Email = transport.Mother.Email()
 
 	s.OnlineSuite.SUT = &mail.Password{
 		SMTP:         smtp,

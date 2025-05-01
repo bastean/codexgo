@@ -48,7 +48,7 @@ func (s *CreateTestSuite) SetupTest() {
 }
 
 func (s *CreateTestSuite) TestHandle() {
-	attributes := create.CommandRandomAttributes()
+	attributes := create.Mother.CommandValidAttributes()
 
 	aggregate, err := user.New(&user.Primitive{
 		Verify:   attributes.Verify,
@@ -60,7 +60,7 @@ func (s *CreateTestSuite) TestHandle() {
 
 	s.NoError(err)
 
-	hashed := user.CipherPasswordWithValidValue()
+	hashed := user.Mother.CipherPasswordValid()
 
 	s.hasher.Mock.On("Hash", aggregate.PlainPassword.Value()).Return(hashed.Value())
 
@@ -72,7 +72,7 @@ func (s *CreateTestSuite) TestHandle() {
 		s.bus.Mock.On("Publish", event)
 	}
 
-	command := messages.RandomWithAttributes(attributes, false)
+	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

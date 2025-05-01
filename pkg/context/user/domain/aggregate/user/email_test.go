@@ -14,7 +14,7 @@ type EmailTestSuite struct {
 }
 
 func (s *EmailTestSuite) TestWithInvalidValue() {
-	value, err := user.EmailWithInvalidValue()
+	value, err := user.Mother.EmailInvalid()
 
 	var actual *errors.InvalidValue
 

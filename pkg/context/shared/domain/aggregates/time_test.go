@@ -14,7 +14,7 @@ type TimeTestSuite struct {
 }
 
 func (s *TimeTestSuite) TestWithInvalidValue() {
-	value, err := aggregates.TimeWithInvalidValue()
+	value, err := aggregates.Mother.TimeInvalid()
 
 	var actual *errors.Internal
 

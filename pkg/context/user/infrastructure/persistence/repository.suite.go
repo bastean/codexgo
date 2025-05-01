@@ -20,7 +20,7 @@ func (s *RepositorySuite) SetupTest() {
 }
 
 func (s *RepositorySuite) TestCreate() {
-	expected := user.Random()
+	expected := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -36,9 +36,9 @@ func (s *RepositorySuite) TestCreate() {
 }
 
 func (s *RepositorySuite) TestCreateErrDuplicateValue() {
-	registered := user.Random()
+	registered := user.Mother.UserValid()
 
-	aggregate := user.Random()
+	aggregate := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(registered))
 
@@ -64,11 +64,11 @@ func (s *RepositorySuite) TestCreateErrDuplicateValue() {
 }
 
 func (s *RepositorySuite) TestUpdate() {
-	expected := user.Random()
+	expected := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
-	expected.CipherPassword = user.CipherPasswordWithValidValue()
+	expected.CipherPassword = user.Mother.CipherPasswordValid()
 
 	s.NoError(s.SUT.Update(expected))
 
@@ -86,9 +86,9 @@ func (s *RepositorySuite) TestUpdate() {
 }
 
 func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
-	registered := user.Random()
+	registered := user.Mother.UserValid()
 
-	aggregate := user.Random()
+	aggregate := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(registered))
 
@@ -116,7 +116,7 @@ func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
 }
 
 func (s *RepositorySuite) TestDelete() {
-	aggregate := user.Random()
+	aggregate := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(aggregate))
 
@@ -146,7 +146,7 @@ func (s *RepositorySuite) TestDelete() {
 }
 
 func (s *RepositorySuite) TestSearch() {
-	expected := user.Random()
+	expected := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -180,7 +180,7 @@ func (s *RepositorySuite) TestSearchErrCriteria() {
 }
 
 func (s *RepositorySuite) TestSearchErrNotFound() {
-	aggregate := user.Random()
+	aggregate := user.Mother.UserValid()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,

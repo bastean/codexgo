@@ -5,7 +5,6 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type HasherSuite struct {
@@ -14,7 +13,7 @@ type HasherSuite struct {
 }
 
 func (s *HasherSuite) TestHash() {
-	plain := services.Create.LoremIpsumWord()
+	plain := Mother.LoremIpsumWord()
 
 	hashed, err := s.SUT.Hash(plain)
 
@@ -24,7 +23,7 @@ func (s *HasherSuite) TestHash() {
 }
 
 func (s *HasherSuite) TestCompare() {
-	plain := services.Create.LoremIpsumWord()
+	plain := Mother.LoremIpsumWord()
 
 	hashed, err := s.SUT.Hash(plain)
 
@@ -36,9 +35,9 @@ func (s *HasherSuite) TestCompare() {
 }
 
 func (s *HasherSuite) TestCompareErrDoNotMatch() {
-	plain := services.Create.LoremIpsumWord()
+	plain := Mother.LoremIpsumWord()
 
-	hashed := services.Create.LoremIpsumWord()
+	hashed := Mother.LoremIpsumWord()
 
 	err := s.SUT.Compare(hashed, plain)
 

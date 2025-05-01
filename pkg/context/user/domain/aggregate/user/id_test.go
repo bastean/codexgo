@@ -14,7 +14,7 @@ type IDTestSuite struct {
 }
 
 func (s *IDTestSuite) TestWithInvalidValue() {
-	value, err := user.IDWithInvalidValue()
+	value, err := user.Mother.IDInvalid()
 
 	var actual *errors.InvalidValue
 

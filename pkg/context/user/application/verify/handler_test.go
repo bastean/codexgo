@@ -39,11 +39,11 @@ func (s *VerifyTestSuite) SetupTest() {
 }
 
 func (s *VerifyTestSuite) TestHandle() {
-	attributes := verify.CommandRandomAttributes()
+	attributes := verify.Mother.CommandValidAttributes()
 
-	aggregate := user.RandomPrimitive()
+	aggregate := user.Mother.UserValidPrimitive()
 
-	aggregate.Verified = user.VerifiedWithFalseValue()
+	aggregate.Verified = user.Mother.VerifiedFalse()
 
 	id, err := values.New[*user.ID](attributes.ID)
 
@@ -65,13 +65,13 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	registered := *aggregate
 
-	registered.Verified = user.VerifiedWithTrueValue()
+	registered.Verified = user.Mother.VerifiedTrue()
 
 	registered.Verify = nil
 
 	s.repository.Mock.On("Update", &registered)
 
-	command := messages.RandomWithAttributes(attributes, false)
+	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

@@ -43,9 +43,9 @@ func (s *DeleteTestSuite) SetupTest() {
 }
 
 func (s *DeleteTestSuite) TestHandle() {
-	aggregate := user.RandomPrimitive()
+	aggregate := user.Mother.UserValidPrimitive()
 
-	plain := user.PlainPasswordWithValidValue()
+	plain := user.Mother.PlainPasswordValid()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -62,7 +62,7 @@ func (s *DeleteTestSuite) TestHandle() {
 		Password: plain.Value(),
 	}
 
-	command := messages.RandomWithAttributes(attributes, false)
+	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

@@ -10,9 +10,7 @@ const (
 	SkipCurrent = 1
 )
 
-func Received(skip int) (string, string, string) {
-	var pkg, receiver, method string
-
+func Received(skip int) (pkg, receiver, method string) {
 	pc, _, _, _ := runtime.Caller(skip + 1)
 
 	if caller := runtime.FuncForPC(pc); caller != nil {

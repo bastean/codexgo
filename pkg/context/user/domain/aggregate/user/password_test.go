@@ -18,7 +18,7 @@ type CipherPasswordTestSuite struct {
 }
 
 func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
-	value, err := user.PlainPasswordWithInvalidLength()
+	value, err := user.Mother.PlainPasswordInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -37,7 +37,7 @@ func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
 }
 
 func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
-	value, err := user.CipherPasswordWithInvalidValue()
+	value, err := user.Mother.CipherPasswordInvalid()
 
 	var actual *errors.Internal
 

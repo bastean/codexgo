@@ -10,7 +10,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
 
@@ -23,7 +22,7 @@ func (s *ConfirmationTestSuite) SetupSuite() {
 
 	s.OfflineSuite.Attributes = new(events.UserCreatedSucceededAttributes)
 
-	messages.RandomizeAttributes(s.OfflineSuite.Attributes)
+	transport.Mother.StructRandomize(s.OfflineSuite.Attributes)
 
 	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.Verify, s.OfflineSuite.Attributes.ID)
 

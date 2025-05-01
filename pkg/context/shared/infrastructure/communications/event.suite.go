@@ -34,7 +34,7 @@ func (s *EventBusSuite) TestPublish() {
 }
 
 func (s *EventBusSuite) TestPublishErrMissingConsumer() {
-	event := messages.Random()
+	event := messages.Mother.MessageValid()
 
 	err := s.SUT.Publish(event)
 

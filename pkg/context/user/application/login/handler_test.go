@@ -44,9 +44,9 @@ func (s *LoginTestSuite) SetupTest() {
 }
 
 func (s *LoginTestSuite) TestHandle() {
-	aggregate := user.RandomPrimitive()
+	aggregate := user.Mother.UserValidPrimitive()
 
-	plain := user.PlainPasswordWithValidValue()
+	plain := user.Mother.PlainPasswordValid()
 
 	criteria := &user.Criteria{
 		Email: aggregate.Email,
@@ -74,7 +74,7 @@ func (s *LoginTestSuite) TestHandle() {
 		Password: plain.Value(),
 	}
 
-	query := messages.RandomWithAttributes(attributes, false)
+	query := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	actual, err := s.SUT.Handle(query)
 
@@ -88,13 +88,13 @@ func (s *LoginTestSuite) TestHandle() {
 }
 
 func (s *LoginTestSuite) TestHandleErrMissingRequired() {
-	plain := user.PlainPasswordWithValidValue()
+	plain := user.Mother.PlainPasswordValid()
 
 	attributes := &login.QueryAttributes{
 		Password: plain.Value(),
 	}
 
-	query := messages.RandomWithAttributes(attributes, false)
+	query := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	_, err := s.SUT.Handle(query)
 

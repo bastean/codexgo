@@ -350,7 +350,7 @@ tasks:
   test-sync:
     requires:
       vars: ["TEST_SYNC"]
-    cmd: bunx concurrently -s first -k --names 'SUT,TEST' 'task test-sut' 'bunx wait-on -l {{.URL_SERVER}}/health && {{.TEST_SYNC}}'
+    cmd: GOTEST=1 bunx concurrently -s first -k --names 'SUT,TEST' 'task test-sut' 'bunx wait-on -l {{.URL_SERVER}}/health && {{.TEST_SYNC}}'
 
   test-unit:
     cmds:
@@ -370,7 +370,7 @@ tasks:
     cmds:
       - task: bash
         vars:
-          CMD: GOTEST=1 SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
+          CMD: SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
 
   test-acceptance:
     cmds:
@@ -383,7 +383,7 @@ tasks:
     cmds:
       - task: bash
         vars:
-          CMD: GOTEST=1 SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
+          CMD: SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
 
   tests:
     cmds:

@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type PanicTestSuite struct {
@@ -15,15 +14,15 @@ type PanicTestSuite struct {
 }
 
 func (s *PanicTestSuite) TestPanic() {
-	err := services.Create.Error()
+	err := errors.Mother.Error()
 
-	expected := fmt.Sprintf("(PanicWithRandomValue): %s", err)
+	expected := fmt.Sprintf("(PanicValidWithError): %s", err)
 
-	s.PanicsWithValue(expected, func() { errors.PanicWithRandomValue(err) })
+	s.PanicsWithValue(expected, func() { errors.Mother.PanicValidWithError(err) })
 }
 
 func (s *PanicTestSuite) TestPanicWithUnknown() {
-	err := services.Create.Error()
+	err := errors.Mother.Error()
 
 	expected := fmt.Sprintf("(Unknown): %s", err)
 

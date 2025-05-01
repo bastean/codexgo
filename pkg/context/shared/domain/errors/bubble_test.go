@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type BubbleTestSuite struct {
@@ -15,7 +14,7 @@ type BubbleTestSuite struct {
 }
 
 func (s *BubbleTestSuite) TestWithValidValue() {
-	errThirdParty := services.Create.Error()
+	errThirdParty := errors.Mother.Error()
 
 	bubble := &errors.Bubble{
 		When:  time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC),
@@ -40,12 +39,12 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 
 func (s *BubbleTestSuite) TestWithoutWhere() {
 	expected := "(New): Cannot create a error Bubble if \"Where\" is not defined"
-	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.BubbleWithoutWhere()) })
+	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.Mother.BubbleInvalidWithoutWhere()) })
 }
 
 func (s *BubbleTestSuite) TestWithoutWhat() {
 	expected := "(New): Cannot create a error Bubble if \"What\" is not defined"
-	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.BubbleWithoutWhat()) })
+	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.Mother.BubbleInvalidWithoutWhat()) })
 }
 
 func TestUnitBubbleSuite(t *testing.T) {

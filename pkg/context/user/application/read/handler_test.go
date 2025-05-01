@@ -38,7 +38,7 @@ func (s *ReadTestSuite) SetupTest() {
 }
 
 func (s *ReadTestSuite) TestHandle() {
-	aggregate := user.RandomPrimitive()
+	aggregate := user.Mother.UserValidPrimitive()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -63,7 +63,7 @@ func (s *ReadTestSuite) TestHandle() {
 		ID: aggregate.ID.Value(),
 	}
 
-	query := messages.RandomWithAttributes(attributes, false)
+	query := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	actual, err := s.SUT.Handle(query)
 

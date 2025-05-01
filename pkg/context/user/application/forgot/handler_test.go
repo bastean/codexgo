@@ -45,13 +45,13 @@ func (s *ForgotTestSuite) SetupTest() {
 }
 
 func (s *ForgotTestSuite) TestHandle() {
-	attributes := forgot.CommandRandomAttributes()
+	attributes := forgot.Mother.CommandValidAttributes()
 
 	email, err := values.New[*user.Email](attributes.Email)
 
 	s.NoError(err)
 
-	aggregate := user.Random()
+	aggregate := user.Mother.UserValid()
 
 	aggregate.Email = email
 
@@ -86,7 +86,7 @@ func (s *ForgotTestSuite) TestHandle() {
 		s.bus.Mock.On("Publish", event)
 	}
 
-	command := messages.RandomWithAttributes(attributes, false)
+	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

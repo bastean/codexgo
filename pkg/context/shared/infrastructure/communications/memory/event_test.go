@@ -16,7 +16,7 @@ type EventBusTestSuite struct {
 }
 
 func (s *EventBusTestSuite) SetupSuite() {
-	s.EventBusSuite.Event = messages.Random()
+	s.EventBusSuite.Event = messages.Mother.MessageValid()
 
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 

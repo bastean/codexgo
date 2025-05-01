@@ -44,7 +44,7 @@ func (s *ResetTestSuite) SetupTest() {
 }
 
 func (s *ResetTestSuite) TestHandle() {
-	attributes := reset.CommandRandomAttributes()
+	attributes := reset.Mother.CommandValidAttributes()
 
 	reset, err := values.New[*user.ID](attributes.Reset)
 
@@ -54,7 +54,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.NoError(err)
 
-	aggregate := user.Random()
+	aggregate := user.Mother.UserValid()
 
 	aggregate.Reset = reset
 
@@ -66,7 +66,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	hashed := user.CipherPasswordWithValidValue()
+	hashed := user.Mother.CipherPasswordValid()
 
 	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed.Value())
 
@@ -78,7 +78,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Update", &registered)
 
-	command := messages.RandomWithAttributes(attributes, false)
+	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

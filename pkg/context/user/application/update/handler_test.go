@@ -43,9 +43,9 @@ func (s *UpdateTestSuite) SetupTest() {
 }
 
 func (s *UpdateTestSuite) TestHandle() {
-	registered := user.RandomPrimitive()
+	registered := user.Mother.UserValidPrimitive()
 
-	attributes := update.CommandRandomAttributes()
+	attributes := update.Mother.CommandValidAttributes()
 
 	attributes.ID = registered.ID.Value()
 
@@ -66,7 +66,7 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.hasher.Mock.On("Compare", registered.CipherPassword.Value(), aggregate.PlainPassword.Value())
 
-	hashed := user.CipherPasswordWithValidValue()
+	hashed := user.Mother.CipherPasswordValid()
 
 	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value())
 
@@ -78,7 +78,7 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Update", aggregate)
 
-	command := messages.RandomWithAttributes(attributes, false)
+	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

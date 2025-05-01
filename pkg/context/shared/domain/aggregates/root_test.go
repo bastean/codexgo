@@ -14,7 +14,7 @@ type RootTestSuite struct {
 }
 
 func (s *RootTestSuite) TestCreationStampErrOverwriteExisting() {
-	root := aggregates.RootWithValidValue()
+	root := aggregates.Mother.RootValid()
 
 	s.NoError(root.CreationStamp())
 

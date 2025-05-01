@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 )
 
 type BubbleUpTestSuite struct {
@@ -15,11 +14,11 @@ type BubbleUpTestSuite struct {
 }
 
 func (s *BubbleUpTestSuite) TestBubbleUp() {
-	err, value := errors.BubbleUpWithRandomValue()
+	err, value := errors.Mother.BubbleUpValid()
 
 	actual := errors.BubbleUp(err)
 
-	expected := fmt.Sprintf("(TestBubbleUp): [(BubbleUpWithRandomValue): [%s]]", value)
+	expected := fmt.Sprintf("(TestBubbleUp): [(BubbleUpValid): [%s]]", value)
 
 	s.Equal(expected, actual.Error())
 }
@@ -27,7 +26,7 @@ func (s *BubbleUpTestSuite) TestBubbleUp() {
 func (s *BubbleUpTestSuite) TestBubbleUpWithUnknown() {
 	var actual error
 
-	err := services.Create.Error()
+	err := errors.Mother.Error()
 
 	func() {
 		actual = errors.BubbleUp(err)
