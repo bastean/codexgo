@@ -1,6 +1,7 @@
 package messages_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -14,33 +15,27 @@ type KeyTestSuite struct {
 }
 
 func (s *KeyTestSuite) SetupSuite() {
-	s.Equal(messages.RExKeyOrganization, `([a-z0-9]{1,20})`)
-	s.Equal(messages.RExKeyService, `([a-z0-9]{1,20})`)
-	s.Equal(messages.RExKeyVersion, `(\d+)`)
-	s.Equal(messages.RExKeyType, `(event|command|query|response)`)
-	s.Equal(messages.RExKeyEntity, `([a-z]{1,20})`)
-	s.Equal(messages.RExKeyAction, `([a-z]{1,20})`)
-	s.Equal(messages.RExKeyStatus, `(queued|succeeded|failed|done)`)
-
-	s.Equal(messages.RExKeyComponents, `^([a-z0-9]{1,20})\.([a-z0-9]{1,20})\.(\d+)\.(event|command|query|response)\.([a-z]{1,20})\.([a-z]{1,20})\.(queued|succeeded|failed|done)$`)
+	s.Equal(messages.RExKey, `^([a-z0-9]{1,30})\.([a-z0-9]{1,30})\.(\d+)\.(event|command|query|response)\.([a-z]{1,30})\.([a-z]{1,30})\.(queued|succeeded|failed|done)$`)
 }
 
 func (s *KeyTestSuite) TestWithValidValue() {
-	key, err := values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
-		Organization: "codexgo",
-		Service:      "user",
-		Version:      "1",
-		Type:         messages.Type.Event,
-		Entity:       "user",
-		Action:       "created",
-		Status:       messages.Status.Succeeded,
-	}))
+	components := messages.Mother.KeyComponentsValid()
+
+	key, err := values.New[*messages.Key](messages.ParseKey(components))
 
 	s.NoError(err)
 
 	actual := key.Value()
 
-	expected := "codexgo.user.1.event.user.created.succeeded"
+	expected := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s",
+		components.Organization,
+		components.Service,
+		components.Version,
+		components.Type,
+		components.Entity,
+		components.Action,
+		components.Status,
+	)
 
 	s.Equal(expected, actual)
 }
@@ -49,7 +44,7 @@ func (s *KeyTestSuite) TestWithInvalidValue() {
 	expected := "(Validate): Key has an invalid nomenclature"
 
 	s.PanicsWithValue(expected, func() {
-		_, _ = values.New[*messages.Key](messages.ParseKey(new(messages.KeyComponents)))
+		_, _ = values.New[*messages.Key](messages.ParseKey(messages.Mother.KeyComponentsInvalid()))
 	})
 }
 

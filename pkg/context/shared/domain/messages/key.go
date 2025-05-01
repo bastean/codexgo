@@ -8,35 +8,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
-const (
-	RExKeyOrganization = `([a-z0-9]{1,20})`
-	RExKeyService      = `([a-z0-9]{1,20})`
-	RExKeyVersion      = `(\d+)`
-	RExKeyType         = `(event|command|query|response)`
-	RExKeyEntity       = `([a-z]{1,20})`
-	RExKeyAction       = `([a-z]{1,20})`
-	RExKeyStatus       = `(queued|succeeded|failed|done)`
-)
-
-var RExKeyComponents = fmt.Sprintf(`^%s\.%s\.%s\.%s\.%s\.%s\.%s$`, RExKeyOrganization, RExKeyService, RExKeyVersion, RExKeyType, RExKeyEntity, RExKeyAction, RExKeyStatus)
-
-var Type = struct {
-	Event, Command, Query, Response string
-}{
-	Event:    "event",
-	Command:  "command",
-	Query:    "query",
-	Response: "response",
-}
-
-var Status = struct {
-	Queued, Succeeded, Failed, Done string
-}{
-	Queued:    "queued",
-	Succeeded: "succeeded",
-	Failed:    "failed",
-	Done:      "done",
-}
+var RExKey = fmt.Sprintf(`^%s\.%s\.%s\.%s\.%s\.%s\.%s$`, RExOrganization, RExService, RExVersion, RExType, RExEntity, RExAction, RExStatus)
 
 // Terminology:
 //   - Organization = Context
@@ -55,7 +27,7 @@ type Key struct {
 }
 
 func (k *Key) Validate() error {
-	if !regexp.MustCompile(RExKeyComponents).MatchString(k.RawValue()) {
+	if !regexp.MustCompile(RExKey).MatchString(k.RawValue()) {
 		errors.Panic(errors.Standard("Key has an invalid nomenclature"))
 	}
 

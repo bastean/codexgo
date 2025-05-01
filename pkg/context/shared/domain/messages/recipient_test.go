@@ -1,6 +1,7 @@
 package messages_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -14,25 +15,25 @@ type RecipientTestSuite struct {
 }
 
 func (s *RecipientTestSuite) SetupSuite() {
-	s.Equal(messages.RExRecipientTrigger, `([a-z_]{1,20})`)
-
-	s.Equal(messages.RExRecipientComponents, `^([a-z0-9]{1,20})\.([a-z]{1,20})\.([a-z_]{1,20})_on_([a-z]{1,20})_(queued|succeeded|failed|done)$`)
+	s.Equal(messages.RExRecipient, `^([a-z0-9]{1,30})\.([a-z]{1,30})\.([a-z_]{1,30})_on_([a-z]{1,30})_(queued|succeeded|failed|done)$`)
 }
 
 func (s *RecipientTestSuite) TestWithValidValue() {
-	recipient, err := values.New[*messages.Recipient](messages.ParseRecipient(&messages.RecipientComponents{
-		Service: "user",
-		Entity:  "user",
-		Trigger: "send_confirmation",
-		Action:  "created",
-		Status:  messages.Status.Succeeded,
-	}))
+	components := messages.Mother.RecipientComponentsValid()
+
+	recipient, err := values.New[*messages.Recipient](messages.ParseRecipient(components))
 
 	s.NoError(err)
 
 	actual := recipient.Value()
 
-	expected := "user.user.send_confirmation_on_created_succeeded"
+	expected := fmt.Sprintf("%s.%s.%s_on_%s_%s",
+		components.Service,
+		components.Entity,
+		components.Trigger,
+		components.Action,
+		components.Status,
+	)
 
 	s.Equal(expected, actual)
 }
@@ -41,7 +42,7 @@ func (s *RecipientTestSuite) TestWithInvalidValue() {
 	expected := "(Validate): Recipient has an invalid nomenclature"
 
 	s.PanicsWithValue(expected, func() {
-		_, _ = values.New[*messages.Recipient](messages.ParseRecipient(new(messages.RecipientComponents)))
+		_, _ = values.New[*messages.Recipient](messages.ParseRecipient(messages.Mother.RecipientComponentsInvalid()))
 	})
 }
 

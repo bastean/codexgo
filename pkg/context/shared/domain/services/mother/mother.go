@@ -39,8 +39,22 @@ func (m *Mother) Email() string {
 	}
 }
 
+func (m *Mother) Words(amount int) []string {
+	words := make([]string, amount)
+
+	for i := range amount {
+		words[i] = m.LoremIpsumWord()
+	}
+
+	return words
+}
+
+func (m *Mother) WordsJoin(words []string, sep string) string {
+	return strings.Join(words, sep)
+}
+
 func (m *Mother) Message() string {
-	return m.LoremIpsumSentence(m.IntRange(1, 12))
+	return m.WordsJoin(m.Words(m.IntRange(1, 12)), " ")
 }
 
 func (m *Mother) TimeSetBefore(actual time.Time, min, max int) time.Time {
