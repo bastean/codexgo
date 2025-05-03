@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/suite"
 
@@ -23,7 +22,7 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 	s.NoError(err)
 
 	expected := fmt.Sprintf("%s (%s): %s: %s: [%s]",
-		bubble.When.Format(time.RFC3339Nano),
+		bubble.When.Format(),
 		bubble.Where,
 		bubble.What,
 		why,

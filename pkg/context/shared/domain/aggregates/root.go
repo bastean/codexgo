@@ -3,7 +3,7 @@ package aggregates
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
@@ -19,7 +19,7 @@ func (r *Root) CreationStamp() error {
 		})
 	}
 
-	created, err := values.New[*Time](services.TimeNow())
+	created, err := values.New[*Time](time.Now().Format())
 
 	if err != nil {
 		return errors.BubbleUp(err)
@@ -32,7 +32,7 @@ func (r *Root) CreationStamp() error {
 }
 
 func (r *Root) UpdatedStamp() error {
-	updated, err := values.Replace(r.Updated, services.TimeNow())
+	updated, err := values.Replace(r.Updated, time.Now().Format())
 
 	if err != nil {
 		return errors.BubbleUp(err)

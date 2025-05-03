@@ -3,10 +3,9 @@ package errors
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 type (
@@ -30,7 +29,7 @@ type (
 )
 
 func (b *Bubble) Error() string {
-	message := fmt.Sprintf("%s (%s): %s", services.FormatTime(b.When), b.Where, b.What)
+	message := fmt.Sprintf("%s (%s): %s", b.When.Format(), b.Where, b.What)
 
 	if b.Why != nil {
 		why, err := json.Marshal(b.Why)
@@ -51,7 +50,7 @@ func (b *Bubble) Error() string {
 
 func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {
 	if bubble.When.IsZero() {
-		bubble.When = time.Now().UTC()
+		bubble.When = time.Now()
 	}
 
 	if bubble.Where == "" {

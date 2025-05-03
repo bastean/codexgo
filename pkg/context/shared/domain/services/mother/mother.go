@@ -2,13 +2,14 @@ package mother
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 var (
@@ -79,7 +80,7 @@ func (m *Mother) TimeRandomAfter(actual time.Time) time.Time {
 
 func (m *Mother) StructRandomize(value any) {
 	if err := m.Struct(value); err != nil {
-		panic(err)
+		log.Panic(err)
 	}
 }
 
@@ -89,7 +90,7 @@ func (*Mother) ID() string {
 
 func New[M ~struct{ *Mother }]() *M {
 	if _, ok := os.LookupEnv("GOTEST"); !ok {
-		panic("Use \"Mother\" only in a \"Test Environment\"")
+		log.Panic("Use \"Mother\" only in a \"Test Environment\"")
 	}
 
 	return &M{

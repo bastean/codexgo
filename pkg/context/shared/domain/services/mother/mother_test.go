@@ -1,6 +1,7 @@
 package mother_test
 
 import (
+	"log"
 	"os"
 	"testing"
 
@@ -15,7 +16,7 @@ type MotherTestSuite struct {
 
 func (s *MotherTestSuite) SetupSuite() {
 	if _, ok := os.LookupEnv("GOTEST"); !ok {
-		panic("\"Test Environment (GOTEST)\" not defined")
+		log.Panic("\"Test Environment (GOTEST)\" not defined")
 	}
 }
 

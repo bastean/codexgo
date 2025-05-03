@@ -2,7 +2,6 @@ package user
 
 import (
 	"net/http"
-	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -14,6 +13,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/service/authentication"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/authentications/jwt"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 )

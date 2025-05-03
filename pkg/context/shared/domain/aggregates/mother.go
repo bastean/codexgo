@@ -2,8 +2,8 @@ package aggregates
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
@@ -22,7 +22,7 @@ func (m *m) RootValid() *Root {
 }
 
 func (m *m) TimeValid() *Time {
-	value, err := values.New[*Time](services.TimeNow())
+	value, err := values.New[*Time](time.Now().Format())
 
 	if err != nil {
 		errors.Panic(err)

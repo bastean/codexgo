@@ -1,13 +1,12 @@
 package communications
 
 import (
-	"time"
-
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 type EventBusSuite struct {

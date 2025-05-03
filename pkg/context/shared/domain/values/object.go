@@ -1,11 +1,10 @@
 package values
 
 import (
-	"os"
 	"reflect"
-	"time"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 type valueObject[T any] interface {
@@ -89,11 +88,11 @@ func (o *Object[T]) RawValue() T {
 }
 
 func (o *Object[T]) Created() string {
-	return o.created.UTC().Format(time.RFC3339Nano)
+	return o.created.Format()
 }
 
 func (o *Object[T]) Updated() string {
-	return o.updated.UTC().Format(time.RFC3339Nano)
+	return o.updated.Format()
 }
 
 func create[O valueObject[V], V any](value V) (O, error) {
@@ -108,14 +107,6 @@ func create[O valueObject[V], V any](value V) (O, error) {
 	return object, nil
 }
 
-func timeNow() time.Time {
-	if _, ok := os.LookupEnv("GOTEST_FROZEN"); ok {
-		return time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)
-	}
-
-	return time.Now()
-}
-
 func New[O valueObject[V], V any](value V) (O, error) {
 	object, err := create[O](value)
 
@@ -123,7 +114,7 @@ func New[O valueObject[V], V any](value V) (O, error) {
 		return *new(O), errors.BubbleUp(err)
 	}
 
-	object.SetCreated(timeNow())
+	object.SetCreated(time.Now())
 
 	return object, nil
 }
@@ -135,15 +126,7 @@ func Replace[O valueObject[V], V any](old O, value V) (O, error) {
 		return *new(O), errors.BubbleUp(err)
 	}
 
-	created, err := time.Parse(time.RFC3339Nano, old.Created())
-
-	if err != nil {
-		return *new(O), errors.New[errors.Internal](&errors.Bubble{
-			What: "Time format is not valid",
-		})
-	}
-
-	object.SetCreated(created)
+	object.SetCreated(time.Parse(old.Created()))
 
 	object.SetUpdated(time.Now())
 

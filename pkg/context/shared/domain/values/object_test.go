@@ -2,7 +2,6 @@ package values_test
 
 import (
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/suite"
 
@@ -197,7 +196,7 @@ func (s *ObjectTestSuite) TestCreated() {
 
 	actual := s.SUT.Created()
 
-	expected := date.UTC().Format(time.RFC3339Nano)
+	expected := date.Format()
 
 	s.Equal(expected, actual)
 }
@@ -213,7 +212,7 @@ func (s *ObjectTestSuite) TestUpdated() {
 
 	actual := s.SUT.Updated()
 
-	expected := date.UTC().Format(time.RFC3339Nano)
+	expected := date.Format()
 
 	s.Equal(expected, actual)
 }

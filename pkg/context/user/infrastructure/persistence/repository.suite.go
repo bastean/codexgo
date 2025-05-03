@@ -96,6 +96,8 @@ func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
 
 	aggregate.Email = registered.Email
 
+	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
+
 	err := s.SUT.Update(aggregate)
 
 	var actual *errors.AlreadyExist

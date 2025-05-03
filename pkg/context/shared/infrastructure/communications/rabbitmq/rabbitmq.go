@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"reflect"
-	"time"
 
 	"github.com/goccy/go-json"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -13,6 +12,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 type (
@@ -259,7 +259,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 	}
 
 	if event.OccurredOn == "" {
-		event.OccurredOn = services.TimeNow()
+		event.OccurredOn = time.Now().Format()
 	}
 
 	body, err := json.Marshal(event)
