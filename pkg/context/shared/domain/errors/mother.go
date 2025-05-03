@@ -8,16 +8,26 @@ type m struct {
 	*mother.Mother
 }
 
-func (m *m) BubbleInvalidWithoutWhere() *Bubble {
+func (m *m) BubbleValid() *Bubble {
 	return &Bubble{
-		What: m.LoremIpsumWord(),
+		When:  m.TimeNow(),
+		Where: m.LoremIpsumWord(),
+		What:  m.LoremIpsumSentence(m.IntRange(1, 3)),
+		Why: Meta{
+			m.LoremIpsumWord(): m.LoremIpsumSentence(m.IntRange(1, 3)),
+		},
+		Who: m.Error(),
 	}
 }
 
-func (m *m) BubbleInvalidWithoutWhat() *Bubble {
-	return &Bubble{
-		Where: m.LoremIpsumWord(),
-	}
+func (m *m) BubbleInvalidWithoutWhere() {
+	func() {
+		_ = New[Default](&Bubble{What: m.LoremIpsumWord()})
+	}()
+}
+
+func (m *m) BubbleInvalidWithoutWhat() {
+	_ = New[Default](&Bubble{Where: m.LoremIpsumWord()})
 }
 
 func (m *m) BubbleUpValid() (error, error) {

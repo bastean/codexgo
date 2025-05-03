@@ -1,6 +1,8 @@
 package errors_test
 
 import (
+	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
@@ -14,21 +16,21 @@ type BubbleTestSuite struct {
 }
 
 func (s *BubbleTestSuite) TestWithValidValue() {
-	errThirdParty := errors.Mother.Error()
+	bubble := errors.Mother.BubbleValid()
 
-	bubble := &errors.Bubble{
-		When:  time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC),
-		Where: "TestWithValidValue",
-		What:  "Test Case",
-		Why: errors.Meta{
-			"Case": "Happy path",
-		},
-		Who: errThirdParty,
-	}
+	why, err := json.Marshal(bubble.Why)
 
-	expected := "2009-11-10T23:00:00Z (TestWithValidValue): Test Case: {\"Case\":\"Happy path\"}: [" + errThirdParty.Error() + "]"
+	s.NoError(err)
 
-	err := errors.New[errors.Default](bubble)
+	expected := fmt.Sprintf("%s (%s): %s: %s: [%s]",
+		bubble.When.Format(time.RFC3339Nano),
+		bubble.Where,
+		bubble.What,
+		why,
+		bubble.Who,
+	)
+
+	err = errors.New[errors.Default](bubble)
 
 	var actual *errors.Default
 
@@ -39,12 +41,12 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 
 func (s *BubbleTestSuite) TestWithoutWhere() {
 	expected := "(New): Cannot create a error Bubble if \"Where\" is not defined"
-	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.Mother.BubbleInvalidWithoutWhere()) })
+	s.PanicsWithValue(expected, func() { errors.Mother.BubbleInvalidWithoutWhere() })
 }
 
 func (s *BubbleTestSuite) TestWithoutWhat() {
 	expected := "(New): Cannot create a error Bubble if \"What\" is not defined"
-	s.PanicsWithValue(expected, func() { _ = errors.New[errors.Default](errors.Mother.BubbleInvalidWithoutWhat()) })
+	s.PanicsWithValue(expected, func() { errors.Mother.BubbleInvalidWithoutWhat() })
 }
 
 func TestUnitBubbleSuite(t *testing.T) {
