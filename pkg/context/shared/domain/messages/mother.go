@@ -25,7 +25,7 @@ func (m *m) KeyComponentsInvalid() *KeyComponents {
 	return new(KeyComponents)
 }
 
-func (m *m) KeyValid(components *KeyComponents) *Key {
+func (m *m) KeyValidWithComponents(components *KeyComponents) *Key {
 	key, err := values.New[*Key](ParseKey(components))
 
 	if err != nil {
@@ -33,6 +33,14 @@ func (m *m) KeyValid(components *KeyComponents) *Key {
 	}
 
 	return key
+}
+
+func (m *m) KeyInvalid() {
+	_, err := values.New[*Key](ParseKey(m.KeyComponentsInvalid()))
+
+	if err != nil {
+		errors.Panic(err)
+	}
 }
 
 func (m *m) RecipientComponentsValid() *RecipientComponents {
@@ -49,7 +57,7 @@ func (m *m) RecipientComponentsInvalid() *RecipientComponents {
 	return new(RecipientComponents)
 }
 
-func (m *m) RecipientValid(components *RecipientComponents) *Recipient {
+func (m *m) RecipientValidWithComponents(components *RecipientComponents) *Recipient {
 	recipient, err := values.New[*Recipient](ParseRecipient(components))
 
 	if err != nil {
@@ -59,11 +67,19 @@ func (m *m) RecipientValid(components *RecipientComponents) *Recipient {
 	return recipient
 }
 
+func (m *m) RecipientInvalid() {
+	_, err := values.New[*Recipient](ParseRecipient(m.RecipientComponentsInvalid()))
+
+	if err != nil {
+		errors.Panic(err)
+	}
+}
+
 func (m *m) MessageValid() *Message {
 	return &Message{
 		ID:         m.UUID(),
 		OccurredOn: m.TimeZoneFull(),
-		Key:        m.KeyValid(m.KeyComponentsValid()),
+		Key:        m.KeyValidWithComponents(m.KeyComponentsValid()),
 		Attributes: m.LoremIpsumWord(),
 		Meta:       m.LoremIpsumWord(),
 	}
@@ -87,7 +103,7 @@ func (m *m) MessageValidWithAttributes(attributes any, shouldRandomize bool) *Me
 	return &Message{
 		ID:         m.UUID(),
 		OccurredOn: m.TimeZoneFull(),
-		Key:        m.KeyValid(m.KeyComponentsValid()),
+		Key:        m.KeyValidWithComponents(m.KeyComponentsValid()),
 		Attributes: attributes,
 		Meta:       m.LoremIpsumWord(),
 	}

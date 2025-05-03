@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type KeyTestSuite struct {
@@ -21,11 +20,7 @@ func (s *KeyTestSuite) SetupSuite() {
 func (s *KeyTestSuite) TestWithValidValue() {
 	components := messages.Mother.KeyComponentsValid()
 
-	key, err := values.New[*messages.Key](messages.ParseKey(components))
-
-	s.NoError(err)
-
-	actual := key.Value()
+	actual := messages.Mother.KeyValidWithComponents(components).Value()
 
 	expected := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s",
 		components.Organization,
@@ -42,10 +37,7 @@ func (s *KeyTestSuite) TestWithValidValue() {
 
 func (s *KeyTestSuite) TestWithInvalidValue() {
 	expected := "(Validate): Key has an invalid nomenclature"
-
-	s.PanicsWithValue(expected, func() {
-		_, _ = values.New[*messages.Key](messages.ParseKey(messages.Mother.KeyComponentsInvalid()))
-	})
+	s.PanicsWithValue(expected, func() { messages.Mother.KeyInvalid() })
 }
 
 func TestUnitKeySuite(t *testing.T) {

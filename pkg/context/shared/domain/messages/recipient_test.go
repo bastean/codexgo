@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type RecipientTestSuite struct {
@@ -21,11 +20,7 @@ func (s *RecipientTestSuite) SetupSuite() {
 func (s *RecipientTestSuite) TestWithValidValue() {
 	components := messages.Mother.RecipientComponentsValid()
 
-	recipient, err := values.New[*messages.Recipient](messages.ParseRecipient(components))
-
-	s.NoError(err)
-
-	actual := recipient.Value()
+	actual := messages.Mother.RecipientValidWithComponents(components).Value()
 
 	expected := fmt.Sprintf("%s.%s.%s_on_%s_%s",
 		components.Service,
@@ -40,10 +35,7 @@ func (s *RecipientTestSuite) TestWithValidValue() {
 
 func (s *RecipientTestSuite) TestWithInvalidValue() {
 	expected := "(Validate): Recipient has an invalid nomenclature"
-
-	s.PanicsWithValue(expected, func() {
-		_, _ = values.New[*messages.Recipient](messages.ParseRecipient(messages.Mother.RecipientComponentsInvalid()))
-	})
+	s.PanicsWithValue(expected, func() { messages.Mother.RecipientInvalid() })
 }
 
 func TestUnitRecipientSuite(t *testing.T) {
