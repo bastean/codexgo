@@ -8,7 +8,7 @@ import (
 
 	"github.com/brianvoe/gofakeit/v7"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/id"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
@@ -85,7 +85,7 @@ func (m *Mother) StructRandomize(value any) {
 }
 
 func (*Mother) ID() string {
-	return services.GenerateID()
+	return id.New()
 }
 
 func New[M ~struct{ *Mother }]() *M {

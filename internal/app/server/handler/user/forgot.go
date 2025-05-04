@@ -11,7 +11,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/id"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
 )
 
@@ -40,7 +40,7 @@ func Forgot(c *gin.Context) {
 	err = command.Bus.Dispatch(messages.New(
 		forgot.CommandKey,
 		&forgot.CommandAttributes{
-			Reset: services.GenerateID(),
+			Reset: id.New(),
 			Email: data.Email,
 		},
 		new(forgot.CommandMeta),

@@ -11,7 +11,7 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/adapter/command"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/id"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 )
 
@@ -40,8 +40,8 @@ func Create(c *gin.Context) {
 	err = command.Bus.Dispatch(messages.New(
 		create.CommandKey,
 		&create.CommandAttributes{
-			Verify:   services.GenerateID(),
-			ID:       services.GenerateID(),
+			Verify:   id.New(),
+			ID:       id.New(),
 			Email:    data.Email,
 			Username: data.Username,
 			Password: data.Password,
