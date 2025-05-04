@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
@@ -18,7 +17,7 @@ type PlainPassword struct {
 }
 
 func (p *PlainPassword) Validate() error {
-	if services.IsNotValid(p.RawValue(), "gte=8", "lte=64") {
+	if values.IsNotValid(p.RawValue(), "gte=8", "lte=64") {
 		return errors.New[errors.InvalidValue](&errors.Bubble{
 			What: fmt.Sprintf("Password must be between %s to %s characters", PlainPasswordMinCharactersLength, PlainPasswordMaxCharactersLength),
 			Why: errors.Meta{
@@ -37,7 +36,7 @@ type CipherPassword struct {
 }
 
 func (c *CipherPassword) Validate() error {
-	if services.IsNotValid(c.RawValue(), "required") {
+	if values.IsNotValid(c.RawValue(), "required") {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Cipher Password is required",
 			Why: errors.Meta{
