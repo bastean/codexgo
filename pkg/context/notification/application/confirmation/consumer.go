@@ -15,7 +15,7 @@ func (c *Consumer) On(event *messages.Message) error {
 	account, ok := event.Attributes.(*events.UserCreatedSucceededAttributes)
 
 	if !ok {
-		return errors.EventAssertion("On")
+		return errors.EventAssertion()
 	}
 
 	err := c.Confirmation.Run(account)

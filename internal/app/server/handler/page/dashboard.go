@@ -17,7 +17,7 @@ func Dashboard(c *gin.Context) {
 	id, exists := c.Get(key.UserID)
 
 	if !exists {
-		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserID, "Dashboard"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.UserID), "/")
 		return
 	}
 
@@ -39,13 +39,13 @@ func Dashboard(c *gin.Context) {
 	found, ok := response.Attributes.(*read.ResponseAttributes)
 
 	if !ok {
-		errs.AbortByErrWithRedirect(c, errs.Assertion("Dashboard"), "/")
+		errs.AbortByErrWithRedirect(c, errs.Assertion(), "/")
 		return
 	}
 
 	err = dashboard.Page(found).Render(c.Request.Context(), c.Writer)
 
 	if err != nil {
-		errs.AbortByErr(c, errs.Render(err, "Dashboard"))
+		errs.AbortByErr(c, errs.Render(err))
 	}
 }

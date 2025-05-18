@@ -26,7 +26,7 @@ func Forgot(c *gin.Context) {
 	err := c.BindJSON(data)
 
 	if err != nil {
-		errs.AbortByErr(c, errs.BindingJSON(err, "Forgot"))
+		errs.AbortByErr(c, errs.BindingJSON(err))
 		return
 	}
 

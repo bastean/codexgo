@@ -21,10 +21,10 @@ func (s *PanicTestSuite) TestPanic() {
 	s.PanicsWithValue(expected, func() { errors.Mother().PanicValidWithError(err) })
 }
 
-func (s *PanicTestSuite) TestPanicWithUnknown() {
+func (s *PanicTestSuite) TestPanicWithAnonymous() {
 	err := errors.Mother().Error()
 
-	expected := fmt.Sprintf("(Unknown): %s", err)
+	expected := fmt.Sprintf("(UNKNOWN): %s", err)
 
 	s.PanicsWithValue(expected, func() { errors.Panic(err) })
 }

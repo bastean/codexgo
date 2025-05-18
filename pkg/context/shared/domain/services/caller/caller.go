@@ -10,6 +10,12 @@ const (
 	SkipCurrent = 1
 )
 
+const (
+	DefaultPkg      = "UNKNOWN"
+	DefaultReceiver = "UNKNOWN"
+	DefaultMethod   = "UNKNOWN"
+)
+
 func Received(skip int) (pkg, receiver, method string) {
 	pc, _, _, _ := runtime.Caller(skip + 1)
 
@@ -25,6 +31,18 @@ func Received(skip int) (pkg, receiver, method string) {
 			receiver = names[1]
 			method = names[2]
 		}
+	}
+
+	if pkg == "" {
+		pkg = DefaultPkg
+	}
+
+	if receiver == "" {
+		receiver = DefaultReceiver
+	}
+
+	if method == "" {
+		method = DefaultMethod
 	}
 
 	return pkg, receiver, method

@@ -19,7 +19,7 @@ func Reset(c *gin.Context) {
 	err := c.BindJSON(attributes)
 
 	if err != nil {
-		errs.AbortByErr(c, errs.BindingJSON(err, "Reset"))
+		errs.AbortByErr(c, errs.BindingJSON(err))
 		return
 	}
 

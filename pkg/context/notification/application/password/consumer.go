@@ -15,7 +15,7 @@ func (c *Consumer) On(event *messages.Message) error {
 	account, ok := event.Attributes.(*events.UserResetQueuedAttributes)
 
 	if !ok {
-		return errors.EventAssertion("On")
+		return errors.EventAssertion()
 	}
 
 	err := c.Password.Run(account)

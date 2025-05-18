@@ -39,8 +39,19 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 }
 
 func (s *BubbleTestSuite) TestWithoutWhere() {
-	expected := "(New): Cannot create a error Bubble if \"Where\" is not defined"
-	s.PanicsWithValue(expected, func() { errors.Mother().BubbleInvalidWithoutWhere() })
+	err := errors.Mother().BubbleValidWithoutWhere()
+
+	var actual *errors.Default
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.Default{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "UNKNOWN",
+		What:  actual.What,
+	}}
+
+	s.Equal(expected, actual)
 }
 
 func (s *BubbleTestSuite) TestWithoutWhat() {

@@ -29,7 +29,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 	attributes, ok := command.Attributes.(*CommandAttributes)
 
 	if !ok {
-		return errors.CommandAssertion("Handle")
+		return errors.CommandAssertion()
 	}
 
 	err := h.Case.Run(attributes)

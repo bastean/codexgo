@@ -23,7 +23,7 @@ func (s *BubbleUpTestSuite) TestBubbleUp() {
 	s.Equal(expected, actual.Error())
 }
 
-func (s *BubbleUpTestSuite) TestBubbleUpWithUnknown() {
+func (s *BubbleUpTestSuite) TestBubbleUpWithAnonymous() {
 	var actual error
 
 	err := errors.Mother().Error()
@@ -32,7 +32,7 @@ func (s *BubbleUpTestSuite) TestBubbleUpWithUnknown() {
 		actual = errors.BubbleUp(err)
 	}()
 
-	expected := fmt.Sprintf("(Unknown): [%s]", err)
+	expected := fmt.Sprintf("(UNKNOWN): [%s]", err)
 
 	s.Equal(expected, actual.Error())
 }

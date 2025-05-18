@@ -24,7 +24,7 @@ func Login(c *gin.Context) {
 	err := c.BindJSON(attributes)
 
 	if err != nil {
-		errs.AbortByErr(c, errs.BindingJSON(err, "Login"))
+		errs.AbortByErr(c, errs.BindingJSON(err))
 		return
 	}
 
@@ -42,7 +42,7 @@ func Login(c *gin.Context) {
 	found, ok := response.Attributes.(*login.ResponseAttributes)
 
 	if !ok {
-		errs.AbortByErr(c, errs.Assertion("Login"))
+		errs.AbortByErr(c, errs.Assertion())
 		return
 	}
 
@@ -63,7 +63,7 @@ func Login(c *gin.Context) {
 	err = session.Save()
 
 	if err != nil {
-		errs.AbortByErr(c, errs.SessionSave(err, "Login"))
+		errs.AbortByErr(c, errs.SessionSave(err))
 		return
 	}
 

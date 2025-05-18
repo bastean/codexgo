@@ -26,7 +26,7 @@ func Create(c *gin.Context) {
 	err := c.BindJSON(data)
 
 	if err != nil {
-		errs.AbortByErr(c, errs.BindingJSON(err, "Create"))
+		errs.AbortByErr(c, errs.BindingJSON(err))
 		return
 	}
 

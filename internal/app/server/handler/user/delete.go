@@ -20,7 +20,7 @@ func Delete(c *gin.Context) {
 	id, exists := c.Get(key.UserID)
 
 	if !exists {
-		errs.AbortByErr(c, errs.MissingKey(key.UserID, "Delete"))
+		errs.AbortByErr(c, errs.MissingKey(key.UserID))
 		return
 	}
 
@@ -29,7 +29,7 @@ func Delete(c *gin.Context) {
 	err := c.BindJSON(attributes)
 
 	if err != nil {
-		errs.AbortByErr(c, errs.BindingJSON(err, "Delete"))
+		errs.AbortByErr(c, errs.BindingJSON(err))
 		return
 	}
 
@@ -58,7 +58,7 @@ func Delete(c *gin.Context) {
 	err = session.Save()
 
 	if err != nil {
-		errs.AbortByErr(c, errs.SessionSave(err, "Delete"))
+		errs.AbortByErr(c, errs.SessionSave(err))
 		return
 	}
 

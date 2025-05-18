@@ -20,9 +20,9 @@ func (m *m) BubbleValid() *Bubble {
 	}
 }
 
-func (m *m) BubbleInvalidWithoutWhere() {
-	func() {
-		_ = New[Default](&Bubble{What: m.LoremIpsumWord()})
+func (m *m) BubbleValidWithoutWhere() error {
+	return func() error {
+		return New[Default](&Bubble{What: m.LoremIpsumWord()})
 	}()
 }
 

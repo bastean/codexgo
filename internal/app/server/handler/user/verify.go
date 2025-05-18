@@ -17,14 +17,14 @@ func Verify(c *gin.Context) {
 	token := c.Query(key.Token)
 
 	if token == "" {
-		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.Token, "Verify"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.Token), "/")
 		return
 	}
 
 	id := c.Query(key.ID)
 
 	if id == "" {
-		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.ID, "Verify"), "/")
+		errs.AbortByErrWithRedirect(c, errs.MissingKey(key.ID), "/")
 		return
 	}
 

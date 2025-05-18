@@ -45,7 +45,7 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 	attributes, ok := query.Attributes.(*QueryAttributes)
 
 	if !ok {
-		return nil, errors.QueryAssertion("Handle")
+		return nil, errors.QueryAssertion()
 	}
 
 	user, err := h.Case.Run(attributes)

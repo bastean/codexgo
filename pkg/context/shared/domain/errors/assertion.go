@@ -2,25 +2,29 @@ package errors
 
 import (
 	"fmt"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
 )
 
-func assertion(what, where string) error {
+func assertion(what string) error {
+	_, _, where := caller.Received(caller.SkipCurrent + 1)
+
 	return New[Internal](&Bubble{
 		Where: where,
 		What:  fmt.Sprintf("Failure in %s type assertion", what),
 	})
 }
 
-func EventAssertion(where string) error {
-	return assertion("Event", where)
+func EventAssertion() error {
+	return assertion("Event")
 }
 
-func CommandAssertion(where string) error {
-	return assertion("Command", where)
+func CommandAssertion() error {
+	return assertion("Command")
 }
 
-func QueryAssertion(where string) error {
-	return assertion("Query", where)
+func QueryAssertion() error {
+	return assertion("Query")
 }
 
 func IsNot(err, target error) bool {

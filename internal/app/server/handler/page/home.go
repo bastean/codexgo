@@ -19,6 +19,6 @@ func Home(c *gin.Context) {
 	}
 
 	if err := home.Page(register, forgot).Render(c.Request.Context(), c.Writer); err != nil {
-		errs.AbortByErr(c, errs.Render(err, "Home"))
+		errs.AbortByErr(c, errs.Render(err))
 	}
 }

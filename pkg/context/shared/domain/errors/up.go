@@ -7,13 +7,6 @@ import (
 )
 
 func BubbleUp(who error) error {
-	where := "Unknown"
-
-	_, _, name := caller.Received(caller.SkipCurrent)
-
-	if name != "" {
-		where = name
-	}
-
+	_, _, where := caller.Received(caller.SkipCurrent)
 	return fmt.Errorf("(%s): [%w]", where, who)
 }

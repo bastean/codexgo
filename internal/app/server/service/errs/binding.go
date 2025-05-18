@@ -5,9 +5,12 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
 )
 
-func BindingJSON(who error, where string) error {
+func BindingJSON(who error) error {
+	_, _, where := caller.Received(caller.SkipCurrent)
+
 	var err *json.UnmarshalTypeError
 
 	if errors.As(who, &err) {

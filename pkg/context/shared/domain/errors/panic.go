@@ -7,13 +7,6 @@ import (
 )
 
 func Panic(what error) {
-	where := "Unknown"
-
-	_, _, name := caller.Received(caller.SkipCurrent)
-
-	if name != "" {
-		where = name
-	}
-
+	_, _, where := caller.Received(caller.SkipCurrent)
 	log.Panicf("(%s): %s", where, what)
 }

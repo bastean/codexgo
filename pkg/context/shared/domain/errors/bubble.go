@@ -54,13 +54,8 @@ func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {
 	}
 
 	if bubble.Where == "" {
-		_, _, name := caller.Received(caller.SkipCurrent)
-
-		if name == "" {
-			Panic(Standard("Cannot create a error Bubble if \"Where\" is not defined"))
-		}
-
-		bubble.Where = name
+		_, _, where := caller.Received(caller.SkipCurrent)
+		bubble.Where = where
 	}
 
 	if bubble.What == "" {
