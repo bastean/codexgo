@@ -8,4 +8,4 @@ type m struct {
 	*mother.Mother
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

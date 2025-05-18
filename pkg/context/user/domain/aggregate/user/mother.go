@@ -180,8 +180,8 @@ func (m *m) VerifiedFalse() *Verified {
 
 func (m *m) UserValidFromPrimitive() *User {
 	user, err := FromPrimitive(&Primitive{
-		Created:     aggregates.Mother.TimeValid().ToPrimitive(),
-		Updated:     aggregates.Mother.TimeValid().ToPrimitive(),
+		Created:     aggregates.Mother().TimeValid().ToPrimitive(),
+		Updated:     aggregates.Mother().TimeValid().ToPrimitive(),
 		VerifyToken: m.IDValid().ToPrimitive(),
 		ResetToken:  m.IDValid().ToPrimitive(),
 		ID:          m.IDValid().ToPrimitive(),
@@ -214,4 +214,4 @@ func (m *m) UserValid() *User {
 	return user
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

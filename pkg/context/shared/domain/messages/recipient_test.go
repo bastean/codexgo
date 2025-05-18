@@ -18,9 +18,9 @@ func (s *RecipientTestSuite) SetupSuite() {
 }
 
 func (s *RecipientTestSuite) TestWithValidValue() {
-	components := messages.Mother.RecipientComponentsValid()
+	components := messages.Mother().RecipientComponentsValid()
 
-	actual := messages.Mother.RecipientValidWithComponents(components).Value()
+	actual := messages.Mother().RecipientValidWithComponents(components).Value()
 
 	expected := fmt.Sprintf("%s.%s.%s_on_%s_%s",
 		components.Service,
@@ -35,7 +35,7 @@ func (s *RecipientTestSuite) TestWithValidValue() {
 
 func (s *RecipientTestSuite) TestWithInvalidValue() {
 	expected := "(Validate): Recipient has an invalid nomenclature"
-	s.PanicsWithValue(expected, func() { messages.Mother.RecipientInvalid() })
+	s.PanicsWithValue(expected, func() { messages.Mother().RecipientInvalid() })
 }
 
 func TestUnitRecipientSuite(t *testing.T) {

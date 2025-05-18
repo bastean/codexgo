@@ -12,4 +12,4 @@ func (m *m) ParseValidValues() (pkg, receiver, method string) {
 	return m.LoremIpsumWord(), m.LoremIpsumWord(), m.LoremIpsumWord()
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

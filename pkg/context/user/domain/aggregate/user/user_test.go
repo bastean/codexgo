@@ -14,9 +14,9 @@ type UserTestSuite struct {
 }
 
 func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
-	aggregate := user.Mother.UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive()
 
-	token := user.Mother.IDValid()
+	token := user.Mother().IDValid()
 
 	err := aggregate.ValidateVerifyToken(token)
 
@@ -37,9 +37,9 @@ func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
 }
 
 func (s *UserTestSuite) TestValidateResetTokenErrDoNotMatch() {
-	aggregate := user.Mother.UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive()
 
-	token := user.Mother.IDValid()
+	token := user.Mother().IDValid()
 
 	err := aggregate.ValidateResetToken(token)
 

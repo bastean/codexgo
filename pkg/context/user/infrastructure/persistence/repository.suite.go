@@ -15,7 +15,7 @@ type RepositorySuite struct {
 }
 
 func (s *RepositorySuite) TestCreate() {
-	expected := user.Mother.UserValid()
+	expected := user.Mother().UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -33,9 +33,9 @@ func (s *RepositorySuite) TestCreate() {
 }
 
 func (s *RepositorySuite) TestCreateErrDuplicateValue() {
-	registered := user.Mother.UserValid()
+	registered := user.Mother().UserValid()
 
-	aggregate := user.Mother.UserValid()
+	aggregate := user.Mother().UserValid()
 
 	s.NoError(s.SUT.Create(registered))
 
@@ -63,11 +63,11 @@ func (s *RepositorySuite) TestCreateErrDuplicateValue() {
 func (s *RepositorySuite) TestUpdate() {
 	var err error
 
-	expected := user.Mother.UserValid()
+	expected := user.Mother().UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
-	expected.Password, err = values.Replace(expected.Password, user.Mother.PasswordValid().Value())
+	expected.Password, err = values.Replace(expected.Password, user.Mother().PasswordValid().Value())
 
 	s.NoError(err)
 
@@ -87,9 +87,9 @@ func (s *RepositorySuite) TestUpdate() {
 }
 
 func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
-	registered := user.Mother.UserValid()
+	registered := user.Mother().UserValid()
 
-	aggregate := user.Mother.UserValid()
+	aggregate := user.Mother().UserValid()
 
 	s.NoError(s.SUT.Create(registered))
 
@@ -117,7 +117,7 @@ func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
 }
 
 func (s *RepositorySuite) TestDelete() {
-	aggregate := user.Mother.UserValid()
+	aggregate := user.Mother().UserValid()
 
 	s.NoError(s.SUT.Create(aggregate))
 
@@ -147,7 +147,7 @@ func (s *RepositorySuite) TestDelete() {
 }
 
 func (s *RepositorySuite) TestSearch() {
-	expected := user.Mother.UserValid()
+	expected := user.Mother().UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
@@ -183,7 +183,7 @@ func (s *RepositorySuite) TestSearchErrCriteria() {
 }
 
 func (s *RepositorySuite) TestSearchErrNotFound() {
-	aggregate := user.Mother.UserValid()
+	aggregate := user.Mother().UserValid()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,

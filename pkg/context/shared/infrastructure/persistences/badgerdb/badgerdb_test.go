@@ -19,7 +19,7 @@ func (s *BadgerDBTestSuite) SetupSuite() {
 }
 
 func (s *BadgerDBTestSuite) TestNewKey() {
-	values := persistences.Mother.KeyValuesValid()
+	values := persistences.Mother().KeyValuesValid()
 
 	actual, err := badgerdb.NewKey(values...)
 
@@ -31,7 +31,7 @@ func (s *BadgerDBTestSuite) TestNewKey() {
 }
 
 func (s *BadgerDBTestSuite) TestParseKey() {
-	expected := persistences.Mother.KeyValuesValid()
+	expected := persistences.Mother().KeyValuesValid()
 
 	key, err := badgerdb.NewKey(expected...)
 

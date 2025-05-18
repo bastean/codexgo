@@ -11,9 +11,9 @@ type m struct {
 
 func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		VerifyToken: user.Mother.IDValid().Value(),
-		ID:          user.Mother.IDValid().Value(),
+		VerifyToken: user.Mother().IDValid().Value(),
+		ID:          user.Mother().IDValid().Value(),
 	}
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

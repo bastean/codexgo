@@ -22,7 +22,7 @@ func (s *PasswordTestSuite) SetupSuite() {
 
 	s.OfflineSuite.Attributes = new(events.UserResetQueuedAttributes)
 
-	transport.Mother.StructRandomize(s.OfflineSuite.Attributes)
+	transport.Mother().StructRandomize(s.OfflineSuite.Attributes)
 
 	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please reset your password through this link: %s/reset?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.ResetToken, s.OfflineSuite.Attributes.ID)
 

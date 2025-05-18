@@ -14,7 +14,7 @@ type BubbleUpTestSuite struct {
 }
 
 func (s *BubbleUpTestSuite) TestBubbleUp() {
-	err, value := errors.Mother.BubbleUpValid()
+	err, value := errors.Mother().BubbleUpValid()
 
 	actual := errors.BubbleUp(err)
 
@@ -26,7 +26,7 @@ func (s *BubbleUpTestSuite) TestBubbleUp() {
 func (s *BubbleUpTestSuite) TestBubbleUpWithUnknown() {
 	var actual error
 
-	err := errors.Mother.Error()
+	err := errors.Mother().Error()
 
 	func() {
 		actual = errors.BubbleUp(err)

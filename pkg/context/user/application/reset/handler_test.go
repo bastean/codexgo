@@ -37,13 +37,13 @@ func (s *ResetTestSuite) SetupSuite() {
 }
 
 func (s *ResetTestSuite) TestHandle() {
-	attributes := reset.Mother.CommandAttributesValid()
+	attributes := reset.Mother().CommandAttributesValid()
 
-	aggregate := user.Mother.UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive()
 
-	aggregate.ResetToken = user.Mother.IDNew(attributes.ResetToken)
+	aggregate.ResetToken = user.Mother().IDNew(attributes.ResetToken)
 
-	aggregate.ID = user.Mother.IDNew(attributes.ID)
+	aggregate.ID = user.Mother().IDNew(attributes.ID)
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -51,7 +51,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	hashed := user.Mother.PasswordValid()
+	hashed := user.Mother().PasswordValid()
 
 	s.hasher.Mock.On("Hash", attributes.Password).
 		Run(func(args suite.Arguments) {
@@ -69,7 +69,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Update", &aggregateWithReset)
 
-	command := messages.Mother.MessageValidWithAttributes(attributes, false)
+	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

@@ -12,4 +12,4 @@ func (m *m) KeyValuesValid() []string {
 	return m.Words(m.IntRange(1, 12))
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

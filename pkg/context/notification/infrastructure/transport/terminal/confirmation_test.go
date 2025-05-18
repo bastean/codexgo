@@ -22,7 +22,7 @@ func (s *ConfirmationTestSuite) SetupSuite() {
 
 	s.OfflineSuite.Attributes = new(events.UserCreatedSucceededAttributes)
 
-	transport.Mother.StructRandomize(s.OfflineSuite.Attributes)
+	transport.Mother().StructRandomize(s.OfflineSuite.Attributes)
 
 	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.VerifyToken, s.OfflineSuite.Attributes.ID)
 

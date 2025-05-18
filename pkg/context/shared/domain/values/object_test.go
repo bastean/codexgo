@@ -35,43 +35,43 @@ func (s *ObjectTestSuite) SetupTest() {
 }
 
 func (s *ObjectTestSuite) TestSetCreated() {
-	s.NotPanics(func() { s.SUT.SetCreated(values.Mother.TimeNow()) })
+	s.NotPanics(func() { s.SUT.SetCreated(values.Mother().TimeNow()) })
 }
 
 func (s *ObjectTestSuite) TestSetCreatedErrAlreadyDefined() {
-	s.NotPanics(func() { s.SUT.SetCreated(values.Mother.TimeNow()) })
+	s.NotPanics(func() { s.SUT.SetCreated(values.Mother().TimeNow()) })
 
 	expected := "(SetCreated): Created is already set"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetCreated(values.Mother.TimeNow()) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetCreated(values.Mother().TimeNow()) })
 }
 
 func (s *ObjectTestSuite) TestSetUpdated() {
-	date := values.Mother.TimeNow()
+	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
-	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother.TimeRandomAfter(date)) })
+	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother().TimeRandomAfter(date)) })
 }
 
 func (s *ObjectTestSuite) TestSetUpdatedErrCreatedUndefined() {
 	expected := "(SetUpdated): Created is not defined"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother.TimeNow()) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeNow()) })
 }
 
 func (s *ObjectTestSuite) TestSetUpdatedErrBeforeCreated() {
-	date := values.Mother.TimeNow()
+	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
 	expected := "(SetUpdated): Time updated cannot be before created"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother.TimeRandomBefore(date)) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeRandomBefore(date)) })
 }
 
 func (s *ObjectTestSuite) TestSetUpdatedErrEqualsCreated() {
-	date := values.Mother.TimeNow()
+	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
@@ -81,31 +81,31 @@ func (s *ObjectTestSuite) TestSetUpdatedErrEqualsCreated() {
 }
 
 func (s *ObjectTestSuite) TestSetUpdatedErrBeforeDefined() {
-	date := values.Mother.TimeNow()
+	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
-	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother.TimeSetAfter(date, 48, 72)) })
+	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, 48, 72)) })
 
 	expected := "(SetUpdated): Updated time cannot be before existing value"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother.TimeSetAfter(date, 1, 24)) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, 1, 24)) })
 }
 
 func (s *ObjectTestSuite) TestSet() {
-	s.NotPanics(func() { s.SUT.Set(values.Mother.LoremIpsumWord()) })
+	s.NotPanics(func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 }
 
 func (s *ObjectTestSuite) TestSetErrAlreadyDefined() {
-	s.NotPanics(func() { s.SUT.Set(values.Mother.LoremIpsumWord()) })
+	s.NotPanics(func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 
 	expected := "(Set): Value is already set"
 
-	s.PanicsWithValue(expected, func() { s.SUT.Set(values.Mother.LoremIpsumWord()) })
+	s.PanicsWithValue(expected, func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 }
 
 func (s *ObjectTestSuite) TestValid() {
-	s.NotPanics(func() { s.SUT.Set(values.Mother.LoremIpsumWord()) })
+	s.NotPanics(func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 
 	s.SUT.Valid()
 
@@ -113,7 +113,7 @@ func (s *ObjectTestSuite) TestValid() {
 }
 
 func (s *ObjectTestSuite) TestValidErrAlreadyValidated() {
-	s.NotPanics(func() { s.SUT.Set(values.Mother.LoremIpsumWord()) })
+	s.NotPanics(func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 
 	s.SUT.Valid()
 
@@ -163,7 +163,7 @@ func (s *ObjectTestSuite) TestValidateWithCustomValidation() {
 }
 
 func (s *ObjectTestSuite) TestValue() {
-	expected := values.Mother.LoremIpsumWord()
+	expected := values.Mother().LoremIpsumWord()
 
 	s.NotPanics(func() { s.SUT.Set(expected) })
 
@@ -180,7 +180,7 @@ func (s *ObjectTestSuite) TestValueErrNotValidated() {
 }
 
 func (s *ObjectTestSuite) TestRawValue() {
-	expected := values.Mother.LoremIpsumWord()
+	expected := values.Mother().LoremIpsumWord()
 
 	s.NotPanics(func() { s.SUT.Set(expected) })
 
@@ -190,7 +190,7 @@ func (s *ObjectTestSuite) TestRawValue() {
 }
 
 func (s *ObjectTestSuite) TestCreated() {
-	date := values.Mother.TimeNow()
+	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
@@ -202,11 +202,11 @@ func (s *ObjectTestSuite) TestCreated() {
 }
 
 func (s *ObjectTestSuite) TestUpdated() {
-	date := values.Mother.TimeNow()
+	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
-	date = values.Mother.TimeRandomAfter(date)
+	date = values.Mother().TimeRandomAfter(date)
 
 	s.NotPanics(func() { s.SUT.SetUpdated(date) })
 
@@ -218,7 +218,7 @@ func (s *ObjectTestSuite) TestUpdated() {
 }
 
 func (s *ObjectTestSuite) TestNew() {
-	actual, err := values.New[*Custom](values.Mother.LoremIpsumWord())
+	actual, err := values.New[*Custom](values.Mother().LoremIpsumWord())
 
 	s.NoError(err)
 
@@ -228,11 +228,11 @@ func (s *ObjectTestSuite) TestNew() {
 }
 
 func (s *ObjectTestSuite) TestReplace() {
-	actual, err := values.New[*Custom](values.Mother.LoremIpsumWord())
+	actual, err := values.New[*Custom](values.Mother().LoremIpsumWord())
 
 	s.NoError(err)
 
-	expected, err := values.Replace(actual, values.Mother.Message())
+	expected, err := values.Replace(actual, values.Mother().Message())
 
 	s.NoError(err)
 

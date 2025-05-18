@@ -33,7 +33,7 @@ func (s *PasswordTestSuite) SetupSuite() {
 }
 
 func (s *PasswordTestSuite) TestConsumer() {
-	event := messages.Mother.MessageValidWithAttributes(new(events.UserResetQueuedAttributes), true)
+	event := messages.Mother().MessageValidWithAttributes(new(events.UserResetQueuedAttributes), true)
 
 	s.transfer.Mock.On("Submit", event.Attributes)
 

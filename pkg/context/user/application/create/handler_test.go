@@ -41,9 +41,9 @@ func (s *CreateTestSuite) SetupSuite() {
 }
 
 func (s *CreateTestSuite) TestHandle() {
-	attributes := create.Mother.CommandAttributesValid()
+	attributes := create.Mother().CommandAttributesValid()
 
-	hashed := user.Mother.PasswordValid()
+	hashed := user.Mother().PasswordValid()
 
 	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed.Value())
 
@@ -63,7 +63,7 @@ func (s *CreateTestSuite) TestHandle() {
 		s.bus.Mock.On("Publish", event)
 	}
 
-	command := messages.Mother.MessageValidWithAttributes(attributes, false)
+	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

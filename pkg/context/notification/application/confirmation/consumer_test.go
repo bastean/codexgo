@@ -33,7 +33,7 @@ func (s *ConfirmationTestSuite) SetupSuite() {
 }
 
 func (s *ConfirmationTestSuite) TestConsumer() {
-	event := messages.Mother.MessageValidWithAttributes(new(events.UserCreatedSucceededAttributes), true)
+	event := messages.Mother().MessageValidWithAttributes(new(events.UserCreatedSucceededAttributes), true)
 
 	s.transfer.Mock.On("Submit", event.Attributes)
 

@@ -53,7 +53,7 @@ func (s *RabbitMQTestSuite) SetupSuite() {
 
 	consumeCycle, _ := context.WithTimeout(context.Background(), 5*time.Second) //nolint:govet
 
-	s.EventBusSuite.Event = messages.Mother.MessageValidWithKey(routingKey)
+	s.EventBusSuite.Event = messages.Mother().MessageValidWithKey(routingKey)
 
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 

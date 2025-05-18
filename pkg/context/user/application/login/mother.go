@@ -11,10 +11,10 @@ type m struct {
 
 func (m *m) QueryAttributesValid() *QueryAttributes {
 	return &QueryAttributes{
-		Email:    user.Mother.EmailValid().Value(),
-		Username: user.Mother.UsernameValid().Value(),
-		Password: user.Mother.PlainPasswordValid().Value(),
+		Email:    user.Mother().EmailValid().Value(),
+		Username: user.Mother().UsernameValid().Value(),
+		Password: user.Mother().PlainPasswordValid().Value(),
 	}
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

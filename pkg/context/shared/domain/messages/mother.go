@@ -109,4 +109,4 @@ func (m *m) MessageValidWithAttributes(attributes any, shouldRandomize bool) *Me
 	}
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

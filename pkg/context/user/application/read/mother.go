@@ -11,8 +11,8 @@ type m struct {
 
 func (m *m) QueryAttributesValid() *QueryAttributes {
 	return &QueryAttributes{
-		ID: user.Mother.IDValid().Value(),
+		ID: user.Mother().IDValid().Value(),
 	}
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

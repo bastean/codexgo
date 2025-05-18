@@ -13,7 +13,7 @@ type HasherSuite struct {
 }
 
 func (s *HasherSuite) TestHash() {
-	plain := Mother.LoremIpsumWord()
+	plain := Mother().LoremIpsumWord()
 
 	hashed, err := s.SUT.Hash(plain)
 
@@ -23,7 +23,7 @@ func (s *HasherSuite) TestHash() {
 }
 
 func (s *HasherSuite) TestCompare() {
-	plain := Mother.LoremIpsumWord()
+	plain := Mother().LoremIpsumWord()
 
 	hashed, err := s.SUT.Hash(plain)
 
@@ -35,9 +35,9 @@ func (s *HasherSuite) TestCompare() {
 }
 
 func (s *HasherSuite) TestCompareErrDoNotMatch() {
-	plain := Mother.LoremIpsumWord()
+	plain := Mother().LoremIpsumWord()
 
-	hashed := Mother.LoremIpsumWord()
+	hashed := Mother().LoremIpsumWord()
 
 	err := s.SUT.Compare(hashed, plain)
 

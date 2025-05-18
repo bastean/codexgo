@@ -15,7 +15,7 @@ type LoggerSuite struct {
 }
 
 func (s *LoggerSuite) TestDebug() {
-	message := Mother.Message()
+	message := Mother().Message()
 
 	s.SUT.Debug(message)
 
@@ -23,7 +23,7 @@ func (s *LoggerSuite) TestDebug() {
 }
 
 func (s *LoggerSuite) TestError() {
-	message := Mother.Message()
+	message := Mother().Message()
 
 	s.SUT.Error(message)
 
@@ -31,7 +31,7 @@ func (s *LoggerSuite) TestError() {
 }
 
 func (s *LoggerSuite) TestInfo() {
-	message := Mother.Message()
+	message := Mother().Message()
 
 	s.SUT.Info(message)
 
@@ -39,7 +39,7 @@ func (s *LoggerSuite) TestInfo() {
 }
 
 func (s *LoggerSuite) TestSuccess() {
-	message := Mother.Message()
+	message := Mother().Message()
 
 	s.SUT.Success(message)
 

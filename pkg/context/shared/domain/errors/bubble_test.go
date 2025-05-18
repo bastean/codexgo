@@ -15,7 +15,7 @@ type BubbleTestSuite struct {
 }
 
 func (s *BubbleTestSuite) TestWithValidValue() {
-	bubble := errors.Mother.BubbleValid()
+	bubble := errors.Mother().BubbleValid()
 
 	why, err := json.Marshal(bubble.Why)
 
@@ -40,12 +40,12 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 
 func (s *BubbleTestSuite) TestWithoutWhere() {
 	expected := "(New): Cannot create a error Bubble if \"Where\" is not defined"
-	s.PanicsWithValue(expected, func() { errors.Mother.BubbleInvalidWithoutWhere() })
+	s.PanicsWithValue(expected, func() { errors.Mother().BubbleInvalidWithoutWhere() })
 }
 
 func (s *BubbleTestSuite) TestWithoutWhat() {
 	expected := "(New): Cannot create a error Bubble if \"What\" is not defined"
-	s.PanicsWithValue(expected, func() { errors.Mother.BubbleInvalidWithoutWhat() })
+	s.PanicsWithValue(expected, func() { errors.Mother().BubbleInvalidWithoutWhat() })
 }
 
 func TestUnitBubbleSuite(t *testing.T) {

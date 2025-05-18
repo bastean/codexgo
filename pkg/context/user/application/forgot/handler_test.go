@@ -37,11 +37,11 @@ func (s *ForgotTestSuite) SetupSuite() {
 }
 
 func (s *ForgotTestSuite) TestHandle() {
-	attributes := forgot.Mother.CommandAttributesValid()
+	attributes := forgot.Mother().CommandAttributesValid()
 
-	aggregate := user.Mother.UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive()
 
-	aggregate.Email = user.Mother.EmailNew(attributes.Email)
+	aggregate.Email = user.Mother().EmailNew(attributes.Email)
 
 	criteria := &user.Criteria{
 		Email: aggregate.Email,
@@ -51,7 +51,7 @@ func (s *ForgotTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	resetToken := user.Mother.IDNew(attributes.ResetToken)
+	resetToken := user.Mother().IDNew(attributes.ResetToken)
 
 	aggregateWithToken := *aggregate
 
@@ -70,7 +70,7 @@ func (s *ForgotTestSuite) TestHandle() {
 		new(events.UserResetQueuedMeta),
 	))
 
-	command := messages.Mother.MessageValidWithAttributes(attributes, false)
+	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

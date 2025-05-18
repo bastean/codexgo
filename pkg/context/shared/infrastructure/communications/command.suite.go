@@ -15,11 +15,11 @@ type CommandBusSuite struct {
 }
 
 func (s *CommandBusSuite) TestRegister() {
-	s.NoError(s.SUT.Register(messages.Mother.MessageValid().Key, s.Handler))
+	s.NoError(s.SUT.Register(messages.Mother().MessageValid().Key, s.Handler))
 }
 
 func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
-	key := messages.Mother.MessageValid().Key
+	key := messages.Mother().MessageValid().Key
 
 	s.NoError(s.SUT.Register(key, s.Handler))
 
@@ -42,7 +42,7 @@ func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
 }
 
 func (s *CommandBusSuite) TestDispatch() {
-	command := messages.Mother.MessageValid()
+	command := messages.Mother().MessageValid()
 
 	s.NoError(s.SUT.Register(command.Key, s.Handler))
 
@@ -54,7 +54,7 @@ func (s *CommandBusSuite) TestDispatch() {
 }
 
 func (s *CommandBusSuite) TestDispatchErrMissingHandler() {
-	command := messages.Mother.MessageValid()
+	command := messages.Mother().MessageValid()
 
 	err := s.SUT.Dispatch(command)
 

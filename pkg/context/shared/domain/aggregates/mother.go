@@ -36,4 +36,4 @@ func (m *m) TimeInvalid() (string, error) {
 	return value, err
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

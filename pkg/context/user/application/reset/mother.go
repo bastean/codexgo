@@ -11,10 +11,10 @@ type m struct {
 
 func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		ResetToken: user.Mother.IDValid().Value(),
-		ID:         user.Mother.IDValid().Value(),
-		Password:   user.Mother.PlainPasswordValid().Value(),
+		ResetToken: user.Mother().IDValid().Value(),
+		ID:         user.Mother().IDValid().Value(),
+		Password:   user.Mother().PlainPasswordValid().Value(),
 	}
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

@@ -33,7 +33,7 @@ func (s *EventBusSuite) TestPublish() {
 }
 
 func (s *EventBusSuite) TestPublishErrMissingConsumer() {
-	event := messages.Mother.MessageValid()
+	event := messages.Mother().MessageValid()
 
 	err := s.SUT.Publish(event)
 

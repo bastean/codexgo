@@ -36,9 +36,9 @@ func (s *DeleteTestSuite) SetupSuite() {
 }
 
 func (s *DeleteTestSuite) TestHandle() {
-	aggregate := user.Mother.UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive()
 
-	plainPassword := user.Mother.PlainPasswordValid()
+	plainPassword := user.Mother().PlainPasswordValid()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -55,7 +55,7 @@ func (s *DeleteTestSuite) TestHandle() {
 		Password: plainPassword.Value(),
 	}
 
-	command := messages.Mother.MessageValidWithAttributes(attributes, false)
+	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

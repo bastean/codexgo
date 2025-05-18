@@ -28,9 +28,9 @@ func (s *PasswordTestSuite) SetupSuite() {
 
 	s.OnlineSuite.Attributes = new(events.UserResetQueuedAttributes)
 
-	transport.Mother.StructRandomize(s.OnlineSuite.Attributes)
+	transport.Mother().StructRandomize(s.OnlineSuite.Attributes)
 
-	s.OnlineSuite.Attributes.Email = transport.Mother.Email()
+	s.OnlineSuite.Attributes.Email = transport.Mother().Email()
 
 	s.OnlineSuite.SUT = &mail.Password{
 		SMTP:         smtp,

@@ -32,15 +32,15 @@ func (s *VerifyTestSuite) SetupSuite() {
 }
 
 func (s *VerifyTestSuite) TestHandle() {
-	attributes := verify.Mother.CommandAttributesValid()
+	attributes := verify.Mother().CommandAttributesValid()
 
-	aggregate := user.Mother.UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive()
 
-	aggregate.ID = user.Mother.IDNew(attributes.ID)
+	aggregate.ID = user.Mother().IDNew(attributes.ID)
 
-	aggregate.VerifyToken = user.Mother.IDNew(attributes.VerifyToken)
+	aggregate.VerifyToken = user.Mother().IDNew(attributes.VerifyToken)
 
-	aggregate.Verified = user.Mother.VerifiedFalse()
+	aggregate.Verified = user.Mother().VerifiedFalse()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -54,7 +54,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregateWithVerify := *aggregate
 
-	verified := user.Mother.VerifiedTrue()
+	verified := user.Mother().VerifiedTrue()
 
 	verified.SetUpdated(time.Now().Add(12))
 
@@ -64,7 +64,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Update", &aggregateWithVerify)
 
-	command := messages.Mother.MessageValidWithAttributes(attributes, false)
+	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 

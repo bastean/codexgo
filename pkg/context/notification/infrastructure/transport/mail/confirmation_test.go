@@ -28,9 +28,9 @@ func (s *ConfirmationTestSuite) SetupSuite() {
 
 	s.OnlineSuite.Attributes = new(events.UserCreatedSucceededAttributes)
 
-	transport.Mother.StructRandomize(s.OnlineSuite.Attributes)
+	transport.Mother().StructRandomize(s.OnlineSuite.Attributes)
 
-	s.OnlineSuite.Attributes.Email = transport.Mother.Email()
+	s.OnlineSuite.Attributes.Email = transport.Mother().Email()
 
 	s.OnlineSuite.SUT = &mail.Confirmation{
 		SMTP:         smtp,

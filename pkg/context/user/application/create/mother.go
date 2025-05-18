@@ -11,12 +11,12 @@ type m struct {
 
 func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		VerifyToken: user.Mother.IDValid().Value(),
-		ID:          user.Mother.IDValid().Value(),
-		Email:       user.Mother.EmailValid().Value(),
-		Username:    user.Mother.UsernameValid().Value(),
-		Password:    user.Mother.PlainPasswordValid().Value(),
+		VerifyToken: user.Mother().IDValid().Value(),
+		ID:          user.Mother().IDValid().Value(),
+		Email:       user.Mother().EmailValid().Value(),
+		Username:    user.Mother().UsernameValid().Value(),
+		Password:    user.Mother().PlainPasswordValid().Value(),
 	}
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]

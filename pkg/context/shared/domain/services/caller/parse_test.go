@@ -18,7 +18,7 @@ func (s *ParseTestSuite) SetupSuite() {
 }
 
 func (s *ParseTestSuite) TestParseWithGenericPointerReceiver() {
-	pkg, receiver, method := caller.Mother.ParseValidValues()
+	pkg, receiver, method := caller.Mother().ParseValidValues()
 
 	received := fmt.Sprintf("%s.(*%s[...]).%s", pkg, receiver, method)
 
@@ -30,7 +30,7 @@ func (s *ParseTestSuite) TestParseWithGenericPointerReceiver() {
 }
 
 func (s *ParseTestSuite) TestParseWithPointerReceiver() {
-	pkg, receiver, method := caller.Mother.ParseValidValues()
+	pkg, receiver, method := caller.Mother().ParseValidValues()
 
 	received := fmt.Sprintf("%s.(*%s).%s", pkg, receiver, method)
 
@@ -42,7 +42,7 @@ func (s *ParseTestSuite) TestParseWithPointerReceiver() {
 }
 
 func (s *ParseTestSuite) TestParseWithReceiver() {
-	pkg, receiver, method := caller.Mother.ParseValidValues()
+	pkg, receiver, method := caller.Mother().ParseValidValues()
 
 	received := fmt.Sprintf("%s.%s.%s", pkg, receiver, method)
 
@@ -54,7 +54,7 @@ func (s *ParseTestSuite) TestParseWithReceiver() {
 }
 
 func (s *ParseTestSuite) TestParseWithGenericFunction() {
-	pkg, _, function := caller.Mother.ParseValidValues()
+	pkg, _, function := caller.Mother().ParseValidValues()
 
 	received := fmt.Sprintf("%s.%s[...]", pkg, function)
 
@@ -66,7 +66,7 @@ func (s *ParseTestSuite) TestParseWithGenericFunction() {
 }
 
 func (s *ParseTestSuite) TestParseWithFunction() {
-	pkg, _, function := caller.Mother.ParseValidValues()
+	pkg, _, function := caller.Mother().ParseValidValues()
 
 	received := fmt.Sprintf("%s.%s", pkg, function)
 

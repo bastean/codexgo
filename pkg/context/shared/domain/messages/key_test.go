@@ -18,9 +18,9 @@ func (s *KeyTestSuite) SetupSuite() {
 }
 
 func (s *KeyTestSuite) TestWithValidValue() {
-	components := messages.Mother.KeyComponentsValid()
+	components := messages.Mother().KeyComponentsValid()
 
-	actual := messages.Mother.KeyValidWithComponents(components).Value()
+	actual := messages.Mother().KeyValidWithComponents(components).Value()
 
 	expected := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s",
 		components.Organization,
@@ -37,7 +37,7 @@ func (s *KeyTestSuite) TestWithValidValue() {
 
 func (s *KeyTestSuite) TestWithInvalidValue() {
 	expected := "(Validate): Key has an invalid nomenclature"
-	s.PanicsWithValue(expected, func() { messages.Mother.KeyInvalid() })
+	s.PanicsWithValue(expected, func() { messages.Mother().KeyInvalid() })
 }
 
 func TestUnitKeySuite(t *testing.T) {

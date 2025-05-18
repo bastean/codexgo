@@ -39,4 +39,4 @@ func (m *m) PanicValidWithError(err error) {
 	Panic(err)
 }
 
-var Mother = mother.New[m]()
+var Mother = mother.New[m]
