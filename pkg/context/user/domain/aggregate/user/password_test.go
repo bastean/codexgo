@@ -13,10 +13,6 @@ type PlainPasswordTestSuite struct {
 	suite.Suite
 }
 
-type CipherPasswordTestSuite struct {
-	suite.Suite
-}
-
 func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
 	value, err := user.Mother.PlainPasswordInvalidLength()
 
@@ -36,8 +32,16 @@ func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
 	s.Equal(expected, actual)
 }
 
-func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
-	value, err := user.Mother.CipherPasswordInvalid()
+func TestUnitPlainPasswordSuite(t *testing.T) {
+	suite.Run(t, new(PlainPasswordTestSuite))
+}
+
+type PasswordTestSuite struct {
+	suite.Suite
+}
+
+func (s *PasswordTestSuite) TestWithInvalidValue() {
+	_, err := user.Mother.PasswordInvalid()
 
 	var actual *errors.Internal
 
@@ -46,19 +50,12 @@ func (s *CipherPasswordTestSuite) TestWithInvalidValue() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Validate",
-		What:  "Cipher Password is required",
-		Why: errors.Meta{
-			"Password": value,
-		},
+		What:  "Password is required",
 	}}
 
 	s.Equal(expected, actual)
 }
 
-func TestUnitPlainPasswordSuite(t *testing.T) {
-	suite.Run(t, new(PlainPasswordTestSuite))
-}
-
-func TestUnitCipherPasswordSuite(t *testing.T) {
-	suite.Run(t, new(CipherPasswordTestSuite))
+func TestUnitPasswordSuite(t *testing.T) {
+	suite.Run(t, new(PasswordTestSuite))
 }

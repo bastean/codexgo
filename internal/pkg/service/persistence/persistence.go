@@ -6,21 +6,21 @@ import (
 	"github.com/bastean/codexgo/v4/internal/pkg/adapter/log"
 	"github.com/bastean/codexgo/v4/internal/pkg/service/env"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/badgerdb"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/sqlite"
 )
 
 var Service = &struct {
-	MongoDB, SQLite string
+	MongoDB, BadgerDB string
 }{
-	MongoDB: log.Service("MongoDB"),
-	SQLite:  log.Service("SQLite"),
+	MongoDB:  log.Service("MongoDB"),
+	BadgerDB: log.Service("BadgerDB"),
 }
 
 var (
-	MongoDB *mongodb.Database
-	SQLite  *sqlite.Database
-	err     error
+	MongoDB  *mongodb.Database
+	BadgerDB *badgerdb.Database
+	err      error
 )
 
 func Up() error {
@@ -40,16 +40,16 @@ func Up() error {
 
 		log.ConnectionEstablishedWith(Service.MongoDB)
 	default:
-		log.Starting(Service.SQLite)
+		log.Starting(Service.BadgerDB)
 
-		SQLite, err = sqlite.Open(env.DatabaseSQLiteDSN)
+		BadgerDB, err = badgerdb.Open(env.DatabaseBadgerDBDSN)
 
 		if err != nil {
-			log.CannotBeStarted(Service.SQLite)
+			log.CannotBeStarted(Service.BadgerDB)
 			return errors.BubbleUp(err)
 		}
 
-		log.Started(Service.SQLite)
+		log.Started(Service.BadgerDB)
 	}
 
 	return nil
@@ -68,14 +68,14 @@ func Down(ctx context.Context) error {
 		log.ConnectionClosedWith(Service.MongoDB)
 
 	default:
-		log.Stopping(Service.SQLite)
+		log.Stopping(Service.BadgerDB)
 
-		if err = sqlite.Close(SQLite); err != nil {
-			log.CannotBeStopped(Service.SQLite)
+		if err = badgerdb.Close(BadgerDB); err != nil {
+			log.CannotBeStopped(Service.BadgerDB)
 			return errors.BubbleUp(err)
 		}
 
-		log.Stopped(Service.SQLite)
+		log.Stopped(Service.BadgerDB)
 	}
 
 	return nil

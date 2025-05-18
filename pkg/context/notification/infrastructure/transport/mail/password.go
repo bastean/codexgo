@@ -27,14 +27,14 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 			What: "Failure to write message headers",
 			Why: errors.Meta{
 				"Headers":  headers,
-				"Reset ID": attributes.Reset,
+				"Reset ID": attributes.ResetToken,
 				"User ID":  attributes.ID,
 			},
 			Who: err,
 		})
 	}
 
-	link := fmt.Sprintf("%s/reset?token=%s&id=%s", c.AppServerURL, attributes.Reset, attributes.ID)
+	link := fmt.Sprintf("%s/reset?token=%s&id=%s", c.AppServerURL, attributes.ResetToken, attributes.ID)
 
 	err = PasswordTemplate(attributes.Username, link).Render(context.Background(), &message)
 
@@ -42,7 +42,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to render password reset mail",
 			Why: errors.Meta{
-				"Reset ID": attributes.Reset,
+				"Reset ID": attributes.ResetToken,
 				"User ID":  attributes.ID,
 			},
 			Who: err,
@@ -56,7 +56,7 @@ func (c *Password) Submit(attributes *events.UserResetQueuedAttributes) error {
 			What: "Failure to send password reset mail",
 			Why: errors.Meta{
 				"SMTP Server URL": c.ServerURL,
-				"Reset ID":        attributes.Reset,
+				"Reset ID":        attributes.ResetToken,
 				"User ID":         attributes.ID,
 			},
 			Who: err,

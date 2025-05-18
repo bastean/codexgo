@@ -13,7 +13,7 @@ type Confirmation struct {
 }
 
 func (c *Confirmation) Submit(attributes *events.UserCreatedSucceededAttributes) error {
-	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", attributes.Username, c.AppServerURL, attributes.Verify, attributes.ID)
+	link := fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", attributes.Username, c.AppServerURL, attributes.VerifyToken, attributes.ID)
 
 	c.Logger.Info(link)
 

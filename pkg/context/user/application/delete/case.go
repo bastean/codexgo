@@ -3,6 +3,7 @@ package delete
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
@@ -12,7 +13,17 @@ type Case struct {
 	roles.Hasher
 }
 
-func (c *Case) Run(id *user.ID, plain *user.PlainPassword) error {
+func (c *Case) Run(attributes *CommandAttributes) error {
+	id, errID := values.New[*user.ID](attributes.ID)
+
+	plainPassword, errPlain := values.New[*user.PlainPassword](attributes.Password)
+
+	err := errors.Join(errID, errPlain)
+
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
+
 	aggregate, err := c.Repository.Search(&user.Criteria{
 		ID: id,
 	})
@@ -21,7 +32,7 @@ func (c *Case) Run(id *user.ID, plain *user.PlainPassword) error {
 		return errors.BubbleUp(err)
 	}
 
-	err = c.Hasher.Compare(aggregate.CipherPassword.Value(), plain.Value())
+	err = c.Hasher.Compare(aggregate.Password.Value(), plainPassword.Value())
 
 	if err != nil {
 		return errors.BubbleUp(err)

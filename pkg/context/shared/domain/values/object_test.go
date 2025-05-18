@@ -232,7 +232,7 @@ func (s *ObjectTestSuite) TestReplace() {
 
 	s.NoError(err)
 
-	expected, err := values.Replace(actual, values.Mother.LoremIpsumWord())
+	expected, err := values.Replace(actual, values.Mother.Message())
 
 	s.NoError(err)
 

@@ -1,24 +1,22 @@
 package update_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type UpdateTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.CommandHandler
-	update     cases.Update
+	update     *update.Case
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 }
@@ -34,49 +32,51 @@ func (s *UpdateTestSuite) SetupSuite() {
 	}
 
 	s.SUT = &update.Handler{
-		Update: s.update,
+		Case: s.update,
 	}
 }
 
-func (s *UpdateTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
-}
-
 func (s *UpdateTestSuite) TestHandle() {
-	registered := user.Mother.UserValidPrimitive()
+	aggregate := user.Mother.UserValidFromPrimitive()
 
-	attributes := update.Mother.CommandValidAttributes()
+	attributes := update.Mother.CommandAttributesValid()
 
-	attributes.ID = registered.ID.Value()
-
-	aggregate, err := user.FromRaw(&user.Primitive{
-		ID:       attributes.ID,
-		Email:    attributes.Email,
-		Username: attributes.Username,
-		Password: attributes.Password,
-	})
-
-	s.NoError(err)
+	attributes.ID = aggregate.ID.Value()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
 	}
 
-	s.repository.Mock.On("Search", criteria).Return(registered)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("Compare", registered.CipherPassword.Value(), aggregate.PlainPassword.Value())
+	s.hasher.Mock.On("Compare", aggregate.Password.Value(), attributes.Password).
+		Run(func(args suite.Arguments) {
+			s.SetTimeAfter(12)
+		})
 
-	hashed := user.Mother.CipherPasswordValid()
+	hashed := user.Mother.PasswordValid()
 
 	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value())
 
-	aggregate.CipherPassword = hashed
+	aggregateWithUpdate := *aggregate
 
-	aggregate.Created = registered.Created
-	aggregate.Updated = registered.Updated
-	aggregate.Verified = registered.Verified
+	email := user.Mother.EmailNew(attributes.Email)
 
-	s.repository.Mock.On("Update", aggregate)
+	email.SetUpdated(time.Now().Add(12))
+
+	aggregateWithUpdate.Email = email
+
+	username := user.Mother.UsernameNew(attributes.Username)
+
+	username.SetUpdated(time.Now().Add(12))
+
+	aggregateWithUpdate.Username = username
+
+	hashed.SetUpdated(time.Now().Add(12))
+
+	aggregateWithUpdate.Password = hashed
+
+	s.repository.Mock.On("Update", &aggregateWithUpdate)
 
 	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
@@ -85,10 +85,6 @@ func (s *UpdateTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.hasher.Mock.AssertExpectations(s.T())
-}
-
-func (s *UpdateTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitUpdateSuite(t *testing.T) {

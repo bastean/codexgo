@@ -113,7 +113,7 @@ Usage: codexgo [flags]
 >     - If `CODEXGO_BROKER_*` is omitted, an in-memory EventBus will be used.
 >     - `In-Memory` implementation will be used for CommandBus and QueryBus.
 >     - If `CODEXGO_DATABASE_*` is omitted, a `SQLite` in-memory database will be used.
->     - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_SQLITE_DSN` variable.
+>     - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_BADGERDB_DSN` variable.
 
 ```bash
 codexgo -env path/to/.env

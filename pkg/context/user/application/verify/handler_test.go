@@ -1,24 +1,21 @@
 package verify_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type VerifyTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.CommandHandler
-	verify     cases.Verify
+	verify     *verify.Case
 	repository *persistence.RepositoryMock
 }
 
@@ -30,56 +27,48 @@ func (s *VerifyTestSuite) SetupSuite() {
 	}
 
 	s.SUT = &verify.Handler{
-		Verify: s.verify,
+		Case: s.verify,
 	}
-}
-
-func (s *VerifyTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
 }
 
 func (s *VerifyTestSuite) TestHandle() {
-	attributes := verify.Mother.CommandValidAttributes()
+	attributes := verify.Mother.CommandAttributesValid()
 
-	aggregate := user.Mother.UserValidPrimitive()
+	aggregate := user.Mother.UserValidFromPrimitive()
+
+	aggregate.ID = user.Mother.IDNew(attributes.ID)
+
+	aggregate.VerifyToken = user.Mother.IDNew(attributes.VerifyToken)
 
 	aggregate.Verified = user.Mother.VerifiedFalse()
 
-	id, err := values.New[*user.ID](attributes.ID)
-
-	s.NoError(err)
-
-	aggregate.ID = id
-
-	verify, err := values.New[*user.ID](attributes.Verify)
-
-	s.NoError(err)
-
-	aggregate.Verify = verify
-
 	criteria := &user.Criteria{
-		ID: id,
+		ID: aggregate.ID,
 	}
 
-	s.repository.Mock.On("Search", criteria).Return(aggregate)
+	s.repository.Mock.On("Search", criteria).
+		Run(func(args suite.Arguments) {
+			s.SetTimeAfter(12)
+		}).
+		Return(aggregate)
 
-	registered := *aggregate
+	aggregateWithVerify := *aggregate
 
-	registered.Verified = user.Mother.VerifiedTrue()
+	verified := user.Mother.VerifiedTrue()
 
-	registered.Verify = nil
+	verified.SetUpdated(time.Now().Add(12))
 
-	s.repository.Mock.On("Update", &registered)
+	aggregateWithVerify.Verified = verified
+
+	aggregateWithVerify.VerifyToken = nil
+
+	s.repository.Mock.On("Update", &aggregateWithVerify)
 
 	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
 	s.NoError(s.SUT.Handle(command))
 
 	s.repository.Mock.AssertExpectations(s.T())
-}
-
-func (s *VerifyTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitVerifySuite(t *testing.T) {

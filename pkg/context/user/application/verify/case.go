@@ -11,7 +11,14 @@ type Case struct {
 	role.Repository
 }
 
-func (c *Case) Run(verify, id *user.ID) error {
+func (c *Case) Run(attributes *CommandAttributes) error {
+	verifyToken, errVerifyToken := values.New[*user.ID](attributes.VerifyToken)
+	id, errID := values.New[*user.ID](attributes.ID)
+
+	if err := errors.Join(errVerifyToken, errID); err != nil {
+		return errors.BubbleUp(err)
+	}
+
 	aggregate, err := c.Repository.Search(&user.Criteria{
 		ID: id,
 	})
@@ -24,19 +31,19 @@ func (c *Case) Run(verify, id *user.ID) error {
 		return nil
 	}
 
-	err = aggregate.ValidateVerify(verify)
+	err = aggregate.ValidateVerifyToken(verifyToken)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.Verified, err = values.New[*user.Verified](true)
+	aggregate.Verified, err = values.Replace(aggregate.Verified, true)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.Verify = nil
+	aggregate.VerifyToken = nil
 
 	err = c.Repository.Update(aggregate)
 

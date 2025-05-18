@@ -13,6 +13,16 @@ type m struct {
 	*mother.Mother
 }
 
+func (m *m) IDNew(id string) *ID {
+	value, err := values.New[*ID](id)
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return value
+}
+
 func (m *m) IDValid() *ID {
 	value, err := values.New[*ID](m.UUID())
 
@@ -29,6 +39,16 @@ func (m *m) IDInvalid() (string, error) {
 	_, err := values.New[*ID](value)
 
 	return value, err
+}
+
+func (m *m) EmailNew(email string) *Email {
+	value, err := values.New[*Email](email)
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return value
 }
 
 func (m *m) EmailValid() *Email {
@@ -54,6 +74,16 @@ func (m *m) EmailInvalid() (string, error) {
 	_, err := values.New[*Email](value)
 
 	return value, err
+}
+
+func (m *m) UsernameNew(username string) *Username {
+	value, err := values.New[*Username](username)
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return value
 }
 
 func (m *m) UsernameValid() *Username {
@@ -100,8 +130,8 @@ func (m *m) PlainPasswordInvalidLength() (string, error) {
 	return value, err
 }
 
-func (m *m) CipherPasswordValid() *CipherPassword {
-	value, err := values.New[*CipherPassword](m.Regex(`^.{8,64}$`))
+func (m *m) PasswordValid() *Password {
+	value, err := values.New[*Password](m.Regex(`^.{8,64}$`))
 
 	if err != nil {
 		errors.Panic(err)
@@ -110,10 +140,10 @@ func (m *m) CipherPasswordValid() *CipherPassword {
 	return value
 }
 
-func (m *m) CipherPasswordInvalid() (string, error) {
+func (m *m) PasswordInvalid() (string, error) {
 	var value string
 
-	_, err := values.New[*CipherPassword](value)
+	_, err := values.New[*Password](value)
 
 	return value, err
 }
@@ -148,32 +178,17 @@ func (m *m) VerifiedFalse() *Verified {
 	return value
 }
 
-func (m *m) UserValidPrimitive() *User {
+func (m *m) UserValidFromPrimitive() *User {
 	user, err := FromPrimitive(&Primitive{
-		Created:  aggregates.Mother.TimeValid().Value(),
-		Updated:  aggregates.Mother.TimeValid().Value(),
-		Verify:   m.IDValid().Value(),
-		Reset:    m.IDValid().Value(),
-		ID:       m.IDValid().Value(),
-		Email:    m.EmailValid().Value(),
-		Username: m.UsernameValid().Value(),
-		Password: m.PlainPasswordValid().Value(),
-		Verified: m.VerifiedValid().Value(),
-	})
-
-	if err != nil {
-		errors.Panic(err)
-	}
-
-	return user
-}
-
-func (m *m) UserValidRaw() *User {
-	user, err := FromRaw(&Primitive{
-		ID:       m.IDValid().Value(),
-		Email:    m.EmailValid().Value(),
-		Username: m.UsernameValid().Value(),
-		Password: m.PlainPasswordValid().Value(),
+		Created:     aggregates.Mother.TimeValid().ToPrimitive(),
+		Updated:     aggregates.Mother.TimeValid().ToPrimitive(),
+		VerifyToken: m.IDValid().ToPrimitive(),
+		ResetToken:  m.IDValid().ToPrimitive(),
+		ID:          m.IDValid().ToPrimitive(),
+		Email:       m.EmailValid().ToPrimitive(),
+		Username:    m.UsernameValid().ToPrimitive(),
+		Password:    m.PasswordValid().ToPrimitive(),
+		Verified:    m.VerifiedValid().ToPrimitive(),
 	})
 
 	if err != nil {
@@ -184,11 +199,17 @@ func (m *m) UserValidRaw() *User {
 }
 
 func (m *m) UserValid() *User {
-	user := m.UserValidPrimitive()
+	user, err := New(&Required{
+		VerifyToken: m.IDValid().Value(),
+		ID:          m.IDValid().Value(),
+		Email:       m.EmailValid().Value(),
+		Username:    m.UsernameValid().Value(),
+		Password:    m.PasswordValid().Value(),
+	})
 
-	user.Created = nil
-	user.Updated = nil
-	user.Reset = nil
+	if err != nil {
+		errors.Panic(err)
+	}
 
 	return user
 }

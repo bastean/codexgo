@@ -54,9 +54,3 @@ func (r *Root) Pull() []*messages.Message {
 
 	return recorded
 }
-
-func NewRoot() (*Root, error) {
-	return &Root{
-		Events: []*messages.Message{},
-	}, nil
-}

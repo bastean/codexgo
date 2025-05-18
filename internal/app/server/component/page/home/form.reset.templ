@@ -39,7 +39,7 @@ script ResetFormInit(formTagID, loginTabTagID string) {
             beforeSend: function(settings) {
                 const params = new URLSearchParams(window.location.search);
 
-                settings.data.Reset = params.get("token");
+                settings.data.ResetToken = params.get("token");
 
                 settings.data.ID = params.get("id");
 

@@ -9,7 +9,7 @@ type m struct {
 	*mother.Mother
 }
 
-func (m *m) CommandValidAttributes() *CommandAttributes {
+func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
 		ID:              user.Mother.IDValid().Value(),
 		Email:           user.Mother.EmailValid().Value(),

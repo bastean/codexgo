@@ -2,6 +2,7 @@ package aggregates
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
@@ -12,13 +13,9 @@ type m struct {
 }
 
 func (m *m) RootValid() *Root {
-	value, err := NewRoot()
-
-	if err != nil {
-		errors.Panic(err)
+	return &Root{
+		Events: make([]*messages.Message, 0),
 	}
-
-	return value
 }
 
 func (m *m) TimeValid() *Time {

@@ -24,9 +24,7 @@ func (c *Collection) Create(user *user.User) error {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate := user.ToPrimitive()
-
-	_, err = c.Collection.InsertOne(context.Background(), aggregate)
+	_, err = c.Collection.InsertOne(context.Background(), user.ToPrimitive())
 
 	switch {
 	case mongodb.IsErrDuplicateValue(err):
@@ -51,11 +49,10 @@ func (c *Collection) Update(user *user.User) error {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate := user.ToPrimitive()
-
-	filter := bson.D{{Key: "id", Value: user.ID.Value()}}
-
-	_, err = c.Collection.ReplaceOne(context.Background(), filter, aggregate)
+	_, err = c.Collection.ReplaceOne(context.Background(),
+		bson.D{{Key: "id.value", Value: user.ID.Value()}},
+		user.ToPrimitive(),
+	)
 
 	switch {
 	case mongodb.IsErrDuplicateValue(err):
@@ -74,9 +71,9 @@ func (c *Collection) Update(user *user.User) error {
 }
 
 func (c *Collection) Delete(id *user.ID) error {
-	filter := bson.D{{Key: "id", Value: id.Value()}}
-
-	_, err := c.Collection.DeleteOne(context.Background(), filter)
+	_, err := c.Collection.DeleteOne(context.Background(),
+		bson.D{{Key: "id.value", Value: id.Value()}},
+	)
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -99,13 +96,13 @@ func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
 
 	switch {
 	case criteria.ID != nil:
-		filter = bson.D{{Key: "id", Value: criteria.ID.Value()}}
+		filter = bson.D{{Key: "id.value", Value: criteria.ID.Value()}}
 		index = criteria.ID.Value()
 	case criteria.Email != nil:
-		filter = bson.D{{Key: "email", Value: criteria.Email.Value()}}
+		filter = bson.D{{Key: "email.value", Value: criteria.Email.Value()}}
 		index = criteria.Email.Value()
 	case criteria.Username != nil:
-		filter = bson.D{{Key: "username", Value: criteria.Username.Value()}}
+		filter = bson.D{{Key: "username.value", Value: criteria.Username.Value()}}
 		index = criteria.Username.Value()
 	default:
 		return nil, errors.New[errors.Internal](&errors.Bubble{
@@ -165,15 +162,15 @@ func Open(session *mongodb.Database, name string) (role.Repository, error) {
 
 	_, err := collection.Indexes().CreateMany(context.Background(), []mongo.IndexModel{
 		{
-			Keys:    bson.D{{Key: "id", Value: 1}},
+			Keys:    bson.D{{Key: "id.value", Value: 1}},
 			Options: options.Index().SetUnique(true),
 		},
 		{
-			Keys:    bson.D{{Key: "email", Value: 1}},
+			Keys:    bson.D{{Key: "email.value", Value: 1}},
 			Options: options.Index().SetUnique(true),
 		},
 		{
-			Keys:    bson.D{{Key: "username", Value: 1}},
+			Keys:    bson.D{{Key: "username.value", Value: 1}},
 			Options: options.Index().SetUnique(true),
 		},
 	})

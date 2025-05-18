@@ -29,8 +29,8 @@ func Verify(c *gin.Context) {
 	}
 
 	attributes := &verify.CommandAttributes{
-		Verify: token,
-		ID:     id,
+		VerifyToken: token,
+		ID:          id,
 	}
 
 	err := command.Bus.Dispatch(messages.New(

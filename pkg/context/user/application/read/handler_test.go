@@ -1,23 +1,20 @@
 package read_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/read"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type ReadTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.QueryHandler
-	read       cases.Read
+	read       *read.Case
 	repository *persistence.RepositoryMock
 }
 
@@ -29,16 +26,12 @@ func (s *ReadTestSuite) SetupSuite() {
 	}
 
 	s.SUT = &read.Handler{
-		Read: s.read,
+		Case: s.read,
 	}
 }
 
-func (s *ReadTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
-}
-
 func (s *ReadTestSuite) TestHandle() {
-	aggregate := user.Mother.UserValidPrimitive()
+	aggregate := user.Mother.UserValidFromPrimitive()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -71,11 +64,7 @@ func (s *ReadTestSuite) TestHandle() {
 
 	s.repository.Mock.AssertExpectations(s.T())
 
-	s.EqualValues(expected, actual)
-}
-
-func (s *ReadTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
+	s.Equal(expected, actual)
 }
 
 func TestUnitReadSuite(t *testing.T) {

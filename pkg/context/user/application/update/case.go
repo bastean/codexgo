@@ -6,6 +6,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
 type Case struct {
@@ -13,40 +14,45 @@ type Case struct {
 	roles.Hasher
 }
 
-func (c *Case) Run(aggregate *user.User, updated *user.PlainPassword) error {
-	account, err := c.Repository.Search(&user.Criteria{
-		ID: aggregate.ID,
+func (c *Case) Run(attributes *CommandAttributes) error {
+	id, errID := values.New[*user.ID](attributes.ID)
+	plainPassword, errPlainPassword := values.New[*user.PlainPassword](attributes.Password)
+
+	if err := errors.Join(errID, errPlainPassword); err != nil {
+		return errors.BubbleUp(err)
+	}
+
+	aggregate, err := c.Repository.Search(&user.Criteria{
+		ID: id,
 	})
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	err = c.Hasher.Compare(account.CipherPassword.Value(), aggregate.PlainPassword.Value())
+	err = c.Hasher.Compare(aggregate.Password.Value(), plainPassword.Value())
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	hashed := account.CipherPassword.Value()
-
-	if updated != nil {
-		hashed, err = c.Hasher.Hash(updated.Value())
-
-		if err != nil {
-			return errors.BubbleUp(err)
-		}
-	}
-
-	aggregate.CipherPassword, err = values.New[*user.CipherPassword](hashed)
+	err = service.UpdateEmail(attributes.Email, aggregate)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.Created = account.Created
-	aggregate.Updated = account.Updated
-	aggregate.Verified = account.Verified
+	err = service.UpdateUsername(attributes.Username, aggregate)
+
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
+
+	err = service.UpdatePassword(attributes.UpdatedPassword, aggregate, c.Hasher)
+
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
 
 	err = c.Repository.Update(aggregate)
 

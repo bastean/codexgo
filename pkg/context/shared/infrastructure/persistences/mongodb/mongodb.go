@@ -65,13 +65,11 @@ func IsErrDuplicateValue(err error) bool {
 }
 
 func HandleErrDuplicateValue(err error) error {
-	re := regexp.MustCompile(`{ [A-Za-z0-9]+:`)
+	re := regexp.MustCompile(`[A-Za-z0-9]+\.value`)
 
-	rawField := re.FindString(err.Error())
+	field := strings.Split(re.FindString(err.Error()), ".")[0]
 
-	toTitle := cases.Title(language.English)
-
-	field := toTitle.String(strings.TrimSuffix(strings.Split(rawField, " ")[1], ":"))
+	field = cases.Title(language.English).String(field)
 
 	if field == "Id" {
 		field = strings.ToUpper(field)

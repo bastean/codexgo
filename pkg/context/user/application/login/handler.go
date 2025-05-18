@@ -4,8 +4,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 var QueryKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
@@ -40,7 +38,7 @@ type QueryMeta struct{}
 type ResponseMeta struct{}
 
 type Handler struct {
-	cases.Login
+	*Case
 }
 
 func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
@@ -50,51 +48,17 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 		return nil, errors.QueryAssertion("Handle")
 	}
 
-	if attributes.Email == "" && attributes.Username == "" {
-		return nil, errors.New[errors.Failure](&errors.Bubble{
-			What: "Email or Username required",
-		})
-	}
-
-	var (
-		err      error
-		email    *user.Email
-		username *user.Username
-	)
-
-	if attributes.Email != "" {
-		email, err = values.New[*user.Email](attributes.Email)
-	}
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	if attributes.Username != "" {
-		username, err = values.New[*user.Username](attributes.Username)
-	}
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	plain, err := values.New[*user.PlainPassword](attributes.Password)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	aggregate, err := h.Login.Run(email, username, plain)
+	user, err := h.Case.Run(attributes)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)
 	}
 
 	response := &ResponseAttributes{
-		ID:       aggregate.ID.Value(),
-		Email:    aggregate.Email.Value(),
-		Username: aggregate.Username.Value(),
-		Verified: aggregate.Verified.Value(),
+		ID:       user.ID.Value(),
+		Email:    user.Email.Value(),
+		Username: user.Username.Value(),
+		Verified: user.Verified.Value(),
 	}
 
 	return messages.New(

@@ -1,25 +1,22 @@
 package login_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/login"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type LoginTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.QueryHandler
-	login      cases.Login
+	login      *login.Case
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 }
@@ -35,18 +32,14 @@ func (s *LoginTestSuite) SetupSuite() {
 	}
 
 	s.SUT = &login.Handler{
-		Login: s.login,
+		Case: s.login,
 	}
 }
 
-func (s *LoginTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
-}
-
 func (s *LoginTestSuite) TestHandle() {
-	aggregate := user.Mother.UserValidPrimitive()
+	aggregate := user.Mother.UserValidFromPrimitive()
 
-	plain := user.Mother.PlainPasswordValid()
+	plainPassword := user.Mother.PlainPasswordValid()
 
 	criteria := &user.Criteria{
 		Email: aggregate.Email,
@@ -54,7 +47,7 @@ func (s *LoginTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("Compare", aggregate.CipherPassword.Value(), plain.Value())
+	s.hasher.Mock.On("Compare", aggregate.Password.Value(), plainPassword.Value())
 
 	response := &login.ResponseAttributes{
 		ID:       aggregate.ID.Value(),
@@ -71,7 +64,7 @@ func (s *LoginTestSuite) TestHandle() {
 
 	attributes := &login.QueryAttributes{
 		Email:    aggregate.Email.Value(),
-		Password: plain.Value(),
+		Password: plainPassword.Value(),
 	}
 
 	query := messages.Mother.MessageValidWithAttributes(attributes, false)
@@ -84,14 +77,14 @@ func (s *LoginTestSuite) TestHandle() {
 
 	s.hasher.Mock.AssertExpectations(s.T())
 
-	s.EqualValues(expected, actual)
+	s.Equal(expected, actual)
 }
 
 func (s *LoginTestSuite) TestHandleErrMissingRequired() {
-	plain := user.Mother.PlainPasswordValid()
+	plainPassword := user.Mother.PlainPasswordValid()
 
 	attributes := &login.QueryAttributes{
-		Password: plain.Value(),
+		Password: plainPassword.Value(),
 	}
 
 	query := messages.Mother.MessageValidWithAttributes(attributes, false)
@@ -104,15 +97,11 @@ func (s *LoginTestSuite) TestHandleErrMissingRequired() {
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Handle",
+		Where: "Run",
 		What:  "Email or Username required",
 	}}
 
 	s.Equal(expected, actual)
-}
-
-func (s *LoginTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitLoginSuite(t *testing.T) {

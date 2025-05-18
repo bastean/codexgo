@@ -3,10 +3,7 @@ package forgot
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
@@ -19,14 +16,13 @@ var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyCom
 }))
 
 type CommandAttributes struct {
-	Reset, Email string
+	ResetToken, Email string
 }
 
 type CommandMeta struct{}
 
 type Handler struct {
-	cases.Forgot
-	roles.EventBus
+	*Case
 }
 
 func (h *Handler) Handle(command *messages.Message) error {
@@ -36,30 +32,10 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	reset, err := values.New[*user.ID](attributes.Reset)
+	err := h.Case.Run(attributes)
 
 	if err != nil {
 		return errors.BubbleUp(err)
-	}
-
-	email, err := values.New[*user.Email](attributes.Email)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	aggregate, err := h.Forgot.Run(reset, email)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	for _, event := range aggregate.Pull() {
-		err = h.EventBus.Publish(event)
-
-		if err != nil {
-			return errors.BubbleUp(err)
-		}
 	}
 
 	return nil

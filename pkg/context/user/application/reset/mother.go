@@ -9,11 +9,11 @@ type m struct {
 	*mother.Mother
 }
 
-func (m *m) CommandValidAttributes() *CommandAttributes {
+func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		Reset:    user.Mother.IDValid().Value(),
-		ID:       user.Mother.IDValid().Value(),
-		Password: user.Mother.PlainPasswordValid().Value(),
+		ResetToken: user.Mother.IDValid().Value(),
+		ID:         user.Mother.IDValid().Value(),
+		Password:   user.Mother.PlainPasswordValid().Value(),
 	}
 }
 

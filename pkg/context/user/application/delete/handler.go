@@ -4,8 +4,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
@@ -24,7 +22,7 @@ type CommandAttributes struct {
 type CommandMeta struct{}
 
 type Handler struct {
-	cases.Delete
+	*Case
 }
 
 func (h *Handler) Handle(command *messages.Message) error {
@@ -34,17 +32,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	id, errID := values.New[*user.ID](attributes.ID)
-
-	plain, errPlain := values.New[*user.PlainPassword](attributes.Password)
-
-	err := errors.Join(errID, errPlain)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	err = h.Delete.Run(id, plain)
+	err := h.Case.Run(attributes)
 
 	if err != nil {
 		return errors.BubbleUp(err)

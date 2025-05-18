@@ -18,8 +18,8 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
+	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/badgerdb/kv"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/mongodb/collection"
-	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence/sqlite/table"
 )
 
 const (
@@ -52,8 +52,8 @@ func InitUser() error {
 			UserCollectionName,
 		)
 	default:
-		repository, err = table.Open(
-			persistence.SQLite,
+		repository, err = kv.Open(
+			persistence.BadgerDB,
 		)
 	}
 
@@ -62,55 +62,55 @@ func InitUser() error {
 	}
 
 	UserCreate = &create.Handler{
-		Create: &create.Case{
+		Case: &create.Case{
 			Hasher:     cipher.Hasher,
 			Repository: repository,
+			EventBus:   event.Bus,
 		},
-		EventBus: event.Bus,
 	}
 
 	UserUpdate = &update.Handler{
-		Update: &update.Case{
+		Case: &update.Case{
 			Repository: repository,
 			Hasher:     cipher.Hasher,
 		},
 	}
 
 	UserDelete = &delete.Handler{
-		Delete: &delete.Case{
+		Case: &delete.Case{
 			Repository: repository,
 			Hasher:     cipher.Hasher,
 		},
 	}
 
 	UserVerify = &verify.Handler{
-		Verify: &verify.Case{
+		Case: &verify.Case{
 			Repository: repository,
 		},
 	}
 
 	UserForgot = &forgot.Handler{
-		Forgot: &forgot.Case{
+		Case: &forgot.Case{
 			Repository: repository,
+			EventBus:   event.Bus,
 		},
-		EventBus: event.Bus,
 	}
 
 	UserReset = &reset.Handler{
-		Reset: &reset.Case{
+		Case: &reset.Case{
 			Repository: repository,
 			Hasher:     cipher.Hasher,
 		},
 	}
 
 	UserRead = &read.Handler{
-		Read: &read.Case{
+		Case: &read.Case{
 			Repository: repository,
 		},
 	}
 
 	UserLogin = &login.Handler{
-		Login: &login.Case{
+		Case: &login.Case{
 			Repository: repository,
 			Hasher:     cipher.Hasher,
 		},

@@ -7,6 +7,11 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
+type Primitive[T any] struct {
+	Value            T
+	Created, Updated string
+}
+
 type valueObject[T any] interface {
 	SetCreated(time.Time)
 	SetUpdated(time.Time)
@@ -17,6 +22,7 @@ type valueObject[T any] interface {
 	RawValue() T
 	Created() string
 	Updated() string
+	ToPrimitive() *Primitive[T]
 }
 
 type Object[T any] struct {
@@ -92,7 +98,19 @@ func (o *Object[T]) Created() string {
 }
 
 func (o *Object[T]) Updated() string {
-	return o.updated.Format()
+	if !o.updated.IsZero() {
+		return o.updated.Format()
+	}
+
+	return ""
+}
+
+func (o *Object[T]) ToPrimitive() *Primitive[T] {
+	return &Primitive[T]{
+		Value:   o.Value(),
+		Created: o.Created(),
+		Updated: o.Updated(),
+	}
 }
 
 func create[O valueObject[V], V any](value V) (O, error) {
@@ -115,6 +133,26 @@ func New[O valueObject[V], V any](value V) (O, error) {
 	}
 
 	object.SetCreated(time.Now())
+
+	return object, nil
+}
+
+func FromPrimitive[O valueObject[V], V any](primitive *Primitive[V], isOptional ...bool) (O, error) {
+	if primitive == nil && len(isOptional) == 1 {
+		return *new(O), nil
+	}
+
+	object, err := create[O](primitive.Value)
+
+	if err != nil {
+		return *new(O), errors.BubbleUp(err)
+	}
+
+	object.SetCreated(time.Parse(primitive.Created))
+
+	if primitive.Updated != "" {
+		object.SetUpdated(time.Parse(primitive.Updated))
+	}
 
 	return object, nil
 }

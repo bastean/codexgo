@@ -10,20 +10,20 @@ import (
 
 type User struct {
 	*aggregates.Root
-	Verify, Reset *ID
+	VerifyToken, ResetToken *ID
 	*ID
 	*Email
 	*Username
-	*PlainPassword
-	*CipherPassword
+	*Password
 	*Verified
 }
 
 type Primitive struct {
-	Created, Updated              string
-	Verify, Reset                 string
-	ID, Email, Username, Password string
-	Verified                      bool
+	Created, Updated        *values.Primitive[string]
+	VerifyToken, ResetToken *values.Primitive[string]
+	ID, Email, Username     *values.Primitive[string]
+	Password                *values.Primitive[string]
+	Verified                *values.Primitive[bool]
 }
 
 type Criteria struct {
@@ -32,38 +32,22 @@ type Criteria struct {
 	*Username
 }
 
-func (u *User) ToPrimitive() *Primitive {
-	primitive := &Primitive{
-		Created:  u.Created.Value(),
-		Updated:  u.Updated.Value(),
-		ID:       u.ID.Value(),
-		Email:    u.Email.Value(),
-		Username: u.Username.Value(),
-		Password: u.CipherPassword.Value(),
-		Verified: u.Verified.Value(),
-	}
-
-	if u.Verify != nil {
-		primitive.Verify = u.Verify.Value()
-	}
-
-	if u.Reset != nil {
-		primitive.Reset = u.Reset.Value()
-	}
-
-	return primitive
+type Required struct {
+	VerifyToken         string
+	ID, Email, Username string
+	Password            string
 }
 
 func (u *User) IsVerified() bool {
 	return u.Verified.Value()
 }
 
-func (u *User) HasReset() bool {
-	return u.Reset != nil
+func (u *User) HasResetToken() bool {
+	return u.ResetToken != nil
 }
 
-func (u *User) ValidateVerify(token *ID) error {
-	if u.Verify.Value() != token.Value() {
+func (u *User) ValidateVerifyToken(token *ID) error {
+	if u.VerifyToken.Value() != token.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
 			Why: errors.Meta{
@@ -75,8 +59,8 @@ func (u *User) ValidateVerify(token *ID) error {
 	return nil
 }
 
-func (u *User) ValidateReset(token *ID) error {
-	if u.Reset.Value() != token.Value() {
+func (u *User) ValidateResetToken(token *ID) error {
+	if u.ResetToken.Value() != token.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
 			Why: errors.Meta{
@@ -88,96 +72,96 @@ func (u *User) ValidateReset(token *ID) error {
 	return nil
 }
 
-func create(user *Primitive) (*User, error) {
-	root, errRoot := aggregates.NewRoot()
+func (u *User) ToPrimitive() *Primitive {
+	primitive := &Primitive{
+		Created:  u.Created.ToPrimitive(),
+		Updated:  u.Updated.ToPrimitive(),
+		ID:       u.ID.ToPrimitive(),
+		Email:    u.Email.ToPrimitive(),
+		Username: u.Username.ToPrimitive(),
+		Password: u.Password.ToPrimitive(),
+		Verified: u.Verified.ToPrimitive(),
+	}
 
-	id, errID := values.New[*ID](user.ID)
-	email, errEmail := values.New[*Email](user.Email)
-	username, errUsername := values.New[*Username](user.Username)
-	verified, errVerified := values.New[*Verified](user.Verified)
+	if u.VerifyToken != nil {
+		primitive.VerifyToken = u.VerifyToken.ToPrimitive()
+	}
 
-	if err := errors.Join(errRoot, errID, errEmail, errUsername, errVerified); err != nil {
+	if u.ResetToken != nil {
+		primitive.ResetToken = u.ResetToken.ToPrimitive()
+	}
+
+	return primitive
+}
+
+func FromPrimitive(primitive *Primitive) (*User, error) {
+	created, errCreated := values.FromPrimitive[*aggregates.Time](primitive.Created)
+	updated, errUpdated := values.FromPrimitive[*aggregates.Time](primitive.Updated, true)
+
+	verifyToken, errVerifyToken := values.FromPrimitive[*ID](primitive.VerifyToken, true)
+	resetToken, errResetToken := values.FromPrimitive[*ID](primitive.ResetToken, true)
+
+	id, errID := values.FromPrimitive[*ID](primitive.ID)
+	email, errEmail := values.FromPrimitive[*Email](primitive.Email)
+	username, errUsername := values.FromPrimitive[*Username](primitive.Username)
+	password, errPassword := values.FromPrimitive[*Password](primitive.Password)
+	verified, errVerified := values.FromPrimitive[*Verified](primitive.Verified)
+
+	if err := errors.Join(errCreated, errUpdated, errVerifyToken, errResetToken, errID, errEmail, errUsername, errPassword, errVerified); err != nil {
 		return nil, errors.BubbleUp(err)
 	}
 
 	return &User{
-		Root:     root,
-		ID:       id,
-		Email:    email,
-		Username: username,
-		Verified: verified,
+		Root: &aggregates.Root{
+			Created: created,
+			Updated: updated,
+			Events:  make([]*messages.Message, 0),
+		},
+		VerifyToken: verifyToken,
+		ResetToken:  resetToken,
+		ID:          id,
+		Email:       email,
+		Username:    username,
+		Password:    password,
+		Verified:    verified,
 	}, nil
 }
 
-func FromPrimitive(primitive *Primitive) (*User, error) {
-	aggregate, err := create(primitive)
+func New(required *Required) (*User, error) {
+	verifyToken, errVerifyToken := values.New[*ID](required.VerifyToken)
+	id, errID := values.New[*ID](required.ID)
 
-	if err != nil {
+	email, errEmail := values.New[*Email](required.Email)
+	username, errUsername := values.New[*Username](required.Username)
+	password, errPassword := values.New[*Password](required.Password)
+	verified, errVerified := values.New[*Verified](false)
+
+	if err := errors.Join(errVerifyToken, errID, errEmail, errUsername, errPassword, errVerified); err != nil {
 		return nil, errors.BubbleUp(err)
 	}
 
-	var errCreated, errUpdated, errCipherPassword, errVerify, errReset error
-
-	aggregate.Created, errCreated = values.New[*aggregates.Time](primitive.Created)
-	aggregate.Updated, errUpdated = values.New[*aggregates.Time](primitive.Updated)
-	aggregate.CipherPassword, errCipherPassword = values.New[*CipherPassword](primitive.Password)
-
-	if primitive.Verify != "" {
-		aggregate.Verify, errVerify = values.New[*ID](primitive.Verify)
+	user := &User{
+		Root: &aggregates.Root{
+			Events: make([]*messages.Message, 0),
+		},
+		VerifyToken: verifyToken,
+		ID:          id,
+		Email:       email,
+		Username:    username,
+		Password:    password,
+		Verified:    verified,
 	}
 
-	if primitive.Reset != "" {
-		aggregate.Reset, errReset = values.New[*ID](primitive.Reset)
-	}
-
-	if err := errors.Join(errCreated, errUpdated, errCipherPassword, errVerify, errReset); err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	return aggregate, nil
-}
-
-func FromRaw(raw *Primitive) (*User, error) {
-	raw.Verified = false
-
-	aggregate, err := create(raw)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	aggregate.PlainPassword, err = values.New[*PlainPassword](raw.Password)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	return aggregate, nil
-}
-
-func New(raw *Primitive) (*User, error) {
-	aggregate, err := FromRaw(raw)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	aggregate.Verify, err = values.New[*ID](raw.Verify)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	aggregate.Record(messages.New(
+	user.Record(messages.New(
 		events.UserCreatedSucceededKey,
 		&events.UserCreatedSucceededAttributes{
-			Verify:   aggregate.Verify.Value(),
-			ID:       aggregate.ID.Value(),
-			Email:    aggregate.Email.Value(),
-			Username: aggregate.Username.Value(),
+			VerifyToken: user.VerifyToken.Value(),
+			ID:          user.ID.Value(),
+			Email:       user.Email.Value(),
+			Username:    user.Username.Value(),
 		},
 		new(events.UserCreatedSucceededMeta),
 	))
 
-	return aggregate, nil
+	return user, nil
 }

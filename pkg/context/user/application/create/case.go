@@ -11,22 +11,43 @@ import (
 type Case struct {
 	roles.Hasher
 	role.Repository
+	roles.EventBus
 }
 
-func (c *Case) Run(aggregate *user.User) error {
-	hashed, err := c.Hasher.Hash(aggregate.PlainPassword.Value())
+func (c *Case) Run(attributes *CommandAttributes) error {
+	_, err := values.New[*user.PlainPassword](attributes.Password)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.CipherPassword, err = values.New[*user.CipherPassword](hashed)
+	attributes.Password, err = c.Hasher.Hash(attributes.Password)
+
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
+
+	aggregate, err := user.New(&user.Required{
+		VerifyToken: attributes.VerifyToken,
+		ID:          attributes.ID,
+		Email:       attributes.Email,
+		Username:    attributes.Username,
+		Password:    attributes.Password,
+	})
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
 	err = c.Repository.Create(aggregate)
+
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
+
+	for _, event := range aggregate.Pull() {
+		err = errors.Join(err, c.EventBus.Publish(event))
+	}
 
 	if err != nil {
 		return errors.BubbleUp(err)

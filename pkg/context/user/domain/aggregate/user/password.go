@@ -31,17 +31,14 @@ func (p *PlainPassword) Validate() error {
 	return nil
 }
 
-type CipherPassword struct {
+type Password struct {
 	values.Object[string]
 }
 
-func (c *CipherPassword) Validate() error {
+func (c *Password) Validate() error {
 	if values.IsNotValid(c.RawValue(), "required") {
 		return errors.New[errors.Internal](&errors.Bubble{
-			What: "Cipher Password is required",
-			Why: errors.Meta{
-				"Password": c.RawValue(),
-			},
+			What: "Password is required",
 		})
 	}
 

@@ -4,8 +4,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
@@ -24,7 +22,7 @@ type CommandAttributes struct {
 type CommandMeta struct{}
 
 type Handler struct {
-	cases.Update
+	*Case
 }
 
 func (h *Handler) Handle(command *messages.Message) error {
@@ -34,28 +32,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	aggregate, err := user.FromRaw(&user.Primitive{
-		ID:       attributes.ID,
-		Email:    attributes.Email,
-		Username: attributes.Username,
-		Password: attributes.Password,
-	})
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	var updated *user.PlainPassword
-
-	if attributes.UpdatedPassword != "" {
-		updated, err = values.New[*user.PlainPassword](attributes.UpdatedPassword)
-
-		if err != nil {
-			return errors.BubbleUp(err)
-		}
-	}
-
-	err = h.Update.Run(aggregate, updated)
+	err := h.Case.Run(attributes)
 
 	if err != nil {
 		return errors.BubbleUp(err)

@@ -4,8 +4,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
@@ -18,13 +16,13 @@ var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyCom
 }))
 
 type CommandAttributes struct {
-	Reset, ID, Password string
+	ResetToken, ID, Password string
 }
 
 type CommandMeta struct{}
 
 type Handler struct {
-	cases.Reset
+	*Case
 }
 
 func (h *Handler) Handle(command *messages.Message) error {
@@ -34,25 +32,7 @@ func (h *Handler) Handle(command *messages.Message) error {
 		return errors.CommandAssertion("Handle")
 	}
 
-	reset, err := values.New[*user.ID](attributes.Reset)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	id, err := values.New[*user.ID](attributes.ID)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	password, err := values.New[*user.PlainPassword](attributes.Password)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	err = h.Reset.Run(reset, id, password)
+	err := h.Case.Run(attributes)
 
 	if err != nil {
 		return errors.BubbleUp(err)

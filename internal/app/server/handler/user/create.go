@@ -40,11 +40,11 @@ func Create(c *gin.Context) {
 	err = command.Bus.Dispatch(messages.New(
 		create.CommandKey,
 		&create.CommandAttributes{
-			Verify:   id.New(),
-			ID:       id.New(),
-			Email:    data.Email,
-			Username: data.Username,
-			Password: data.Password,
+			VerifyToken: id.New(),
+			ID:          id.New(),
+			Email:       data.Email,
+			Username:    data.Username,
+			Password:    data.Password,
 		},
 		new(create.CommandMeta),
 	))

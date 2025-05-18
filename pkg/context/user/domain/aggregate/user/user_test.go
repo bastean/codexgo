@@ -13,12 +13,12 @@ type UserTestSuite struct {
 	suite.Suite
 }
 
-func (s *UserTestSuite) TestValidateVerifyErrDoNotMatch() {
-	aggregate := user.Mother.UserValid()
+func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
+	aggregate := user.Mother.UserValidFromPrimitive()
 
 	token := user.Mother.IDValid()
 
-	err := aggregate.ValidateVerify(token)
+	err := aggregate.ValidateVerifyToken(token)
 
 	var actual *errors.Failure
 
@@ -26,7 +26,7 @@ func (s *UserTestSuite) TestValidateVerifyErrDoNotMatch() {
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "ValidateVerify",
+		Where: "ValidateVerifyToken",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
 			"Received": token.Value(),
@@ -36,14 +36,12 @@ func (s *UserTestSuite) TestValidateVerifyErrDoNotMatch() {
 	s.Equal(expected, actual)
 }
 
-func (s *UserTestSuite) TestValidateResetErrDoNotMatch() {
-	aggregate := user.Mother.UserValid()
-
-	aggregate.Reset = user.Mother.IDValid()
+func (s *UserTestSuite) TestValidateResetTokenErrDoNotMatch() {
+	aggregate := user.Mother.UserValidFromPrimitive()
 
 	token := user.Mother.IDValid()
 
-	err := aggregate.ValidateReset(token)
+	err := aggregate.ValidateResetToken(token)
 
 	var actual *errors.Failure
 
@@ -51,7 +49,7 @@ func (s *UserTestSuite) TestValidateResetErrDoNotMatch() {
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "ValidateReset",
+		Where: "ValidateResetToken",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
 			"Received": token.Value(),

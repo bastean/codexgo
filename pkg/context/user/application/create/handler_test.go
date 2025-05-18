@@ -1,25 +1,22 @@
 package create_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/create"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type CreateTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.CommandHandler
-	create     cases.Create
+	create     *create.Case
 	hasher     *ciphers.HasherMock
 	repository *persistence.RepositoryMock
 	bus        *communications.EventBusMock
@@ -35,36 +32,30 @@ func (s *CreateTestSuite) SetupSuite() {
 	s.create = &create.Case{
 		Hasher:     s.hasher,
 		Repository: s.repository,
+		EventBus:   s.bus,
 	}
 
 	s.SUT = &create.Handler{
-		Create:   s.create,
-		EventBus: s.bus,
+		Case: s.create,
 	}
 }
 
-func (s *CreateTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
-}
-
 func (s *CreateTestSuite) TestHandle() {
-	attributes := create.Mother.CommandValidAttributes()
+	attributes := create.Mother.CommandAttributesValid()
 
-	aggregate, err := user.New(&user.Primitive{
-		Verify:   attributes.Verify,
-		ID:       attributes.ID,
-		Email:    attributes.Email,
-		Username: attributes.Username,
-		Password: attributes.Password,
+	hashed := user.Mother.PasswordValid()
+
+	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed.Value())
+
+	aggregate, err := user.New(&user.Required{
+		VerifyToken: attributes.VerifyToken,
+		ID:          attributes.ID,
+		Email:       attributes.Email,
+		Username:    attributes.Username,
+		Password:    hashed.Value(),
 	})
 
 	s.NoError(err)
-
-	hashed := user.Mother.CipherPasswordValid()
-
-	s.hasher.Mock.On("Hash", aggregate.PlainPassword.Value()).Return(hashed.Value())
-
-	aggregate.CipherPassword = hashed
 
 	s.repository.Mock.On("Create", aggregate)
 
@@ -81,10 +72,6 @@ func (s *CreateTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.bus.Mock.AssertExpectations(s.T())
-}
-
-func (s *CreateTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitCreateSuite(t *testing.T) {

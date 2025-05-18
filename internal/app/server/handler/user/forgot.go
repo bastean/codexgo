@@ -40,8 +40,8 @@ func Forgot(c *gin.Context) {
 	err = command.Bus.Dispatch(messages.New(
 		forgot.CommandKey,
 		&forgot.CommandAttributes{
-			Reset: id.New(),
-			Email: data.Email,
+			ResetToken: id.New(),
+			Email:      data.Email,
 		},
 		new(forgot.CommandMeta),
 	))

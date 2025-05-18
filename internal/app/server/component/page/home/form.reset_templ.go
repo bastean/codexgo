@@ -15,8 +15,8 @@ const (
 
 func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ResetFormInit_4d69`,
-		Function: `function __templ_ResetFormInit_4d69(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ResetFormInit_30e6`,
+		Function: `function __templ_ResetFormInit_30e6(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -49,7 +49,7 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
             beforeSend: function(settings) {
                 const params = new URLSearchParams(window.location.search);
 
-                settings.data.Reset = params.get("token");
+                settings.data.ResetToken = params.get("token");
 
                 settings.data.ID = params.get("id");
 
@@ -79,8 +79,8 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ResetFormInit_4d69`, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_4d69`, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_ResetFormInit_30e6`, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_30e6`, formTagID, loginTabTagID),
 	}
 }
 

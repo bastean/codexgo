@@ -4,8 +4,6 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 )
 
 var QueryKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
@@ -40,7 +38,7 @@ type QueryMeta struct{}
 type ResponseMeta struct{}
 
 type Handler struct {
-	cases.Read
+	*Case
 }
 
 func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
@@ -50,23 +48,17 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 		return nil, errors.QueryAssertion("Handle")
 	}
 
-	id, err := values.New[*user.ID](attributes.ID)
-
-	if err != nil {
-		return nil, errors.BubbleUp(err)
-	}
-
-	aggregate, err := h.Read.Run(id)
+	user, err := h.Case.Run(attributes)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)
 	}
 
 	response := &ResponseAttributes{
-		ID:       aggregate.ID.Value(),
-		Email:    aggregate.Email.Value(),
-		Username: aggregate.Username.Value(),
-		Verified: aggregate.Verified.Value(),
+		ID:       user.ID.Value(),
+		Email:    user.Email.Value(),
+		Username: user.Username.Value(),
+		Verified: user.Verified.Value(),
 	}
 
 	return messages.New(

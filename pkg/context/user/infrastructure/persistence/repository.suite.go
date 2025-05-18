@@ -1,11 +1,10 @@
 package persistence
 
 import (
-	"os"
-
 	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
 )
@@ -13,10 +12,6 @@ import (
 type RepositorySuite struct {
 	suite.Suite
 	SUT role.Repository
-}
-
-func (s *RepositorySuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
 }
 
 func (s *RepositorySuite) TestCreate() {
@@ -31,6 +26,8 @@ func (s *RepositorySuite) TestCreate() {
 	actual, err := s.SUT.Search(criteria)
 
 	s.NoError(err)
+
+	expected.Pull()
 
 	s.Equal(expected, actual)
 }
@@ -64,11 +61,15 @@ func (s *RepositorySuite) TestCreateErrDuplicateValue() {
 }
 
 func (s *RepositorySuite) TestUpdate() {
+	var err error
+
 	expected := user.Mother.UserValid()
 
 	s.NoError(s.SUT.Create(expected))
 
-	expected.CipherPassword = user.Mother.CipherPasswordValid()
+	expected.Password, err = values.Replace(expected.Password, user.Mother.PasswordValid().Value())
+
+	s.NoError(err)
 
 	s.NoError(s.SUT.Update(expected))
 
@@ -80,7 +81,7 @@ func (s *RepositorySuite) TestUpdate() {
 
 	s.NoError(err)
 
-	actual.Updated = expected.Updated
+	expected.Pull()
 
 	s.Equal(expected, actual)
 }
@@ -95,8 +96,6 @@ func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
 	s.NoError(s.SUT.Create(aggregate))
 
 	aggregate.Email = registered.Email
-
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 
 	err := s.SUT.Update(aggregate)
 
@@ -160,6 +159,8 @@ func (s *RepositorySuite) TestSearch() {
 
 	s.NoError(err)
 
+	expected.Pull()
+
 	s.Equal(expected, actual)
 }
 
@@ -205,8 +206,4 @@ func (s *RepositorySuite) TestSearchErrNotFound() {
 	}}
 
 	s.Equal(expected, actual)
-}
-
-func (s *RepositorySuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }

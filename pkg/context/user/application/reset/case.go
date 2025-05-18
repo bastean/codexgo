@@ -13,7 +13,15 @@ type Case struct {
 	roles.Hasher
 }
 
-func (c *Case) Run(reset, id *user.ID, password *user.PlainPassword) error {
+func (c *Case) Run(attributes *CommandAttributes) error {
+	resetToken, errResetToken := values.New[*user.ID](attributes.ResetToken)
+	id, errID := values.New[*user.ID](attributes.ID)
+	plainPassword, errPlainPassword := values.New[*user.PlainPassword](attributes.Password)
+
+	if err := errors.Join(errResetToken, errID, errPlainPassword); err != nil {
+		return errors.BubbleUp(err)
+	}
+
 	aggregate, err := c.Repository.Search(&user.Criteria{
 		ID: id,
 	})
@@ -22,25 +30,25 @@ func (c *Case) Run(reset, id *user.ID, password *user.PlainPassword) error {
 		return errors.BubbleUp(err)
 	}
 
-	err = aggregate.ValidateReset(reset)
+	err = aggregate.ValidateResetToken(resetToken)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	hashed, err := c.Hasher.Hash(password.Value())
+	hashed, err := c.Hasher.Hash(plainPassword.Value())
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.CipherPassword, err = values.New[*user.CipherPassword](hashed)
+	aggregate.Password, err = values.Replace(aggregate.Password, hashed)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.Reset = nil
+	aggregate.ResetToken = nil
 
 	err = c.Repository.Update(aggregate)
 

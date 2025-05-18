@@ -16,7 +16,7 @@ var UserCreatedSucceededKey, _ = values.New[*messages.Key](messages.ParseKey(&me
 
 type (
 	UserCreatedSucceededAttributes struct {
-		Verify, ID, Email, Username string
+		VerifyToken, ID, Email, Username string
 	}
 	UserCreatedSucceededMeta struct{}
 )
@@ -32,7 +32,7 @@ var UserResetQueuedKey, _ = values.New[*messages.Key](messages.ParseKey(&message
 
 type (
 	UserResetQueuedAttributes struct {
-		Reset, ID, Email, Username string
+		ResetToken, ID, Email, Username string
 	}
 	UserResetQueuedMeta struct{}
 )

@@ -1,25 +1,22 @@
 package reset_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/reset"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type ResetTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.CommandHandler
-	reset      cases.Reset
+	reset      *reset.Case
 	repository *persistence.RepositoryMock
 	hasher     *ciphers.HasherMock
 }
@@ -35,30 +32,18 @@ func (s *ResetTestSuite) SetupSuite() {
 	}
 
 	s.SUT = &reset.Handler{
-		Reset: s.reset,
+		Case: s.reset,
 	}
 }
 
-func (s *ResetTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
-}
-
 func (s *ResetTestSuite) TestHandle() {
-	attributes := reset.Mother.CommandValidAttributes()
+	attributes := reset.Mother.CommandAttributesValid()
 
-	reset, err := values.New[*user.ID](attributes.Reset)
+	aggregate := user.Mother.UserValidFromPrimitive()
 
-	s.NoError(err)
+	aggregate.ResetToken = user.Mother.IDNew(attributes.ResetToken)
 
-	id, err := values.New[*user.ID](attributes.ID)
-
-	s.NoError(err)
-
-	aggregate := user.Mother.UserValid()
-
-	aggregate.Reset = reset
-
-	aggregate.ID = id
+	aggregate.ID = user.Mother.IDNew(attributes.ID)
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -66,17 +51,23 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	hashed := user.Mother.CipherPasswordValid()
+	hashed := user.Mother.PasswordValid()
 
-	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed.Value())
+	s.hasher.Mock.On("Hash", attributes.Password).
+		Run(func(args suite.Arguments) {
+			s.SetTimeAfter(12)
+		}).
+		Return(hashed.Value())
 
-	registered := *aggregate
+	aggregateWithReset := *aggregate
 
-	registered.CipherPassword = hashed
+	hashed.SetUpdated(time.Now().Add(12))
 
-	registered.Reset = nil
+	aggregateWithReset.Password = hashed
 
-	s.repository.Mock.On("Update", &registered)
+	aggregateWithReset.ResetToken = nil
+
+	s.repository.Mock.On("Update", &aggregateWithReset)
 
 	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
@@ -85,10 +76,6 @@ func (s *ResetTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.hasher.Mock.AssertExpectations(s.T())
-}
-
-func (s *ResetTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitResetSuite(t *testing.T) {

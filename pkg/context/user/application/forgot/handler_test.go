@@ -1,26 +1,22 @@
 package forgot_test
 
 import (
-	"os"
 	"testing"
-
-	"github.com/stretchr/testify/suite"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
 )
 
 type ForgotTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT        roles.CommandHandler
-	forgot     cases.Forgot
+	forgot     *forgot.Case
 	repository *persistence.RepositoryMock
 	bus        *communications.EventBusMock
 }
@@ -32,59 +28,47 @@ func (s *ForgotTestSuite) SetupSuite() {
 
 	s.forgot = &forgot.Case{
 		Repository: s.repository,
+		EventBus:   s.bus,
 	}
 
 	s.SUT = &forgot.Handler{
-		Forgot:   s.forgot,
-		EventBus: s.bus,
+		Case: s.forgot,
 	}
 }
 
-func (s *ForgotTestSuite) SetupTest() {
-	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
-}
-
 func (s *ForgotTestSuite) TestHandle() {
-	attributes := forgot.Mother.CommandValidAttributes()
+	attributes := forgot.Mother.CommandAttributesValid()
 
-	email, err := values.New[*user.Email](attributes.Email)
+	aggregate := user.Mother.UserValidFromPrimitive()
 
-	s.NoError(err)
-
-	aggregate := user.Mother.UserValid()
-
-	aggregate.Email = email
+	aggregate.Email = user.Mother.EmailNew(attributes.Email)
 
 	criteria := &user.Criteria{
 		Email: aggregate.Email,
 	}
 
+	aggregate.ResetToken = nil
+
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	reset, err := values.New[*user.ID](attributes.Reset)
+	resetToken := user.Mother.IDNew(attributes.ResetToken)
 
-	s.NoError(err)
+	aggregateWithToken := *aggregate
 
-	registered := *aggregate
+	aggregateWithToken.ResetToken = resetToken
 
-	registered.Reset = reset
+	s.repository.Mock.On("Update", &aggregateWithToken)
 
-	s.repository.Mock.On("Update", &registered)
-
-	registered.Record(messages.New(
+	s.bus.Mock.On("Publish", messages.New(
 		events.UserResetQueuedKey,
 		&events.UserResetQueuedAttributes{
-			Reset:    registered.Reset.Value(),
-			ID:       registered.ID.Value(),
-			Email:    registered.Email.Value(),
-			Username: registered.Username.Value(),
+			ResetToken: resetToken.Value(),
+			ID:         aggregate.ID.Value(),
+			Email:      aggregate.Email.Value(),
+			Username:   aggregate.Username.Value(),
 		},
 		new(events.UserResetQueuedMeta),
 	))
-
-	for _, event := range registered.Events {
-		s.bus.Mock.On("Publish", event)
-	}
 
 	command := messages.Mother.MessageValidWithAttributes(attributes, false)
 
@@ -93,10 +77,6 @@ func (s *ForgotTestSuite) TestHandle() {
 	s.repository.Mock.AssertExpectations(s.T())
 
 	s.bus.Mock.AssertExpectations(s.T())
-}
-
-func (s *ForgotTestSuite) TearDownTest() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN"))
 }
 
 func TestUnitForgotSuite(t *testing.T) {

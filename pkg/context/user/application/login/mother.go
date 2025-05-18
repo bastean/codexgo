@@ -9,7 +9,7 @@ type m struct {
 	*mother.Mother
 }
 
-func (m *m) QueryValidAttributes() *QueryAttributes {
+func (m *m) QueryAttributesValid() *QueryAttributes {
 	return &QueryAttributes{
 		Email:    user.Mother.EmailValid().Value(),
 		Username: user.Mother.UsernameValid().Value(),

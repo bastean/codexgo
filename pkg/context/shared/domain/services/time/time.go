@@ -3,6 +3,7 @@ package time
 import (
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -44,7 +45,28 @@ func (t Time) After(u Time) bool {
 
 func Now() Time {
 	if _, ok := os.LookupEnv("GOTEST_FROZEN"); ok {
-		return Time{time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)}
+		date := Time{time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)}
+
+		switch {
+		case os.Getenv("GOTEST_FROZEN_BEFORE") != "":
+			value, err := strconv.Atoi(os.Getenv("GOTEST_FROZEN_BEFORE"))
+
+			if err != nil {
+				log.Panic(err)
+			}
+
+			date = date.Add(-Duration(value))
+		case os.Getenv("GOTEST_FROZEN_AFTER") != "":
+			value, err := strconv.Atoi(os.Getenv("GOTEST_FROZEN_AFTER"))
+
+			if err != nil {
+				log.Panic(err)
+			}
+
+			date = date.Add(Duration(value))
+		}
+
+		return date
 	}
 
 	return Time{time.Now().UTC()}
