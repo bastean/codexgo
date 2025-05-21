@@ -15,13 +15,9 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
-type (
-	BindingKey = string
-)
-
 type Queue struct {
-	BindingKey
 	Name             *messages.Recipient
+	BindingKey       string
 	Attributes, Meta reflect.Type
 }
 
@@ -116,70 +112,22 @@ func (r *RabbitMQ) AddQueueEventBind(queue *Queue, routingKey *messages.Key) err
 	return nil
 }
 
-func (r *RabbitMQ) Unmarshal(data []byte, attributes, meta reflect.Type, event *messages.Message) error {
-	received := make(map[string]json.RawMessage)
-
-	err := json.Unmarshal(data, &received)
-
-	if err != nil {
-		return errors.New[errors.Internal](&errors.Bubble{
-			What: "Cannot unmarshal an Event",
-			Who:  err,
-		})
-	}
-
-	err = json.Unmarshal(data, event)
-
-	if err != nil {
-		return errors.New[errors.Internal](&errors.Bubble{
-			What: "Cannot unmarshal an Event ID, OccurredOn & Key",
-			Who:  err,
-		})
-	}
-
-	var value any
-
-	if attributes != nil {
-		value = reflect.New(attributes.Elem()).Interface()
-
-		err = json.Unmarshal(received["Attributes"], value)
-
-		if err != nil {
-			return errors.New[errors.Internal](&errors.Bubble{
-				What: "Cannot unmarshal an Event Attributes",
-				Who:  err,
-			})
-		}
-
-		event.Attributes = value
-	}
-
-	if meta != nil {
-		value = reflect.New(meta.Elem()).Interface()
-
-		err = json.Unmarshal(received["Meta"], value)
-
-		if err != nil {
-			return errors.New[errors.Internal](&errors.Bubble{
-				What: "Cannot unmarshal an Event Meta",
-				Who:  err,
-			})
-		}
-
-		event.Meta = value
-	}
-
-	return nil
-}
-
 func (r *RabbitMQ) Consume(key *messages.Key, queue *Queue, deliveries <-chan amqp.Delivery, consumer roles.EventConsumer) {
 	for delivery := range deliveries {
 		event := new(messages.Message)
 
-		err := r.Unmarshal(delivery.Body, queue.Attributes, queue.Meta, event)
+		if queue.Attributes != nil {
+			event.Attributes = reflect.New(queue.Attributes.Elem()).Interface()
+		}
+
+		if queue.Meta != nil {
+			event.Meta = reflect.New(queue.Meta.Elem()).Interface()
+		}
+
+		err := json.Unmarshal(delivery.Body, event)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failed to deliver a Event with ID [%s] from Queue [%s]: [%s]", key.Value(), queue.Name.Value(), err))
+			r.Logger.Error(fmt.Sprintf("Failure to decode an Event with ID [%s] from Queue [%s]: [%s]", key.Value(), queue.Name.Value(), err))
 			continue
 		}
 
@@ -188,14 +136,14 @@ func (r *RabbitMQ) Consume(key *messages.Key, queue *Queue, deliveries <-chan am
 		err = consumer.On(event)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failed to consume a Event with ID [%s] from Queue [%s]: [%s]", key.Value(), queue.Name.Value(), err))
+			r.Logger.Error(fmt.Sprintf("Failure to consume an Event with ID [%s] from Queue [%s]: [%s]", event.Key.Value(), queue.Name.Value(), err))
 			continue
 		}
 
 		err = delivery.Ack(false)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failed to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", key.Value(), queue.Name.Value(), err))
+			r.Logger.Error(fmt.Sprintf("Failure to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", event.Key.Value(), queue.Name.Value(), err))
 		}
 	}
 }

@@ -12,6 +12,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
 var (
@@ -21,8 +22,8 @@ var (
 
 func InitNotification() error {
 	var (
-		transferConfirmation role.Transfer[*events.UserCreatedSucceededAttributes]
-		transferPassword     role.Transfer[*events.UserResetQueuedAttributes]
+		transferConfirmation role.Transfer
+		transferPassword     role.Transfer
 	)
 
 	switch {
@@ -49,22 +50,22 @@ func InitNotification() error {
 	}
 
 	NotificationConfirmation = &confirmation.Consumer{
-		Confirmation: &confirmation.Case{
+		Case: &confirmation.Case{
 			Transfer: transferConfirmation,
 		},
 	}
 
 	NotificationPassword = &password.Consumer{
-		Password: &password.Case{
+		Case: &password.Case{
 			Transfer: transferPassword,
 		},
 	}
 
 	err = events.AddEventMapper(event.Bus, events.Mapper{
-		events.UserCreatedSucceededKey: {
+		user.CreatedSucceededKey: {
 			NotificationConfirmation,
 		},
-		events.UserResetQueuedKey: {
+		user.ResetQueuedKey: {
 			NotificationPassword,
 		},
 	})

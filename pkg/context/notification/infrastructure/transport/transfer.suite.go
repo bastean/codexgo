@@ -3,32 +3,33 @@ package transport
 import (
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/role"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
 
-type OnlineSuite[T any] struct {
+type OnlineSuite struct {
 	suite.Suite
-	SUT        role.Transfer[T]
-	Attributes T
+	SUT       role.Transfer
+	Recipient *recipient.Recipient
 }
 
-func (s *OnlineSuite[T]) TestSubmit() {
-	s.NoError(s.SUT.Submit(s.Attributes))
+func (s *OnlineSuite) TestSubmit() {
+	s.NoError(s.SUT.Submit(s.Recipient))
 }
 
-type OfflineSuite[T any] struct {
+type OfflineSuite struct {
 	suite.Suite
-	SUT        role.Transfer[T]
-	Logger     *records.LoggerMock
-	Attributes T
-	Message    string
+	SUT       role.Transfer
+	Logger    *records.LoggerMock
+	Recipient *recipient.Recipient
+	Message   string
 }
 
-func (s *OfflineSuite[T]) TestSubmit() {
+func (s *OfflineSuite) TestSubmit() {
 	s.Logger.Mock.On("Info", s.Message)
 
-	s.NoError(s.SUT.Submit(s.Attributes))
+	s.NoError(s.SUT.Submit(s.Recipient))
 
 	s.Logger.Mock.AssertExpectations(s.T())
 }

@@ -1,24 +1,28 @@
 package password
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 )
 
+type EventAttributes = struct {
+	ResetToken, ID, Email, Username string
+}
+
+type EventMeta = struct{}
+
 type Consumer struct {
-	cases.Password
+	*Case
 }
 
 func (c *Consumer) On(event *messages.Message) error {
-	account, ok := event.Attributes.(*events.UserResetQueuedAttributes)
+	account, ok := event.Attributes.(*EventAttributes)
 
 	if !ok {
 		return errors.EventAssertion()
 	}
 
-	err := c.Password.Run(account)
+	err := c.Case.Run(account)
 
 	if err != nil {
 		return errors.BubbleUp(err)

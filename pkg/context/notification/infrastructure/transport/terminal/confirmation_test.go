@@ -7,29 +7,29 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
 
 type ConfirmationTestSuite struct {
-	transport.OfflineSuite[*events.UserCreatedSucceededAttributes]
+	transport.OfflineSuite
 }
 
 func (s *ConfirmationTestSuite) SetupSuite() {
 	appServerURL := os.Getenv("CODEXGO_SERVER_GIN_URL")
 
-	s.OfflineSuite.Attributes = new(events.UserCreatedSucceededAttributes)
+	s.Recipient = recipient.Mother().RecipientValid()
 
-	transport.Mother().StructRandomize(s.OfflineSuite.Attributes)
+	s.Recipient.VerifyToken = recipient.Mother().IDValid()
 
-	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.VerifyToken, s.OfflineSuite.Attributes.ID)
+	s.Message = fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", s.Recipient.Username.Value(), appServerURL, s.Recipient.VerifyToken.Value(), s.Recipient.ID.Value())
 
-	s.OfflineSuite.Logger = new(records.LoggerMock)
+	s.Logger = new(records.LoggerMock)
 
-	s.OfflineSuite.SUT = &terminal.Confirmation{
-		Logger:       s.OfflineSuite.Logger,
+	s.SUT = &terminal.Confirmation{
+		Logger:       s.Logger,
 		AppServerURL: appServerURL,
 	}
 }

@@ -2,7 +2,6 @@ package forgot
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
@@ -47,14 +46,14 @@ func (c *Case) Run(attributes *CommandAttributes) error {
 	}
 
 	err = c.EventBus.Publish(messages.New(
-		events.UserResetQueuedKey,
-		&events.UserResetQueuedAttributes{
+		user.ResetQueuedKey,
+		&user.ResetQueuedAttributes{
 			ResetToken: aggregate.ResetToken.Value(),
 			ID:         aggregate.ID.Value(),
 			Email:      aggregate.Email.Value(),
 			Username:   aggregate.Username.Value(),
 		},
-		new(events.UserResetQueuedMeta),
+		new(user.ResetQueuedMeta),
 	))
 
 	if err != nil {

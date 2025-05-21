@@ -3,39 +3,49 @@ package password_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/application/password"
-	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type PasswordTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT      roles.EventConsumer
-	password cases.Password
-	transfer *transport.TransferMock[*events.UserResetQueuedAttributes]
+	password *password.Case
+	transfer *transport.TransferMock
 }
 
 func (s *PasswordTestSuite) SetupSuite() {
-	s.transfer = new(transport.TransferMock[*events.UserResetQueuedAttributes])
+	s.transfer = new(transport.TransferMock)
 
 	s.password = &password.Case{
 		Transfer: s.transfer,
 	}
 
 	s.SUT = &password.Consumer{
-		Password: s.password,
+		Case: s.password,
 	}
 }
 
 func (s *PasswordTestSuite) TestConsumer() {
-	event := messages.Mother().MessageValidWithAttributes(new(events.UserResetQueuedAttributes), true)
+	attributes := password.Mother().EventAttributesValid()
 
-	s.transfer.Mock.On("Submit", event.Attributes)
+	aggregate, err := recipient.New(&recipient.Required{
+		ID:       attributes.ID,
+		Email:    attributes.Email,
+		Username: attributes.Username,
+	})
+
+	s.NoError(err)
+
+	aggregate.ResetToken = recipient.Mother().IDNew(attributes.ResetToken)
+
+	event := messages.Mother().MessageValidWithAttributes(attributes, false)
+
+	s.transfer.Mock.On("Submit", aggregate)
 
 	s.NoError(s.SUT.On(event))
 

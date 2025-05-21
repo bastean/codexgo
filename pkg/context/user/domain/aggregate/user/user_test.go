@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -55,6 +56,38 @@ func (s *UserTestSuite) TestValidateResetTokenErrDoNotMatch() {
 			"Received": token.Value(),
 		},
 	}}
+
+	s.Equal(expected, actual)
+}
+
+func (s *UserTestSuite) TestCreatedSucceededKey() {
+	actual := user.CreatedSucceededKey.Value()
+
+	expected := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s",
+		"codexgo",
+		"user",
+		"1",
+		"event",
+		"user",
+		"created",
+		"succeeded",
+	)
+
+	s.Equal(expected, actual)
+}
+
+func (s *UserTestSuite) TestResetQueuedKey() {
+	actual := user.ResetQueuedKey.Value()
+
+	expected := fmt.Sprintf("%s.%s.%s.%s.%s.%s.%s",
+		"codexgo",
+		"user",
+		"1",
+		"event",
+		"user",
+		"reset",
+		"queued",
+	)
 
 	s.Equal(expected, actual)
 }

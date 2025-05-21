@@ -7,29 +7,29 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/terminal"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
 
 type PasswordTestSuite struct {
-	transport.OfflineSuite[*events.UserResetQueuedAttributes]
+	transport.OfflineSuite
 }
 
 func (s *PasswordTestSuite) SetupSuite() {
 	appServerURL := os.Getenv("CODEXGO_SERVER_GIN_URL")
 
-	s.OfflineSuite.Attributes = new(events.UserResetQueuedAttributes)
+	s.Recipient = recipient.Mother().RecipientValid()
 
-	transport.Mother().StructRandomize(s.OfflineSuite.Attributes)
+	s.Recipient.ResetToken = recipient.Mother().IDValid()
 
-	s.OfflineSuite.Message = fmt.Sprintf("Hi %s, please reset your password through this link: %s/reset?token=%s&id=%s", s.OfflineSuite.Attributes.Username, appServerURL, s.OfflineSuite.Attributes.ResetToken, s.OfflineSuite.Attributes.ID)
+	s.Message = fmt.Sprintf("Hi %s, please reset your password through this link: %s/reset?token=%s&id=%s", s.Recipient.Username.Value(), appServerURL, s.Recipient.ResetToken.Value(), s.Recipient.ID.Value())
 
-	s.OfflineSuite.Logger = new(records.LoggerMock)
+	s.Logger = new(records.LoggerMock)
 
-	s.OfflineSuite.SUT = &terminal.Password{
-		Logger:       s.OfflineSuite.Logger,
+	s.SUT = &terminal.Password{
+		Logger:       s.Logger,
 		AppServerURL: appServerURL,
 	}
 }

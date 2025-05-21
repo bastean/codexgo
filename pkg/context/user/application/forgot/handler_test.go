@@ -3,7 +3,6 @@ package forgot_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
@@ -60,14 +59,14 @@ func (s *ForgotTestSuite) TestHandle() {
 	s.repository.Mock.On("Update", &aggregateWithToken)
 
 	s.bus.Mock.On("Publish", messages.New(
-		events.UserResetQueuedKey,
-		&events.UserResetQueuedAttributes{
+		user.ResetQueuedKey,
+		&user.ResetQueuedAttributes{
 			ResetToken: resetToken.Value(),
 			ID:         aggregate.ID.Value(),
 			Email:      aggregate.Email.Value(),
 			Username:   aggregate.Username.Value(),
 		},
-		new(events.UserResetQueuedMeta),
+		new(user.ResetQueuedMeta),
 	))
 
 	command := messages.Mother().MessageValidWithAttributes(attributes, false)

@@ -3,7 +3,6 @@ package user
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
@@ -153,14 +152,14 @@ func New(required *Required) (*User, error) {
 	}
 
 	user.Record(messages.New(
-		events.UserCreatedSucceededKey,
-		&events.UserCreatedSucceededAttributes{
+		CreatedSucceededKey,
+		&CreatedSucceededAttributes{
 			VerifyToken: user.VerifyToken.Value(),
 			ID:          user.ID.Value(),
 			Email:       user.Email.Value(),
 			Username:    user.Username.Value(),
 		},
-		new(events.UserCreatedSucceededMeta),
+		new(CreatedSucceededMeta),
 	))
 
 	return user, nil

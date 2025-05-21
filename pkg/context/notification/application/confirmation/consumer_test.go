@@ -3,39 +3,49 @@ package confirmation_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/application/confirmation"
-	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/cases"
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type ConfirmationTestSuite struct {
-	suite.Suite
+	suite.Frozen
 	SUT          roles.EventConsumer
-	confirmation cases.Confirmation
-	transfer     *transport.TransferMock[*events.UserCreatedSucceededAttributes]
+	confirmation *confirmation.Case
+	transfer     *transport.TransferMock
 }
 
 func (s *ConfirmationTestSuite) SetupSuite() {
-	s.transfer = new(transport.TransferMock[*events.UserCreatedSucceededAttributes])
+	s.transfer = new(transport.TransferMock)
 
 	s.confirmation = &confirmation.Case{
 		Transfer: s.transfer,
 	}
 
 	s.SUT = &confirmation.Consumer{
-		Confirmation: s.confirmation,
+		Case: s.confirmation,
 	}
 }
 
 func (s *ConfirmationTestSuite) TestConsumer() {
-	event := messages.Mother().MessageValidWithAttributes(new(events.UserCreatedSucceededAttributes), true)
+	attributes := confirmation.Mother().EventAttributesValid()
 
-	s.transfer.Mock.On("Submit", event.Attributes)
+	aggregate, err := recipient.New(&recipient.Required{
+		ID:       attributes.ID,
+		Email:    attributes.Email,
+		Username: attributes.Username,
+	})
+
+	s.NoError(err)
+
+	aggregate.VerifyToken = recipient.Mother().IDNew(attributes.VerifyToken)
+
+	event := messages.Mother().MessageValidWithAttributes(attributes, false)
+
+	s.transfer.Mock.On("Submit", aggregate)
 
 	s.NoError(s.SUT.On(event))
 

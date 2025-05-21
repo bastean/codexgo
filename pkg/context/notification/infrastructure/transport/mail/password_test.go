@@ -6,17 +6,21 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/events"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
 )
 
 type PasswordTestSuite struct {
-	transport.OnlineSuite[*events.UserResetQueuedAttributes]
+	transport.OnlineSuite
 }
 
 func (s *PasswordTestSuite) SetupSuite() {
+	s.Recipient = recipient.Mother().RecipientValid()
+
+	s.Recipient.ResetToken = recipient.Mother().IDValid()
+
 	smtp := smtp.Open(
 		&smtp.Auth{
 			Host:     os.Getenv("CODEXGO_SMTP_HOST"),
@@ -26,13 +30,7 @@ func (s *PasswordTestSuite) SetupSuite() {
 		},
 	)
 
-	s.OnlineSuite.Attributes = new(events.UserResetQueuedAttributes)
-
-	transport.Mother().StructRandomize(s.OnlineSuite.Attributes)
-
-	s.OnlineSuite.Attributes.Email = transport.Mother().Email()
-
-	s.OnlineSuite.SUT = &mail.Password{
+	s.SUT = &mail.Password{
 		SMTP:         smtp,
 		AppServerURL: os.Getenv("CODEXGO_SERVER_GIN_URL"),
 	}
