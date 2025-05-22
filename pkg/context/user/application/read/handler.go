@@ -15,6 +15,12 @@ var QueryKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyCompo
 	Status:  messages.Status.Queued,
 }))
 
+type QueryAttributes = struct {
+	ID string
+}
+
+type QueryMeta = struct{}
+
 var ResponseKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
@@ -24,18 +30,12 @@ var ResponseKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyCo
 	Status:  messages.Status.Done,
 }))
 
-type QueryAttributes struct {
-	ID string
-}
-
-type ResponseAttributes struct {
+type ResponseAttributes = struct {
 	ID, Email, Username string
 	Verified            bool
 }
 
-type QueryMeta struct{}
-
-type ResponseMeta struct{}
+type ResponseMeta = struct{}
 
 type Handler struct {
 	*Case
@@ -54,16 +54,14 @@ func (h *Handler) Handle(query *messages.Message) (*messages.Message, error) {
 		return nil, errors.BubbleUp(err)
 	}
 
-	response := &ResponseAttributes{
-		ID:       user.ID.Value(),
-		Email:    user.Email.Value(),
-		Username: user.Username.Value(),
-		Verified: user.Verified.Value(),
-	}
-
 	return messages.New(
 		ResponseKey,
-		response,
+		&ResponseAttributes{
+			ID:       user.ID.Value(),
+			Email:    user.Email.Value(),
+			Username: user.Username.Value(),
+			Verified: user.Verified.Value(),
+		},
 		new(ResponseMeta),
 	), nil
 }

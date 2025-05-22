@@ -15,11 +15,11 @@ var CommandKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyCom
 	Status:  messages.Status.Queued,
 }))
 
-type CommandAttributes struct {
+type CommandAttributes = struct {
 	VerifyToken, ID string
 }
 
-type CommandMeta struct{}
+type CommandMeta = struct{}
 
 type Handler struct {
 	*Case
