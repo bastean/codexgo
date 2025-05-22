@@ -25,6 +25,16 @@ func (m *m) KeyComponentsInvalid() *KeyComponents {
 	return new(KeyComponents)
 }
 
+func (m *m) KeyValid() *Key {
+	key, err := values.New[*Key](ParseKey(m.KeyComponentsValid()))
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return key
+}
+
 func (m *m) KeyValidWithComponents(components *KeyComponents) *Key {
 	key, err := values.New[*Key](ParseKey(components))
 
@@ -55,6 +65,16 @@ func (m *m) RecipientComponentsValid() *RecipientComponents {
 
 func (m *m) RecipientComponentsInvalid() *RecipientComponents {
 	return new(RecipientComponents)
+}
+
+func (m *m) RecipientValid() *Recipient {
+	recipient, err := values.New[*Recipient](ParseRecipient(m.RecipientComponentsValid()))
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return recipient
 }
 
 func (m *m) RecipientValidWithComponents(components *RecipientComponents) *Recipient {
