@@ -4,14 +4,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/badgerdb"
 )
 
 type BadgerDBTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *BadgerDBTestSuite) SetupSuite() {

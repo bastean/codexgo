@@ -3,14 +3,13 @@ package user_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
 type PlainPasswordTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
@@ -37,7 +36,7 @@ func TestUnitPlainPasswordSuite(t *testing.T) {
 }
 
 type PasswordTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *PasswordTestSuite) TestWithInvalidValue() {

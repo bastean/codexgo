@@ -1,14 +1,13 @@
 package communications
 
 import (
-	"github.com/stretchr/testify/mock"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 )
 
 type QueryHandlerMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *QueryHandlerMock) Handle(query *messages.Message) (*messages.Message, error) {
@@ -17,7 +16,7 @@ func (m *QueryHandlerMock) Handle(query *messages.Message) (*messages.Message, e
 }
 
 type QueryBusMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *QueryBusMock) Register(key *messages.Key, handler roles.QueryHandler) error {

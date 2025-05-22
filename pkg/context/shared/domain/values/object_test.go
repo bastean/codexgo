@@ -3,9 +3,8 @@ package values_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
@@ -26,7 +25,7 @@ func (c *Custom) Validate() error {
 }
 
 type ObjectTestSuite struct {
-	suite.Suite
+	suite.Default
 	SUT *values.Object[string]
 }
 

@@ -1,13 +1,12 @@
 package persistence
 
 import (
-	"github.com/stretchr/testify/mock"
-
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
 type RepositoryMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *RepositoryMock) Create(user *user.User) error {

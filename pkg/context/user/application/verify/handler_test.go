@@ -5,6 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
@@ -47,7 +48,7 @@ func (s *VerifyTestSuite) TestHandle() {
 	}
 
 	s.repository.Mock.On("Search", criteria).
-		Run(func(args suite.Arguments) {
+		Run(func(args mock.Arguments) {
 			s.SetTimeAfter(12)
 		}).
 		Return(aggregate)

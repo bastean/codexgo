@@ -4,7 +4,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -12,9 +11,9 @@ var (
 	Run = suite.Run
 )
 
-type (
-	Arguments = mock.Arguments
-)
+type Default struct {
+	suite.Suite
+}
 
 type Frozen struct {
 	suite.Suite

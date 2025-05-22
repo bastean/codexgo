@@ -1,14 +1,13 @@
 package ciphers
 
 import (
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type HasherSuite struct {
-	suite.Suite
+	suite.Default
 	SUT roles.Hasher
 }
 

@@ -5,13 +5,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type MotherTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *MotherTestSuite) SetupSuite() {

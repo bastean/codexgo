@@ -3,13 +3,12 @@ package id_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/id"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type IDTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *IDTestSuite) SetupSuite() {

@@ -1,11 +1,11 @@
 package records
 
 import (
-	"github.com/stretchr/testify/mock"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 )
 
 type LoggerMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *LoggerMock) Debug(message string) {

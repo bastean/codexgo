@@ -1,11 +1,11 @@
 package ciphers
 
 import (
-	"github.com/stretchr/testify/mock"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 )
 
 type HasherMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *HasherMock) Hash(plain string) (string, error) {

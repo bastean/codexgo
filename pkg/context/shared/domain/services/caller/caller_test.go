@@ -3,13 +3,12 @@ package caller_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type CallerTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *CallerTestSuite) SetupSuite() {

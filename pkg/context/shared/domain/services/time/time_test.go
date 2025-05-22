@@ -4,13 +4,12 @@ import (
 	"testing"
 	t "time"
 
-	"github.com/stretchr/testify/suite"
-
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 type TimeTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *TimeTestSuite) TestParseWithValidValue() {

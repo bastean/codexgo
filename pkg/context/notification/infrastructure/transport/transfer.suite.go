@@ -1,15 +1,14 @@
 package transport
 
 import (
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/role"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records"
 )
 
 type OnlineSuite struct {
-	suite.Suite
+	suite.Default
 	SUT       role.Transfer
 	Recipient *recipient.Recipient
 }
@@ -19,7 +18,7 @@ func (s *OnlineSuite) TestSubmit() {
 }
 
 type OfflineSuite struct {
-	suite.Suite
+	suite.Default
 	SUT       role.Transfer
 	Logger    *records.LoggerMock
 	Recipient *recipient.Recipient

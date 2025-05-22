@@ -5,6 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
@@ -54,7 +55,7 @@ func (s *ResetTestSuite) TestHandle() {
 	hashed := user.Mother().PasswordValid()
 
 	s.hasher.Mock.On("Hash", attributes.Password).
-		Run(func(args suite.Arguments) {
+		Run(func(args mock.Arguments) {
 			s.SetTimeAfter(12)
 		}).
 		Return(hashed.Value())

@@ -5,6 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
@@ -50,7 +51,7 @@ func (s *UpdateTestSuite) TestHandle() {
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
 	s.hasher.Mock.On("Compare", aggregate.Password.Value(), attributes.Password).
-		Run(func(args suite.Arguments) {
+		Run(func(args mock.Arguments) {
 			s.SetTimeAfter(12)
 		})
 

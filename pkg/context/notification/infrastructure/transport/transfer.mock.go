@@ -1,13 +1,12 @@
 package transport
 
 import (
-	"github.com/stretchr/testify/mock"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 )
 
 type TransferMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *TransferMock) Submit(recipient *recipient.Recipient) error {

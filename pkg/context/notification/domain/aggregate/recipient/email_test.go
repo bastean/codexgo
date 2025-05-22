@@ -3,14 +3,13 @@ package recipient_test
 import (
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
 type EmailTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *EmailTestSuite) TestWithInvalidValue() {

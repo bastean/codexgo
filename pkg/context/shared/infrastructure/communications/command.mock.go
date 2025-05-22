@@ -1,14 +1,13 @@
 package communications
 
 import (
-	"github.com/stretchr/testify/mock"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 )
 
 type CommandHandlerMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *CommandHandlerMock) Handle(command *messages.Message) error {
@@ -17,7 +16,7 @@ func (m *CommandHandlerMock) Handle(command *messages.Message) error {
 }
 
 type CommandBusMock struct {
-	mock.Mock
+	mock.Default
 }
 
 func (m *CommandBusMock) Register(key *messages.Key, handler roles.CommandHandler) error {

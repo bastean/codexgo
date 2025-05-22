@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/suite"
-
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
 type UserTestSuite struct {
-	suite.Suite
+	suite.Default
 }
 
 func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
