@@ -226,6 +226,49 @@ func (s *ObjectTestSuite) TestNew() {
 
 	s.IsType(expected, actual)
 }
+func (s *ObjectTestSuite) TestFromPrimitive() {
+	expected, err := values.New[*Custom](values.Mother().LoremIpsumWord())
+
+	s.NoError(err)
+
+	actual, err := values.FromPrimitive[*Custom](expected.ToPrimitive())
+
+	s.NoError(err)
+
+	s.IsType(expected, actual)
+
+	s.Equal(expected.Value(), actual.Value())
+
+	s.Equal(expected.Created(), actual.Created())
+
+	s.Equal(expected.Updated(), actual.Updated())
+}
+
+func (s *ObjectTestSuite) TestFromPrimitiveWithOptional() {
+	actual, err := values.FromPrimitive[*Custom](nil, true)
+
+	s.NoError(err)
+
+	var expected *Custom
+
+	s.IsType(expected, actual)
+}
+
+func (s *ObjectTestSuite) TestFromPrimitiveErrRequired() {
+	_, err := values.FromPrimitive[*Custom](nil)
+
+	var actual *errors.Internal
+
+	s.ErrorAs(err, &actual)
+
+	expected := &errors.Internal{Bubble: &errors.Bubble{
+		When:  actual.When,
+		Where: "FromPrimitive",
+		What:  "Primitive value is required",
+	}}
+
+	s.Equal(expected, actual)
+}
 
 func (s *ObjectTestSuite) TestReplace() {
 	actual, err := values.New[*Custom](values.Mother().LoremIpsumWord())

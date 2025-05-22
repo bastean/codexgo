@@ -138,8 +138,15 @@ func New[O valueObject[V], V any](value V) (O, error) {
 }
 
 func FromPrimitive[O valueObject[V], V any](primitive *Primitive[V], isOptional ...bool) (O, error) {
-	if primitive == nil && len(isOptional) == 1 {
-		return *new(O), nil
+	if primitive == nil {
+		switch {
+		case len(isOptional) == 1:
+			return *new(O), nil
+		default:
+			return *new(O), errors.New[errors.Internal](&errors.Bubble{
+				What: "Primitive value is required",
+			})
+		}
 	}
 
 	object, err := create[O](primitive.Value)
