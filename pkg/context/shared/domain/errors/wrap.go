@@ -2,10 +2,11 @@ package errors
 
 import (
 	"errors"
+	"fmt"
 )
 
 var (
-	Standard = errors.New
+	Standard = fmt.Errorf
 	Join     = errors.Join
 	As       = errors.As
 	Is       = errors.Is

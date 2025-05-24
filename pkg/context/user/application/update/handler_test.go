@@ -59,25 +59,31 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value())
 
-	aggregateWithUpdate := *aggregate
+	aggregate = user.Mother().UserCopy(aggregate)
 
 	email := user.Mother().EmailNew(attributes.Email)
 
 	email.SetUpdated(time.Now().Add(12))
 
-	aggregateWithUpdate.Email = email
+	aggregate.Email = email
 
 	username := user.Mother().UsernameNew(attributes.Username)
 
 	username.SetUpdated(time.Now().Add(12))
 
-	aggregateWithUpdate.Username = username
+	aggregate.Username = username
 
 	hashed.SetUpdated(time.Now().Add(12))
 
-	aggregateWithUpdate.Password = hashed
+	aggregate.Password = hashed
 
-	s.repository.Mock.On("Update", &aggregateWithUpdate)
+	s.SetTimeAfter(12)
+
+	s.NoError(aggregate.UpdatedStamp())
+
+	s.UnsetTimeAfter()
+
+	s.repository.Mock.On("Update", aggregate)
 
 	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 

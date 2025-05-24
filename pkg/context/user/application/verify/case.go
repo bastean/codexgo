@@ -45,6 +45,12 @@ func (c *Case) Run(attributes *CommandAttributes) error {
 
 	aggregate.VerifyToken = nil
 
+	err = aggregate.UpdatedStamp()
+
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
+
 	err = c.Repository.Update(aggregate)
 
 	if err != nil {

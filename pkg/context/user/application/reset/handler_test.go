@@ -60,15 +60,21 @@ func (s *ResetTestSuite) TestHandle() {
 		}).
 		Return(hashed.Value())
 
-	aggregateWithReset := *aggregate
+	aggregate = user.Mother().UserCopy(aggregate)
 
 	hashed.SetUpdated(time.Now().Add(12))
 
-	aggregateWithReset.Password = hashed
+	aggregate.Password = hashed
 
-	aggregateWithReset.ResetToken = nil
+	aggregate.ResetToken = nil
 
-	s.repository.Mock.On("Update", &aggregateWithReset)
+	s.SetTimeAfter(12)
+
+	s.NoError(aggregate.UpdatedStamp())
+
+	s.UnsetTimeAfter()
+
+	s.repository.Mock.On("Update", aggregate)
 
 	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 

@@ -18,13 +18,7 @@ type Collection struct {
 }
 
 func (c *Collection) Create(user *user.User) error {
-	err := user.CreationStamp()
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	_, err = c.Collection.InsertOne(context.Background(), user.ToPrimitive())
+	_, err := c.Collection.InsertOne(context.Background(), user.ToPrimitive())
 
 	switch {
 	case mongodb.IsErrDuplicateValue(err):
@@ -43,13 +37,7 @@ func (c *Collection) Create(user *user.User) error {
 }
 
 func (c *Collection) Update(user *user.User) error {
-	err := user.UpdatedStamp()
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	_, err = c.Collection.ReplaceOne(context.Background(),
+	_, err := c.Collection.ReplaceOne(context.Background(),
 		bson.D{{Key: "id.value", Value: user.ID.Value()}},
 		user.ToPrimitive(),
 	)

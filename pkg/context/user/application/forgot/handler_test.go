@@ -5,6 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
@@ -38,7 +39,7 @@ func (s *ForgotTestSuite) SetupSuite() {
 func (s *ForgotTestSuite) TestHandle() {
 	attributes := forgot.Mother().CommandAttributesValid()
 
-	aggregate := user.Mother().UserValidFromPrimitive()
+	aggregate := user.Mother().UserValidFromPrimitive("ResetToken")
 
 	aggregate.Email = user.Mother().EmailNew(attributes.Email)
 
@@ -46,17 +47,25 @@ func (s *ForgotTestSuite) TestHandle() {
 		Email: aggregate.Email,
 	}
 
-	aggregate.ResetToken = nil
+	s.repository.Mock.On("Search", criteria).
+		Run(func(args mock.Arguments) {
+			s.SetTimeAfter(12)
+		}).
+		Return(aggregate)
 
-	s.repository.Mock.On("Search", criteria).Return(aggregate)
+	aggregate = user.Mother().UserCopy(aggregate)
 
 	resetToken := user.Mother().IDNew(attributes.ResetToken)
 
-	aggregateWithToken := *aggregate
+	aggregate.ResetToken = resetToken
 
-	aggregateWithToken.ResetToken = resetToken
+	s.SetTimeAfter(12)
 
-	s.repository.Mock.On("Update", &aggregateWithToken)
+	s.NoError(aggregate.UpdatedStamp())
+
+	s.UnsetTimeAfter()
+
+	s.repository.Mock.On("Update", aggregate)
 
 	s.bus.Mock.On("Publish", messages.New(
 		user.ResetQueuedKey,

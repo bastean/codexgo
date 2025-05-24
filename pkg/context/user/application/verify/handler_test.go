@@ -53,17 +53,23 @@ func (s *VerifyTestSuite) TestHandle() {
 		}).
 		Return(aggregate)
 
-	aggregateWithVerify := *aggregate
+	aggregate = user.Mother().UserCopy(aggregate)
 
 	verified := user.Mother().VerifiedTrue()
 
 	verified.SetUpdated(time.Now().Add(12))
 
-	aggregateWithVerify.Verified = verified
+	aggregate.Verified = verified
 
-	aggregateWithVerify.VerifyToken = nil
+	aggregate.VerifyToken = nil
 
-	s.repository.Mock.On("Update", &aggregateWithVerify)
+	s.SetTimeAfter(12)
+
+	s.NoError(aggregate.UpdatedStamp())
+
+	s.UnsetTimeAfter()
+
+	s.repository.Mock.On("Update", aggregate)
 
 	command := messages.Mother().MessageValidWithAttributes(attributes, false)
 

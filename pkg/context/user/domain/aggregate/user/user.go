@@ -74,12 +74,15 @@ func (u *User) ValidateResetToken(token *ID) error {
 func (u *User) ToPrimitive() *Primitive {
 	primitive := &Primitive{
 		Created:  u.Created.ToPrimitive(),
-		Updated:  u.Updated.ToPrimitive(),
 		ID:       u.ID.ToPrimitive(),
 		Email:    u.Email.ToPrimitive(),
 		Username: u.Username.ToPrimitive(),
 		Password: u.Password.ToPrimitive(),
 		Verified: u.Verified.ToPrimitive(),
+	}
+
+	if u.Updated != nil {
+		primitive.Updated = u.Updated.ToPrimitive()
 	}
 
 	if u.VerifyToken != nil {
@@ -149,6 +152,12 @@ func New(required *Required) (*User, error) {
 		Username:    username,
 		Password:    password,
 		Verified:    verified,
+	}
+
+	err := user.CreationStamp()
+
+	if err != nil {
+		return nil, errors.BubbleUp(err)
 	}
 
 	user.Record(messages.New(

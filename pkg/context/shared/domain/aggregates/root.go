@@ -26,13 +26,22 @@ func (r *Root) CreationStamp() error {
 	}
 
 	r.Created = created
-	r.Updated = created
 
 	return nil
 }
 
 func (r *Root) UpdatedStamp() error {
-	updated, err := values.Replace(r.Updated, time.Now().Format())
+	var (
+		err     error
+		updated *Time
+	)
+
+	switch r.Updated {
+	case nil:
+		updated, err = values.New[*Time](time.Now().Format())
+	default:
+		updated, err = values.Replace(r.Updated, time.Now().Format())
+	}
 
 	if err != nil {
 		return errors.BubbleUp(err)

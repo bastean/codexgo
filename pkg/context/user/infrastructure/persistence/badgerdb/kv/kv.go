@@ -135,12 +135,6 @@ func (kv *KV) Create(aggregate *user.User) error {
 		return errors.BubbleUp(err)
 	}
 
-	err = aggregate.CreationStamp()
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
 	value, err := json.Marshal(aggregate.ToPrimitive())
 
 	if err != nil {
@@ -186,12 +180,6 @@ func (kv *KV) Update(aggregate *user.User) error {
 		Email:    aggregate.Email,
 		Username: aggregate.Username,
 	}, true)
-
-	if err != nil {
-		return errors.BubbleUp(err)
-	}
-
-	err = aggregate.UpdatedStamp()
 
 	if err != nil {
 		return errors.BubbleUp(err)

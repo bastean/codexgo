@@ -178,7 +178,33 @@ func (m *m) VerifiedFalse() *Verified {
 	return value
 }
 
-func (m *m) UserValidFromPrimitive() *User {
+func (m *m) UserCopy(user *User) *User {
+	copy, err := FromPrimitive(user.ToPrimitive())
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return copy
+}
+
+func (m *m) UserValid() *User {
+	user, err := New(&Required{
+		VerifyToken: m.IDValid().Value(),
+		ID:          m.IDValid().Value(),
+		Email:       m.EmailValid().Value(),
+		Username:    m.UsernameValid().Value(),
+		Password:    m.PasswordValid().Value(),
+	})
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return user
+}
+
+func (m *m) UserValidFromPrimitive(without ...string) *User {
 	user, err := FromPrimitive(&Primitive{
 		Created:     aggregates.Mother().TimeValid().ToPrimitive(),
 		Updated:     aggregates.Mother().TimeValid().ToPrimitive(),
@@ -195,20 +221,17 @@ func (m *m) UserValidFromPrimitive() *User {
 		errors.Panic(err)
 	}
 
-	return user
-}
-
-func (m *m) UserValid() *User {
-	user, err := New(&Required{
-		VerifyToken: m.IDValid().Value(),
-		ID:          m.IDValid().Value(),
-		Email:       m.EmailValid().Value(),
-		Username:    m.UsernameValid().Value(),
-		Password:    m.PasswordValid().Value(),
-	})
-
-	if err != nil {
-		errors.Panic(err)
+	for _, field := range without {
+		switch field {
+		case "Updated":
+			user.Updated = nil
+		case "VerifyToken":
+			user.VerifyToken = nil
+		case "ResetToken":
+			user.ResetToken = nil
+		default:
+			errors.Panic(errors.Standard("Unknown field %q", field))
+		}
 	}
 
 	return user
