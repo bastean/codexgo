@@ -5,7 +5,7 @@ import (
 )
 
 type Verified struct {
-	values.Object[bool]
+	values.Bool
 }
 
 func (v *Verified) Validate() error {

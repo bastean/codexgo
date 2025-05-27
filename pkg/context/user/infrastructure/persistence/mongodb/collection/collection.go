@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/mongodb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
@@ -58,7 +59,7 @@ func (c *Collection) Update(user *user.User) error {
 	return nil
 }
 
-func (c *Collection) Delete(id *user.ID) error {
+func (c *Collection) Delete(id *values.ID) error {
 	_, err := c.Collection.DeleteOne(context.Background(),
 		bson.D{{Key: "id.value", Value: id.Value()}},
 	)

@@ -2,7 +2,7 @@ package read
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type m struct {
@@ -11,7 +11,7 @@ type m struct {
 
 func (m *m) QueryAttributesValid() *QueryAttributes {
 	return &QueryAttributes{
-		ID: user.Mother().IDValid().Value(),
+		ID: values.Mother().IDValid().Value(),
 	}
 }
 

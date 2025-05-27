@@ -14,8 +14,8 @@ type Case struct {
 }
 
 func (c *Case) Run(attributes *CommandAttributes) error {
-	resetToken, errResetToken := values.New[*user.ID](attributes.ResetToken)
-	id, errID := values.New[*user.ID](attributes.ID)
+	resetToken, errResetToken := values.New[*values.Token](attributes.ResetToken)
+	id, errID := values.New[*values.ID](attributes.ID)
 	plainPassword, errPlainPassword := values.New[*user.PlainPassword](attributes.Password)
 
 	if err := errors.Join(errResetToken, errID, errPlainPassword); err != nil {

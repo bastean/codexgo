@@ -8,6 +8,7 @@ import (
 	"github.com/dgraph-io/badger/v4"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/persistences/badgerdb"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
@@ -99,7 +100,7 @@ func (kv *KV) isDuplicate(criteria *user.Criteria, isItselfExcluded bool) error 
 	return nil
 }
 
-func (kv *KV) actualKey(id *user.ID) ([]byte, error) {
+func (kv *KV) actualKey(id *values.ID) ([]byte, error) {
 	if id == nil {
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			What: "ID not defined",
@@ -240,7 +241,7 @@ func (kv *KV) Update(aggregate *user.User) error {
 	return nil
 }
 
-func (kv *KV) Delete(id *user.ID) error {
+func (kv *KV) Delete(id *values.ID) error {
 	key, err := kv.actualKey(id)
 
 	if err != nil {

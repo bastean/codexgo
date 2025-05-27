@@ -12,8 +12,8 @@ type Case struct {
 }
 
 func (c *Case) Run(attributes *CommandAttributes) error {
-	verifyToken, errVerifyToken := values.New[*user.ID](attributes.VerifyToken)
-	id, errID := values.New[*user.ID](attributes.ID)
+	verifyToken, errVerifyToken := values.New[*values.Token](attributes.VerifyToken)
+	id, errID := values.New[*values.ID](attributes.ID)
 
 	if err := errors.Join(errVerifyToken, errID); err != nil {
 		return errors.BubbleUp(err)

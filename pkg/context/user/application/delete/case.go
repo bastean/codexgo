@@ -14,7 +14,7 @@ type Case struct {
 }
 
 func (c *Case) Run(attributes *CommandAttributes) error {
-	id, errID := values.New[*user.ID](attributes.ID)
+	id, errID := values.New[*values.ID](attributes.ID)
 
 	plainPassword, errPlain := values.New[*user.PlainPassword](attributes.Password)
 

@@ -31,6 +31,10 @@ func (t Time) Add(d Duration) Time {
 	return Time{t.time.Add(d)}
 }
 
+func (t Time) Sub(u Time) Duration {
+	return t.time.Sub(u.time)
+}
+
 func (t Time) Before(u Time) bool {
 	return t.time.Before(u.time)
 }

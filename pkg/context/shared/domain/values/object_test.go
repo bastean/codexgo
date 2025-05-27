@@ -5,11 +5,12 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type Custom struct {
-	values.Object[string]
+	values.String
 }
 
 func (c *Custom) Validate() error {
@@ -26,11 +27,11 @@ func (c *Custom) Validate() error {
 
 type ObjectTestSuite struct {
 	suite.Default
-	SUT *values.Object[string]
+	SUT *values.String
 }
 
 func (s *ObjectTestSuite) SetupTest() {
-	s.SUT = new(values.Object[string])
+	s.SUT = new(values.String)
 }
 
 func (s *ObjectTestSuite) TestSetCreated() {
@@ -84,11 +85,11 @@ func (s *ObjectTestSuite) TestSetUpdatedErrBeforeDefined() {
 
 	s.NotPanics(func() { s.SUT.SetCreated(date) })
 
-	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, 48, 72)) })
+	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, time.Day*2, time.Day*3)) })
 
 	expected := "(SetUpdated): Updated time cannot be before existing value"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, 1, 24)) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, time.Hour, time.Day)) })
 }
 
 func (s *ObjectTestSuite) TestSet() {

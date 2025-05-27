@@ -9,7 +9,7 @@ import (
 
 func UpdateEmail(email string, aggregate *user.User) error {
 	if email != "" && email != aggregate.Email.Value() {
-		_, err := values.New[*user.Email](email)
+		_, err := values.New[*values.Email](email)
 
 		if err != nil {
 			return errors.BubbleUp(err)
@@ -27,7 +27,7 @@ func UpdateEmail(email string, aggregate *user.User) error {
 
 func UpdateUsername(username string, aggregate *user.User) error {
 	if username != "" && username != aggregate.Username.Value() {
-		_, err := values.New[*user.Username](username)
+		_, err := values.New[*values.Username](username)
 
 		if err != nil {
 			return errors.BubbleUp(err)

@@ -9,6 +9,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type ConfirmationTestSuite struct {
@@ -41,7 +42,7 @@ func (s *ConfirmationTestSuite) TestConsumer() {
 
 	s.NoError(err)
 
-	aggregate.VerifyToken = recipient.Mother().IDNew(attributes.VerifyToken)
+	aggregate.VerifyToken = values.Mother().TokenNew(attributes.VerifyToken)
 
 	event := messages.Mother().MessageValidWithAttributes(attributes, false)
 

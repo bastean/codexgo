@@ -23,7 +23,7 @@ type KeyComponents struct {
 }
 
 type Key struct {
-	values.Object[string]
+	values.String
 }
 
 func (k *Key) Validate() error {

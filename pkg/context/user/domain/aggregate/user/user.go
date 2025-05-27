@@ -9,26 +9,26 @@ import (
 
 type User struct {
 	*aggregates.Root
-	VerifyToken, ResetToken *ID
-	*ID
-	*Email
-	*Username
+	VerifyToken, ResetToken *values.Token
+	*values.ID
+	*values.Email
+	*values.Username
 	*Password
 	*Verified
 }
 
 type Primitive struct {
-	Created, Updated        *values.Primitive[string]
-	VerifyToken, ResetToken *values.Primitive[string]
-	ID, Email, Username     *values.Primitive[string]
-	Password                *values.Primitive[string]
-	Verified                *values.Primitive[bool]
+	Created, Updated        *values.StringPrimitive
+	VerifyToken, ResetToken *values.StringPrimitive
+	ID, Email, Username     *values.StringPrimitive
+	Password                *values.StringPrimitive
+	Verified                *values.BoolPrimitive
 }
 
 type Criteria struct {
-	*ID
-	*Email
-	*Username
+	*values.ID
+	*values.Email
+	*values.Username
 }
 
 type Required struct {
@@ -45,7 +45,7 @@ func (u *User) HasResetToken() bool {
 	return u.ResetToken != nil
 }
 
-func (u *User) ValidateVerifyToken(token *ID) error {
+func (u *User) ValidateVerifyToken(token *values.Token) error {
 	if u.VerifyToken.Value() != token.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
@@ -58,7 +58,7 @@ func (u *User) ValidateVerifyToken(token *ID) error {
 	return nil
 }
 
-func (u *User) ValidateResetToken(token *ID) error {
+func (u *User) ValidateResetToken(token *values.Token) error {
 	if u.ResetToken.Value() != token.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
@@ -97,15 +97,15 @@ func (u *User) ToPrimitive() *Primitive {
 }
 
 func FromPrimitive(primitive *Primitive) (*User, error) {
-	created, errCreated := values.FromPrimitive[*aggregates.Time](primitive.Created)
-	updated, errUpdated := values.FromPrimitive[*aggregates.Time](primitive.Updated, true)
+	created, errCreated := values.FromPrimitive[*values.Time](primitive.Created)
+	updated, errUpdated := values.FromPrimitive[*values.Time](primitive.Updated, true)
 
-	verifyToken, errVerifyToken := values.FromPrimitive[*ID](primitive.VerifyToken, true)
-	resetToken, errResetToken := values.FromPrimitive[*ID](primitive.ResetToken, true)
+	verifyToken, errVerifyToken := values.FromPrimitive[*values.Token](primitive.VerifyToken, true)
+	resetToken, errResetToken := values.FromPrimitive[*values.Token](primitive.ResetToken, true)
 
-	id, errID := values.FromPrimitive[*ID](primitive.ID)
-	email, errEmail := values.FromPrimitive[*Email](primitive.Email)
-	username, errUsername := values.FromPrimitive[*Username](primitive.Username)
+	id, errID := values.FromPrimitive[*values.ID](primitive.ID)
+	email, errEmail := values.FromPrimitive[*values.Email](primitive.Email)
+	username, errUsername := values.FromPrimitive[*values.Username](primitive.Username)
 	password, errPassword := values.FromPrimitive[*Password](primitive.Password)
 	verified, errVerified := values.FromPrimitive[*Verified](primitive.Verified)
 
@@ -130,11 +130,11 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 }
 
 func New(required *Required) (*User, error) {
-	verifyToken, errVerifyToken := values.New[*ID](required.VerifyToken)
-	id, errID := values.New[*ID](required.ID)
+	verifyToken, errVerifyToken := values.New[*values.Token](required.VerifyToken)
+	id, errID := values.New[*values.ID](required.ID)
 
-	email, errEmail := values.New[*Email](required.Email)
-	username, errUsername := values.New[*Username](required.Username)
+	email, errEmail := values.New[*values.Email](required.Email)
+	username, errUsername := values.New[*values.Username](required.Username)
 	password, errPassword := values.New[*Password](required.Password)
 	verified, errVerified := values.New[*Verified](false)
 

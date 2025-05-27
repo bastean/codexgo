@@ -1,8 +1,8 @@
 package password
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/notification/domain/aggregate/recipient"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type m struct {
@@ -11,10 +11,10 @@ type m struct {
 
 func (m *m) EventAttributesValid() *EventAttributes {
 	return &EventAttributes{
-		ResetToken: recipient.Mother().IDValid().Value(),
-		ID:         recipient.Mother().IDValid().Value(),
-		Email:      recipient.Mother().EmailValid().Value(),
-		Username:   recipient.Mother().UsernameValid().Value(),
+		ResetToken: values.Mother().TokenValid().Value(),
+		ID:         values.Mother().IDValid().Value(),
+		Email:      values.Mother().EmailValid().Value(),
+		Username:   values.Mother().UsernameValid().Value(),
 	}
 }
 

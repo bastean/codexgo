@@ -2,7 +2,7 @@ package verify
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type m struct {
@@ -11,8 +11,8 @@ type m struct {
 
 func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		VerifyToken: user.Mother().IDValid().Value(),
-		ID:          user.Mother().IDValid().Value(),
+		VerifyToken: values.Mother().TokenValid().Value(),
+		ID:          values.Mother().IDValid().Value(),
 	}
 }
 

@@ -1,12 +1,11 @@
-package aggregates
+package values
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type Time struct {
-	values.Object[string]
+	String
 }
 
 func (t *Time) Validate() error {

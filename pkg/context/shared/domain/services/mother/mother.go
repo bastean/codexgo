@@ -58,24 +58,24 @@ func (m *Mother) Message() string {
 	return m.WordsJoin(m.Words(m.IntRange(1, 12)), " ")
 }
 
-func (m *Mother) TimeSetBefore(actual time.Time, min, max int) time.Time {
-	return actual.Add(-time.Duration(m.IntRange(min, max)))
+func (m *Mother) TimeSetBefore(actual time.Time, min, max time.Duration) time.Time {
+	return actual.Add(-time.Duration(m.IntRange(int(min), int(max))))
 }
 
 func (m *Mother) TimeRandomBefore(actual time.Time) time.Time {
-	return m.TimeSetBefore(actual, 1, 72)
+	return m.TimeSetBefore(actual, time.Day, time.Day*3)
 }
 
 func (m *Mother) TimeNow() time.Time {
 	return time.Now()
 }
 
-func (m *Mother) TimeSetAfter(actual time.Time, min, max int) time.Time {
-	return actual.Add(time.Duration(m.IntRange(min, max)))
+func (m *Mother) TimeSetAfter(actual time.Time, min, max time.Duration) time.Time {
+	return actual.Add(time.Duration(m.IntRange(int(min), int(max))))
 }
 
 func (m *Mother) TimeRandomAfter(actual time.Time) time.Time {
-	return m.TimeSetAfter(actual, 1, 72)
+	return m.TimeSetAfter(actual, time.Day, time.Day*3)
 }
 
 func (m *Mother) StructRandomize(value any) {

@@ -10,6 +10,10 @@ const (
 	Second      = time.Second
 	Minute      = time.Minute
 	Hour        = time.Hour
+	Day         = Hour * 24
+	Week        = Day * 7
+	Month       = Week * 4
+	Year        = Month * 12
 )
 
 var (

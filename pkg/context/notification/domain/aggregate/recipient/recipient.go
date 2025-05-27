@@ -6,10 +6,10 @@ import (
 )
 
 type Recipient struct {
-	VerifyToken, ResetToken *ID
-	*ID
-	*Email
-	*Username
+	VerifyToken, ResetToken *values.Token
+	*values.ID
+	*values.Email
+	*values.Username
 }
 
 type Required struct {
@@ -17,10 +17,10 @@ type Required struct {
 }
 
 func New(required *Required) (*Recipient, error) {
-	id, errID := values.New[*ID](required.ID)
+	id, errID := values.New[*values.ID](required.ID)
 
-	email, errEmail := values.New[*Email](required.Email)
-	username, errUsername := values.New[*Username](required.Username)
+	email, errEmail := values.New[*values.Email](required.Email)
+	username, errUsername := values.New[*values.Username](required.Username)
 
 	if err := errors.Join(errID, errEmail, errUsername); err != nil {
 		return nil, errors.BubbleUp(err)

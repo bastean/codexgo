@@ -8,6 +8,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/infrastructure/persistence"
@@ -37,9 +38,9 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregate := user.Mother().UserValidFromPrimitive()
 
-	aggregate.ID = user.Mother().IDNew(attributes.ID)
+	aggregate.ID = values.Mother().IDNew(attributes.ID)
 
-	aggregate.VerifyToken = user.Mother().IDNew(attributes.VerifyToken)
+	aggregate.VerifyToken = values.Mother().TokenNew(attributes.VerifyToken)
 
 	aggregate.Verified = user.Mother().VerifiedFalse()
 
@@ -49,7 +50,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).
 		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(12)
+			s.SetTimeAfter(time.Hour)
 		}).
 		Return(aggregate)
 
@@ -57,13 +58,13 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	verified := user.Mother().VerifiedTrue()
 
-	verified.SetUpdated(time.Now().Add(12))
+	verified.SetUpdated(time.Now().Add(time.Hour))
 
 	aggregate.Verified = verified
 
 	aggregate.VerifyToken = nil
 
-	s.SetTimeAfter(12)
+	s.SetTimeAfter(time.Hour)
 
 	s.NoError(aggregate.UpdatedStamp())
 

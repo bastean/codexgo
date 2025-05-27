@@ -9,6 +9,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type PasswordTestSuite struct {
@@ -41,7 +42,7 @@ func (s *PasswordTestSuite) TestConsumer() {
 
 	s.NoError(err)
 
-	aggregate.ResetToken = recipient.Mother().IDNew(attributes.ResetToken)
+	aggregate.ResetToken = values.Mother().TokenNew(attributes.ResetToken)
 
 	event := messages.Mother().MessageValidWithAttributes(attributes, false)
 

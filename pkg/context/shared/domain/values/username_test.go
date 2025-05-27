@@ -1,11 +1,11 @@
-package user_test
+package values_test
 
 import (
 	"testing"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type UsernameTestSuite struct {
@@ -13,7 +13,7 @@ type UsernameTestSuite struct {
 }
 
 func (s *UsernameTestSuite) TestWithInvalidLength() {
-	value, err := user.Mother().UsernameInvalidLength()
+	value, err := values.Mother().UsernameInvalidLength()
 
 	var actual *errors.InvalidValue
 
@@ -32,7 +32,7 @@ func (s *UsernameTestSuite) TestWithInvalidLength() {
 }
 
 func (s *UsernameTestSuite) TestWithInvalidAlphanumeric() {
-	value, err := user.Mother().UsernameInvalidAlphanumeric()
+	value, err := values.Mother().UsernameInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
 

@@ -22,12 +22,12 @@ func (c *Case) Run(attributes *QueryAttributes) (*user.User, error) {
 
 	var (
 		err      error
-		email    *user.Email
-		username *user.Username
+		email    *values.Email
+		username *values.Username
 	)
 
 	if attributes.Email != "" {
-		email, err = values.New[*user.Email](attributes.Email)
+		email, err = values.New[*values.Email](attributes.Email)
 	}
 
 	if err != nil {
@@ -35,7 +35,7 @@ func (c *Case) Run(attributes *QueryAttributes) (*user.User, error) {
 	}
 
 	if attributes.Username != "" {
-		username, err = values.New[*user.Username](attributes.Username)
+		username, err = values.New[*values.Username](attributes.Username)
 	}
 
 	if err != nil {

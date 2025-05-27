@@ -1,19 +1,19 @@
-package user_test
+package values_test
 
 import (
 	"testing"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
-type EmailTestSuite struct {
+type IDTestSuite struct {
 	suite.Default
 }
 
-func (s *EmailTestSuite) TestWithInvalidValue() {
-	value, err := user.Mother().EmailInvalid()
+func (s *IDTestSuite) TestWithInvalidValue() {
+	value, err := values.Mother().IDInvalid()
 
 	var actual *errors.InvalidValue
 
@@ -22,15 +22,15 @@ func (s *EmailTestSuite) TestWithInvalidValue() {
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Validate",
-		What:  "Invalid email format",
+		What:  "Invalid UUID4 format",
 		Why: errors.Meta{
-			"Email": value,
+			"ID": value,
 		},
 	}}
 
 	s.Equal(expected, actual)
 }
 
-func TestUnitEmailSuite(t *testing.T) {
-	suite.Run(t, new(EmailTestSuite))
+func TestUnitIDSuite(t *testing.T) {
+	suite.Run(t, new(IDTestSuite))
 }

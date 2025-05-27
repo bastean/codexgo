@@ -2,7 +2,7 @@ package forgot
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
-	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type m struct {
@@ -11,8 +11,8 @@ type m struct {
 
 func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		ResetToken: user.Mother().IDValid().Value(),
-		Email:      user.Mother().EmailValid().Value(),
+		ResetToken: values.Mother().TokenValid().Value(),
+		Email:      values.Mother().EmailValid().Value(),
 	}
 }
 

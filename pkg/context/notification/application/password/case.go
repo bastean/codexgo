@@ -22,7 +22,7 @@ func (c *Case) Run(attributes *EventAttributes) error {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.ResetToken, err = values.New[*recipient.ID](attributes.ResetToken)
+	aggregate.ResetToken, err = values.New[*values.Token](attributes.ResetToken)
 
 	if err != nil {
 		return errors.BubbleUp(err)

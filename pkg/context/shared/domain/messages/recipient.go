@@ -22,7 +22,7 @@ type RecipientComponents struct {
 }
 
 type Recipient struct {
-	values.Object[string]
+	values.String
 }
 
 func (r *Recipient) Validate() error {

@@ -13,7 +13,7 @@ const (
 )
 
 type PlainPassword struct {
-	values.Object[string]
+	values.String
 }
 
 func (p *PlainPassword) Validate() error {
@@ -32,7 +32,7 @@ func (p *PlainPassword) Validate() error {
 }
 
 type Password struct {
-	values.Object[string]
+	values.String
 }
 
 func (c *Password) Validate() error {

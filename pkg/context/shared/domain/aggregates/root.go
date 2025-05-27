@@ -8,7 +8,7 @@ import (
 )
 
 type Root struct {
-	Created, Updated *Time
+	Created, Updated *values.Time
 	Events           []*messages.Message
 }
 
@@ -19,7 +19,7 @@ func (r *Root) CreationStamp() error {
 		})
 	}
 
-	created, err := values.New[*Time](time.Now().Format())
+	created, err := values.New[*values.Time](time.Now().Format())
 
 	if err != nil {
 		return errors.BubbleUp(err)
@@ -33,12 +33,12 @@ func (r *Root) CreationStamp() error {
 func (r *Root) UpdatedStamp() error {
 	var (
 		err     error
-		updated *Time
+		updated *values.Time
 	)
 
 	switch r.Updated {
 	case nil:
-		updated, err = values.New[*Time](time.Now().Format())
+		updated, err = values.New[*values.Time](time.Now().Format())
 	default:
 		updated, err = values.Replace(r.Updated, time.Now().Format())
 	}

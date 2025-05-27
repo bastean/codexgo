@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/stretchr/testify/suite"
+
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 var (
@@ -23,16 +25,16 @@ func (s *Frozen) SetupTest() {
 	s.NoError(os.Setenv("GOTEST_FROZEN", "1"))
 }
 
-func (s *Frozen) SetTimeBefore(time int) {
-	s.NoError(os.Setenv("GOTEST_FROZEN_BEFORE", strconv.Itoa(time)))
+func (s *Frozen) SetTimeBefore(d time.Duration) {
+	s.NoError(os.Setenv("GOTEST_FROZEN_BEFORE", strconv.Itoa(int(d))))
 }
 
 func (s *Frozen) UnsetTimeBefore() {
 	s.NoError(os.Unsetenv("GOTEST_FROZEN_BEFORE"))
 }
 
-func (s *Frozen) SetTimeAfter(time int) {
-	s.NoError(os.Setenv("GOTEST_FROZEN_AFTER", strconv.Itoa(time)))
+func (s *Frozen) SetTimeAfter(d time.Duration) {
+	s.NoError(os.Setenv("GOTEST_FROZEN_AFTER", strconv.Itoa(int(d))))
 }
 
 func (s *Frozen) UnsetTimeAfter() {

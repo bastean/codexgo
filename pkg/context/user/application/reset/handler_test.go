@@ -8,6 +8,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/reset"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -42,9 +43,9 @@ func (s *ResetTestSuite) TestHandle() {
 
 	aggregate := user.Mother().UserValidFromPrimitive()
 
-	aggregate.ResetToken = user.Mother().IDNew(attributes.ResetToken)
+	aggregate.ResetToken = values.Mother().TokenNew(attributes.ResetToken)
 
-	aggregate.ID = user.Mother().IDNew(attributes.ID)
+	aggregate.ID = values.Mother().IDNew(attributes.ID)
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,
@@ -56,19 +57,19 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.hasher.Mock.On("Hash", attributes.Password).
 		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(12)
+			s.SetTimeAfter(time.Hour)
 		}).
 		Return(hashed.Value())
 
 	aggregate = user.Mother().UserCopy(aggregate)
 
-	hashed.SetUpdated(time.Now().Add(12))
+	hashed.SetUpdated(time.Now().Add(time.Hour))
 
 	aggregate.Password = hashed
 
 	aggregate.ResetToken = nil
 
-	s.SetTimeAfter(12)
+	s.SetTimeAfter(time.Hour)
 
 	s.NoError(aggregate.UpdatedStamp())
 

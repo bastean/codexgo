@@ -8,6 +8,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport"
 	"github.com/bastean/codexgo/v4/pkg/context/notification/infrastructure/transport/mail"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/transports/smtp"
 )
 
@@ -18,7 +19,7 @@ type PasswordTestSuite struct {
 func (s *PasswordTestSuite) SetupSuite() {
 	s.Recipient = recipient.Mother().RecipientValid()
 
-	s.Recipient.ResetToken = recipient.Mother().IDValid()
+	s.Recipient.ResetToken = values.Mother().TokenValid()
 
 	smtp := smtp.Open(
 		&smtp.Auth{

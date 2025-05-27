@@ -7,6 +7,8 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -41,7 +43,7 @@ func (s *ForgotTestSuite) TestHandle() {
 
 	aggregate := user.Mother().UserValidFromPrimitive("ResetToken")
 
-	aggregate.Email = user.Mother().EmailNew(attributes.Email)
+	aggregate.Email = values.Mother().EmailNew(attributes.Email)
 
 	criteria := &user.Criteria{
 		Email: aggregate.Email,
@@ -49,17 +51,17 @@ func (s *ForgotTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).
 		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(12)
+			s.SetTimeAfter(time.Hour)
 		}).
 		Return(aggregate)
 
 	aggregate = user.Mother().UserCopy(aggregate)
 
-	resetToken := user.Mother().IDNew(attributes.ResetToken)
+	resetToken := values.Mother().TokenNew(attributes.ResetToken)
 
 	aggregate.ResetToken = resetToken
 
-	s.SetTimeAfter(12)
+	s.SetTimeAfter(time.Hour)
 
 	s.NoError(aggregate.UpdatedStamp())
 

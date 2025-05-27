@@ -12,7 +12,7 @@ type Case struct {
 }
 
 func (c *Case) Run(attributes *QueryAttributes) (*user.User, error) {
-	id, err := values.New[*user.ID](attributes.ID)
+	id, err := values.New[*values.ID](attributes.ID)
 
 	if err != nil {
 		return nil, errors.BubbleUp(err)
