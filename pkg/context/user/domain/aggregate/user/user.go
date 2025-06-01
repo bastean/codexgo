@@ -1,15 +1,16 @@
 package user
 
 import (
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/root"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type User struct {
-	*aggregates.Root
-	VerifyToken, ResetToken *values.Token
+	*root.Root
+	VerifyToken, ResetToken *token.Token
 	*values.ID
 	*values.Email
 	*values.Username
@@ -19,7 +20,7 @@ type User struct {
 
 type Primitive struct {
 	Created, Updated        *values.StringPrimitive
-	VerifyToken, ResetToken *values.StringPrimitive
+	VerifyToken, ResetToken *token.Primitive
 	ID, Email, Username     *values.StringPrimitive
 	Password                *values.StringPrimitive
 	Verified                *values.BoolPrimitive
@@ -45,8 +46,8 @@ func (u *User) HasResetToken() bool {
 	return u.ResetToken != nil
 }
 
-func (u *User) ValidateVerifyToken(token *values.Token) error {
-	if u.VerifyToken.Value() != token.Value() {
+func (u *User) ValidateVerifyToken(token *token.Token) error {
+	if u.VerifyToken.ID.Value() != token.ID.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
 			Why: errors.Meta{
@@ -58,8 +59,8 @@ func (u *User) ValidateVerifyToken(token *values.Token) error {
 	return nil
 }
 
-func (u *User) ValidateResetToken(token *values.Token) error {
-	if u.ResetToken.Value() != token.Value() {
+func (u *User) ValidateResetToken(token *token.Token) error {
+	if u.ResetToken.ID.Value() != token.ID.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
 			Why: errors.Meta{
@@ -100,8 +101,8 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 	created, errCreated := values.FromPrimitive[*values.Time](primitive.Created)
 	updated, errUpdated := values.FromPrimitive[*values.Time](primitive.Updated, true)
 
-	verifyToken, errVerifyToken := values.FromPrimitive[*values.Token](primitive.VerifyToken, true)
-	resetToken, errResetToken := values.FromPrimitive[*values.Token](primitive.ResetToken, true)
+	verifyToken, errVerifyToken := token.FromPrimitive(primitive.VerifyToken, true)
+	resetToken, errResetToken := token.FromPrimitive(primitive.ResetToken, true)
 
 	id, errID := values.FromPrimitive[*values.ID](primitive.ID)
 	email, errEmail := values.FromPrimitive[*values.Email](primitive.Email)
@@ -114,7 +115,7 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 	}
 
 	return &User{
-		Root: &aggregates.Root{
+		Root: &root.Root{
 			Created: created,
 			Updated: updated,
 			Events:  make([]*messages.Message, 0),
@@ -130,7 +131,7 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 }
 
 func New(required *Required) (*User, error) {
-	verifyToken, errVerifyToken := values.New[*values.Token](required.VerifyToken)
+	verifyToken, errVerifyToken := token.New(required.VerifyToken)
 	id, errID := values.New[*values.ID](required.ID)
 
 	email, errEmail := values.New[*values.Email](required.Email)
@@ -143,7 +144,7 @@ func New(required *Required) (*User, error) {
 	}
 
 	user := &User{
-		Root: &aggregates.Root{
+		Root: &root.Root{
 			Events: make([]*messages.Message, 0),
 		},
 		VerifyToken: verifyToken,
@@ -163,7 +164,7 @@ func New(required *Required) (*User, error) {
 	user.Record(messages.New(
 		CreatedSucceededKey,
 		&CreatedSucceededAttributes{
-			VerifyToken: user.VerifyToken.Value(),
+			VerifyToken: user.VerifyToken.ID.Value(),
 			ID:          user.ID.Value(),
 			Email:       user.Email.Value(),
 			Username:    user.Username.Value(),

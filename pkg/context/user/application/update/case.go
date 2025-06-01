@@ -36,19 +36,19 @@ func (c *Case) Run(attributes *CommandAttributes) error {
 		return errors.BubbleUp(err)
 	}
 
-	err = service.UpdateEmail(attributes.Email, aggregate)
+	err = service.UpdateEmail(aggregate, attributes.Email)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	err = service.UpdateUsername(attributes.Username, aggregate)
+	err = service.UpdateUsername(aggregate, attributes.Username)
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	err = service.UpdatePassword(attributes.UpdatedPassword, aggregate, c.Hasher)
+	err = service.UpdatePassword(aggregate, attributes.UpdatedPassword, c.Hasher)
 
 	if err != nil {
 		return errors.BubbleUp(err)

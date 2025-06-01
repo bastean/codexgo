@@ -7,6 +7,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/role"
+	"github.com/bastean/codexgo/v4/pkg/context/user/domain/service"
 )
 
 type Case struct {
@@ -15,11 +16,7 @@ type Case struct {
 }
 
 func (c *Case) Run(attributes *CommandAttributes) error {
-	resetToken, errResetToken := values.New[*values.Token](attributes.ResetToken)
-
-	email, errEmail := values.New[*values.Email](attributes.Email)
-
-	err := errors.Join(errResetToken, errEmail)
+	email, err := values.New[*values.Email](attributes.Email)
 
 	if err != nil {
 		return errors.BubbleUp(err)
@@ -33,11 +30,11 @@ func (c *Case) Run(attributes *CommandAttributes) error {
 		return errors.BubbleUp(err)
 	}
 
-	if aggregate.HasResetToken() {
-		return nil
-	}
+	err = service.SetResetToken(aggregate, attributes.ResetToken)
 
-	aggregate.ResetToken = resetToken
+	if err != nil {
+		return errors.BubbleUp(err)
+	}
 
 	err = aggregate.UpdatedStamp()
 
@@ -54,7 +51,7 @@ func (c *Case) Run(attributes *CommandAttributes) error {
 	err = c.EventBus.Publish(messages.New(
 		user.ResetQueuedKey,
 		&user.ResetQueuedAttributes{
-			ResetToken: aggregate.ResetToken.Value(),
+			ResetToken: aggregate.ResetToken.ID.Value(),
 			ID:         aggregate.ID.Value(),
 			Email:      aggregate.Email.Value(),
 			Username:   aggregate.Username.Value(),

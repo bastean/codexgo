@@ -3,11 +3,10 @@ package forgot_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/forgot"
@@ -49,23 +48,15 @@ func (s *ForgotTestSuite) TestHandle() {
 		Email: aggregate.Email,
 	}
 
-	s.repository.Mock.On("Search", criteria).
-		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(time.Hour)
-		}).
-		Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
 	aggregate = user.Mother().UserCopy(aggregate)
 
-	resetToken := values.Mother().TokenNew(attributes.ResetToken)
+	resetToken := token.Mother().TokenNew(attributes.ResetToken)
 
 	aggregate.ResetToken = resetToken
 
-	s.SetTimeAfter(time.Hour)
-
 	s.NoError(aggregate.UpdatedStamp())
-
-	s.UnsetTimeAfter()
 
 	s.repository.Mock.On("Update", aggregate)
 

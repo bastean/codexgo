@@ -11,7 +11,7 @@ type m struct {
 
 func (m *m) EventAttributesValid() *EventAttributes {
 	return &EventAttributes{
-		VerifyToken: values.Mother().TokenValid().Value(),
+		VerifyToken: values.Mother().IDValid().Value(),
 		ID:          values.Mother().IDValid().Value(),
 		Email:       values.Mother().EmailValid().Value(),
 		Username:    values.Mother().UsernameValid().Value(),

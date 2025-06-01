@@ -19,7 +19,7 @@ type ConfirmationTestSuite struct {
 func (s *ConfirmationTestSuite) SetupSuite() {
 	s.Recipient = recipient.Mother().RecipientValid()
 
-	s.Recipient.VerifyToken = values.Mother().TokenValid()
+	s.Recipient.VerifyToken = values.Mother().IDValid()
 
 	smtp := smtp.Open(
 		&smtp.Auth{

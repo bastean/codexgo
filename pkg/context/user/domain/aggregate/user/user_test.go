@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
@@ -17,7 +17,7 @@ type UserTestSuite struct {
 func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
 	aggregate := user.Mother().UserValidFromPrimitive()
 
-	token := values.Mother().TokenValid()
+	token := token.Mother().TokenValid()
 
 	err := aggregate.ValidateVerifyToken(token)
 
@@ -40,7 +40,7 @@ func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
 func (s *UserTestSuite) TestValidateResetTokenErrDoNotMatch() {
 	aggregate := user.Mother().UserValidFromPrimitive()
 
-	token := values.Mother().TokenValid()
+	token := token.Mother().TokenValid()
 
 	err := aggregate.ValidateResetToken(token)
 

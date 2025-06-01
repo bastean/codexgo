@@ -28,7 +28,7 @@ type Key struct {
 
 func (k *Key) Validate() error {
 	if !regexp.MustCompile(RExKey).MatchString(k.RawValue()) {
-		errors.Panic(errors.Standard("Key has an invalid nomenclature"))
+		errors.Panic(errors.Standard("Key has an invalid nomenclature %q", k.RawValue()))
 	}
 
 	k.Valid()

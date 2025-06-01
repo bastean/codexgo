@@ -12,7 +12,7 @@ type m struct {
 
 func (m *m) CommandAttributesValid() *CommandAttributes {
 	return &CommandAttributes{
-		ResetToken: values.Mother().TokenValid().Value(),
+		ResetToken: values.Mother().IDValid().Value(),
 		ID:         values.Mother().IDValid().Value(),
 		Password:   user.Mother().PlainPasswordValid().Value(),
 	}

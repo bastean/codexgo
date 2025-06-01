@@ -22,7 +22,7 @@ func (c *Case) Run(attributes *EventAttributes) error {
 		return errors.BubbleUp(err)
 	}
 
-	aggregate.VerifyToken, err = values.New[*values.Token](attributes.VerifyToken)
+	aggregate.VerifyToken, err = values.New[*values.ID](attributes.VerifyToken)
 
 	if err != nil {
 		return errors.BubbleUp(err)

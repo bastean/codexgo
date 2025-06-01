@@ -5,9 +5,7 @@ import (
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/update"
@@ -51,38 +49,21 @@ func (s *UpdateTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	s.hasher.Mock.On("Compare", aggregate.Password.Value(), attributes.Password).
-		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(time.Hour)
-		})
+	s.hasher.Mock.On("Compare", aggregate.Password.Value(), attributes.Password)
 
-	hashed := user.Mother().PasswordValid()
+	hashed := user.Mother().PasswordValid().Value()
 
-	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed.Value())
+	s.hasher.Mock.On("Hash", attributes.UpdatedPassword).Return(hashed)
 
 	aggregate = user.Mother().UserCopy(aggregate)
 
-	email := values.Mother().EmailNew(attributes.Email)
+	aggregate.Password = user.Mother().PasswordReplace(aggregate.Password, hashed)
 
-	email.SetUpdated(time.Now().Add(time.Hour))
+	aggregate.Email = values.Mother().EmailReplace(aggregate.Email, attributes.Email)
 
-	aggregate.Email = email
-
-	username := values.Mother().UsernameNew(attributes.Username)
-
-	username.SetUpdated(time.Now().Add(time.Hour))
-
-	aggregate.Username = username
-
-	hashed.SetUpdated(time.Now().Add(time.Hour))
-
-	aggregate.Password = hashed
-
-	s.SetTimeAfter(time.Hour)
+	aggregate.Username = values.Mother().UsernameReplace(aggregate.Username, attributes.Username)
 
 	s.NoError(aggregate.UpdatedStamp())
-
-	s.UnsetTimeAfter()
 
 	s.repository.Mock.On("Update", aggregate)
 

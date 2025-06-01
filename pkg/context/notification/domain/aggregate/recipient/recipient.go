@@ -6,7 +6,7 @@ import (
 )
 
 type Recipient struct {
-	VerifyToken, ResetToken *values.Token
+	VerifyToken, ResetToken *values.ID
 	*values.ID
 	*values.Email
 	*values.Username

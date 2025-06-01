@@ -1,4 +1,4 @@
-package aggregates
+package root
 
 import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"

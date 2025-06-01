@@ -27,7 +27,7 @@ type Recipient struct {
 
 func (r *Recipient) Validate() error {
 	if !regexp.MustCompile(RExRecipient).MatchString(r.RawValue()) {
-		errors.Panic(errors.Standard("Recipient has an invalid nomenclature"))
+		errors.Panic(errors.Standard("Recipient has an invalid nomenclature %q", r.RawValue()))
 	}
 
 	r.Valid()

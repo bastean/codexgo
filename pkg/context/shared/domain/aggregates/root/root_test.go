@@ -1,9 +1,9 @@
-package aggregates_test
+package root_test
 
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/root"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
@@ -13,11 +13,11 @@ type RootTestSuite struct {
 }
 
 func (s *RootTestSuite) TestCreationStampErrOverwriteExisting() {
-	root := aggregates.Mother().RootValid()
+	aggregate := root.Mother().RootValid()
 
-	s.NoError(root.CreationStamp())
+	s.NoError(aggregate.CreationStamp())
 
-	err := root.CreationStamp()
+	err := aggregate.CreationStamp()
 
 	var actual *errors.Internal
 

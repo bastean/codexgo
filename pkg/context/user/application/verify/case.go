@@ -1,6 +1,7 @@
 package verify
 
 import (
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -12,7 +13,7 @@ type Case struct {
 }
 
 func (c *Case) Run(attributes *CommandAttributes) error {
-	verifyToken, errVerifyToken := values.New[*values.Token](attributes.VerifyToken)
+	verifyToken, errVerifyToken := token.New(attributes.VerifyToken)
 	id, errID := values.New[*values.ID](attributes.ID)
 
 	if err := errors.Join(errVerifyToken, errID); err != nil {

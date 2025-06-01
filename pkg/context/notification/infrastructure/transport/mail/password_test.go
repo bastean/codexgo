@@ -19,7 +19,7 @@ type PasswordTestSuite struct {
 func (s *PasswordTestSuite) SetupSuite() {
 	s.Recipient = recipient.Mother().RecipientValid()
 
-	s.Recipient.ResetToken = values.Mother().TokenValid()
+	s.Recipient.ResetToken = values.Mother().IDValid()
 
 	smtp := smtp.Open(
 		&smtp.Auth{

@@ -42,7 +42,7 @@ func (s *PasswordTestSuite) TestConsumer() {
 
 	s.NoError(err)
 
-	aggregate.ResetToken = values.Mother().TokenNew(attributes.ResetToken)
+	aggregate.ResetToken = values.Mother().IDNew(attributes.ResetToken)
 
 	event := messages.Mother().MessageValidWithAttributes(attributes, false)
 

@@ -3,11 +3,10 @@ package verify_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/verify"
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
@@ -40,7 +39,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregate.ID = values.Mother().IDNew(attributes.ID)
 
-	aggregate.VerifyToken = values.Mother().TokenNew(attributes.VerifyToken)
+	aggregate.VerifyToken = token.Mother().TokenNew(attributes.VerifyToken)
 
 	aggregate.Verified = user.Mother().VerifiedFalse()
 
@@ -48,27 +47,15 @@ func (s *VerifyTestSuite) TestHandle() {
 		ID: aggregate.ID,
 	}
 
-	s.repository.Mock.On("Search", criteria).
-		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(time.Hour)
-		}).
-		Return(aggregate)
+	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
 	aggregate = user.Mother().UserCopy(aggregate)
 
-	verified := user.Mother().VerifiedTrue()
-
-	verified.SetUpdated(time.Now().Add(time.Hour))
-
-	aggregate.Verified = verified
+	aggregate.Verified = user.Mother().VerifiedReplace(aggregate.Verified, true)
 
 	aggregate.VerifyToken = nil
 
-	s.SetTimeAfter(time.Hour)
-
 	s.NoError(aggregate.UpdatedStamp())
-
-	s.UnsetTimeAfter()
 
 	s.repository.Mock.On("Update", aggregate)
 

@@ -3,11 +3,10 @@ package reset_test
 import (
 	"testing"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mock"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/ciphers"
 	"github.com/bastean/codexgo/v4/pkg/context/user/application/reset"
@@ -43,7 +42,7 @@ func (s *ResetTestSuite) TestHandle() {
 
 	aggregate := user.Mother().UserValidFromPrimitive()
 
-	aggregate.ResetToken = values.Mother().TokenNew(attributes.ResetToken)
+	aggregate.ResetToken = token.Mother().TokenNew(attributes.ResetToken)
 
 	aggregate.ID = values.Mother().IDNew(attributes.ID)
 
@@ -53,27 +52,17 @@ func (s *ResetTestSuite) TestHandle() {
 
 	s.repository.Mock.On("Search", criteria).Return(aggregate)
 
-	hashed := user.Mother().PasswordValid()
+	hashed := user.Mother().PasswordValid().Value()
 
-	s.hasher.Mock.On("Hash", attributes.Password).
-		Run(func(args mock.Arguments) {
-			s.SetTimeAfter(time.Hour)
-		}).
-		Return(hashed.Value())
+	s.hasher.Mock.On("Hash", attributes.Password).Return(hashed)
 
 	aggregate = user.Mother().UserCopy(aggregate)
 
-	hashed.SetUpdated(time.Now().Add(time.Hour))
-
-	aggregate.Password = hashed
+	aggregate.Password = user.Mother().PasswordReplace(aggregate.Password, hashed)
 
 	aggregate.ResetToken = nil
 
-	s.SetTimeAfter(time.Hour)
-
 	s.NoError(aggregate.UpdatedStamp())
-
-	s.UnsetTimeAfter()
 
 	s.repository.Mock.On("Update", aggregate)
 

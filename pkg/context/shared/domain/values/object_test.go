@@ -70,16 +70,6 @@ func (s *ObjectTestSuite) TestSetUpdatedErrBeforeCreated() {
 	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeRandomBefore(date)) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedErrEqualsCreated() {
-	date := values.Mother().TimeNow()
-
-	s.NotPanics(func() { s.SUT.SetCreated(date) })
-
-	expected := "(SetUpdated): Time updated cannot be equal to created"
-
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(date) })
-}
-
 func (s *ObjectTestSuite) TestSetUpdatedErrBeforeDefined() {
 	date := values.Mother().TimeNow()
 

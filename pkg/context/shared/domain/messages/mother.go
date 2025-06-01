@@ -53,6 +53,14 @@ func (m *m) KeyInvalid() {
 	}
 }
 
+func (m *m) KeyInvalidWithComponents(components *KeyComponents) {
+	_, err := values.New[*Key](ParseKey(components))
+
+	if err != nil {
+		errors.Panic(err)
+	}
+}
+
 func (m *m) RecipientComponentsValid() *RecipientComponents {
 	return &RecipientComponents{
 		Service: m.LoremIpsumWord(),
@@ -89,6 +97,14 @@ func (m *m) RecipientValidWithComponents(components *RecipientComponents) *Recip
 
 func (m *m) RecipientInvalid() {
 	_, err := values.New[*Recipient](ParseRecipient(m.RecipientComponentsInvalid()))
+
+	if err != nil {
+		errors.Panic(err)
+	}
+}
+
+func (m *m) RecipientInvalidWithComponents(components *RecipientComponents) {
+	_, err := values.New[*Recipient](ParseRecipient(components))
 
 	if err != nil {
 		errors.Panic(err)

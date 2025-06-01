@@ -22,7 +22,7 @@ func (s *PasswordTestSuite) SetupSuite() {
 
 	s.Recipient = recipient.Mother().RecipientValid()
 
-	s.Recipient.ResetToken = values.Mother().TokenValid()
+	s.Recipient.ResetToken = values.Mother().IDValid()
 
 	s.Message = fmt.Sprintf("Hi %s, please reset your password through this link: %s/reset?token=%s&id=%s", s.Recipient.Username.Value(), appServerURL, s.Recipient.ResetToken.Value(), s.Recipient.ID.Value())
 

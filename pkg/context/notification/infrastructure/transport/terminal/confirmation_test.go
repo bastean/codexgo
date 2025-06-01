@@ -22,7 +22,7 @@ func (s *ConfirmationTestSuite) SetupSuite() {
 
 	s.Recipient = recipient.Mother().RecipientValid()
 
-	s.Recipient.VerifyToken = values.Mother().TokenValid()
+	s.Recipient.VerifyToken = values.Mother().IDValid()
 
 	s.Message = fmt.Sprintf("Hi %s, please confirm your account through this link: %s/v4/account/verify?token=%s&id=%s", s.Recipient.Username.Value(), appServerURL, s.Recipient.VerifyToken.Value(), s.Recipient.ID.Value())
 

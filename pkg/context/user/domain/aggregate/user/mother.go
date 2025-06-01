@@ -1,6 +1,7 @@
 package user
 
 import (
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/token"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/mother"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
@@ -28,6 +29,16 @@ func (m *m) PlainPasswordInvalidLength() (string, error) {
 	return value, err
 }
 
+func (m *m) PasswordReplace(old *Password, value string) *Password {
+	password, err := values.Replace(old, value)
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return password
+}
+
 func (m *m) PasswordValid() *Password {
 	value, err := values.New[*Password](m.Regex(`^.{8,64}$`))
 
@@ -44,6 +55,16 @@ func (m *m) PasswordInvalid() (string, error) {
 	_, err := values.New[*Password](value)
 
 	return value, err
+}
+
+func (m *m) VerifiedReplace(old *Verified, value bool) *Verified {
+	verified, err := values.Replace(old, value)
+
+	if err != nil {
+		errors.Panic(err)
+	}
+
+	return verified
 }
 
 func (m *m) VerifiedValid() *Verified {
@@ -88,7 +109,7 @@ func (m *m) UserCopy(user *User) *User {
 
 func (m *m) UserValid() *User {
 	user, err := New(&Required{
-		VerifyToken: values.Mother().TokenValid().Value(),
+		VerifyToken: values.Mother().IDValid().Value(),
 		ID:          values.Mother().IDValid().Value(),
 		Email:       values.Mother().EmailValid().Value(),
 		Username:    values.Mother().UsernameValid().Value(),
@@ -106,8 +127,8 @@ func (m *m) UserValidFromPrimitive(without ...string) *User {
 	user, err := FromPrimitive(&Primitive{
 		Created:     values.Mother().TimeValid().ToPrimitive(),
 		Updated:     values.Mother().TimeValid().ToPrimitive(),
-		VerifyToken: values.Mother().TokenValid().ToPrimitive(),
-		ResetToken:  values.Mother().TokenValid().ToPrimitive(),
+		VerifyToken: token.Mother().TokenValid().ToPrimitive(),
+		ResetToken:  token.Mother().TokenValid().ToPrimitive(),
 		ID:          values.Mother().IDValid().ToPrimitive(),
 		Email:       values.Mother().EmailValid().ToPrimitive(),
 		Username:    values.Mother().UsernameValid().ToPrimitive(),

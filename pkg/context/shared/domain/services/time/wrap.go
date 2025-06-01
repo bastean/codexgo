@@ -6,14 +6,20 @@ import (
 
 const (
 	RFC3339Nano = time.RFC3339Nano
+)
+
+const (
 	Millisecond = time.Millisecond
 	Second      = time.Second
 	Minute      = time.Minute
 	Hour        = time.Hour
-	Day         = Hour * 24
-	Week        = Day * 7
-	Month       = Week * 4
-	Year        = Month * 12
+)
+
+const (
+	Day   = Hour * 24
+	Week  = Day * 7
+	Month = Week * 4
+	Year  = Month * 12
 )
 
 var (

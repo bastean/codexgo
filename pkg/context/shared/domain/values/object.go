@@ -45,8 +45,6 @@ func (o *Object[T]) SetUpdated(actual time.Time) {
 		errors.Panic(errors.Standard("Created is not defined"))
 	case actual.Before(o.created):
 		errors.Panic(errors.Standard("Time updated cannot be before created"))
-	case actual.Equal(o.created):
-		errors.Panic(errors.Standard("Time updated cannot be equal to created"))
 	case actual.Before(o.updated):
 		errors.Panic(errors.Standard("Updated time cannot be before existing value"))
 	}

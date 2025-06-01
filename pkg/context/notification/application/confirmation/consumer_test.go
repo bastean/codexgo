@@ -42,7 +42,7 @@ func (s *ConfirmationTestSuite) TestConsumer() {
 
 	s.NoError(err)
 
-	aggregate.VerifyToken = values.Mother().TokenNew(attributes.VerifyToken)
+	aggregate.VerifyToken = values.Mother().IDNew(attributes.VerifyToken)
 
 	event := messages.Mother().MessageValidWithAttributes(attributes, false)
 

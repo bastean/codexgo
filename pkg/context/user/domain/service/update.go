@@ -7,7 +7,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-func UpdateEmail(email string, aggregate *user.User) error {
+func UpdateEmail(aggregate *user.User, email string) error {
 	if email != "" && email != aggregate.Email.Value() {
 		_, err := values.New[*values.Email](email)
 
@@ -25,7 +25,7 @@ func UpdateEmail(email string, aggregate *user.User) error {
 	return nil
 }
 
-func UpdateUsername(username string, aggregate *user.User) error {
+func UpdateUsername(aggregate *user.User, username string) error {
 	if username != "" && username != aggregate.Username.Value() {
 		_, err := values.New[*values.Username](username)
 
@@ -43,7 +43,7 @@ func UpdateUsername(username string, aggregate *user.User) error {
 	return nil
 }
 
-func UpdatePassword(password string, aggregate *user.User, hasher roles.Hasher) error {
+func UpdatePassword(aggregate *user.User, password string, hasher roles.Hasher) error {
 	if password != "" {
 		_, err := values.New[*user.PlainPassword](password)
 
