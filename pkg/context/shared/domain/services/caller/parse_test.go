@@ -12,7 +12,7 @@ type ParseTestSuite struct {
 	suite.Default
 }
 
-func (s *ParseTestSuite) SetupSuite() {
+func (s *ParseTestSuite) TestSentinel() {
 	s.Equal(caller.RExAvoid, `[^.()[\]]+`)
 }
 

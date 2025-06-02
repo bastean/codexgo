@@ -13,7 +13,7 @@ type BadgerDBTestSuite struct {
 	suite.Default
 }
 
-func (s *BadgerDBTestSuite) SetupSuite() {
+func (s *BadgerDBTestSuite) TestSentinel() {
 	s.Equal(badgerdb.Separator, ":")
 }
 

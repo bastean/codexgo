@@ -13,7 +13,7 @@ type MotherTestSuite struct {
 	suite.Default
 }
 
-func (s *MotherTestSuite) SetupSuite() {
+func (s *MotherTestSuite) TestSentinel() {
 	if _, ok := os.LookupEnv("GOTEST"); !ok {
 		log.Panic("\"Test Environment (GOTEST)\" not defined")
 	}

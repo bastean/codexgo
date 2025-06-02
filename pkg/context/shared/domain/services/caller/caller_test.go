@@ -11,7 +11,7 @@ type CallerTestSuite struct {
 	suite.Default
 }
 
-func (s *CallerTestSuite) SetupSuite() {
+func (s *CallerTestSuite) TestSentinel() {
 	s.Equal(caller.FromCurrent, 0)
 	s.Equal(caller.SkipCurrent, 1)
 

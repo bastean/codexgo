@@ -16,11 +16,6 @@ type KVTestSuite struct {
 }
 
 func (s *KVTestSuite) SetupSuite() {
-	s.Equal(kv.TotalCriteriaFields, 3)
-	s.Equal(kv.IxID, 0)
-	s.Equal(kv.IxEmail, 1)
-	s.Equal(kv.IxUsername, 2)
-
 	_ = os.RemoveAll(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN"))
 
 	session, err := badgerdb.Open(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN"))
@@ -34,6 +29,13 @@ func (s *KVTestSuite) SetupSuite() {
 	if err != nil {
 		errors.Panic(err)
 	}
+}
+
+func (s *KVTestSuite) TestSentinel() {
+	s.Equal(kv.TotalCriteriaFields, 3)
+	s.Equal(kv.IxID, 0)
+	s.Equal(kv.IxEmail, 1)
+	s.Equal(kv.IxUsername, 2)
 }
 
 func (*KVTestSuite) TearDownSuite() {

@@ -12,7 +12,7 @@ type WrapTestSuite struct {
 	suite.Default
 }
 
-func (s *WrapTestSuite) TestWrapped() {
+func (s *WrapTestSuite) TestSentinel() {
 	s.Equal(time.RFC3339Nano, t.RFC3339Nano)
 
 	s.Equal(time.Millisecond, t.Millisecond)

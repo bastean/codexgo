@@ -11,7 +11,7 @@ type RegExpTestSuite struct {
 	suite.Default
 }
 
-func (s *RegExpTestSuite) SetupSuite() {
+func (s *RegExpTestSuite) TestSentinel() {
 	s.Equal(messages.RExOrganization, `([a-z0-9]{1,30})`)
 	s.Equal(messages.RExService, `([a-z0-9]{1,30})`)
 	s.Equal(messages.RExVersion, `(\d+)`)

@@ -12,7 +12,7 @@ type RecipientTestSuite struct {
 	suite.Default
 }
 
-func (s *RecipientTestSuite) SetupSuite() {
+func (s *RecipientTestSuite) TestSentinel() {
 	s.Equal(messages.RExRecipient, `^([a-z0-9]{1,30})\.([a-z]{1,30})\.([a-z_]{1,30})_on_([a-z]{1,30})_(queued|succeeded|failed|done)$`)
 }
 

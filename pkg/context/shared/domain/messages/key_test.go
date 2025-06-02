@@ -12,7 +12,7 @@ type KeyTestSuite struct {
 	suite.Default
 }
 
-func (s *KeyTestSuite) SetupSuite() {
+func (s *KeyTestSuite) TestSentinel() {
 	s.Equal(messages.RExKey, `^([a-z0-9]{1,30})\.([a-z0-9]{1,30})\.(\d+)\.(event|command|query|response)\.([a-z]{1,30})\.([a-z]{1,30})\.(queued|succeeded|failed|done)$`)
 }
 

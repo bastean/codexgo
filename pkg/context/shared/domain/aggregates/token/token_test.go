@@ -13,7 +13,7 @@ type TokenTestSuite struct {
 	suite.Default
 }
 
-func (s *TokenTestSuite) SetupSuite() {
+func (s *TokenTestSuite) TestSentinel() {
 	s.Equal(token.Limit, 3)
 	s.Equal(token.Every, int(time.Minute*3))
 	s.Equal(token.Next, int(time.Hour))
