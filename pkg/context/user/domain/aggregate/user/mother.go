@@ -125,8 +125,8 @@ func (m *m) UserValid() *User {
 
 func (m *m) UserValidFromPrimitive(without ...string) *User {
 	user, err := FromPrimitive(&Primitive{
-		Created:     values.Mother().TimeValid().ToPrimitive(),
-		Updated:     values.Mother().TimeValid().ToPrimitive(),
+		CreatedAt:   values.Mother().TimeValid().ToPrimitive(),
+		UpdatedAt:   values.Mother().TimeValid().ToPrimitive(),
 		VerifyToken: token.Mother().TokenValid().ToPrimitive(),
 		ResetToken:  token.Mother().TokenValid().ToPrimitive(),
 		ID:          values.Mother().IDValid().ToPrimitive(),
@@ -142,8 +142,8 @@ func (m *m) UserValidFromPrimitive(without ...string) *User {
 
 	for _, field := range without {
 		switch field {
-		case "Updated":
-			user.Updated = nil
+		case "UpdatedAt":
+			user.UpdatedAt = nil
 		case "VerifyToken":
 			user.VerifyToken = nil
 		case "ResetToken":

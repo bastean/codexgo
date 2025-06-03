@@ -19,7 +19,7 @@ type User struct {
 }
 
 type Primitive struct {
-	Created, Updated        *values.StringPrimitive
+	CreatedAt, UpdatedAt    *values.StringPrimitive
 	VerifyToken, ResetToken *token.Primitive
 	ID, Email, Username     *values.StringPrimitive
 	Password                *values.StringPrimitive
@@ -74,16 +74,16 @@ func (u *User) ValidateResetToken(token *token.Token) error {
 
 func (u *User) ToPrimitive() *Primitive {
 	primitive := &Primitive{
-		Created:  u.Created.ToPrimitive(),
-		ID:       u.ID.ToPrimitive(),
-		Email:    u.Email.ToPrimitive(),
-		Username: u.Username.ToPrimitive(),
-		Password: u.Password.ToPrimitive(),
-		Verified: u.Verified.ToPrimitive(),
+		CreatedAt: u.CreatedAt.ToPrimitive(),
+		ID:        u.ID.ToPrimitive(),
+		Email:     u.Email.ToPrimitive(),
+		Username:  u.Username.ToPrimitive(),
+		Password:  u.Password.ToPrimitive(),
+		Verified:  u.Verified.ToPrimitive(),
 	}
 
-	if u.Updated != nil {
-		primitive.Updated = u.Updated.ToPrimitive()
+	if u.UpdatedAt != nil {
+		primitive.UpdatedAt = u.UpdatedAt.ToPrimitive()
 	}
 
 	if u.VerifyToken != nil {
@@ -98,8 +98,8 @@ func (u *User) ToPrimitive() *Primitive {
 }
 
 func FromPrimitive(primitive *Primitive) (*User, error) {
-	created, errCreated := values.FromPrimitive[*values.Time](primitive.Created)
-	updated, errUpdated := values.FromPrimitive[*values.Time](primitive.Updated, true)
+	createdAt, errCreatedAt := values.FromPrimitive[*values.Time](primitive.CreatedAt)
+	updatedAt, errUpdatedAt := values.FromPrimitive[*values.Time](primitive.UpdatedAt, true)
 
 	verifyToken, errVerifyToken := token.FromPrimitive(primitive.VerifyToken, true)
 	resetToken, errResetToken := token.FromPrimitive(primitive.ResetToken, true)
@@ -110,15 +110,15 @@ func FromPrimitive(primitive *Primitive) (*User, error) {
 	password, errPassword := values.FromPrimitive[*Password](primitive.Password)
 	verified, errVerified := values.FromPrimitive[*Verified](primitive.Verified)
 
-	if err := errors.Join(errCreated, errUpdated, errVerifyToken, errResetToken, errID, errEmail, errUsername, errPassword, errVerified); err != nil {
+	if err := errors.Join(errCreatedAt, errUpdatedAt, errVerifyToken, errResetToken, errID, errEmail, errUsername, errPassword, errVerified); err != nil {
 		return nil, errors.BubbleUp(err)
 	}
 
 	return &User{
 		Root: &root.Root{
-			Created: created,
-			Updated: updated,
-			Events:  make([]*messages.Message, 0),
+			CreatedAt: createdAt,
+			UpdatedAt: updatedAt,
+			Events:    make([]*messages.Message, 0),
 		},
 		VerifyToken: verifyToken,
 		ResetToken:  resetToken,

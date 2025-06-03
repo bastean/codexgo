@@ -33,9 +33,9 @@ func (a *Attempt) Increase() error {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: fmt.Sprintf("No more attempts, please try again in %q", current.Sub(time.Parse(a.Until.Value())).Round(time.Second)),
 		})
-	case a.Counter.Updated() != "" && current.Before(time.Parse(a.Counter.Updated()).Add(time.Duration(a.Every.Value()))):
+	case a.Counter.UpdatedAt() != "" && current.Before(time.Parse(a.Counter.UpdatedAt()).Add(time.Duration(a.Every.Value()))):
 		return errors.New[errors.Failure](&errors.Bubble{
-			What: fmt.Sprintf("Please try again in %q", current.Sub(time.Parse(a.Counter.Updated()).Add(time.Duration(a.Every.Value()))).Round(time.Second)),
+			What: fmt.Sprintf("Please try again in %q", current.Sub(time.Parse(a.Counter.UpdatedAt()).Add(time.Duration(a.Every.Value()))).Round(time.Second)),
 		})
 	}
 

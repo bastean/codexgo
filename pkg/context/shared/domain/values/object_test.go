@@ -34,52 +34,52 @@ func (s *ObjectTestSuite) SetupTest() {
 	s.SUT = new(values.String)
 }
 
-func (s *ObjectTestSuite) TestSetCreated() {
-	s.NotPanics(func() { s.SUT.SetCreated(values.Mother().TimeNow()) })
+func (s *ObjectTestSuite) TestSetCreatedAt() {
+	s.NotPanics(func() { s.SUT.SetCreatedAt(values.Mother().TimeNow()) })
 }
 
-func (s *ObjectTestSuite) TestSetCreatedErrAlreadyDefined() {
-	s.NotPanics(func() { s.SUT.SetCreated(values.Mother().TimeNow()) })
+func (s *ObjectTestSuite) TestSetCreatedAtErrAlreadyDefined() {
+	s.NotPanics(func() { s.SUT.SetCreatedAt(values.Mother().TimeNow()) })
 
-	expected := "(SetCreated): Created is already set"
+	expected := "(SetCreatedAt): Created is already set"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetCreated(values.Mother().TimeNow()) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetCreatedAt(values.Mother().TimeNow()) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdated() {
+func (s *ObjectTestSuite) TestSetUpdatedAt() {
 	date := values.Mother().TimeNow()
 
-	s.NotPanics(func() { s.SUT.SetCreated(date) })
+	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
 
-	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother().TimeRandomAfter(date)) })
+	s.NotPanics(func() { s.SUT.SetUpdatedAt(values.Mother().TimeRandomAfter(date)) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedErrCreatedUndefined() {
-	expected := "(SetUpdated): Created is not defined"
+func (s *ObjectTestSuite) TestSetUpdatedAtErrCreatedUndefined() {
+	expected := "(SetUpdatedAt): Created is not defined"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeNow()) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdatedAt(values.Mother().TimeNow()) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedErrBeforeCreated() {
+func (s *ObjectTestSuite) TestSetUpdatedAtErrBeforeCreated() {
 	date := values.Mother().TimeNow()
 
-	s.NotPanics(func() { s.SUT.SetCreated(date) })
+	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
 
-	expected := "(SetUpdated): Time updated cannot be before created"
+	expected := "(SetUpdatedAt): Time updated cannot be before created"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeRandomBefore(date)) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdatedAt(values.Mother().TimeRandomBefore(date)) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedErrBeforeDefined() {
+func (s *ObjectTestSuite) TestSetUpdatedAtErrBeforeDefined() {
 	date := values.Mother().TimeNow()
 
-	s.NotPanics(func() { s.SUT.SetCreated(date) })
+	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
 
-	s.NotPanics(func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, time.Day*2, time.Day*3)) })
+	s.NotPanics(func() { s.SUT.SetUpdatedAt(values.Mother().TimeSetAfter(date, time.Day*2, time.Day*3)) })
 
-	expected := "(SetUpdated): Updated time cannot be before existing value"
+	expected := "(SetUpdatedAt): Updated time cannot be before existing value"
 
-	s.PanicsWithValue(expected, func() { s.SUT.SetUpdated(values.Mother().TimeSetAfter(date, time.Hour, time.Day)) })
+	s.PanicsWithValue(expected, func() { s.SUT.SetUpdatedAt(values.Mother().TimeSetAfter(date, time.Hour, time.Day)) })
 }
 
 func (s *ObjectTestSuite) TestSet() {
@@ -179,28 +179,28 @@ func (s *ObjectTestSuite) TestRawValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *ObjectTestSuite) TestCreated() {
+func (s *ObjectTestSuite) TestCreatedAt() {
 	date := values.Mother().TimeNow()
 
-	s.NotPanics(func() { s.SUT.SetCreated(date) })
+	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
 
-	actual := s.SUT.Created()
+	actual := s.SUT.CreatedAt()
 
 	expected := date.Format()
 
 	s.Equal(expected, actual)
 }
 
-func (s *ObjectTestSuite) TestUpdated() {
+func (s *ObjectTestSuite) TestUpdatedAt() {
 	date := values.Mother().TimeNow()
 
-	s.NotPanics(func() { s.SUT.SetCreated(date) })
+	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
 
 	date = values.Mother().TimeRandomAfter(date)
 
-	s.NotPanics(func() { s.SUT.SetUpdated(date) })
+	s.NotPanics(func() { s.SUT.SetUpdatedAt(date) })
 
-	actual := s.SUT.Updated()
+	actual := s.SUT.UpdatedAt()
 
 	expected := date.Format()
 
@@ -229,9 +229,9 @@ func (s *ObjectTestSuite) TestFromPrimitive() {
 
 	s.Equal(expected.Value(), actual.Value())
 
-	s.Equal(expected.Created(), actual.Created())
+	s.Equal(expected.CreatedAt(), actual.CreatedAt())
 
-	s.Equal(expected.Updated(), actual.Updated())
+	s.Equal(expected.UpdatedAt(), actual.UpdatedAt())
 }
 
 func (s *ObjectTestSuite) TestFromPrimitiveWithOptional() {
@@ -271,9 +271,9 @@ func (s *ObjectTestSuite) TestReplace() {
 
 	s.NotEqual(expected.Value(), actual.Value())
 
-	s.Equal(expected.Created(), actual.Created())
+	s.Equal(expected.CreatedAt(), actual.CreatedAt())
 
-	s.NotEqual(expected.Updated(), actual.Updated())
+	s.NotEqual(expected.UpdatedAt(), actual.UpdatedAt())
 }
 
 func TestUnitObjectSuite(t *testing.T) {

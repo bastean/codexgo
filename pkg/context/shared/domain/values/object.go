@@ -8,48 +8,48 @@ import (
 )
 
 type Primitive[T any] struct {
-	Value            T
-	Created, Updated string
+	Value                T
+	CreatedAt, UpdatedAt string
 }
 
 type valueObject[T any] interface {
-	SetCreated(time.Time)
-	SetUpdated(time.Time)
+	SetCreatedAt(time.Time)
+	SetUpdatedAt(time.Time)
 	Set(T)
 	Valid()
 	Validate() error
 	Value() T
 	RawValue() T
-	Created() string
-	Updated() string
+	CreatedAt() string
+	UpdatedAt() string
 	ToPrimitive() *Primitive[T]
 }
 
 type Object[T any] struct {
-	value            T
-	isSet, isValid   bool
-	created, updated time.Time
+	value                T
+	isSet, isValid       bool
+	createdAt, updatedAt time.Time
 }
 
-func (o *Object[T]) SetCreated(actual time.Time) {
-	if !o.created.IsZero() {
+func (o *Object[T]) SetCreatedAt(actual time.Time) {
+	if !o.createdAt.IsZero() {
 		errors.Panic(errors.Standard("Created is already set"))
 	}
 
-	o.created = actual
+	o.createdAt = actual
 }
 
-func (o *Object[T]) SetUpdated(actual time.Time) {
+func (o *Object[T]) SetUpdatedAt(actual time.Time) {
 	switch {
-	case o.created.IsZero():
+	case o.createdAt.IsZero():
 		errors.Panic(errors.Standard("Created is not defined"))
-	case actual.Before(o.created):
+	case actual.Before(o.createdAt):
 		errors.Panic(errors.Standard("Time updated cannot be before created"))
-	case actual.Before(o.updated):
+	case actual.Before(o.updatedAt):
 		errors.Panic(errors.Standard("Updated time cannot be before existing value"))
 	}
 
-	o.updated = actual
+	o.updatedAt = actual
 }
 
 func (o *Object[T]) Set(value T) {
@@ -91,13 +91,13 @@ func (o *Object[T]) RawValue() T {
 	return o.value
 }
 
-func (o *Object[T]) Created() string {
-	return o.created.Format()
+func (o *Object[T]) CreatedAt() string {
+	return o.createdAt.Format()
 }
 
-func (o *Object[T]) Updated() string {
-	if !o.updated.IsZero() {
-		return o.updated.Format()
+func (o *Object[T]) UpdatedAt() string {
+	if !o.updatedAt.IsZero() {
+		return o.updatedAt.Format()
 	}
 
 	return ""
@@ -105,9 +105,9 @@ func (o *Object[T]) Updated() string {
 
 func (o *Object[T]) ToPrimitive() *Primitive[T] {
 	return &Primitive[T]{
-		Value:   o.Value(),
-		Created: o.Created(),
-		Updated: o.Updated(),
+		Value:     o.Value(),
+		CreatedAt: o.CreatedAt(),
+		UpdatedAt: o.UpdatedAt(),
 	}
 }
 
@@ -130,7 +130,7 @@ func New[O valueObject[V], V any](value V) (O, error) {
 		return *new(O), errors.BubbleUp(err)
 	}
 
-	object.SetCreated(time.Now())
+	object.SetCreatedAt(time.Now())
 
 	return object, nil
 }
@@ -153,10 +153,10 @@ func FromPrimitive[O valueObject[V], V any](primitive *Primitive[V], isOptional 
 		return *new(O), errors.BubbleUp(err)
 	}
 
-	object.SetCreated(time.Parse(primitive.Created))
+	object.SetCreatedAt(time.Parse(primitive.CreatedAt))
 
-	if primitive.Updated != "" {
-		object.SetUpdated(time.Parse(primitive.Updated))
+	if primitive.UpdatedAt != "" {
+		object.SetUpdatedAt(time.Parse(primitive.UpdatedAt))
 	}
 
 	return object, nil
@@ -169,9 +169,9 @@ func Replace[O valueObject[V], V any](old O, value V) (O, error) {
 		return *new(O), errors.BubbleUp(err)
 	}
 
-	object.SetCreated(time.Parse(old.Created()))
+	object.SetCreatedAt(time.Parse(old.CreatedAt()))
 
-	object.SetUpdated(time.Now())
+	object.SetUpdatedAt(time.Now())
 
 	return object, nil
 }

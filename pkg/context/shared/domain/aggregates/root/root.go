@@ -8,46 +8,46 @@ import (
 )
 
 type Root struct {
-	Created, Updated *values.Time
-	Events           []*messages.Message
+	CreatedAt, UpdatedAt *values.Time
+	Events               []*messages.Message
 }
 
 func (r *Root) CreationStamp() error {
-	if r.Created != nil {
+	if r.CreatedAt != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Cannot overwrite an existing stamp",
 		})
 	}
 
-	created, err := values.New[*values.Time](time.Now().Format())
+	createdAt, err := values.New[*values.Time](time.Now().Format())
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	r.Created = created
+	r.CreatedAt = createdAt
 
 	return nil
 }
 
 func (r *Root) UpdatedStamp() error {
 	var (
-		err     error
-		updated *values.Time
+		err       error
+		updatedAt *values.Time
 	)
 
-	switch r.Updated {
+	switch r.UpdatedAt {
 	case nil:
-		updated, err = values.New[*values.Time](time.Now().Format())
+		updatedAt, err = values.New[*values.Time](time.Now().Format())
 	default:
-		updated, err = values.Replace(r.Updated, time.Now().Format())
+		updatedAt, err = values.Replace(r.UpdatedAt, time.Now().Format())
 	}
 
 	if err != nil {
 		return errors.BubbleUp(err)
 	}
 
-	r.Updated = updated
+	r.UpdatedAt = updatedAt
 
 	return nil
 }

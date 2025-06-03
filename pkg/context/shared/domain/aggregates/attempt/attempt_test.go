@@ -60,7 +60,7 @@ func (s *AttemptTestSuite) TestIncreaseErrTryAgain() {
 
 	current := time.Now()
 
-	aggregate.Counter.SetUpdated(attempt.Mother().TimeSetAfter(current, time.Hour, time.Day))
+	aggregate.Counter.SetUpdatedAt(attempt.Mother().TimeSetAfter(current, time.Hour, time.Day))
 
 	err := aggregate.Increase()
 
@@ -71,7 +71,7 @@ func (s *AttemptTestSuite) TestIncreaseErrTryAgain() {
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Increase",
-		What:  fmt.Sprintf("Please try again in %q", current.Sub(time.Parse(aggregate.Counter.Updated()).Add(time.Duration(aggregate.Every.Value()))).Round(time.Second)),
+		What:  fmt.Sprintf("Please try again in %q", current.Sub(time.Parse(aggregate.Counter.UpdatedAt()).Add(time.Duration(aggregate.Every.Value()))).Round(time.Second)),
 	}}
 
 	s.Equal(expected, actual)
