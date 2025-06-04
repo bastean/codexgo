@@ -12,6 +12,15 @@ func MissingKey(what string) error {
 
 	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,
-		What:  fmt.Sprintf("Failure to obtain the value of the key [%s]", what),
+		What:  fmt.Sprintf("Missing key %q", what),
+	})
+}
+
+func MissingTokenSignature() error {
+	_, _, where := caller.Received(caller.SkipCurrent)
+
+	return errors.New[errors.Internal](&errors.Bubble{
+		Where: where,
+		What:  "Missing token signature",
 	})
 }

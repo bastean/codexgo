@@ -11,6 +11,7 @@ import (
 	"golang.org/x/text/language"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/array"
 )
 
 const (
@@ -67,7 +68,14 @@ func IsErrDuplicateValue(err error) bool {
 func HandleErrDuplicateValue(err error) error {
 	re := regexp.MustCompile(`[A-Za-z0-9]+\.value`)
 
-	field := strings.Split(re.FindString(err.Error()), ".")[0]
+	field, exists := array.Slice(strings.Split(re.FindString(err.Error()), "."), 0)
+
+	if !exists {
+		return errors.New[errors.Internal](&errors.Bubble{
+			What: "Missing field",
+			Who:  err,
+		})
+	}
 
 	field = cases.Title(language.English).String(field)
 
