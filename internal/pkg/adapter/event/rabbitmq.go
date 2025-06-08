@@ -11,7 +11,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/user/domain/aggregate/user"
 )
 
-var UserCreatedSucceededRecipient, _ = values.New[*messages.Recipient](messages.ParseRecipient(&messages.RecipientComponents{
+var UserCreatedSucceededRecipient, _ = values.New[*messages.Recipient](messages.FormatRecipient(&messages.RecipientComponents{
 	Service: "user",
 	Entity:  "user",
 	Trigger: "send_confirmation",
@@ -19,7 +19,7 @@ var UserCreatedSucceededRecipient, _ = values.New[*messages.Recipient](messages.
 	Status:  "succeeded",
 }))
 
-var UserResetQueuedRecipient, _ = values.New[*messages.Recipient](messages.ParseRecipient(&messages.RecipientComponents{
+var UserResetQueuedRecipient, _ = values.New[*messages.Recipient](messages.FormatRecipient(&messages.RecipientComponents{
 	Service: "user",
 	Entity:  "user",
 	Trigger: "send_reset",
@@ -28,7 +28,7 @@ var UserResetQueuedRecipient, _ = values.New[*messages.Recipient](messages.Parse
 }))
 
 var RabbitMQueueMapper = rabbitmq.Mapper{
-	user.CreatedSucceededKey: []*rabbitmq.Queue{
+	user.CreatedSucceededKey.Value(): []*rabbitmq.Queue{
 		{
 			Name:       UserCreatedSucceededRecipient,
 			BindingKey: user.CreatedSucceededKey.Value(),
@@ -36,7 +36,7 @@ var RabbitMQueueMapper = rabbitmq.Mapper{
 			Meta:       reflect.TypeOf(new(confirmation.EventMeta)),
 		},
 	},
-	user.ResetQueuedKey: []*rabbitmq.Queue{
+	user.ResetQueuedKey.Value(): []*rabbitmq.Queue{
 		{
 			Name:       UserResetQueuedRecipient,
 			BindingKey: user.ResetQueuedKey.Value(),

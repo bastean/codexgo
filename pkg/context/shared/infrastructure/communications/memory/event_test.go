@@ -3,7 +3,6 @@ package memory_test
 import (
 	"testing"
 
-	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/communications"
@@ -15,12 +14,10 @@ type EventBusTestSuite struct {
 }
 
 func (s *EventBusTestSuite) SetupSuite() {
-	s.EventBusSuite.Event = messages.Mother().MessageValid()
-
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 
 	s.EventBusSuite.SUT = &memory.EventBus{
-		Consumers: make(map[*messages.Key][]roles.EventConsumer),
+		Consumers: make(map[string][]roles.EventConsumer),
 	}
 }
 

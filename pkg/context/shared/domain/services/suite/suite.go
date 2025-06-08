@@ -26,19 +26,19 @@ func (s *Frozen) SetupTest() {
 }
 
 func (s *Frozen) SetTimeBefore(d time.Duration) {
-	s.NoError(os.Setenv("GOTEST_FROZEN_BEFORE", strconv.Itoa(int(d))))
+	s.NoError(os.Setenv("GOTEST_FROZEN_TIME_BEFORE", strconv.Itoa(int(d))))
 }
 
 func (s *Frozen) UnsetTimeBefore() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN_BEFORE"))
+	s.NoError(os.Unsetenv("GOTEST_FROZEN_TIME_BEFORE"))
 }
 
 func (s *Frozen) SetTimeAfter(d time.Duration) {
-	s.NoError(os.Setenv("GOTEST_FROZEN_AFTER", strconv.Itoa(int(d))))
+	s.NoError(os.Setenv("GOTEST_FROZEN_TIME_AFTER", strconv.Itoa(int(d))))
 }
 
 func (s *Frozen) UnsetTimeAfter() {
-	s.NoError(os.Unsetenv("GOTEST_FROZEN_AFTER"))
+	s.NoError(os.Unsetenv("GOTEST_FROZEN_TIME_AFTER"))
 }
 
 func (s *Frozen) TearDownTest() {

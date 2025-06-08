@@ -22,29 +22,9 @@ type RabbitMQTestSuite struct {
 func (s *RabbitMQTestSuite) SetupSuite() {
 	var err error
 
-	routingKeyComponents := messages.Mother().KeyComponentsValid()
-
-	routingKey := messages.Mother().KeyValidWithComponents(routingKeyComponents)
-
-	queue := messages.Mother().RecipientValid()
-
-	queues := rabbitmq.Mapper{
-		routingKey: []*rabbitmq.Queue{
-			{
-				Name: queue,
-				BindingKey: fmt.Sprintf("#.%s.#.%s.%s",
-					routingKeyComponents.Type,
-					routingKeyComponents.Action,
-					routingKeyComponents.Status),
-			},
-		},
-	}
-
 	logger := log.New()
 
 	consumeCycle, _ := context.WithTimeout(context.Background(), 5*time.Second) //nolint:govet
-
-	s.EventBusSuite.Event = messages.Mother().MessageValidWithKey(routingKey)
 
 	s.EventBusSuite.Consumer = new(communications.EventConsumerMock)
 
@@ -58,8 +38,26 @@ func (s *RabbitMQTestSuite) SetupSuite() {
 	if err != nil {
 		errors.Panic(err)
 	}
+}
 
-	err = rabbitmq.AddQueueMapper(s.EventBusSuite.SUT.(*rabbitmq.RabbitMQ), queues)
+func (s *RabbitMQTestSuite) SetupTest() {
+	s.EventBusSuite.SetupTest()
+
+	var routingKeyComponents *messages.KeyComponents
+
+	s.NotPanics(func() { routingKeyComponents = messages.ParseKey(s.EventBusSuite.Event.Key.Value()) })
+
+	err := rabbitmq.AddQueueMapper(s.EventBusSuite.SUT.(*rabbitmq.RabbitMQ), rabbitmq.Mapper{
+		s.EventBusSuite.Event.Key.Value(): []*rabbitmq.Queue{
+			{
+				Name: messages.Mother().RecipientValid(),
+				BindingKey: fmt.Sprintf("#.%s.#.%s.%s",
+					routingKeyComponents.Type,
+					routingKeyComponents.Action,
+					routingKeyComponents.Status),
+			},
+		},
+	})
 
 	if err != nil {
 		errors.Panic(err)

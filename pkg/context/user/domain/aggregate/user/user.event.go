@@ -5,7 +5,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
-var CreatedSucceededKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
+var CreatedSucceededKey, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Event,
@@ -20,7 +20,7 @@ type CreatedSucceededAttributes = struct {
 
 type CreatedSucceededMeta = struct{}
 
-var ResetQueuedKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
+var ResetQueuedKey, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Event,

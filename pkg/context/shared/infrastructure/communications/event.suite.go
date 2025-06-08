@@ -15,6 +15,10 @@ type EventBusSuite struct {
 	Event    *messages.Message
 }
 
+func (s *EventBusSuite) SetupTest() {
+	s.Event = messages.Mother().MessageValid()
+}
+
 func (s *EventBusSuite) TestSubscribe() {
 	s.NoError(s.SUT.Subscribe(s.Event.Key, s.Consumer))
 }
@@ -32,9 +36,9 @@ func (s *EventBusSuite) TestPublish() {
 }
 
 func (s *EventBusSuite) TestPublishErrMissingConsumer() {
-	event := messages.Mother().MessageValid()
+	s.Event = messages.Mother().MessageValid()
 
-	err := s.SUT.Publish(event)
+	err := s.SUT.Publish(s.Event)
 
 	var actual *errors.Internal
 
@@ -45,7 +49,8 @@ func (s *EventBusSuite) TestPublishErrMissingConsumer() {
 		Where: "Publish",
 		What:  "Failure to execute a Event without a Consumer",
 		Why: errors.Meta{
-			"Event": event.Key.Value(),
+			"ID":  s.Event.ID.Value(),
+			"Key": s.Event.Key.Value(),
 		},
 	}}
 

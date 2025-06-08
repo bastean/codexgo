@@ -12,18 +12,19 @@ type EventBus struct {
 }
 
 func (b *EventBus) Subscribe(key *messages.Key, consumer roles.EventConsumer) error {
-	b.Consumers[key] = append(b.Consumers[key], consumer)
+	b.Consumers[key.Value()] = append(b.Consumers[key.Value()], consumer)
 	return nil
 }
 
 func (b *EventBus) Publish(event *messages.Message) error {
-	consumers, ok := b.Consumers[event.Key]
+	consumers, ok := b.Consumers[event.Key.Value()]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to execute a Event without a Consumer",
 			Why: errors.Meta{
-				"Event": event.Key.Value(),
+				"ID":  event.ID.Value(),
+				"Key": event.Key.Value(),
 			},
 		})
 	}

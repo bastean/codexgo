@@ -3,6 +3,7 @@ package messages
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
@@ -36,7 +37,7 @@ func (k *Key) Validate() error {
 	return nil
 }
 
-func ParseKey(key *KeyComponents) string {
+func FormatKey(key *KeyComponents) string {
 	if key.Organization == "" {
 		key.Organization = "codexgo"
 	}
@@ -50,4 +51,20 @@ func ParseKey(key *KeyComponents) string {
 		key.Action,
 		key.Status,
 	)
+}
+
+func ParseKey(value string) *KeyComponents {
+	_, _ = values.New[*Key](value)
+
+	components := strings.Split(value, ".")
+
+	return &KeyComponents{
+		Organization: components[0],
+		Service:      components[1],
+		Version:      components[2],
+		Type:         components[3],
+		Entity:       components[4],
+		Action:       components[5],
+		Status:       components[6],
+	}
 }

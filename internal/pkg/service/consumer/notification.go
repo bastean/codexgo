@@ -62,10 +62,10 @@ func InitNotification() error {
 	}
 
 	err = events.AddEventMapper(event.Bus, events.Mapper{
-		user.CreatedSucceededKey: {
+		user.CreatedSucceededKey.Value(): {
 			NotificationConfirmation,
 		},
-		user.ResetQueuedKey: {
+		user.ResetQueuedKey.Value(): {
 			NotificationPassword,
 		},
 	})

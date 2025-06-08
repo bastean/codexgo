@@ -52,16 +52,16 @@ func Now() Time {
 		date := Time{time.Date(2009, time.November, 10, 23, 0, 0, 0, time.UTC)}
 
 		switch {
-		case os.Getenv("GOTEST_FROZEN_BEFORE") != "":
-			value, err := strconv.Atoi(os.Getenv("GOTEST_FROZEN_BEFORE"))
+		case os.Getenv("GOTEST_FROZEN_TIME_BEFORE") != "":
+			value, err := strconv.Atoi(os.Getenv("GOTEST_FROZEN_TIME_BEFORE"))
 
 			if err != nil {
 				log.Panic(err)
 			}
 
 			date = date.Add(-Duration(value))
-		case os.Getenv("GOTEST_FROZEN_AFTER") != "":
-			value, err := strconv.Atoi(os.Getenv("GOTEST_FROZEN_AFTER"))
+		case os.Getenv("GOTEST_FROZEN_TIME_AFTER") != "":
+			value, err := strconv.Atoi(os.Getenv("GOTEST_FROZEN_TIME_AFTER"))
 
 			if err != nil {
 				log.Panic(err)

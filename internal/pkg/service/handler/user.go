@@ -117,12 +117,12 @@ func InitUser() error {
 	}
 
 	err = commands.AddCommandMapper(command.Bus, commands.Mapper{
-		create.CommandKey: UserCreate,
-		update.CommandKey: UserUpdate,
-		delete.CommandKey: UserDelete,
-		verify.CommandKey: UserVerify,
-		forgot.CommandKey: UserForgot,
-		reset.CommandKey:  UserReset,
+		create.CommandKey.Value(): UserCreate,
+		update.CommandKey.Value(): UserUpdate,
+		delete.CommandKey.Value(): UserDelete,
+		verify.CommandKey.Value(): UserVerify,
+		forgot.CommandKey.Value(): UserForgot,
+		reset.CommandKey.Value():  UserReset,
 	})
 
 	if err != nil {
@@ -130,8 +130,8 @@ func InitUser() error {
 	}
 
 	err = queries.AddQueryMapper(query.Bus, queries.Mapper{
-		read.QueryKey:  UserRead,
-		login.QueryKey: UserLogin,
+		read.QueryKey.Value():  UserRead,
+		login.QueryKey.Value(): UserLogin,
 	})
 
 	if err != nil {

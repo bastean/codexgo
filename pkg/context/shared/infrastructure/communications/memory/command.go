@@ -12,30 +12,31 @@ type CommandBus struct {
 }
 
 func (b *CommandBus) Register(key *messages.Key, handler roles.CommandHandler) error {
-	_, ok := b.Handlers[key]
+	_, ok := b.Handlers[key.Value()]
 
 	if ok {
 		return errors.New[errors.Internal](&errors.Bubble{
-			What: key.Value() + " already registered",
+			What: "Already registered",
 			Why: errors.Meta{
-				"Command": key,
+				"Key": key.Value(),
 			},
 		})
 	}
 
-	b.Handlers[key] = handler
+	b.Handlers[key.Value()] = handler
 
 	return nil
 }
 
 func (b *CommandBus) Dispatch(command *messages.Message) error {
-	handler, ok := b.Handlers[command.Key]
+	handler, ok := b.Handlers[command.Key.Value()]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to execute a Command without a Handler",
 			Why: errors.Meta{
-				"Command": command.Key,
+				"ID":  command.ID.Value(),
+				"Key": command.Key.Value(),
 			},
 		})
 	}

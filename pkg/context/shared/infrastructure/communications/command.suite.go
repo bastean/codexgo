@@ -5,24 +5,28 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/messages"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
 type CommandBusSuite struct {
 	suite.Default
 	SUT     roles.CommandBus
 	Handler *CommandHandlerMock
+	Command *messages.Message
+}
+
+func (s *CommandBusSuite) SetupTest() {
+	s.Command = messages.Mother().MessageValid()
 }
 
 func (s *CommandBusSuite) TestRegister() {
-	s.NoError(s.SUT.Register(messages.Mother().MessageValid().Key, s.Handler))
+	s.NoError(s.SUT.Register(s.Command.Key, s.Handler))
 }
 
 func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
-	key := messages.Mother().MessageValid().Key
+	s.NoError(s.SUT.Register(s.Command.Key, s.Handler))
 
-	s.NoError(s.SUT.Register(key, s.Handler))
-
-	err := s.SUT.Register(key, s.Handler)
+	err := s.SUT.Register(s.Command.Key, s.Handler)
 
 	var actual *errors.Internal
 
@@ -31,9 +35,9 @@ func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Register",
-		What:  key.Value() + " already registered",
+		What:  "Already registered",
 		Why: errors.Meta{
-			"Command": key,
+			"Key": s.Command.Key.Value(),
 		},
 	}}
 
@@ -41,21 +45,21 @@ func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
 }
 
 func (s *CommandBusSuite) TestDispatch() {
-	command := messages.Mother().MessageValid()
+	s.NoError(s.SUT.Register(s.Command.Key, s.Handler))
 
-	s.NoError(s.SUT.Register(command.Key, s.Handler))
+	s.Handler.Mock.On("Handle", s.Command)
 
-	s.Handler.Mock.On("Handle", command)
+	s.NoError(s.SUT.Dispatch(s.Command))
 
-	s.NoError(s.SUT.Dispatch(command))
-
-	s.Handler.Mock.AssertExpectations(s.T())
+	s.Eventually(func() bool {
+		return s.Handler.Mock.AssertExpectations(s.T())
+	}, 10*time.Second, 30*time.Millisecond)
 }
 
 func (s *CommandBusSuite) TestDispatchErrMissingHandler() {
-	command := messages.Mother().MessageValid()
+	s.Command = messages.Mother().MessageValid()
 
-	err := s.SUT.Dispatch(command)
+	err := s.SUT.Dispatch(s.Command)
 
 	var actual *errors.Internal
 
@@ -66,7 +70,8 @@ func (s *CommandBusSuite) TestDispatchErrMissingHandler() {
 		Where: "Dispatch",
 		What:  "Failure to execute a Command without a Handler",
 		Why: errors.Meta{
-			"Command": command.Key,
+			"ID":  s.Command.ID.Value(),
+			"Key": s.Command.Key.Value(),
 		},
 	}}
 

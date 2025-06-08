@@ -13,6 +13,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/roles"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/id"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
 type Queue struct {
@@ -22,7 +23,7 @@ type Queue struct {
 }
 
 type (
-	Mapper map[*messages.Key][]*Queue
+	Mapper map[string][]*Queue
 )
 
 type RabbitMQ struct {
@@ -60,9 +61,9 @@ func (r *RabbitMQ) AddExchange(name string) error {
 	return nil
 }
 
-func (r *RabbitMQ) AddQueue(name *messages.Recipient) error {
+func (r *RabbitMQ) AddQueue(queue *Queue, routingKey string) error {
 	_, err := r.Channel.QueueDeclare(
-		name.Value(),
+		queue.Name.Value(),
 		true,
 		false,
 		false,
@@ -74,17 +75,13 @@ func (r *RabbitMQ) AddQueue(name *messages.Recipient) error {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to declare a Queue",
 			Why: errors.Meta{
-				"Queue": name.Value(),
+				"Queue": queue.Name.Value(),
 			},
 			Who: err,
 		})
 	}
 
-	return nil
-}
-
-func (r *RabbitMQ) AddQueueEventBind(queue *Queue, routingKey *messages.Key) error {
-	err := r.Channel.QueueBind(
+	err = r.Channel.QueueBind(
 		queue.Name.Value(),
 		queue.BindingKey,
 		r.exchange,
@@ -99,7 +96,7 @@ func (r *RabbitMQ) AddQueueEventBind(queue *Queue, routingKey *messages.Key) err
 				"Exchange":    r.exchange,
 				"Queue":       queue.Name.Value(),
 				"Binding Key": queue.BindingKey,
-				"Routing Key": routingKey.Value(),
+				"Routing Key": routingKey,
 			},
 			Who: err,
 		})
@@ -112,44 +109,49 @@ func (r *RabbitMQ) AddQueueEventBind(queue *Queue, routingKey *messages.Key) err
 	return nil
 }
 
-func (r *RabbitMQ) Consume(key *messages.Key, queue *Queue, deliveries <-chan amqp.Delivery, consumer roles.EventConsumer) {
+func (r *RabbitMQ) Consume(queue *Queue, deliveries <-chan amqp.Delivery, consumer roles.EventConsumer) {
 	for delivery := range deliveries {
-		event := new(messages.Message)
+		primitive := new(messages.Primitive)
 
 		if queue.Attributes != nil {
-			event.Attributes = reflect.New(queue.Attributes.Elem()).Interface()
+			primitive.Attributes = reflect.New(queue.Attributes.Elem()).Interface()
 		}
 
 		if queue.Meta != nil {
-			event.Meta = reflect.New(queue.Meta.Elem()).Interface()
+			primitive.Meta = reflect.New(queue.Meta.Elem()).Interface()
 		}
 
-		err := json.Unmarshal(delivery.Body, event)
+		err := json.Unmarshal(delivery.Body, primitive)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to decode an Event with ID [%s] from Queue [%s]: [%s]", key.Value(), queue.Name.Value(), err))
+			r.Logger.Error(fmt.Sprintf("Failure to decode an Event from Queue [%s]: [%s]", queue.Name.Value(), err))
 			continue
 		}
 
-		event.Key = key
+		event, err := messages.FromPrimitive(primitive)
+
+		if err != nil {
+			r.Logger.Error(fmt.Sprintf("Failure to create a Event with ID [%s] from Queue [%s]: [%s]", primitive.ID.Value, queue.Name.Value(), err))
+			continue
+		}
 
 		err = consumer.On(event)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to consume an Event with ID [%s] from Queue [%s]: [%s]", event.Key.Value(), queue.Name.Value(), err))
+			r.Logger.Error(fmt.Sprintf("Failure to consume an Event with ID [%s] from Queue [%s]: [%s]", event.ID.Value(), queue.Name.Value(), err))
 			continue
 		}
 
 		err = delivery.Ack(false)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", event.Key.Value(), queue.Name.Value(), err))
+			r.Logger.Error(fmt.Sprintf("Failure to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", event.ID.Value(), queue.Name.Value(), err))
 		}
 	}
 }
 
 func (r *RabbitMQ) Subscribe(key *messages.Key, consumer roles.EventConsumer) error {
-	queues, ok := r.queues[key]
+	queues, ok := r.queues[key.Value()]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -184,33 +186,44 @@ func (r *RabbitMQ) Subscribe(key *messages.Key, consumer roles.EventConsumer) er
 			})
 		}
 
-		go r.Consume(key, queue, deliveries, consumer)
+		go r.Consume(queue, deliveries, consumer)
 	}
 
 	return nil
 }
 
 func (r *RabbitMQ) Publish(event *messages.Message) error {
-	_, ok := r.queues[event.Key]
+	_, ok := r.queues[event.Key.Value()]
 
 	if !ok {
 		return errors.New[errors.Internal](&errors.Bubble{
 			What: "Failure to execute a Event without a Consumer",
 			Why: errors.Meta{
-				"Event": event.Key.Value(),
+				"ID":  event.ID.Value(),
+				"Key": event.Key.Value(),
 			},
 		})
 	}
 
-	if event.ID == "" {
-		event.ID = id.New()
+	var err error
+
+	if event.ID == nil {
+		event.ID, err = values.New[*values.ID](id.New())
+
+		if err != nil {
+			return errors.BubbleUp(err)
+		}
 	}
 
-	if event.OccurredOn == "" {
-		event.OccurredOn = time.Now().Format()
+	if event.OccurredAt == nil {
+		event.OccurredAt, err = values.New[*values.Time](time.Now().Format())
+
+		if err != nil {
+			return errors.BubbleUp(err)
+		}
 	}
 
-	body, err := json.Marshal(event)
+	body, err := json.Marshal(event.ToPrimitive())
 
 	if err != nil {
 		return errors.New[errors.Internal](&errors.Bubble{
@@ -254,7 +267,7 @@ func (r *RabbitMQ) Publish(event *messages.Message) error {
 	return nil
 }
 
-func Open(uri string, exchange string, logger roles.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
+func Open(uri, exchange string, logger roles.Logger, consumeCycle context.Context) (*RabbitMQ, error) {
 	session, err := amqp.Dial(uri)
 
 	if err != nil {
@@ -317,15 +330,7 @@ func AddQueueMapper(rmq *RabbitMQ, mapper Mapper) error {
 
 	for routingKey, queues := range mapper {
 		for _, queue := range queues {
-			err = rmq.AddQueue(queue.Name)
-
-			if err != nil {
-				return errors.BubbleUp(err)
-			}
-
-			err = rmq.AddQueueEventBind(queue, routingKey)
-
-			if err != nil {
+			if err = rmq.AddQueue(queue, routingKey); err != nil {
 				return errors.BubbleUp(err)
 			}
 		}

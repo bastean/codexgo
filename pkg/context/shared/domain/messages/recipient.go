@@ -3,6 +3,7 @@ package messages
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
@@ -35,7 +36,7 @@ func (r *Recipient) Validate() error {
 	return nil
 }
 
-func ParseRecipient(recipient *RecipientComponents) string {
+func FormatRecipient(recipient *RecipientComponents) string {
 	return fmt.Sprintf("%s.%s.%s_on_%s_%s",
 		recipient.Service,
 		recipient.Entity,
@@ -43,4 +44,27 @@ func ParseRecipient(recipient *RecipientComponents) string {
 		recipient.Action,
 		recipient.Status,
 	)
+}
+
+func ParseRecipient(value string) *RecipientComponents {
+	_, _ = values.New[*Recipient](value)
+
+	components := strings.Split(value, ".")
+
+	recipient := &RecipientComponents{
+		Service: components[0],
+		Entity:  components[1],
+	}
+
+	underscores := strings.Split(components[2], "_on_")
+
+	recipient.Trigger = underscores[0]
+
+	underscores = strings.Split(underscores[1], "_")
+
+	recipient.Action = underscores[0]
+
+	recipient.Status = underscores[1]
+
+	return recipient
 }

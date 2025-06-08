@@ -6,7 +6,7 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
-var QueryKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
+var QueryKey, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Query,
@@ -21,7 +21,7 @@ type QueryAttributes = struct {
 
 type QueryMeta = struct{}
 
-var ResponseKey, _ = values.New[*messages.Key](messages.ParseKey(&messages.KeyComponents{
+var ResponseKey, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyComponents{
 	Service: "user",
 	Version: "1",
 	Type:    messages.Type.Response,

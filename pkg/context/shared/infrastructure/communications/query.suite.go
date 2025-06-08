@@ -11,18 +11,21 @@ type QueryBusSuite struct {
 	suite.Default
 	SUT     roles.QueryBus
 	Handler *QueryHandlerMock
+	Query   *messages.Message
+}
+
+func (s *QueryBusSuite) SetupTest() {
+	s.Query = messages.Mother().MessageValid()
 }
 
 func (s *QueryBusSuite) TestRegister() {
-	s.NoError(s.SUT.Register(messages.Mother().MessageValid().Key, s.Handler))
+	s.NoError(s.SUT.Register(s.Query.Key, s.Handler))
 }
 
 func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
-	key := messages.Mother().MessageValid().Key
+	s.NoError(s.SUT.Register(s.Query.Key, s.Handler))
 
-	s.NoError(s.SUT.Register(key, s.Handler))
-
-	err := s.SUT.Register(key, s.Handler)
+	err := s.SUT.Register(s.Query.Key, s.Handler)
 
 	var actual *errors.Internal
 
@@ -31,9 +34,9 @@ func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
 		Where: "Register",
-		What:  key.Value() + " already registered",
+		What:  "Already registered",
 		Why: errors.Meta{
-			"Query": key,
+			"Key": s.Query.Key.Value(),
 		},
 	}}
 
@@ -41,15 +44,13 @@ func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
 }
 
 func (s *QueryBusSuite) TestAsk() {
-	query := messages.Mother().MessageValid()
-
-	s.NoError(s.SUT.Register(query.Key, s.Handler))
+	s.NoError(s.SUT.Register(s.Query.Key, s.Handler))
 
 	response := messages.Mother().MessageValid()
 
-	s.Handler.Mock.On("Handle", query).Return(response)
+	s.Handler.Mock.On("Handle", s.Query).Return(response)
 
-	actual, err := s.SUT.Ask(query)
+	actual, err := s.SUT.Ask(s.Query)
 
 	s.NoError(err)
 
@@ -61,9 +62,9 @@ func (s *QueryBusSuite) TestAsk() {
 }
 
 func (s *QueryBusSuite) TestAskErrMissingHandler() {
-	query := messages.Mother().MessageValid()
+	s.Query = messages.Mother().MessageValid()
 
-	_, err := s.SUT.Ask(query)
+	_, err := s.SUT.Ask(s.Query)
 
 	var actual *errors.Internal
 
@@ -74,7 +75,8 @@ func (s *QueryBusSuite) TestAskErrMissingHandler() {
 		Where: "Ask",
 		What:  "Failure to execute a Query without a Handler",
 		Why: errors.Meta{
-			"Query": query.Key,
+			"ID":  s.Query.ID.Value(),
+			"Key": s.Query.Key.Value(),
 		},
 	}}
 
