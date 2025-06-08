@@ -7,7 +7,7 @@ import (
 )
 
 func assertion(what string) error {
-	_, _, where := caller.Received(caller.SkipCurrent + 1)
+	where, _, _, _ := caller.Received(caller.SkipCurrent + 1)
 
 	return New[Internal](&Bubble{
 		Where: where,

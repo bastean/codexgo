@@ -27,7 +27,7 @@ func (s *UserTestSuite) TestValidateVerifyTokenErrDoNotMatch() {
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "ValidateVerifyToken",
+		Where: "user/*User/ValidateVerifyToken",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
 			"Received": token.Value(),
@@ -50,7 +50,7 @@ func (s *UserTestSuite) TestValidateResetTokenErrDoNotMatch() {
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "ValidateResetToken",
+		Where: "user/*User/ValidateResetToken",
 		What:  "Tokens do not match",
 		Why: errors.Meta{
 			"Received": token.Value(),

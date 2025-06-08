@@ -37,7 +37,7 @@ func (s *KeyTestSuite) TestWithValidValue() {
 func (s *KeyTestSuite) TestWithInvalidValue() {
 	components := messages.Mother().KeyComponentsInvalid()
 
-	expected := fmt.Sprintf("(Validate): Key has an invalid nomenclature %q", messages.FormatKey(components))
+	expected := fmt.Sprintf("(messages/*Key/Validate): Key has an invalid nomenclature %q", messages.FormatKey(components))
 
 	s.PanicsWithValue(expected, func() { messages.Mother().KeyInvalidWithComponents(components) })
 }

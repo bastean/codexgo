@@ -54,7 +54,7 @@ func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {
 	}
 
 	if bubble.Where == "" {
-		_, _, where := caller.Received(caller.SkipCurrent)
+		where, _, _, _ := caller.Received(caller.SkipCurrent)
 		bubble.Where = where
 	}
 

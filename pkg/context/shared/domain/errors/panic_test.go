@@ -15,7 +15,7 @@ type PanicTestSuite struct {
 func (s *PanicTestSuite) TestPanic() {
 	err := errors.Mother().Error()
 
-	expected := fmt.Sprintf("(PanicValidWithError): %s", err)
+	expected := fmt.Sprintf("(errors/*m/PanicValidWithError): %s", err)
 
 	s.PanicsWithValue(expected, func() { errors.Mother().PanicValidWithError(err) })
 }

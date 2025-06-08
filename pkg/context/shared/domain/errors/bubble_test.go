@@ -54,7 +54,7 @@ func (s *BubbleTestSuite) TestWithoutWhere() {
 }
 
 func (s *BubbleTestSuite) TestWithoutWhat() {
-	expected := "(New): Cannot create a error Bubble if \"What\" is not defined"
+	expected := "(errors/New): Cannot create a error Bubble if \"What\" is not defined"
 	s.PanicsWithValue(expected, func() { errors.Mother().BubbleInvalidWithoutWhat() })
 }
 

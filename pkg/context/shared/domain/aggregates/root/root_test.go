@@ -25,7 +25,7 @@ func (s *RootTestSuite) TestCreationStampErrOverwriteExisting() {
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "CreationStamp",
+		Where: "root/*Root/CreationStamp",
 		What:  "Cannot overwrite an existing stamp",
 	}}
 

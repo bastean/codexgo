@@ -3,6 +3,7 @@ package caller
 import (
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 const (
@@ -11,12 +12,17 @@ const (
 )
 
 const (
+	Separator = "/"
+)
+
+const (
+	DefaultWhere    = "UNKNOWN"
 	DefaultPkg      = "UNKNOWN"
 	DefaultReceiver = "UNKNOWN"
 	DefaultMethod   = "UNKNOWN"
 )
 
-func Received(skip int) (pkg, receiver, method string) {
+func Received(skip int) (where, pkg, receiver, method string) {
 	pc, _, _, _ := runtime.Caller(skip + 1)
 
 	if caller := runtime.FuncForPC(pc); caller != nil {
@@ -33,6 +39,12 @@ func Received(skip int) (pkg, receiver, method string) {
 		}
 	}
 
+	where = strings.Join(strings.Fields(strings.Join([]string{pkg, receiver, method}, " ")), Separator)
+
+	if where == "" {
+		where = DefaultWhere
+	}
+
 	if pkg == "" {
 		pkg = DefaultPkg
 	}
@@ -45,5 +57,5 @@ func Received(skip int) (pkg, receiver, method string) {
 		method = DefaultMethod
 	}
 
-	return pkg, receiver, method
+	return where, pkg, receiver, method
 }

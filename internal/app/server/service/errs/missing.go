@@ -8,7 +8,7 @@ import (
 )
 
 func MissingKey(what string) error {
-	_, _, where := caller.Received(caller.SkipCurrent)
+	where, _, _, _ := caller.Received(caller.SkipCurrent)
 
 	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,
@@ -17,7 +17,7 @@ func MissingKey(what string) error {
 }
 
 func MissingTokenSignature() error {
-	_, _, where := caller.Received(caller.SkipCurrent)
+	where, _, _, _ := caller.Received(caller.SkipCurrent)
 
 	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,

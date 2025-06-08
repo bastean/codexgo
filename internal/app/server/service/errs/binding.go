@@ -9,7 +9,7 @@ import (
 )
 
 func BindingJSON(who error) error {
-	_, _, where := caller.Received(caller.SkipCurrent)
+	where, _, _, _ := caller.Received(caller.SkipCurrent)
 
 	var err *json.UnmarshalTypeError
 

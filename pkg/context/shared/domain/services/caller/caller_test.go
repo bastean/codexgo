@@ -15,13 +15,18 @@ func (s *CallerTestSuite) TestSentinel() {
 	s.Equal(caller.FromCurrent, 0)
 	s.Equal(caller.SkipCurrent, 1)
 
+	s.Equal(caller.Separator, "/")
+
+	s.Equal(caller.DefaultWhere, "UNKNOWN")
 	s.Equal(caller.DefaultPkg, "UNKNOWN")
 	s.Equal(caller.DefaultReceiver, "UNKNOWN")
 	s.Equal(caller.DefaultMethod, "UNKNOWN")
 }
 
 func (s *CallerTestSuite) TestCallerFromCurrent() {
-	pkg, receiver, method := caller.Received(caller.FromCurrent)
+	where, pkg, receiver, method := caller.Received(caller.FromCurrent)
+
+	s.Equal(where, "caller_test/*CallerTestSuite/TestCallerFromCurrent")
 
 	s.Equal(pkg, "caller_test")
 
@@ -31,11 +36,13 @@ func (s *CallerTestSuite) TestCallerFromCurrent() {
 }
 
 func (s *CallerTestSuite) TestCallerWithSkipCurrent() {
-	var pkg, receiver, method string
+	var where, pkg, receiver, method string
 
 	func() {
-		pkg, receiver, method = caller.Received(caller.SkipCurrent)
+		where, pkg, receiver, method = caller.Received(caller.SkipCurrent)
 	}()
+
+	s.Equal(where, "caller_test/*CallerTestSuite/TestCallerWithSkipCurrent")
 
 	s.Equal(pkg, "caller_test")
 
@@ -45,11 +52,13 @@ func (s *CallerTestSuite) TestCallerWithSkipCurrent() {
 }
 
 func (s *CallerTestSuite) TestCallerWithAnonymous() {
-	var pkg, receiver, method string
+	var where, pkg, receiver, method string
 
 	func() {
-		pkg, receiver, method = caller.Received(caller.FromCurrent)
+		where, pkg, receiver, method = caller.Received(caller.FromCurrent)
 	}()
+
+	s.Equal(where, "UNKNOWN")
 
 	s.Equal(pkg, "UNKNOWN")
 

@@ -35,7 +35,7 @@ func (s *RecipientTestSuite) TestWithValidValue() {
 func (s *RecipientTestSuite) TestWithInvalidValue() {
 	components := messages.Mother().RecipientComponentsInvalid()
 
-	expected := fmt.Sprintf("(Validate): Recipient has an invalid nomenclature %q", messages.FormatRecipient(components))
+	expected := fmt.Sprintf("(messages/*Recipient/Validate): Recipient has an invalid nomenclature %q", messages.FormatRecipient(components))
 
 	s.PanicsWithValue(expected, func() { messages.Mother().RecipientInvalidWithComponents(components) })
 }

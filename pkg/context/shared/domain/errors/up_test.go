@@ -17,7 +17,7 @@ func (s *BubbleUpTestSuite) TestBubbleUp() {
 
 	actual := errors.BubbleUp(err)
 
-	expected := fmt.Sprintf("(TestBubbleUp): [(BubbleUpValid): [%s]]", value)
+	expected := fmt.Sprintf("(errors_test/*BubbleUpTestSuite/TestBubbleUp): [(errors/*m/BubbleUpValid): [%s]]", value)
 
 	s.Equal(expected, actual.Error())
 }

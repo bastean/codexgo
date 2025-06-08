@@ -46,9 +46,11 @@ func (s *RepositorySuite) TestCreateErrDuplicateValue() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "HandleErrDuplicateValue")
+
 	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleErrDuplicateValue",
+		Where: actual.Where,
 		What:  "ID already registered",
 		Why: errors.Meta{
 			"Field": "ID",
@@ -102,9 +104,11 @@ func (s *RepositorySuite) TestUpdateErrDuplicateValue() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "HandleErrDuplicateValue")
+
 	expected := &errors.AlreadyExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleErrDuplicateValue",
+		Where: actual.Where,
 		What:  "Email already registered",
 		Why: errors.Meta{
 			"Field": "Email",
@@ -132,9 +136,11 @@ func (s *RepositorySuite) TestDelete() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "HandleErrNotFound")
+
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleErrNotFound",
+		Where: actual.Where,
 		What:  aggregate.ID.Value() + " not found",
 		Why: errors.Meta{
 			"Index": aggregate.ID.Value(),
@@ -172,9 +178,11 @@ func (s *RepositorySuite) TestSearchErrCriteria() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "Search")
+
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Search",
+		Where: actual.Where,
 		What:  "Criteria not defined",
 	}}
 
@@ -194,9 +202,11 @@ func (s *RepositorySuite) TestSearchErrNotFound() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "HandleErrNotFound")
+
 	expected := &errors.NotExist{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "HandleErrNotFound",
+		Where: actual.Where,
 		What:  aggregate.ID.Value() + " not found",
 		Why: errors.Meta{
 			"Index": aggregate.ID.Value(),

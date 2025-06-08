@@ -32,9 +32,11 @@ func (s *CommandBusSuite) TestRegisterErrDuplicateCommand() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "Register")
+
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Register",
+		Where: actual.Where,
 		What:  "Already registered",
 		Why: errors.Meta{
 			"Key": s.Command.Key.Value(),
@@ -65,9 +67,11 @@ func (s *CommandBusSuite) TestDispatchErrMissingHandler() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "Dispatch")
+
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Dispatch",
+		Where: actual.Where,
 		What:  "Failure to execute a Command without a Handler",
 		Why: errors.Meta{
 			"ID":  s.Command.ID.Value(),

@@ -31,9 +31,11 @@ func (s *QueryBusSuite) TestRegisterErrDuplicateQuery() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "Register")
+
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Register",
+		Where: actual.Where,
 		What:  "Already registered",
 		Why: errors.Meta{
 			"Key": s.Query.Key.Value(),
@@ -70,9 +72,11 @@ func (s *QueryBusSuite) TestAskErrMissingHandler() {
 
 	s.ErrorAs(err, &actual)
 
+	s.Contains(actual.Where, "Ask")
+
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		When:  actual.When,
-		Where: "Ask",
+		Where: actual.Where,
 		What:  "Failure to execute a Query without a Handler",
 		Why: errors.Meta{
 			"ID":  s.Query.ID.Value(),

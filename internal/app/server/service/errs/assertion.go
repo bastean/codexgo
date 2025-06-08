@@ -6,7 +6,7 @@ import (
 )
 
 func Assertion() error {
-	_, _, where := caller.Received(caller.SkipCurrent)
+	where, _, _, _ := caller.Received(caller.SkipCurrent)
 
 	return errors.New[errors.Internal](&errors.Bubble{
 		Where: where,
