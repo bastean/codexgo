@@ -12,7 +12,7 @@ type PlainPasswordTestSuite struct {
 	suite.Default
 }
 
-func (s *PlainPasswordTestSuite) TestWithInvalidLength() {
+func (s *PlainPasswordTestSuite) TestErrInvalidLength() {
 	value, err := user.Mother().PlainPasswordInvalidLength()
 
 	var actual *errors.InvalidValue
@@ -39,7 +39,7 @@ type PasswordTestSuite struct {
 	suite.Default
 }
 
-func (s *PasswordTestSuite) TestWithInvalidValue() {
+func (s *PasswordTestSuite) TestErrRequired() {
 	_, err := user.Mother().PasswordInvalid()
 
 	var actual *errors.Internal

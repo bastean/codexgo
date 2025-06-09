@@ -12,7 +12,7 @@ type EmailTestSuite struct {
 	suite.Default
 }
 
-func (s *EmailTestSuite) TestWithInvalidValue() {
+func (s *EmailTestSuite) TestErrInvalidFormat() {
 	value, err := values.Mother().EmailInvalid()
 
 	var actual *errors.InvalidValue

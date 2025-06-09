@@ -12,7 +12,7 @@ type UsernameTestSuite struct {
 	suite.Default
 }
 
-func (s *UsernameTestSuite) TestWithInvalidLength() {
+func (s *UsernameTestSuite) TestErrInvalidLength() {
 	value, err := values.Mother().UsernameInvalidLength()
 
 	var actual *errors.InvalidValue
@@ -31,7 +31,7 @@ func (s *UsernameTestSuite) TestWithInvalidLength() {
 	s.Equal(expected, actual)
 }
 
-func (s *UsernameTestSuite) TestWithInvalidAlphanumeric() {
+func (s *UsernameTestSuite) TestErrInvalidAlphanumeric() {
 	value, err := values.Mother().UsernameInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue
