@@ -15,6 +15,10 @@ func assertion(what string) error {
 	})
 }
 
+func Assertion(what string) error {
+	return assertion(what)
+}
+
 func EventAssertion() error {
 	return assertion("Event")
 }

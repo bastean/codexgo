@@ -78,28 +78,31 @@ func (c *Collection) Delete(id *values.ID) error {
 }
 
 func (c *Collection) Search(criteria *user.Criteria) (*user.User, error) {
-	var (
-		filter bson.D
-		index  string
-	)
+	var filter bson.E
 
 	switch {
 	case criteria.ID != nil:
-		filter = bson.D{{Key: "id.value", Value: criteria.ID.Value()}}
-		index = criteria.ID.Value()
+		filter.Key = "id.value"
+		filter.Value = criteria.ID.Value()
 	case criteria.Email != nil:
-		filter = bson.D{{Key: "email.value", Value: criteria.Email.Value()}}
-		index = criteria.Email.Value()
+		filter.Key = "email.value"
+		filter.Value = criteria.Email.Value()
 	case criteria.Username != nil:
-		filter = bson.D{{Key: "username.value", Value: criteria.Username.Value()}}
-		index = criteria.Username.Value()
+		filter.Key = "username.value"
+		filter.Value = criteria.Username.Value()
 	default:
 		return nil, errors.New[errors.Internal](&errors.Bubble{
 			What: "Criteria not defined",
 		})
 	}
 
-	result := c.Collection.FindOne(context.Background(), filter)
+	index, ok := filter.Value.(string)
+
+	if !ok {
+		return nil, errors.Assertion("Filter")
+	}
+
+	result := c.Collection.FindOne(context.Background(), bson.D{filter})
 
 	err := result.Err()
 

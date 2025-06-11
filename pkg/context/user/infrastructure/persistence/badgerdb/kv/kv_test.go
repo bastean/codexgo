@@ -16,7 +16,7 @@ type KVTestSuite struct {
 }
 
 func (s *KVTestSuite) SetupSuite() {
-	_ = os.RemoveAll(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN"))
+	s.NoError(os.RemoveAll(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN")))
 
 	session, err := badgerdb.Open(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN"))
 
@@ -38,8 +38,8 @@ func (s *KVTestSuite) TestSentinel() {
 	s.Equal(kv.IxUsername, 2)
 }
 
-func (*KVTestSuite) TearDownSuite() {
-	_ = os.RemoveAll(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN"))
+func (s *KVTestSuite) TearDownSuite() {
+	s.NoError(os.RemoveAll(os.Getenv("CODEXGO_DATABASE_BADGERDB_DSN")))
 }
 
 func TestIntegrationKVSuite(t *testing.T) {
