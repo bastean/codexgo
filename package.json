@@ -17,15 +17,15 @@
     "internal/app/*"
   ],
   "devDependencies": {
-    "@commitlint/cli": "19.8.0",
-    "@commitlint/config-conventional": "19.8.0",
-    "@release-it/bumper": "7.0.2",
-    "@release-it/conventional-changelog": "10.0.0",
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "@release-it/bumper": "7.0.5",
+    "@release-it/conventional-changelog": "10.0.1",
     "husky": "9.1.7",
-    "lint-staged": "15.5.0",
-    "npm-check-updates": "17.1.18",
+    "lint-staged": "16.1.0",
+    "npm-check-updates": "18.0.1",
     "prettier": "3.5.3",
-    "release-it": "18.1.2"
+    "release-it": "19.0.3"
   },
   "overrides": {
     "conventional-changelog-conventionalcommits": "8.0.0"
