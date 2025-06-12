@@ -17,8 +17,8 @@ const (
 
 func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_RegisterFormInit_e044`,
-		Function: `function __templ_RegisterFormInit_e044(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
+		Name: `__templ_RegisterFormInit_11f0`,
+		Function: `function __templ_RegisterFormInit_11f0(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
         .popup({
             position: "top center",
             hoverable: true
@@ -93,7 +93,7 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
             action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
 
                 settings.data = JSON.stringify(settings.data);
 
@@ -106,7 +106,7 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
                     $(` + "`" + `#${formTagID}` + "`" + `).form("reset");
                 }, 1000);
@@ -121,8 +121,8 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_RegisterFormInit_e044`, submitTagID, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_e044`, submitTagID, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_RegisterFormInit_11f0`, submitTagID, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_11f0`, submitTagID, formTagID, loginTabTagID),
 	}
 }
 

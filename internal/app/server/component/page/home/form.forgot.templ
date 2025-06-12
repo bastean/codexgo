@@ -35,7 +35,7 @@ script ForgotFormInit(formTagID string) {
             action: "user_forgot", 
             method: "POST",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
 
                 settings.data = JSON.stringify(settings.data);
         
@@ -48,7 +48,7 @@ script ForgotFormInit(formTagID string) {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     $(`#${formTagID}`).form("reset");
                 }, 1000);
             },

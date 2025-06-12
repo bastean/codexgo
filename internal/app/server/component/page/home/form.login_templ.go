@@ -14,8 +14,8 @@ const (
 
 func LoginFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_LoginFormInit_7de9`,
-		Function: `function __templ_LoginFormInit_7de9(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_LoginFormInit_ab83`,
+		Function: `function __templ_LoginFormInit_ab83(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -48,7 +48,7 @@ func LoginFormInit(formTagID string) templ.ComponentScript {
             beforeSend: function(settings) {
                 let login = settings.data.Login;
 
-                if (_.includes(login, "@")) {
+                if (login.includes("@")) {
                     settings.data.Email = login;
                 } else {
                     settings.data.Username = login;
@@ -65,7 +65,7 @@ func LoginFormInit(formTagID string) templ.ComponentScript {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },
@@ -79,8 +79,8 @@ func LoginFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_LoginFormInit_7de9`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_7de9`, formTagID),
+		Call:       templ.SafeScript(`__templ_LoginFormInit_ab83`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_ab83`, formTagID),
 	}
 }
 

@@ -17,8 +17,8 @@ const (
 
 func ForgotFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ForgotFormInit_b258`,
-		Function: `function __templ_ForgotFormInit_b258(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ForgotFormInit_9cbb`,
+		Function: `function __templ_ForgotFormInit_9cbb(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -45,7 +45,7 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
             action: "user_forgot", 
             method: "POST",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
 
                 settings.data = JSON.stringify(settings.data);
         
@@ -58,7 +58,7 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     $(` + "`" + `#${formTagID}` + "`" + `).form("reset");
                 }, 1000);
             },
@@ -72,8 +72,8 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ForgotFormInit_b258`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_b258`, formTagID),
+		Call:       templ.SafeScript(`__templ_ForgotFormInit_9cbb`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_9cbb`, formTagID),
 	}
 }
 

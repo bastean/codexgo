@@ -38,7 +38,7 @@ script LoginFormInit(formTagID string) {
             beforeSend: function(settings) {
                 let login = settings.data.Login;
 
-                if (_.includes(login, "@")) {
+                if (login.includes("@")) {
                     settings.data.Email = login;
                 } else {
                     settings.data.Username = login;
@@ -55,7 +55,7 @@ script LoginFormInit(formTagID string) {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },

@@ -14,7 +14,7 @@ script Init() {
         Put(key, value) {
             let storage = localStorage.getItem(this.MasterKey);
 
-            storage = JSON.parse(storage)
+            storage = JSON.parse(storage);
 
             storage[key] = value;
 
@@ -23,14 +23,14 @@ script Init() {
         Get(key) {
             let storage = localStorage.getItem(this.MasterKey);
 
-            storage = JSON.parse(storage)
+            storage = JSON.parse(storage);
 
-            return _.get(storage, key, null);
+            return storage[key];
         },
         Delete(key) {
             let storage = localStorage.getItem(this.MasterKey);
 
-            storage = JSON.parse(storage)
+            storage = JSON.parse(storage);
 
             delete storage[key];
 
@@ -45,9 +45,7 @@ script Init() {
 
             let cookies = await cookieStore.getAll();
 
-            _.each(cookies, function(cookie) {
-                cookieStore.delete(cookie);
-            });
+            cookies.forEach((cookie) => cookieStore.delete(cookie));
         }
     }
 

@@ -15,8 +15,8 @@ const (
 
 func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ResetFormInit_30e6`,
-		Function: `function __templ_ResetFormInit_30e6(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ResetFormInit_f826`,
+		Function: `function __templ_ResetFormInit_f826(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -64,7 +64,7 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
                     $(".ui.mini.modal").modal("hide");
                 }, 1000);
@@ -79,8 +79,8 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ResetFormInit_30e6`, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_30e6`, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_ResetFormInit_f826`, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_f826`, formTagID, loginTabTagID),
 	}
 }
 

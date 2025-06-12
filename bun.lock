@@ -21,7 +21,6 @@
       "devDependencies": {
         "fomantic-ui": "2.10.0-beta.29",
         "jquery": "3.7.1",
-        "lodash": "4.17.21",
       },
     },
   },

@@ -46,7 +46,7 @@ script DeleteFormInit(formTagID string) {
                     showProgress: "top"
                 });
 
-                 _.delay(function() {
+                setTimeout(() => {
                     Storage.Clear();
                     window.location.replace("/");
                 }, 1000);

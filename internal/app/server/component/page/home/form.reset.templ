@@ -54,7 +54,7 @@ script ResetFormInit(formTagID, loginTabTagID string) {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
                     $(".ui.mini.modal").modal("hide");
                 }, 1000);

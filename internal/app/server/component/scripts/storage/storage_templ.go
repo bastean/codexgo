@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func Init() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Init_9d44`,
-		Function: `function __templ_Init_9d44(){const Storage = {
+		Name: `__templ_Init_6303`,
+		Function: `function __templ_Init_6303(){const Storage = {
         MasterKey: "codexgo",
         Key: {},
         Init() {
@@ -24,7 +24,7 @@ func Init() templ.ComponentScript {
         Put(key, value) {
             let storage = localStorage.getItem(this.MasterKey);
 
-            storage = JSON.parse(storage)
+            storage = JSON.parse(storage);
 
             storage[key] = value;
 
@@ -33,14 +33,14 @@ func Init() templ.ComponentScript {
         Get(key) {
             let storage = localStorage.getItem(this.MasterKey);
 
-            storage = JSON.parse(storage)
+            storage = JSON.parse(storage);
 
-            return _.get(storage, key, null);
+            return storage[key];
         },
         Delete(key) {
             let storage = localStorage.getItem(this.MasterKey);
 
-            storage = JSON.parse(storage)
+            storage = JSON.parse(storage);
 
             delete storage[key];
 
@@ -55,9 +55,7 @@ func Init() templ.ComponentScript {
 
             let cookies = await cookieStore.getAll();
 
-            _.each(cookies, function(cookie) {
-                cookieStore.delete(cookie);
-            });
+            cookies.forEach((cookie) => cookieStore.delete(cookie));
         }
     }
 
@@ -65,8 +63,8 @@ func Init() templ.ComponentScript {
 
     window.Storage = Storage
 }`,
-		Call:       templ.SafeScript(`__templ_Init_9d44`),
-		CallInline: templ.SafeScriptInline(`__templ_Init_9d44`),
+		Call:       templ.SafeScript(`__templ_Init_6303`),
+		CallInline: templ.SafeScriptInline(`__templ_Init_6303`),
 	}
 }
 

@@ -14,8 +14,8 @@ const (
 
 func DeleteFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_DeleteFormInit_b376`,
-		Function: `function __templ_DeleteFormInit_b376(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_DeleteFormInit_306d`,
+		Function: `function __templ_DeleteFormInit_306d(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -56,7 +56,7 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
                     showProgress: "top"
                 });
 
-                 _.delay(function() {
+                setTimeout(() => {
                     Storage.Clear();
                     window.location.replace("/");
                 }, 1000);
@@ -71,8 +71,8 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_DeleteFormInit_b376`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_b376`, formTagID),
+		Call:       templ.SafeScript(`__templ_DeleteFormInit_306d`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_306d`, formTagID),
 	}
 }
 

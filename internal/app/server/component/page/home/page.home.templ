@@ -42,7 +42,7 @@ script PageInit(resetModalTagID string) {
         })
     ;
 
-   if (_.includes(window.location.pathname, "/reset")) {
+   if (window.location.pathname.includes("/reset")) {
         $(`#${resetModalTagID}`)
             .modal({
                 closable: false

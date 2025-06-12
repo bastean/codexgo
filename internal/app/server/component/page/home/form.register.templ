@@ -83,7 +83,7 @@ script RegisterFormInit(submitTagID, formTagID, loginTabTagID string) {
             action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = _.toString(settings.data.CaptchaAnswer);
+                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
 
                 settings.data = JSON.stringify(settings.data);
 
@@ -96,7 +96,7 @@ script RegisterFormInit(submitTagID, formTagID, loginTabTagID string) {
                     showProgress: "top"
                 });
 
-                _.delay(function() {
+                setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
                     $(`#${formTagID}`).form("reset");
                 }, 1000);

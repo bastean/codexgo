@@ -10,10 +10,7 @@
     "jquery_target": "{target}/jquery.com",
 
     "fomantic_source": "{source}/fomantic-ui/dist",
-    "fomantic_target": "{target}/fomantic-ui.com",
-
-    "lodash_source": "{source}/lodash",
-    "lodash_target": "{target}/lodash.com"
+    "fomantic_target": "{target}/fomantic-ui.com"
   },
   "Dependencies": [
     {
@@ -35,11 +32,6 @@
       "Files": ["{*.woff2}"],
       "Source": "{fomantic_source}/themes/default/assets/fonts",
       "Target": "{fomantic_target}/themes/default/assets/fonts"
-    },
-    {
-      "Files": ["lodash.min.js"],
-      "Source": "{lodash_source}",
-      "Target": "{lodash_target}"
     }
   ]
 }

@@ -83,7 +83,7 @@ script UpdateFormInit(formTagID string) {
                     showProgress: "top"
                 });
 
-                 _.delay(function() {
+                setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },

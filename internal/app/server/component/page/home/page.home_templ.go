@@ -46,8 +46,8 @@ func ShowModal(modalTagID string) templ.ComponentScript {
 
 func PageInit(resetModalTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_PageInit_f8a0`,
-		Function: `function __templ_PageInit_f8a0(resetModalTagID){$(".ui.container")
+		Name: `__templ_PageInit_6496`,
+		Function: `function __templ_PageInit_6496(resetModalTagID){$(".ui.container")
         .transition("fade in", "3s")
     ;
 
@@ -64,7 +64,7 @@ func PageInit(resetModalTagID string) templ.ComponentScript {
         })
     ;
 
-   if (_.includes(window.location.pathname, "/reset")) {
+   if (window.location.pathname.includes("/reset")) {
         $(` + "`" + `#${resetModalTagID}` + "`" + `)
             .modal({
                 closable: false
@@ -73,8 +73,8 @@ func PageInit(resetModalTagID string) templ.ComponentScript {
         ;
     }
 }`,
-		Call:       templ.SafeScript(`__templ_PageInit_f8a0`, resetModalTagID),
-		CallInline: templ.SafeScriptInline(`__templ_PageInit_f8a0`, resetModalTagID),
+		Call:       templ.SafeScript(`__templ_PageInit_6496`, resetModalTagID),
+		CallInline: templ.SafeScriptInline(`__templ_PageInit_6496`, resetModalTagID),
 	}
 }
 

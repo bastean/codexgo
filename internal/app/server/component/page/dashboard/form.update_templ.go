@@ -14,8 +14,8 @@ const (
 
 func UpdateFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_UpdateFormInit_023b`,
-		Function: `function __templ_UpdateFormInit_023b(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_UpdateFormInit_e3a5`,
+		Function: `function __templ_UpdateFormInit_e3a5(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -93,7 +93,7 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
                     showProgress: "top"
                 });
 
-                 _.delay(function() {
+                setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },
@@ -107,8 +107,8 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_UpdateFormInit_023b`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_023b`, formTagID),
+		Call:       templ.SafeScript(`__templ_UpdateFormInit_e3a5`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_e3a5`, formTagID),
 	}
 }
 
