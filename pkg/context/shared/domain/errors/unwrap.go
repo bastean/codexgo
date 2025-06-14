@@ -1,0 +1,68 @@
+package errors
+
+type Bubbles struct {
+	Internal     []*Internal
+	Failure      []*Failure
+	InvalidValue []*InvalidValue
+	AlreadyExist []*AlreadyExist
+	NotExist     []*NotExist
+	Unknown      []error
+}
+
+type (
+	single = interface{ Unwrap() error }
+	joined = interface{ Unwrap() []error }
+)
+
+func ExtractBubbles(err error) []error {
+	var (
+		errs    []error
+		extract func(error)
+	)
+
+	extract = func(err error) {
+		switch wrapped := err.(type) {
+		case nil:
+			return
+		case single:
+			extract(wrapped.Unwrap())
+		case joined:
+			for _, unwrapped := range wrapped.Unwrap() {
+				extract(unwrapped)
+			}
+		default:
+			errs = append(errs, err)
+		}
+	}
+
+	extract(err)
+
+	return errs
+}
+
+func FilterBubbles(errs []error) *Bubbles {
+	bubbles := new(Bubbles)
+
+	for _, err := range errs {
+		switch bubble := err.(type) {
+		case *Internal:
+			bubbles.Internal = append(bubbles.Internal, bubble)
+		case *Failure:
+			bubbles.Failure = append(bubbles.Failure, bubble)
+		case *InvalidValue:
+			bubbles.InvalidValue = append(bubbles.InvalidValue, bubble)
+		case *AlreadyExist:
+			bubbles.AlreadyExist = append(bubbles.AlreadyExist, bubble)
+		case *NotExist:
+			bubbles.NotExist = append(bubbles.NotExist, bubble)
+		default:
+			bubbles.Unknown = append(bubbles.Unknown, bubble)
+		}
+	}
+
+	return bubbles
+}
+
+func Unwrap(err error) *Bubbles {
+	return FilterBubbles(ExtractBubbles(err))
+}

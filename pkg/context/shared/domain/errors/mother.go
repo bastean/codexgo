@@ -20,6 +20,30 @@ func (m *m) BubbleValid() *Bubble {
 	}
 }
 
+func (m *m) DefaultValid() *Default {
+	return New[Default](m.BubbleValid())
+}
+
+func (m *m) InternalValid() *Internal {
+	return New[Internal](m.BubbleValid())
+}
+
+func (m *m) FailureValid() *Failure {
+	return New[Failure](m.BubbleValid())
+}
+
+func (m *m) InvalidValueValid() *InvalidValue {
+	return New[InvalidValue](m.BubbleValid())
+}
+
+func (m *m) AlreadyExistValid() *AlreadyExist {
+	return New[AlreadyExist](m.BubbleValid())
+}
+
+func (m *m) NotExistValid() *NotExist {
+	return New[NotExist](m.BubbleValid())
+}
+
 func (m *m) BubbleValidWithoutWhere() error {
 	return func() error {
 		return New[Default](&Bubble{What: m.LoremIpsumWord()})
