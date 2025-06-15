@@ -1,8 +1,6 @@
 package user
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
@@ -16,7 +14,7 @@ import (
 func Reset(c *gin.Context) {
 	attributes := new(reset.CommandAttributes)
 
-	err := c.BindJSON(attributes)
+	err := c.ShouldBindJSON(attributes)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err))
@@ -34,8 +32,5 @@ func Reset(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &reply.JSON{
-		Success: true,
-		Message: "Password updated",
-	})
+	reply.Success(c, "Password updated")
 }

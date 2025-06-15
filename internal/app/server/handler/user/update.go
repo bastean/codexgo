@@ -1,8 +1,6 @@
 package user
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/errs"
@@ -25,7 +23,7 @@ func Update(c *gin.Context) {
 
 	attributes := new(update.CommandAttributes)
 
-	err := c.BindJSON(attributes)
+	err := c.ShouldBindJSON(attributes)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err))
@@ -45,8 +43,5 @@ func Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &reply.JSON{
-		Success: true,
-		Message: "Account updated",
-	})
+	reply.Success(c, "Account updated")
 }

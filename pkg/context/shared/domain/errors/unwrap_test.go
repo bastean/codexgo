@@ -19,6 +19,7 @@ func (s *UnwrapTestSuite) TestSentinel() {
 		AlreadyExist []*errors.AlreadyExist
 		NotExist     []*errors.NotExist
 		Unknown      []error
+		Amount       int
 	}), new(errors.Bubbles))
 }
 
@@ -53,7 +54,9 @@ func (s *UnwrapTestSuite) TestFilterBubbles() {
 		unknown      = errors.Mother().Error()
 	)
 
-	actual := errors.FilterBubbles([]error{internal, failure, invalidValue, alreadyExist, notExist, unknown})
+	actual := new(errors.Bubbles)
+
+	errors.FilterBubbles([]error{internal, failure, invalidValue, alreadyExist, notExist, unknown}, actual)
 
 	expected := &errors.Bubbles{
 		Internal:     []*errors.Internal{internal},
@@ -62,9 +65,15 @@ func (s *UnwrapTestSuite) TestFilterBubbles() {
 		AlreadyExist: []*errors.AlreadyExist{alreadyExist},
 		NotExist:     []*errors.NotExist{notExist},
 		Unknown:      []error{unknown},
+		Amount:       6,
 	}
 
 	s.Equal(expected, actual)
+}
+
+func (s *UnwrapTestSuite) TestFilterBubblesErrNotDefined() {
+	expected := "(errors/FilterBubbles): Cannot filter if \"Bubbles\" are not defined"
+	s.PanicsWithValue(expected, func() { errors.FilterBubbles(make([]error, 0), nil) })
 }
 
 func (s *UnwrapTestSuite) TestUnwrap() {
@@ -81,7 +90,9 @@ func (s *UnwrapTestSuite) TestUnwrap() {
 
 	wrapped := errors.BubbleUp(joined)
 
-	actual := errors.Unwrap(wrapped)
+	actual := new(errors.Bubbles)
+
+	errors.Unwrap(wrapped, actual)
 
 	expected := &errors.Bubbles{
 		Internal:     []*errors.Internal{internal},
@@ -90,6 +101,7 @@ func (s *UnwrapTestSuite) TestUnwrap() {
 		AlreadyExist: []*errors.AlreadyExist{alreadyExist},
 		NotExist:     []*errors.NotExist{notExist},
 		Unknown:      []error{unknown},
+		Amount:       6,
 	}
 
 	s.Equal(expected, actual)

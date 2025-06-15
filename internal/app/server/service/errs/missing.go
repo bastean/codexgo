@@ -7,6 +7,15 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
 )
 
+func Missing(what string) error {
+	where, _, _, _ := caller.Received(caller.SkipCurrent)
+
+	return errors.New[errors.Failure](&errors.Bubble{
+		Where: where,
+		What:  fmt.Sprintf("Missing %q", what),
+	})
+}
+
 func MissingKey(what string) error {
 	where, _, _, _ := caller.Received(caller.SkipCurrent)
 

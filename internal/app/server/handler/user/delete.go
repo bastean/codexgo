@@ -1,8 +1,6 @@
 package user
 
 import (
-	"net/http"
-
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 
@@ -26,7 +24,7 @@ func Delete(c *gin.Context) {
 
 	attributes := new(delete.CommandAttributes)
 
-	err := c.BindJSON(attributes)
+	err := c.ShouldBindJSON(attributes)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err))
@@ -62,8 +60,5 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, &reply.JSON{
-		Success: true,
-		Message: "Account deleted",
-	})
+	reply.Success(c, "Account deleted")
 }

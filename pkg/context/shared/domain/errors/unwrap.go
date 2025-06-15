@@ -7,6 +7,7 @@ type Bubbles struct {
 	AlreadyExist []*AlreadyExist
 	NotExist     []*NotExist
 	Unknown      []error
+	Amount       int
 }
 
 type (
@@ -40,8 +41,10 @@ func ExtractBubbles(err error) []error {
 	return errs
 }
 
-func FilterBubbles(errs []error) *Bubbles {
-	bubbles := new(Bubbles)
+func FilterBubbles(errs []error, bubbles *Bubbles) {
+	if bubbles == nil {
+		Panic(Standard("Cannot filter if \"Bubbles\" are not defined"))
+	}
 
 	for _, err := range errs {
 		switch bubble := err.(type) {
@@ -60,9 +63,9 @@ func FilterBubbles(errs []error) *Bubbles {
 		}
 	}
 
-	return bubbles
+	bubbles.Amount = len(errs)
 }
 
-func Unwrap(err error) *Bubbles {
-	return FilterBubbles(ExtractBubbles(err))
+func Unwrap(err error, bubbles *Bubbles) {
+	FilterBubbles(ExtractBubbles(err), bubbles)
 }

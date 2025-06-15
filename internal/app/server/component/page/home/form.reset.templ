@@ -60,10 +60,12 @@ script ResetFormInit(formTagID, loginTabTagID string) {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                $.toast({
-                    class: "error",
-                    message: response.Message,
-                    showProgress: "top"
+                response.Data.forEach((error) => {
+                    $.toast({
+                        class: "error",
+                        message: error.Message,
+                        showProgress: "top"
+                    })
                 });
             }
         })

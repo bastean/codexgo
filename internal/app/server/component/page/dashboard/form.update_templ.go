@@ -14,8 +14,8 @@ const (
 
 func UpdateFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_UpdateFormInit_e3a5`,
-		Function: `function __templ_UpdateFormInit_e3a5(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_UpdateFormInit_9409`,
+		Function: `function __templ_UpdateFormInit_9409(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -98,17 +98,19 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                $.toast({
-                    class: "error",
-                    message: response.Message,
-                    showProgress: "top"
+                response.Data.forEach((error) => {
+                    $.toast({
+                        class: "error",
+                        message: error.Message,
+                        showProgress: "top"
+                    })
                 });
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_UpdateFormInit_e3a5`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_e3a5`, formTagID),
+		Call:       templ.SafeScript(`__templ_UpdateFormInit_9409`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_9409`, formTagID),
 	}
 }
 
@@ -140,7 +142,7 @@ func UpdateForm(email, username string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(UpdateFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 102, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 104, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -153,7 +155,7 @@ func UpdateForm(email, username string) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 110, Col: 69}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 112, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -166,7 +168,7 @@ func UpdateForm(email, username string) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(username)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 117, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 119, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

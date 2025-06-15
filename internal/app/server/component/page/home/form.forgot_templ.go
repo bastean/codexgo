@@ -17,8 +17,8 @@ const (
 
 func ForgotFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ForgotFormInit_9cbb`,
-		Function: `function __templ_ForgotFormInit_9cbb(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ForgotFormInit_4311`,
+		Function: `function __templ_ForgotFormInit_4311(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -63,17 +63,19 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                $.toast({
-                    class: "error",
-                    message: response.Message,
-                    showProgress: "top"
+                response.Data.forEach((error) => {
+                    $.toast({
+                        class: "error",
+                        message: error.Message,
+                        showProgress: "top"
+                    })
                 });
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ForgotFormInit_9cbb`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_9cbb`, formTagID),
+		Call:       templ.SafeScript(`__templ_ForgotFormInit_4311`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_4311`, formTagID),
 	}
 }
 
@@ -105,7 +107,7 @@ func ForgotForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 67, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 69, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -118,7 +120,7 @@ func ForgotForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 69, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 71, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {

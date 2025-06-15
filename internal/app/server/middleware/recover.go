@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
@@ -25,6 +23,8 @@ func Recover() gin.RecoveryFunc {
 
 		log.Error(failure.Error())
 
-		c.AbortWithStatusJSON(http.StatusInternalServerError, &reply.JSON{Message: "Server error. Try again later."})
+		c.Abort()
+
+		reply.FailureServer(c)
 	}
 }

@@ -1,8 +1,6 @@
 package user
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
@@ -23,10 +21,15 @@ type CreateData struct {
 func Create(c *gin.Context) {
 	data := new(CreateData)
 
-	err := c.BindJSON(data)
+	err := c.ShouldBindJSON(data)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err))
+		return
+	}
+
+	if data.Data == nil {
+		errs.AbortByErr(c, errs.Missing("Captcha"))
 		return
 	}
 
@@ -34,6 +37,11 @@ func Create(c *gin.Context) {
 
 	if err != nil {
 		errs.AbortByErr(c, errors.BubbleUp(err))
+		return
+	}
+
+	if data.CommandAttributes == nil {
+		errs.AbortByErr(c, errs.Missing("Attributes"))
 		return
 	}
 
@@ -56,8 +64,5 @@ func Create(c *gin.Context) {
 
 	captcha.Clear(data.CaptchaID)
 
-	c.JSON(http.StatusCreated, &reply.JSON{
-		Success: true,
-		Message: "Account created",
-	})
+	reply.Success(c, "Account created")
 }

@@ -14,8 +14,8 @@ const (
 
 func DeleteFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_DeleteFormInit_306d`,
-		Function: `function __templ_DeleteFormInit_306d(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_DeleteFormInit_8ec8`,
+		Function: `function __templ_DeleteFormInit_8ec8(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -62,17 +62,19 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                $.toast({
-                    class: "error",
-                    message: response.Message,
-                    showProgress: "top"
+                response.Data.forEach((error) => {
+                    $.toast({
+                        class: "error",
+                        message: error.Message,
+                        showProgress: "top"
+                    })
                 });
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_DeleteFormInit_306d`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_306d`, formTagID),
+		Call:       templ.SafeScript(`__templ_DeleteFormInit_8ec8`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_8ec8`, formTagID),
 	}
 }
 
@@ -114,7 +116,7 @@ func DeleteForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(DeleteFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.delete.templ`, Line: 72, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.delete.templ`, Line: 74, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {

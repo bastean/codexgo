@@ -1,8 +1,6 @@
 package user
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/service/captcha"
@@ -23,7 +21,7 @@ type ForgotData struct {
 func Forgot(c *gin.Context) {
 	data := new(ForgotData)
 
-	err := c.BindJSON(data)
+	err := c.ShouldBindJSON(data)
 
 	if err != nil {
 		errs.AbortByErr(c, errs.BindingJSON(err))
@@ -53,8 +51,5 @@ func Forgot(c *gin.Context) {
 
 	captcha.Clear(data.CaptchaID)
 
-	c.JSON(http.StatusOK, &reply.JSON{
-		Success: true,
-		Message: "Link sent. Please check your inbox",
-	})
+	reply.Success(c, "Link sent. Please check your inbox")
 }

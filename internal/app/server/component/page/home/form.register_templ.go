@@ -17,8 +17,8 @@ const (
 
 func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_RegisterFormInit_11f0`,
-		Function: `function __templ_RegisterFormInit_11f0(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
+		Name: `__templ_RegisterFormInit_3dca`,
+		Function: `function __templ_RegisterFormInit_3dca(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
         .popup({
             position: "top center",
             hoverable: true
@@ -112,17 +112,19 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                $.toast({
-                    class: "error",
-                    message: response.Message,
-                    showProgress: "top"
+                response.Data.forEach((error) => {
+                    $.toast({
+                        class: "error",
+                        message: error.Message,
+                        showProgress: "top"
+                    })
                 });
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_RegisterFormInit_11f0`, submitTagID, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_11f0`, submitTagID, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_RegisterFormInit_3dca`, submitTagID, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_3dca`, submitTagID, formTagID, loginTabTagID),
 	}
 }
 
@@ -154,7 +156,7 @@ func RegisterForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 116, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 118, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -201,7 +203,7 @@ func RegisterForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterSubmitTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 158, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 160, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
