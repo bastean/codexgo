@@ -7,27 +7,16 @@ const (
 script LoginFormInit(formTagID string) {
     $(`#${formTagID}`)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Login: {
                     rules: [
-                        {
-                            type: "notEmpty"
-                        }
+                        ...Form.Rules.NotEmpty
                     ]
                 },
                 Password: {
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 }
             }
@@ -49,24 +38,14 @@ script LoginFormInit(formTagID string) {
                 return settings;
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;

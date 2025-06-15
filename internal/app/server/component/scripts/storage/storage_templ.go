@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func Init() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Init_6303`,
-		Function: `function __templ_Init_6303(){const Storage = {
+		Name: `__templ_Init_5edb`,
+		Function: `function __templ_Init_5edb(){const Storage = {
         MasterKey: "codexgo",
         Key: {},
         Init() {
@@ -61,10 +61,10 @@ func Init() templ.ComponentScript {
 
     Storage.Init();
 
-    window.Storage = Storage
+    window.Storage = Storage;
 }`,
-		Call:       templ.SafeScript(`__templ_Init_6303`),
-		CallInline: templ.SafeScriptInline(`__templ_Init_6303`),
+		Call:       templ.SafeScript(`__templ_Init_5edb`),
+		CallInline: templ.SafeScriptInline(`__templ_Init_5edb`),
 	}
 }
 

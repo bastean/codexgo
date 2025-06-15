@@ -11,6 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts"
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts/fomantic"
+	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts/form"
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts/jquery"
 	"github.com/bastean/codexgo/v4/internal/app/server/component/scripts/storage"
 )
@@ -41,6 +42,10 @@ func Index(headScripts scripts.Head, bodyScripts scripts.Body) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = storage.Init().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = form.Init().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

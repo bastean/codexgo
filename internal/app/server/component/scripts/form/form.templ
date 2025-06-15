@@ -1,0 +1,91 @@
+package form
+
+script Init() {
+    const Form = {
+        Settings: {
+            on: "blur",
+            inline: true,
+            preventLeaving: true,
+            keyboardShortcuts: false,
+        },
+        Rules: {
+            Email: [
+                {
+                    type: "email"
+                }
+            ],
+            Username: [
+                {
+                    type: "size[2..20]"
+                },
+                {
+                    type: "regExp[/^[A-Za-z0-9]+$/]",
+                    prompt: "{name} must be alphanumeric only"
+                },
+                {
+                    type: "regExp[/^.*[^0-9].*$/]",
+                    prompt: "{name} cannot be only numbers"
+                }
+            ],
+            Password: [
+                {
+                    type: "size[8..64]"
+                },
+                {
+                    type: "regExp[/^.*[^0-9].*$/]",
+                    prompt: "{name} cannot be only numbers"
+                }
+            ],
+            Terms: [
+                {
+                    type: "checked",
+                    prompt: "Terms and Conditions must be checked"
+                }
+            ],
+            NotEmpty: [
+                {
+                    type: "notEmpty"
+                }
+            ],
+            Match(target) {
+                return [
+                    {
+                        type: `match[${target}]`
+                    }
+                ]
+            }
+        },
+        Captcha: {
+            Encode(settings, captcha) {
+                settings.data[captcha] = settings.data[captcha].toString();
+
+                settings.data = JSON.stringify(settings.data);
+
+                return settings;
+            }
+        },
+        Toast: {
+            Success(response) {
+                $.toast({
+                    class: "success",
+                    message: response.Message,
+                    showProgress: "top"
+                });
+            },
+            Failure(response) {
+                response.Data.forEach((error) => {
+                    $.toast({
+                        class: "error",
+                        message: error.Message,
+                        showProgress: "top"
+                    })
+                });
+            }
+        }
+    }
+
+    window.Form = Form;
+}
+
+templ Form() {
+}

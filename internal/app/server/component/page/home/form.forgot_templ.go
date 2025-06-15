@@ -17,26 +17,19 @@ const (
 
 func ForgotFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ForgotFormInit_4311`,
-		Function: `function __templ_ForgotFormInit_4311(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ForgotFormInit_4893`,
+		Function: `function __templ_ForgotFormInit_4893(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Email: {
                     rules: [
-                        {
-                            type: "email"
-                        }
+                        ...Form.Rules.Email
                     ]
                 },
                 CaptchaAnswer: {
                     rules: [
-                        {
-                            type: "notEmpty"
-                        }
+                        ...Form.Rules.NotEmpty
                     ]
                 }
             }
@@ -45,37 +38,23 @@ func ForgotFormInit(formTagID string) templ.ComponentScript {
             action: "user_forgot", 
             method: "POST",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
-
-                settings.data = JSON.stringify(settings.data);
-        
-                return settings;
+                return Form.Captcha.Encode(settings, "CaptchaAnswer");
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     $(` + "`" + `#${formTagID}` + "`" + `).form("reset");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ForgotFormInit_4311`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_4311`, formTagID),
+		Call:       templ.SafeScript(`__templ_ForgotFormInit_4893`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ForgotFormInit_4893`, formTagID),
 	}
 }
 
@@ -107,7 +86,7 @@ func ForgotForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 69, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 48, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -120,7 +99,7 @@ func ForgotForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ForgotFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 71, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.forgot.templ`, Line: 50, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {

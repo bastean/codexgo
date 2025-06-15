@@ -20,6 +20,10 @@ func ErrorHandler() gin.HandlerFunc {
 		}
 
 		if route, shouldRedirect := c.Get(key.Redirect); shouldRedirect {
+			for _, err := range c.Errors.Errors() {
+				log.Error(err)
+			}
+
 			route, ok := route.(string)
 
 			if !ok {

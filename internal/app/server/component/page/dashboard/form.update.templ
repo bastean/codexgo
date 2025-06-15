@@ -7,53 +7,30 @@ const (
 script UpdateFormInit(formTagID string) {
     $(`#${formTagID}`)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Email: {
                     optional: true,
                     rules: [
-                        {
-                            type: "email"
-                        }
+                        ...Form.Rules.Email
                     ]
                 },
                 Username: {
                     optional: true,
                     rules: [
-                        {
-                            type: "size[2..20]"
-                        },
-                        {
-                            type: "regExp[/^[A-Za-z0-9]+$/]",
-                            prompt: "{name} must be alphanumeric only"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                       ...Form.Rules.Username
                     ]
                 },
                 UpdatedPassword: {
                     optional: true,
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     depends: "UpdatedPassword",
                     rules: [
-                        {
-                            type: "match[UpdatedPassword]"
-                        }
+                        ...Form.Rules.Match("UpdatedPassword")
                     ]
                 },
                 Password: {
@@ -62,13 +39,7 @@ script UpdateFormInit(formTagID string) {
                             type: "notEmpty",
                             prompt: "{name} is required to update the account settings"
                         },
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 }
             }
@@ -77,24 +48,14 @@ script UpdateFormInit(formTagID string) {
             action: "user_update", 
             method: "PATCH",
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;

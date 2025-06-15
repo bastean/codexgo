@@ -15,20 +15,12 @@ script ResetFormInit(formTagID, loginTabTagID string) {
             fields: {
                 Password: {
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     rules: [
-                        {
-                            type: "match[Password]"
-                        }
+                        ...Form.Rules.Match("Password")
                     ]
                 }
             }
@@ -48,11 +40,7 @@ script ResetFormInit(formTagID, loginTabTagID string) {
                 return settings;
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
@@ -60,13 +48,7 @@ script ResetFormInit(formTagID, loginTabTagID string) {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;

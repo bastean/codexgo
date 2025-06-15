@@ -15,8 +15,8 @@ const (
 
 func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ResetFormInit_b373`,
-		Function: `function __templ_ResetFormInit_b373(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_ResetFormInit_c253`,
+		Function: `function __templ_ResetFormInit_c253(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             on: "blur",
             inline: true,
@@ -25,20 +25,12 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
             fields: {
                 Password: {
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     rules: [
-                        {
-                            type: "match[Password]"
-                        }
+                        ...Form.Rules.Match("Password")
                     ]
                 }
             }
@@ -58,11 +50,7 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
                 return settings;
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
@@ -70,19 +58,13 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ResetFormInit_b373`, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_b373`, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_ResetFormInit_c253`, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_c253`, formTagID, loginTabTagID),
 	}
 }
 
@@ -114,7 +96,7 @@ func ResetForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ResetModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 76, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 58, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -127,7 +109,7 @@ func ResetForm() templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ResetFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 78, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 60, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {

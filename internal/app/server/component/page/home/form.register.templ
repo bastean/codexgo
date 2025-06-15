@@ -17,64 +17,36 @@ script RegisterFormInit(submitTagID, formTagID, loginTabTagID string) {
 
     $(`#${formTagID}`)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Email: {
                     rules: [
-                        {
-                            type: "email"
-                        }
+                        ...Form.Rules.Email
                     ]
                 },
                 Username: {
                     rules: [
-                        {
-                            type: "size[2..20]"
-                        },
-                        {
-                            type: "regExp[/^[A-Za-z0-9]+$/]",
-                            prompt: "{name} must be alphanumeric only"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Username
                     ]
                 },
                 Password: {
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     rules: [
-                        {
-                            type: "match[Password]"
-                        }
+                        ...Form.Rules.Match("Password")
                     ]
                 },
                 Terms: {
                     rules: [
-                        {
-                            type: "checked",
-                            prompt: "Terms and Conditions must be checked"
-                        }
+                        ...Form.Rules.Terms
                     ]
                 },
                 CaptchaAnswer: {
                     rules: [
-                        {
-                            type: "notEmpty"
-                        }
+                        ...Form.Rules.NotEmpty
                     ]
                 }
             }
@@ -83,18 +55,10 @@ script RegisterFormInit(submitTagID, formTagID, loginTabTagID string) {
             action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
-
-                settings.data = JSON.stringify(settings.data);
-
-                return settings;
+                return Form.Captcha.Encode(settings, "CaptchaAnswer");
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
@@ -102,13 +66,7 @@ script RegisterFormInit(submitTagID, formTagID, loginTabTagID string) {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;

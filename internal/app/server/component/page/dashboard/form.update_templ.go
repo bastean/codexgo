@@ -14,56 +14,33 @@ const (
 
 func UpdateFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_UpdateFormInit_9409`,
-		Function: `function __templ_UpdateFormInit_9409(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_UpdateFormInit_d730`,
+		Function: `function __templ_UpdateFormInit_d730(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Email: {
                     optional: true,
                     rules: [
-                        {
-                            type: "email"
-                        }
+                        ...Form.Rules.Email
                     ]
                 },
                 Username: {
                     optional: true,
                     rules: [
-                        {
-                            type: "size[2..20]"
-                        },
-                        {
-                            type: "regExp[/^[A-Za-z0-9]+$/]",
-                            prompt: "{name} must be alphanumeric only"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                       ...Form.Rules.Username
                     ]
                 },
                 UpdatedPassword: {
                     optional: true,
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     depends: "UpdatedPassword",
                     rules: [
-                        {
-                            type: "match[UpdatedPassword]"
-                        }
+                        ...Form.Rules.Match("UpdatedPassword")
                     ]
                 },
                 Password: {
@@ -72,13 +49,7 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
                             type: "notEmpty",
                             prompt: "{name} is required to update the account settings"
                         },
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 }
             }
@@ -87,30 +58,20 @@ func UpdateFormInit(formTagID string) templ.ComponentScript {
             action: "user_update", 
             method: "PATCH",
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_UpdateFormInit_9409`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_9409`, formTagID),
+		Call:       templ.SafeScript(`__templ_UpdateFormInit_d730`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_UpdateFormInit_d730`, formTagID),
 	}
 }
 
@@ -142,7 +103,7 @@ func UpdateForm(email, username string) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(UpdateFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 104, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 65, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -155,7 +116,7 @@ func UpdateForm(email, username string) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(email)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 112, Col: 69}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 73, Col: 69}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -168,7 +129,7 @@ func UpdateForm(email, username string) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(username)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 119, Col: 78}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.update.templ`, Line: 80, Col: 78}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

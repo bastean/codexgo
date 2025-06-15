@@ -14,13 +14,10 @@ const (
 
 func DeleteFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_DeleteFormInit_8ec8`,
-		Function: `function __templ_DeleteFormInit_8ec8(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_DeleteFormInit_1659`,
+		Function: `function __templ_DeleteFormInit_1659(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Password: {
                     rules: [
@@ -28,20 +25,12 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
                             type: "notEmpty",
                             prompt: "{name} is required to delete the account"
                         },
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     rules: [
-                        {
-                            type: "match[Password]"
-                        }
+                        ...Form.Rules.Match("Password")
                     ]
                 }
             }
@@ -50,11 +39,7 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
             action: "user_delete", 
             method: "DELETE",
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     Storage.Clear();
@@ -62,19 +47,13 @@ func DeleteFormInit(formTagID string) templ.ComponentScript {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_DeleteFormInit_8ec8`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_8ec8`, formTagID),
+		Call:       templ.SafeScript(`__templ_DeleteFormInit_1659`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_DeleteFormInit_1659`, formTagID),
 	}
 }
 
@@ -116,7 +95,7 @@ func DeleteForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(DeleteFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.delete.templ`, Line: 74, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/dashboard/form.delete.templ`, Line: 53, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {

@@ -17,8 +17,8 @@ const (
 
 func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_RegisterFormInit_3dca`,
-		Function: `function __templ_RegisterFormInit_3dca(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
+		Name: `__templ_RegisterFormInit_bf45`,
+		Function: `function __templ_RegisterFormInit_bf45(submitTagID, formTagID, loginTabTagID){$(` + "`" + `#${submitTagID}` + "`" + `)
         .popup({
             position: "top center",
             hoverable: true
@@ -27,64 +27,36 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
 
     $(` + "`" + `#${formTagID}` + "`" + `)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Email: {
                     rules: [
-                        {
-                            type: "email"
-                        }
+                        ...Form.Rules.Email
                     ]
                 },
                 Username: {
                     rules: [
-                        {
-                            type: "size[2..20]"
-                        },
-                        {
-                            type: "regExp[/^[A-Za-z0-9]+$/]",
-                            prompt: "{name} must be alphanumeric only"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Username
                     ]
                 },
                 Password: {
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     rules: [
-                        {
-                            type: "match[Password]"
-                        }
+                        ...Form.Rules.Match("Password")
                     ]
                 },
                 Terms: {
                     rules: [
-                        {
-                            type: "checked",
-                            prompt: "Terms and Conditions must be checked"
-                        }
+                        ...Form.Rules.Terms
                     ]
                 },
                 CaptchaAnswer: {
                     rules: [
-                        {
-                            type: "notEmpty"
-                        }
+                        ...Form.Rules.NotEmpty
                     ]
                 }
             }
@@ -93,18 +65,10 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
             action: "user_create", 
             method: "PUT",
             beforeSend: function(settings) {
-                settings.data.CaptchaAnswer = settings.data.CaptchaAnswer.toString();
-
-                settings.data = JSON.stringify(settings.data);
-
-                return settings;
+                return Form.Captcha.Encode(settings, "CaptchaAnswer");
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     $.tab("change tab", loginTabTagID);
@@ -112,19 +76,13 @@ func RegisterFormInit(submitTagID, formTagID, loginTabTagID string) templ.Compon
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_RegisterFormInit_3dca`, submitTagID, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_3dca`, submitTagID, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_RegisterFormInit_bf45`, submitTagID, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_RegisterFormInit_bf45`, submitTagID, formTagID, loginTabTagID),
 	}
 }
 
@@ -156,7 +114,7 @@ func RegisterForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 118, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 76, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -203,7 +161,7 @@ func RegisterForm(captcha *captcha.Captcha) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterSubmitTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 160, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.register.templ`, Line: 118, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {

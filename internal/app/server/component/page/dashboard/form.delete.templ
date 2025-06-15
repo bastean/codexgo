@@ -7,10 +7,7 @@ const (
 script DeleteFormInit(formTagID string) {
     $(`#${formTagID}`)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Password: {
                     rules: [
@@ -18,20 +15,12 @@ script DeleteFormInit(formTagID string) {
                             type: "notEmpty",
                             prompt: "{name} is required to delete the account"
                         },
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 },
                 ConfirmPassword: {
                     rules: [
-                        {
-                            type: "match[Password]"
-                        }
+                        ...Form.Rules.Match("Password")
                     ]
                 }
             }
@@ -40,11 +29,7 @@ script DeleteFormInit(formTagID string) {
             action: "user_delete", 
             method: "DELETE",
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     Storage.Clear();
@@ -52,13 +37,7 @@ script DeleteFormInit(formTagID string) {
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;

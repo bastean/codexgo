@@ -14,30 +14,19 @@ const (
 
 func LoginFormInit(formTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_LoginFormInit_ffc5`,
-		Function: `function __templ_LoginFormInit_ffc5(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_LoginFormInit_43bd`,
+		Function: `function __templ_LoginFormInit_43bd(formTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
-            on: "blur",
-            inline: true,
-            preventLeaving: true,
-            keyboardShortcuts: false,
+            ...Form.Settings,
             fields: {
                 Login: {
                     rules: [
-                        {
-                            type: "notEmpty"
-                        }
+                        ...Form.Rules.NotEmpty
                     ]
                 },
                 Password: {
                     rules: [
-                        {
-                            type: "size[8..64]"
-                        },
-                        {
-                            type: "regExp[/^.*[^0-9].*$/]",
-                            prompt: "{name} cannot be only numbers"
-                        }
+                        ...Form.Rules.Password
                     ]
                 }
             }
@@ -59,30 +48,20 @@ func LoginFormInit(formTagID string) templ.ComponentScript {
                 return settings;
             },
             onSuccess: function(response, element, xhr) {
-                $.toast({
-                    class: "success",
-                    message: response.Message,
-                    showProgress: "top"
-                });
+                Form.Toast.Success(response)
 
                 setTimeout(() => {
                     window.location.replace("/dashboard");
                 }, 1000);
             },
             onFailure: function(response, element, xhr) {
-                response.Data.forEach((error) => {
-                    $.toast({
-                        class: "error",
-                        message: error.Message,
-                        showProgress: "top"
-                    })
-                });
+                Form.Toast.Failure(response)
             }
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_LoginFormInit_ffc5`, formTagID),
-		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_ffc5`, formTagID),
+		Call:       templ.SafeScript(`__templ_LoginFormInit_43bd`, formTagID),
+		CallInline: templ.SafeScriptInline(`__templ_LoginFormInit_43bd`, formTagID),
 	}
 }
 
@@ -114,7 +93,7 @@ func LoginForm() templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(LoginFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.login.templ`, Line: 76, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.login.templ`, Line: 55, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
