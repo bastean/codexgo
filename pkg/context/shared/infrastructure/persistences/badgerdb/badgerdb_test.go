@@ -14,7 +14,7 @@ type BadgerDBTestSuite struct {
 }
 
 func (s *BadgerDBTestSuite) TestSentinel() {
-	s.Equal(badgerdb.Separator, ":")
+	s.Equal(":", badgerdb.Separator)
 }
 
 func (s *BadgerDBTestSuite) TestNewKey() {

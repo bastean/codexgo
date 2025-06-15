@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func Init() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Init_5edb`,
-		Function: `function __templ_Init_5edb(){const Storage = {
+		Name: `__templ_Init_fa42`,
+		Function: `function __templ_Init_fa42(){const Storage = {
         MasterKey: "codexgo",
         Key: {},
         Init() {
@@ -57,14 +57,14 @@ func Init() templ.ComponentScript {
 
             cookies.forEach((cookie) => cookieStore.delete(cookie));
         }
-    }
+    };
 
     Storage.Init();
 
     window.Storage = Storage;
 }`,
-		Call:       templ.SafeScript(`__templ_Init_5edb`),
-		CallInline: templ.SafeScriptInline(`__templ_Init_5edb`),
+		Call:       templ.SafeScript(`__templ_Init_fa42`),
+		CallInline: templ.SafeScriptInline(`__templ_Init_fa42`),
 	}
 }
 

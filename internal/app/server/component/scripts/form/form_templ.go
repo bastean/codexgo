@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func Init() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Init_24da`,
-		Function: `function __templ_Init_24da(){const Form = {
+		Name: `__templ_Init_7718`,
+		Function: `function __templ_Init_7718(){const Form = {
         Settings: {
             on: "blur",
             inline: true,
@@ -62,7 +62,7 @@ func Init() templ.ComponentScript {
                     {
                         type: ` + "`" + `match[${target}]` + "`" + `
                     }
-                ]
+                ];
             }
         },
         Captcha: {
@@ -88,16 +88,16 @@ func Init() templ.ComponentScript {
                         class: "error",
                         message: error.Message,
                         showProgress: "top"
-                    })
+                    });
                 });
             }
         }
-    }
+    };
 
     window.Form = Form;
 }`,
-		Call:       templ.SafeScript(`__templ_Init_24da`),
-		CallInline: templ.SafeScriptInline(`__templ_Init_24da`),
+		Call:       templ.SafeScript(`__templ_Init_7718`),
+		CallInline: templ.SafeScriptInline(`__templ_Init_7718`),
 	}
 }
 

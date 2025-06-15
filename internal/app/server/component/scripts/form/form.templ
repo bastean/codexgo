@@ -52,7 +52,7 @@ script Init() {
                     {
                         type: `match[${target}]`
                     }
-                ]
+                ];
             }
         },
         Captcha: {
@@ -78,11 +78,11 @@ script Init() {
                         class: "error",
                         message: error.Message,
                         showProgress: "top"
-                    })
+                    });
                 });
             }
         }
-    }
+    };
 
     window.Form = Form;
 }

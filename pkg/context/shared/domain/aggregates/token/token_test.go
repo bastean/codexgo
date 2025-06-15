@@ -14,9 +14,9 @@ type TokenTestSuite struct {
 }
 
 func (s *TokenTestSuite) TestSentinel() {
-	s.Equal(token.Limit, 3)
-	s.Equal(token.Every, int(time.Minute*3))
-	s.Equal(token.Next, int(time.Hour))
+	s.Equal(3, token.Limit)
+	s.Equal(int(time.Minute*3), token.Every)
+	s.Equal(int(time.Hour), token.Next)
 }
 
 func (s *TokenTestSuite) TestNew() {

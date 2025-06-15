@@ -13,7 +13,7 @@ type ParseTestSuite struct {
 }
 
 func (s *ParseTestSuite) TestSentinel() {
-	s.Equal(caller.RExAvoid, `[^.()[\]]+`)
+	s.Equal(`[^.()[\]]+`, caller.RExAvoid)
 }
 
 func (s *ParseTestSuite) TestParseWithGenericPointerReceiver() {

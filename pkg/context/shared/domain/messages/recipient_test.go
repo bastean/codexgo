@@ -13,7 +13,7 @@ type RecipientTestSuite struct {
 }
 
 func (s *RecipientTestSuite) TestSentinel() {
-	s.Equal(messages.RExRecipient, `^([a-z0-9]{1,30})\.([a-z]{1,30})\.([a-z_]{1,30})_on_([a-z]{1,30})_(queued|succeeded|failed|done)$`)
+	s.Equal(`^([a-z0-9]{1,30})\.([a-z]{1,30})\.([a-z_]{1,30})_on_([a-z]{1,30})_(queued|succeeded|failed|done)$`, messages.RExRecipient)
 }
 
 func (s *RecipientTestSuite) TestWithValidValue() {

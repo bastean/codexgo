@@ -12,15 +12,15 @@ type CallerTestSuite struct {
 }
 
 func (s *CallerTestSuite) TestSentinel() {
-	s.Equal(caller.FromCurrent, 0)
-	s.Equal(caller.SkipCurrent, 1)
+	s.Equal(0, caller.FromCurrent)
+	s.Equal(1, caller.SkipCurrent)
 
-	s.Equal(caller.Separator, "/")
+	s.Equal("/", caller.Separator)
 
-	s.Equal(caller.DefaultWhere, "UNKNOWN")
-	s.Equal(caller.DefaultPkg, "UNKNOWN")
-	s.Equal(caller.DefaultReceiver, "UNKNOWN")
-	s.Equal(caller.DefaultMethod, "UNKNOWN")
+	s.Equal("UNKNOWN", caller.DefaultWhere)
+	s.Equal("UNKNOWN", caller.DefaultPkg)
+	s.Equal("UNKNOWN", caller.DefaultReceiver)
+	s.Equal("UNKNOWN", caller.DefaultMethod)
 }
 
 func (s *CallerTestSuite) TestCallerFromCurrent() {

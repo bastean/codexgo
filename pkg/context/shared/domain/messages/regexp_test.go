@@ -12,24 +12,24 @@ type RegExpTestSuite struct {
 }
 
 func (s *RegExpTestSuite) TestSentinel() {
-	s.Equal(messages.RExOrganization, `([a-z0-9]{1,30})`)
-	s.Equal(messages.RExService, `([a-z0-9]{1,30})`)
-	s.Equal(messages.RExVersion, `(\d+)`)
-	s.Equal(messages.RExType, `(event|command|query|response)`)
-	s.Equal(messages.RExEntity, `([a-z]{1,30})`)
-	s.Equal(messages.RExTrigger, `([a-z_]{1,30})`)
-	s.Equal(messages.RExAction, `([a-z]{1,30})`)
-	s.Equal(messages.RExStatus, `(queued|succeeded|failed|done)`)
+	s.Equal(`([a-z0-9]{1,30})`, messages.RExOrganization)
+	s.Equal(`([a-z0-9]{1,30})`, messages.RExService)
+	s.Equal(`(\d+)`, messages.RExVersion)
+	s.Equal(`(event|command|query|response)`, messages.RExType)
+	s.Equal(`([a-z]{1,30})`, messages.RExEntity)
+	s.Equal(`([a-z_]{1,30})`, messages.RExTrigger)
+	s.Equal(`([a-z]{1,30})`, messages.RExAction)
+	s.Equal(`(queued|succeeded|failed|done)`, messages.RExStatus)
 
-	s.Equal(messages.Type.Event, "event")
-	s.Equal(messages.Type.Command, "command")
-	s.Equal(messages.Type.Query, "query")
-	s.Equal(messages.Type.Response, "response")
+	s.Equal("event", messages.Type.Event)
+	s.Equal("command", messages.Type.Command)
+	s.Equal("query", messages.Type.Query)
+	s.Equal("response", messages.Type.Response)
 
-	s.Equal(messages.Status.Queued, "queued")
-	s.Equal(messages.Status.Succeeded, "succeeded")
-	s.Equal(messages.Status.Failed, "failed")
-	s.Equal(messages.Status.Done, "done")
+	s.Equal("queued", messages.Status.Queued)
+	s.Equal("succeeded", messages.Status.Succeeded)
+	s.Equal("failed", messages.Status.Failed)
+	s.Equal("done", messages.Status.Done)
 }
 
 func TestUnitRegExpSuite(t *testing.T) {

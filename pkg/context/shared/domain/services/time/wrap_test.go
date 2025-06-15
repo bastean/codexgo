@@ -13,19 +13,19 @@ type WrapTestSuite struct {
 }
 
 func (s *WrapTestSuite) TestSentinel() {
-	s.Equal(time.RFC3339Nano, t.RFC3339Nano)
+	s.Equal(t.RFC3339Nano, time.RFC3339Nano)
 
-	s.Equal(time.Millisecond, t.Millisecond)
-	s.Equal(time.Second, t.Second)
-	s.Equal(time.Minute, t.Minute)
-	s.Equal(time.Hour, t.Hour)
+	s.Equal(t.Millisecond, time.Millisecond)
+	s.Equal(t.Second, time.Second)
+	s.Equal(t.Minute, time.Minute)
+	s.Equal(t.Hour, time.Hour)
 
-	s.Equal(time.Day, time.Hour*24)
-	s.Equal(time.Week, time.Day*7)
-	s.Equal(time.Month, time.Week*4)
-	s.Equal(time.Year, time.Month*12)
+	s.Equal(time.Hour*24, time.Day)
+	s.Equal(time.Day*7, time.Week)
+	s.Equal(time.Week*4, time.Month)
+	s.Equal(time.Month*12, time.Year)
 
-	s.Equal(time.Duration(0), t.Duration(0))
+	s.Equal(t.Duration(0), time.Duration(0))
 }
 
 func TestUnitWrapSuite(t *testing.T) {

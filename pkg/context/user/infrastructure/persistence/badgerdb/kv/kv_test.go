@@ -32,10 +32,10 @@ func (s *KVTestSuite) SetupSuite() {
 }
 
 func (s *KVTestSuite) TestSentinel() {
-	s.Equal(kv.TotalCriteriaFields, 3)
-	s.Equal(kv.IxID, 0)
-	s.Equal(kv.IxEmail, 1)
-	s.Equal(kv.IxUsername, 2)
+	s.Equal(3, kv.TotalCriteriaFields)
+	s.Equal(0, kv.IxID)
+	s.Equal(1, kv.IxEmail)
+	s.Equal(2, kv.IxUsername)
 }
 
 func (s *KVTestSuite) TearDownSuite() {
