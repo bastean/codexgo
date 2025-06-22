@@ -9,14 +9,14 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 const (
-	ResetFormTagID  = "reset-form"
-	ResetModalTagID = "reset-modal"
+	VerifyFormTagID  = "verify-form"
+	VerifyModalTagID = "verify-modal"
 )
 
-func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
+func VerifyFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_ResetFormInit_b75f`,
-		Function: `function __templ_ResetFormInit_b75f(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
+		Name: `__templ_VerifyFormInit_0e30`,
+		Function: `function __templ_VerifyFormInit_0e30(formTagID, loginTabTagID){$(` + "`" + `#${formTagID}` + "`" + `)
         .form({
             ...Form.Settings,
             fields: {
@@ -24,19 +24,14 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
                     rules: [
                         ...Form.Rules.Password
                     ]
-                },
-                ConfirmPassword: {
-                    rules: [
-                        ...Form.Rules.Match("Password")
-                    ]
                 }
             }
         })
         .api({
-            action: "user_reset", 
+            action: "user_verify", 
             method: "PATCH",
             beforeSend: function(settings) {
-                return Form.Token.Encode(settings, "ResetToken")
+                return Form.Token.Encode(settings, "VerifyToken")
             },
             onSuccess: function(response, element, xhr) {
                 Form.Toast.Success(response)
@@ -52,12 +47,12 @@ func ResetFormInit(formTagID, loginTabTagID string) templ.ComponentScript {
         })
     ;
 }`,
-		Call:       templ.SafeScript(`__templ_ResetFormInit_b75f`, formTagID, loginTabTagID),
-		CallInline: templ.SafeScriptInline(`__templ_ResetFormInit_b75f`, formTagID, loginTabTagID),
+		Call:       templ.SafeScript(`__templ_VerifyFormInit_0e30`, formTagID, loginTabTagID),
+		CallInline: templ.SafeScriptInline(`__templ_VerifyFormInit_0e30`, formTagID, loginTabTagID),
 	}
 }
 
-func ResetForm() templ.Component {
+func VerifyForm() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -83,9 +78,9 @@ func ResetForm() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ResetModalTagID)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(VerifyModalTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 47, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.verify.templ`, Line: 42, Col: 27}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -96,19 +91,19 @@ func ResetForm() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(ResetFormTagID)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(VerifyFormTagID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.reset.templ`, Line: 49, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/form.verify.templ`, Line: 44, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Reset your password</h1><div class=\"required field\"><label>Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"lock icon\"></i> <input type=\"password\" placeholder=\"Password\" name=\"Password\"></div></div><div class=\"required field\"><label>Confirm Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"redo icon\"></i> <input type=\"password\" placeholder=\"Confirm Password\" name=\"ConfirmPassword\"></div></div><div class=\"ui divider\"></div><div class=\"ui middle aligned center aligned grid\"><div class=\"column\"><button class=\"ui fluid primary submit button\">Reset</button></div></div></form></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "\" class=\"ui inverted form\"><h1 class=\"ui dividing inverted header\">Verify your account</h1><div class=\"required field\"><label>Password</label><div class=\"ui inverted transparent left icon input\"><i class=\"lock icon\"></i> <input type=\"password\" placeholder=\"Password\" name=\"Password\"></div></div><div class=\"ui divider\"></div><div class=\"ui middle aligned center aligned grid\"><div class=\"column\"><button class=\"ui fluid primary submit button\">Verify</button></div></div></form></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ResetFormInit(ResetFormTagID, LoginTabTagID).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = VerifyFormInit(VerifyFormTagID, LoginTabTagID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

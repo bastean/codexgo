@@ -86,6 +86,7 @@ func InitUser() error {
 	UserVerify = &verify.Handler{
 		Case: &verify.Case{
 			Repository: repository,
+			Hasher:     cipher.Hasher,
 		},
 	}
 

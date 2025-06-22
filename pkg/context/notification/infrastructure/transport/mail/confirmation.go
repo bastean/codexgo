@@ -34,7 +34,7 @@ func (c *Confirmation) Submit(recipient *recipient.Recipient) error {
 		})
 	}
 
-	link := fmt.Sprintf("%s/v4/account/verify?token=%s&id=%s", c.AppServerURL, recipient.VerifyToken.Value(), recipient.ID.Value())
+	link := fmt.Sprintf("%s/verify?token=%s&id=%s", c.AppServerURL, recipient.VerifyToken.Value(), recipient.ID.Value())
 
 	err = ConfirmationTemplate(recipient.Username.Value(), link).Render(context.Background(), &message)
 

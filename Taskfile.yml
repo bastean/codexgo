@@ -15,6 +15,9 @@ vars:
   URL_SERVER: http://localhost:8080
   URL_GITHUB: https://github.com/bastean/codexgo
 
+  #* API
+  API_SMTP: http://localhost:8025/api/v1
+
   #* Go
   GO_MODULE: github.com/bastean/codexgo/v4
 
@@ -370,7 +373,7 @@ tasks:
     cmds:
       - task: bash
         vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
+          CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
 
   test-acceptance:
     cmds:
@@ -383,7 +386,7 @@ tasks:
     cmds:
       - task: bash
         vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
+          CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
 
   tests:
     cmds:

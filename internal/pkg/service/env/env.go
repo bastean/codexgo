@@ -92,9 +92,13 @@ func Init() error {
 	}
 
 	SMTP()
+
 	Broker()
+
 	Database()
+
 	JWT()
+
 	Server()
 
 	return nil

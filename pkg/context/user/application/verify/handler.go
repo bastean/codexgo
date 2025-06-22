@@ -16,7 +16,7 @@ var CommandKey, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyCo
 }))
 
 type CommandAttributes = struct {
-	VerifyToken, ID string
+	VerifyToken, ID, Password string
 }
 
 type CommandMeta = struct{}

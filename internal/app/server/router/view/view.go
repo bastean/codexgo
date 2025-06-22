@@ -18,6 +18,8 @@ func (v *View) Public() {
 
 	home.GET("/", page.Home)
 
+	home.GET("/verify", page.Home)
+
 	home.GET("/reset", page.Home)
 }
 

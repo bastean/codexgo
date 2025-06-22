@@ -10,8 +10,8 @@ import templruntime "github.com/a-h/templ/runtime"
 
 func Init() templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_Init_7718`,
-		Function: `function __templ_Init_7718(){const Form = {
+		Name: `__templ_Init_f45c`,
+		Function: `function __templ_Init_f45c(){const Form = {
         Settings: {
             on: "blur",
             inline: true,
@@ -74,6 +74,19 @@ func Init() templ.ComponentScript {
                 return settings;
             }
         },
+        Token: {
+            Encode(settings, token) {
+                const params = new URLSearchParams(window.location.search);
+
+                settings.data[token] = params.get("token");
+
+                settings.data.ID = params.get("id");
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            }
+        },
         Toast: {
             Success(response) {
                 $.toast({
@@ -96,8 +109,8 @@ func Init() templ.ComponentScript {
 
     window.Form = Form;
 }`,
-		Call:       templ.SafeScript(`__templ_Init_7718`),
-		CallInline: templ.SafeScriptInline(`__templ_Init_7718`),
+		Call:       templ.SafeScript(`__templ_Init_f45c`),
+		CallInline: templ.SafeScriptInline(`__templ_Init_f45c`),
 	}
 }
 

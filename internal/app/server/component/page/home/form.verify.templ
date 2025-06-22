@@ -1,11 +1,11 @@
 package home
 
 const (
-	ResetFormTagID  = "reset-form"
-	ResetModalTagID = "reset-modal"
+	VerifyFormTagID  = "verify-form"
+	VerifyModalTagID = "verify-modal"
 )
 
-script ResetFormInit(formTagID, loginTabTagID string) {
+script VerifyFormInit(formTagID, loginTabTagID string) {
     $(`#${formTagID}`)
         .form({
             ...Form.Settings,
@@ -14,19 +14,14 @@ script ResetFormInit(formTagID, loginTabTagID string) {
                     rules: [
                         ...Form.Rules.Password
                     ]
-                },
-                ConfirmPassword: {
-                    rules: [
-                        ...Form.Rules.Match("Password")
-                    ]
                 }
             }
         })
         .api({
-            action: "user_reset", 
+            action: "user_verify", 
             method: "PATCH",
             beforeSend: function(settings) {
-                return Form.Token.Encode(settings, "ResetToken")
+                return Form.Token.Encode(settings, "VerifyToken")
             },
             onSuccess: function(response, element, xhr) {
                 Form.Toast.Success(response)
@@ -43,12 +38,12 @@ script ResetFormInit(formTagID, loginTabTagID string) {
     ;
 }
 
-templ ResetForm() {
-	<div id={ ResetModalTagID } class="ui mini inverted modal">
+templ VerifyForm() {
+	<div id={ VerifyModalTagID } class="ui mini inverted modal">
 		<div class="content">
-			<form id={ ResetFormTagID } class="ui inverted form">
+			<form id={ VerifyFormTagID } class="ui inverted form">
 				<h1 class="ui dividing inverted header">
-					Reset your password
+					Verify your account
 				</h1>
 				<div class="required field">
 					<label>Password</label>
@@ -57,21 +52,14 @@ templ ResetForm() {
 						<input type="password" placeholder="Password" name="Password"/>
 					</div>
 				</div>
-				<div class="required field">
-					<label>Confirm Password</label>
-					<div class="ui inverted transparent left icon input">
-						<i class="redo icon"></i>
-						<input type="password" placeholder="Confirm Password" name="ConfirmPassword"/>
-					</div>
-				</div>
 				<div class="ui divider"></div>
 				<div class="ui middle aligned center aligned grid">
 					<div class="column">
-						<button class="ui fluid primary submit button">Reset</button>
+						<button class="ui fluid primary submit button">Verify</button>
 					</div>
 				</div>
 			</form>
 		</div>
 	</div>
-	@ResetFormInit(ResetFormTagID, LoginTabTagID)
+	@VerifyFormInit(VerifyFormTagID, LoginTabTagID)
 }

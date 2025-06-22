@@ -1,11 +1,11 @@
-Feature: User forgot password
+Feature: Reset a user password
 
   Scenario: Create a valid non existing account through UI
     Given I am on the Home page
-    * I fill the Email with uiForgot@example.com
-    * I fill the Username with uiForgot
-    * I fill the Password with uiForgot@example
-    * I fill the Confirm Password with uiForgot@example
+    * I fill the Email with uiReset@example.com
+    * I fill the Username with uiReset
+    * I fill the Password with uiReset@example
+    * I fill the Confirm Password with uiReset@example
     * I check the I agree to the terms and conditions
     * I hover the Sign up button
     * I fill the Answer with 00000
@@ -16,9 +16,9 @@ Feature: User forgot password
     Given I send a PUT request to Create with body:
       """
       {
-        "Email": "apiForgot@example.com",
-        "Username": "apiForgot",
-        "Password": "apiForgot@example",
+        "Email": "apiReset@example.com",
+        "Username": "apiReset",
+        "Password": "apiReset@example",
         "CaptchaID": "00000",
         "CaptchaAnswer": "00000"
       }
@@ -37,7 +37,7 @@ Feature: User forgot password
     Given I am on the Home page
     * I click on the Sign in button
     * I click on the Forgot Password? button
-    * I fill the Email with uiForgot@example.com
+    * I fill the Email with uiReset@example.com
     * I fill the Answer with 00000
     When I click the Send button
     Then I see Link sent. Please check your inbox notification
@@ -46,7 +46,7 @@ Feature: User forgot password
     Given I send a POST request to Forgot with body:
       """
       {
-        "Email": "apiForgot@example.com",
+        "Email": "apiReset@example.com",
         "CaptchaID": "00000",
         "CaptchaAnswer": "00000"
       }
@@ -61,38 +61,30 @@ Feature: User forgot password
       }
       """
 
-  Scenario: Recover a valid non existing account through UI
-    Given I am on the Home page
-    * I click on the Sign in button
-    * I click on the Forgot Password? button
-    * I fill the Email with non-existing@example.com
-    * I fill the Answer with 00000
-    When I click the Send button
-    Then I see non-existing@example.com not found notification
+  Scenario: Reset a valid existing account through UI
+    Given I receive the link in uiReset@example.com
+    * I open the Reset link received
+    * I fill the Password with uiReset@example
+    * I fill the Confirm Password with uiReset@example
+    When I click the Reset button
+    Then I see Password updated notification
 
-  Scenario: Recover a valid non existing account through API
-    Given I send a POST request to Forgot with body:
+  Scenario: Reset a valid existing account through API
+    Given I receive the link in apiReset@example.com
+    When I send a PATCH request to Reset with body:
       """
       {
-        "Email": "non-existing@example.com",
-        "CaptchaID": "00000",
-        "CaptchaAnswer": "00000"
+        "ResetToken": "[Token]",
+        "ID": "[ID]",
+        "Password": "apiReset@example"
       }
       """
-    Then the response status code should be 400
+    Then the response status code should be 200
     And the response body should be:
       """
       {
-        "Success": false,
-        "Message": "Some errors have been found.",
-        "Data": [
-          {
-            "Type": "NotExist",
-            "Message": "non-existing@example.com not found",
-            "Data": {
-              "Index": "non-existing@example.com"
-            }
-          }
-        ]
+        "Success": true,
+        "Message": "Password updated",
+        "Data": null
       }
       """

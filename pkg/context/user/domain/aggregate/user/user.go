@@ -42,12 +42,16 @@ func (u *User) IsVerified() bool {
 	return u.Verified.Value()
 }
 
+func (u *User) HasVerifyToken() bool {
+	return u.VerifyToken != nil
+}
+
 func (u *User) HasResetToken() bool {
 	return u.ResetToken != nil
 }
 
 func (u *User) ValidateVerifyToken(token *token.Token) error {
-	if u.VerifyToken.ID.Value() != token.ID.Value() {
+	if !u.HasVerifyToken() || u.VerifyToken.ID.Value() != token.ID.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
 			Why: errors.Meta{
@@ -60,7 +64,7 @@ func (u *User) ValidateVerifyToken(token *token.Token) error {
 }
 
 func (u *User) ValidateResetToken(token *token.Token) error {
-	if u.ResetToken.ID.Value() != token.ID.Value() {
+	if !u.HasResetToken() || u.ResetToken.ID.Value() != token.ID.Value() {
 		return errors.New[errors.Failure](&errors.Bubble{
 			What: "Tokens do not match",
 			Why: errors.Meta{

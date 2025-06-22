@@ -16,9 +16,9 @@ type Case struct {
 func (c *Case) Run(attributes *CommandAttributes) error {
 	id, errID := values.New[*values.ID](attributes.ID)
 
-	plainPassword, errPlain := values.New[*user.PlainPassword](attributes.Password)
+	plainPassword, errPlainPassword := values.New[*user.PlainPassword](attributes.Password)
 
-	err := errors.Join(errID, errPlain)
+	err := errors.Join(errID, errPlainPassword)
 
 	if err != nil {
 		return errors.BubbleUp(err)

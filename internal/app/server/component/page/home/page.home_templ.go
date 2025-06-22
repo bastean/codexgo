@@ -44,10 +44,10 @@ func ShowModal(modalTagID string) templ.ComponentScript {
 	}
 }
 
-func PageInit(resetModalTagID string) templ.ComponentScript {
+func PageInit(verifyModalTagID, resetModalTagID string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_PageInit_6496`,
-		Function: `function __templ_PageInit_6496(resetModalTagID){$(".ui.container")
+		Name: `__templ_PageInit_e361`,
+		Function: `function __templ_PageInit_e361(verifyModalTagID, resetModalTagID){$(".ui.container")
         .transition("fade in", "3s")
     ;
 
@@ -64,6 +64,15 @@ func PageInit(resetModalTagID string) templ.ComponentScript {
         })
     ;
 
+   if (window.location.pathname.includes("/verify")) {
+        $(` + "`" + `#${verifyModalTagID}` + "`" + `)
+            .modal({
+                closable: false
+            })
+            .modal("show")
+        ;
+    }
+
    if (window.location.pathname.includes("/reset")) {
         $(` + "`" + `#${resetModalTagID}` + "`" + `)
             .modal({
@@ -73,8 +82,8 @@ func PageInit(resetModalTagID string) templ.ComponentScript {
         ;
     }
 }`,
-		Call:       templ.SafeScript(`__templ_PageInit_6496`, resetModalTagID),
-		CallInline: templ.SafeScriptInline(`__templ_PageInit_6496`, resetModalTagID),
+		Call:       templ.SafeScript(`__templ_PageInit_e361`, verifyModalTagID, resetModalTagID),
+		CallInline: templ.SafeScriptInline(`__templ_PageInit_e361`, verifyModalTagID, resetModalTagID),
 	}
 }
 
@@ -118,7 +127,7 @@ func Page(register, forgot *captcha.Captcha) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 68, Col: 51}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 77, Col: 51}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -131,7 +140,7 @@ func Page(register, forgot *captcha.Captcha) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 69, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 78, Col: 61}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -144,7 +153,7 @@ func Page(register, forgot *captcha.Captcha) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(RegisterTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 74, Col: 72}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 83, Col: 72}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -169,7 +178,7 @@ func Page(register, forgot *captcha.Captcha) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(LoginTabTagID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 78, Col: 62}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/app/server/component/page/home/page.home.templ`, Line: 87, Col: 62}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -187,6 +196,10 @@ func Page(register, forgot *captcha.Captcha) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+			templ_7745c5c3_Err = VerifyForm().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			templ_7745c5c3_Err = ForgotForm(forgot).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -199,7 +212,7 @@ func Page(register, forgot *captcha.Captcha) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = PageInit(ResetModalTagID).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = PageInit(VerifyModalTagID, ResetModalTagID).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

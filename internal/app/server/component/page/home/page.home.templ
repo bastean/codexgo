@@ -24,7 +24,7 @@ script ShowModal(modalTagID string) {
     ;
 }
 
-script PageInit(resetModalTagID string) {
+script PageInit(verifyModalTagID, resetModalTagID string) {
     $(".ui.container")
         .transition("fade in", "3s")
     ;
@@ -41,6 +41,15 @@ script PageInit(resetModalTagID string) {
             value: true
         })
     ;
+
+   if (window.location.pathname.includes("/verify")) {
+        $(`#${verifyModalTagID}`)
+            .modal({
+                closable: false
+            })
+            .modal("show")
+        ;
+    }
 
    if (window.location.pathname.includes("/reset")) {
         $(`#${resetModalTagID}`)
@@ -78,6 +87,7 @@ templ Page(register, forgot *captcha.Captcha) {
 				<div class="ui tab basic segment" data-tab={ LoginTabTagID }>
 					@LoginForm()
 				</div>
+				@VerifyForm()
 				@ForgotForm(forgot)
 				@ResetForm()
 			</div>
@@ -89,6 +99,6 @@ templ Page(register, forgot *captcha.Captcha) {
 				<i class="close icon"></i>
 			</div>
 		</div>
-		@PageInit(ResetModalTagID)
+		@PageInit(VerifyModalTagID, ResetModalTagID)
 	}
 }

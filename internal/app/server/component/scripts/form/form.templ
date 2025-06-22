@@ -64,6 +64,19 @@ script Init() {
                 return settings;
             }
         },
+        Token: {
+            Encode(settings, token) {
+                const params = new URLSearchParams(window.location.search);
+
+                settings.data[token] = params.get("token");
+
+                settings.data.ID = params.get("id");
+
+                settings.data = JSON.stringify(settings.data);
+        
+                return settings;
+            }
+        },
         Toast: {
             Success(response) {
                 $.toast({
