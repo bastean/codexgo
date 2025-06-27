@@ -41,4 +41,4 @@ RUN mkdir -p logs \
 USER codexgo
 
 HEALTHCHECK --interval=12s --timeout=12s --retries=12 \
-    CMD curl -sSfI http://localhost:8080/health || exit 1
+    CMD curl -sSf http://localhost:8080/health || exit 1

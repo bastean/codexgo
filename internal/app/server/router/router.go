@@ -43,7 +43,7 @@ func New(files *embed.FS) *gin.Engine {
 
 	view.Use(Router)
 
-	Router.HEAD("/health", health.Check)
+	Router.GET("/health", health.Check)
 
 	Router.NoRoute(redirect.Default)
 

@@ -1,11 +1,11 @@
 package health
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+
+	"github.com/bastean/codexgo/v4/internal/app/server/service/reply"
 )
 
 func Check(c *gin.Context) {
-	c.Status(http.StatusOK)
+	reply.Success(c, "OK")
 }

@@ -353,7 +353,7 @@ tasks:
   test-sync:
     requires:
       vars: ["TEST_SYNC"]
-    cmd: GOTEST=1 bunx concurrently -s first -k --names 'SUT,TEST' 'task test-sut' 'bunx wait-on -l {{.URL_SERVER}}/health && {{.TEST_SYNC}}'
+    cmd: GOTEST=1 bunx concurrently -s first -k --names 'SUT,TEST' 'task test-sut' 'bunx wait-on -l {{.URL_SERVER | replace "http" "http-get"}}/health && {{.TEST_SYNC}}'
 
   test-unit:
     cmds:
