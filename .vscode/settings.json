@@ -13,9 +13,12 @@
   "cucumber.glue": ["**/internal/app/**/*_test.go"],
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.maxComputationTime": 0,
+  "docker.extension.enableComposeLanguageServer": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.detectIndentation": false,
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
+  "editor.linkedEditing": true,
   "emmet.includeLanguages": {
     "templ": "html"
   },
@@ -28,5 +31,9 @@
   "go.toolsManagement.autoUpdate": true,
   "gopls": {
     "ui.semanticTokens": true
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "yaml.schemas": {
+    ".vscode/empty.json": ["compose*y*ml", "docker-compose*y*ml"]
   }
 }
