@@ -16,7 +16,7 @@ var UserCreatedSucceededRecipient, _ = values.New[*messages.Recipient](messages.
 	Entity:  "user",
 	Trigger: "send_confirmation",
 	Action:  "created",
-	Status:  "succeeded",
+	Status:  messages.Status.Succeeded,
 }))
 
 var UserResetQueuedRecipient, _ = values.New[*messages.Recipient](messages.FormatRecipient(&messages.RecipientComponents{
@@ -24,7 +24,7 @@ var UserResetQueuedRecipient, _ = values.New[*messages.Recipient](messages.Forma
 	Entity:  "user",
 	Trigger: "send_reset",
 	Action:  "reset",
-	Status:  "queued",
+	Status:  messages.Status.Queued,
 }))
 
 var RabbitMQueueMapper = rabbitmq.Mapper{
