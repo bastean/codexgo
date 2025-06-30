@@ -432,13 +432,7 @@ tasks:
         vars:
           TEST_SYNC: task test-acceptance-sync
 
-  tests-sync:
-    cmds:
-      - task: bash
-        vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
-
-  flaky:
+  test-flaky:
     vars:
       RANDOM: "{{randIntN 10 | add 3}}"
       ITERATE: "{{.RANDOM | int | until}}"
@@ -447,10 +441,16 @@ tasks:
       - for: { var: ITERATE }
         cmd: task test-unit
 
+  tests-sync:
+    cmds:
+      - task: bash
+        vars:
+          CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
+
   tests:
     cmds:
+      - task: test-flaky
       - task: test-clean
-      - task: flaky
       - task: test-sync
         vars:
           TEST_SYNC: task tests-sync

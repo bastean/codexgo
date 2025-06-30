@@ -15,6 +15,13 @@ runs:
     - name: Setup Task
       uses: arduino/setup-task@v2
 
+    - name: Cache 'node_modules'
+      uses: actions/cache@v4
+      id: node_modules
+      with:
+        key: node-cache-${{ runner.os }}-node_modules-${{ hashFiles('bun.lock') }}-${{ hashFiles('.github/actions/setup/action.yml') }}
+        path: "node_modules"
+
     - name: Setup codexGO
       shell: ${{ runner.os == 'Windows' && 'pwsh' || 'bash' }}
       run: task init-ci
