@@ -4,9 +4,12 @@ FROM golang:1.24-bookworm AS dev
 
 WORKDIR /app
 
-RUN apt update \
- && apt upgrade -y \
- && apt install -y sudo unzip \
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt update -qy \
+ && apt upgrade -qy \
+ && apt autoremove -qy \
+ && apt install -qy sudo unzip \
  && go install github.com/go-task/task/v3/cmd/task@latest
 
 COPY Taskfile.yml .

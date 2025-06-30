@@ -1,7 +1,8 @@
 version: "3"
 
 vars:
-  #* Fluxbox
+  # ---------------------------------- Fluxbox --------------------------------- #
+
   FLUXBOX_MENU: ~/.fluxbox/menu
 
 tasks:

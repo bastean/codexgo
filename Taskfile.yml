@@ -11,21 +11,28 @@ includes:
     flatten: true
 
 vars:
-  #* URL
+  # ------------------------------------ URL ----------------------------------- #
+
   URL_SERVER: http://localhost:8080
   URL_GITHUB: https://github.com/bastean/codexgo
 
-  #* API
+  # ------------------------------------ API ----------------------------------- #
+
   API_SMTP: http://localhost:8025/api/v1
 
-  #* Go
+  # ------------------------------------ Go ------------------------------------ #
+
   GO_MODULE: github.com/bastean/codexgo/v4
 
-  #* Prompt
+  # ---------------------------------- Prompt ---------------------------------- #
+
   PROMPT_WARNING: This is a dangerous command... Do you want to continue?
 
 tasks:
-  #* Bin
+  # ---------------------------------------------------------------------------- #
+  #                                      Bin                                     #
+  # ---------------------------------------------------------------------------- #
+
   bashrc:
     internal: true
     requires:
@@ -128,16 +135,28 @@ tasks:
     internal: true
     cmd: git reset --hard HEAD
 
-  #* Upgrade
+  # ---------------------------------------------------------------------------- #
+  #                                    Upgrade                                   #
+  # ---------------------------------------------------------------------------- #
+
   upgrade-managers:
     cmds:
-      - sudo apt update
-      #? - sudo apt upgrade -y
       - sudo apt install -y python3
       - task: curl
         vars:
           URL: https://bun.sh/install
           PIPE: sudo BUN_INSTALL=/usr/local bash
+
+  upgrade-system:
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      DEBIAN_PRIORITY: critical
+      NEEDRESTART_MODE: a
+    cmds:
+      - sudo apt update -y
+      - sudo apt upgrade -y
+      - sudo apt autoremove -y
+      - task: upgrade-managers
 
   upgrade-go: go get -t -u ./cmd/... ./internal/... ./pkg/... ./scripts/...
 
@@ -157,7 +176,10 @@ tasks:
       - task: git-reset-hard
       - task: bun-ci
 
-  #* Install
+  # ---------------------------------------------------------------------------- #
+  #                                    Install                                   #
+  # ---------------------------------------------------------------------------- #
+
   install-scanners:
     cmds:
       - task: go-install
@@ -200,6 +222,7 @@ tasks:
             - github.com/bastean/x/tools/cmd/cdeps@latest
             - github.com/bastean/x/tools/cmd/syncenv@latest
             - github.com/air-verse/air@latest
+            - github.com/dgraph-io/badger/v4/badger@latest
             - github.com/a-h/templ/cmd/templ@latest
 
   install-tools-test:
@@ -219,13 +242,19 @@ tasks:
     cmds:
       - task: install-tools-dev
 
-  #* Download
+  # ---------------------------------------------------------------------------- #
+  #                                   Download                                   #
+  # ---------------------------------------------------------------------------- #
+
   download-dependencies:
     cmds:
       - go mod download
       - task: bun-ci
 
-  #* Generate
+  # ---------------------------------------------------------------------------- #
+  #                                   Generate                                   #
+  # ---------------------------------------------------------------------------- #
+
   generate-required:
     cmds:
       - go generate ./...
@@ -233,16 +262,22 @@ tasks:
       - templ generate
       - templ fmt .
 
-  #* Restore
+  # ---------------------------------------------------------------------------- #
+  #                                    Restore                                   #
+  # ---------------------------------------------------------------------------- #
+
   restore:
     cmds:
       - bunx husky init
       - git restore .
 
-  #* Init
+  # ---------------------------------------------------------------------------- #
+  #                                     Init                                     #
+  # ---------------------------------------------------------------------------- #
+
   init:
     cmds:
-      - task: upgrade-managers
+      - task: upgrade-system
       - task: install-tooling
       - task: download-dependencies
       - task: cdeps
@@ -263,10 +298,16 @@ tasks:
       - git add .
       - task: init
 
-  #* ENV
+  # ---------------------------------------------------------------------------- #
+  #                                      ENV                                     #
+  # ---------------------------------------------------------------------------- #
+
   syncenv: syncenv -e ./deployments -t ./deployments/.env.example
 
-  #* Scan
+  # ---------------------------------------------------------------------------- #
+  #                                     Scan                                     #
+  # ---------------------------------------------------------------------------- #
+
   scan-secrets-local:
     cmds:
       - task: trufflehog-git
@@ -317,7 +358,10 @@ tasks:
       - task: scan-vulns
       - task: scan-misconfigs
 
-  #* Lint/Format
+  # ---------------------------------------------------------------------------- #
+  #                                  Lint/Format                                 #
+  # ---------------------------------------------------------------------------- #
+
   lint:
     cmds:
       - go mod tidy
@@ -332,14 +376,20 @@ tasks:
       - golangci-lint run
       - task: prettier-check
 
-  #* Debug
+  # ---------------------------------------------------------------------------- #
+  #                                     Debug                                    #
+  # ---------------------------------------------------------------------------- #
+
   debug-dead: deadcode -test ./...
 
   debugs:
     cmds:
       - task: debug-dead
 
-  #* Test
+  # ---------------------------------------------------------------------------- #
+  #                                     Test                                     #
+  # ---------------------------------------------------------------------------- #
+
   test-sut: air
 
   test-clean:
@@ -388,21 +438,37 @@ tasks:
         vars:
           CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
 
+  flaky:
+    vars:
+      RANDOM: "{{randIntN 10 | add 3}}"
+      ITERATE: "{{.RANDOM | int | until}}"
+    cmds:
+      - task: prompt-"Iterations \"{{.RANDOM}}\""
+      - for: { var: ITERATE }
+        cmd: task test-unit
+
   tests:
     cmds:
       - task: test-clean
+      - task: flaky
       - task: test-sync
         vars:
           TEST_SYNC: task tests-sync
 
-  #* Build
+  # ---------------------------------------------------------------------------- #
+  #                                     Build                                    #
+  # ---------------------------------------------------------------------------- #
+
   build:
     cmds:
       - task: lint
-      - rm -rf build/
+      - rm -rf ./build
       - go build -ldflags="-s -w" -o ./build/codexgo ./cmd/codexgo
 
-  #* Release
+  # ---------------------------------------------------------------------------- #
+  #                                    Release                                   #
+  # ---------------------------------------------------------------------------- #
+
   release:
     cmds:
       - task: release-it
@@ -443,7 +509,10 @@ tasks:
         vars:
           OPTIONS: --changelog
 
-  #* Git
+  # ---------------------------------------------------------------------------- #
+  #                                      Git                                     #
+  # ---------------------------------------------------------------------------- #
+
   commit: bunx czg
 
   git-v*:
@@ -551,10 +620,16 @@ tasks:
       - task: git-reset-hard
       - task: init
 
-  #* Mailpit
+  # ---------------------------------------------------------------------------- #
+  #                                    Mailpit                                   #
+  # ---------------------------------------------------------------------------- #
+
   mailpit: mailpit --smtp-auth-allow-insecure --smtp-auth-accept-any
 
-  #* Docker
+  # ---------------------------------------------------------------------------- #
+  #                                    Docker                                    #
+  # ---------------------------------------------------------------------------- #
+
   docker-usage: docker system df
 
   docker-it-*:
@@ -680,7 +755,10 @@ tasks:
       - task: compose-down
       - task: docker-usage
 
-  #* Devcontainer
+  # ---------------------------------------------------------------------------- #
+  #                                 Devcontainer                                 #
+  # ---------------------------------------------------------------------------- #
+
   devcontainer-*-*:
     requires:
       vars: ["USER", "PASSWORD"]
@@ -703,7 +781,10 @@ tasks:
     cmds:
       - ssh -p {{.PORT}} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null {{.USER}}@{{.HOST}}
 
-  #* Fix
+  # ---------------------------------------------------------------------------- #
+  #                                      Fix                                     #
+  # ---------------------------------------------------------------------------- #
+
   fix-dev:
     cmds:
       - task: upgrade-go
