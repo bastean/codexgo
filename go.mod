@@ -1,11 +1,11 @@
 module github.com/bastean/codexgo/v4
 
-go 1.24.2
+go 1.24.4
 
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.6
 	github.com/a-h/templ v0.3.906
-	github.com/brianvoe/gofakeit/v7 v7.2.1
+	github.com/brianvoe/gofakeit/v7 v7.3.0
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
 	github.com/cucumber/godog v0.15.0
 	github.com/dgraph-io/badger/v4 v4.7.0
@@ -59,7 +59,7 @@ require (
 	github.com/hashicorp/golang-lru v1.0.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
-	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
+	github.com/klauspost/cpuid/v2 v2.2.11 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -68,7 +68,7 @@ require (
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/redis/go-redis/v9 v9.10.0 // indirect
+	github.com/redis/go-redis/v9 v9.11.0 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
@@ -78,9 +78,9 @@ require (
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
-	go.opentelemetry.io/otel v1.36.0 // indirect
-	go.opentelemetry.io/otel/metric v1.36.0 // indirect
-	go.opentelemetry.io/otel/trace v1.36.0 // indirect
+	go.opentelemetry.io/otel v1.37.0 // indirect
+	go.opentelemetry.io/otel/metric v1.37.0 // indirect
+	go.opentelemetry.io/otel/trace v1.37.0 // indirect
 	golang.org/x/arch v0.18.0 // indirect
 	golang.org/x/image v0.28.0 // indirect
 	golang.org/x/net v0.41.0 // indirect

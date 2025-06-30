@@ -158,7 +158,7 @@ tasks:
       - sudo apt autoremove -y
       - task: upgrade-managers
 
-  upgrade-go: go get -t -u ./cmd/... ./internal/... ./pkg/... ./scripts/...
+  upgrade-go: go get -t -u ./cmd/... ./internal/... ./pkg/...
 
   cdeps: cdeps -c ./configs/cdeps/cdeps.json
 

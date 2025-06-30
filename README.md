@@ -352,15 +352,12 @@ It is a monolith where CRUD operations can be performed from different presentat
 ### Folders
 
 1. `pkg/context/(modules)`
-
    - It is the logical core that contains all the necessary functionalities that are agnostic of any **presentation**.
 
 2. `internal/pkg/service`
-
    - It is responsible for initializing all **context** functionalities so that they are ready for use, as well as for **"mapping"** certain values to centralize all imports required for **presentations** in a single place.
 
 3. `internal/app/(presentations)`
-
    - These **applications** will be used as **presentations** in order to serve the functionalities to an end user.
 
 ### Idiomatic
@@ -457,9 +454,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 #### Dev Container **(Recommended)**
 
 1. System Requirements
-
    - [Docker](https://docs.docker.com/get-docker)
-
      - [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 2. Start VS Code
@@ -469,7 +464,6 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    ```
 
 3. Open Command Palette
-
    - F1
 
 4. Run
@@ -479,7 +473,6 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
    ```
 
 5. SSH **(Optional)**
-
    - We can connect to our `Dev Container` via `SSH` in the following ways:
      - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository
        ```bash
@@ -492,15 +485,16 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
      - **Password:** `vscode`
 
 6. Desktop **(Optional)**
-
    - We can connect to our `Dev Container` via `VNC` using our web browser.
      - **URL:** `http://localhost:6080`
      - **Password:** `vscode`
        - No password is required to connect from the **local host**.
      - Change the default applications of the context menu **(Optional)**
+
        ```bash
        task desktop
        ```
+
        - **File Manager:** `xfe`
        - **Terminal:** `terminator`
        - **Web Browser:** `chromium`
@@ -508,7 +502,6 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 #### Locally
 
 1. System Requirements
-
    - [Go](https://go.dev/doc/install)
    - [Task](https://taskfile.dev/installation)
    - [Docker](https://docs.docker.com/get-docker)
@@ -575,22 +568,18 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 - Run initialization from `ZIP` ([codexGO](https://github.com/bastean/codexgo#zip))
 
 - Cleanup
-
   - `CHANGELOG`
   - Everything not required
 
 - Add `<repository>` > `assets/`
-
   - Compress `assets`
 
 - Update `#colors` > `#<repository>`
 
 - Update (`codexgo/v*`|`codexgo`|`codexGO`) > `<repository>`
-
   - `Source Code`, `Files` & `Folders`
 
 - Update `README`
-
   - Update `Logo`
   - Update `Description`
   - Add `Disclaimer`
@@ -617,7 +606,6 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 #### Settings
 
 - Rulesets
-
   - `New branch ruleset`
     - Ruleset Name \*
       - Branches
@@ -645,7 +633,6 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
       - Block force pushes
 
 - Secrets and variables **(Optional)**
-
   - Actions
     - New repository secret
       - `BOT_GPG_PASSPHRASE`
@@ -655,13 +642,11 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
         ```
 
 - Social preview
-
   - Upload an image…
 
 #### Actions
 
 - Workflows
-
   - Release
     - Run workflow
       - Use workflow from
@@ -685,9 +670,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 ##### Secrets and variables
 
 - Actions
-
   - New repository secret
-
     - `BOT_GPG_PASSPHRASE`
 
     - `BOT_GPG_PRIVATE_KEY`
