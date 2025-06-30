@@ -4,7 +4,7 @@ go 1.24.2
 
 require (
 	github.com/JGLTechnologies/gin-rate-limit v1.5.6
-	github.com/a-h/templ v0.3.898
+	github.com/a-h/templ v0.3.906
 	github.com/brianvoe/gofakeit/v7 v7.2.1
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
 	github.com/cucumber/godog v0.15.0

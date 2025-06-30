@@ -60,10 +60,11 @@ templ Page(attributes *read.ResponseAttributes) {
 									<i class="dropdown icon"></i>
 									<div class="menu">
 										<div class="header">
-											if !attributes.Verified {
-												<i class="inverted red times circle icon" data-variation="red" data-content="Unverified"></i>
-											} else {
-												<i class="inverted green check circle icon" data-variation="green" data-content="Verified"></i>
+											switch attributes.Verified {
+												case true:
+													<i class="inverted green check circle icon" data-variation="green" data-content="Verified"></i>
+												default:
+													<i class="inverted red times circle icon" data-variation="red" data-content="Unverified"></i>
 											}
 											Account
 										</div>
@@ -88,23 +89,24 @@ templ Page(attributes *read.ResponseAttributes) {
 				@UpdateForm(attributes.Email, attributes.Username)
 				@DeleteForm()
 			</div>
-			if !attributes.Verified {
-				<div class="ui looping pulsating transition blue bottom fixed nag">
-					<div class="title">
-						<i class="check circle icon"></i>
-						Account Confirmation
+			switch attributes.Verified {
+				case true:
+					<div class="ui looping pulsating transition green bottom fixed nag">
+						<div class="title">
+							<i class="check circle icon"></i>
+							Account Confirmed
+						</div>
+						<i class="close icon"></i>
 					</div>
-					<div>Link sent. Please check your inbox</div>
-					<i class="close icon"></i>
-				</div>
-			} else {
-				<div class="ui looping pulsating transition green bottom fixed nag">
-					<div class="title">
-						<i class="check circle icon"></i>
-						Account Confirmed
+				default:
+					<div class="ui looping pulsating transition blue bottom fixed nag">
+						<div class="title">
+							<i class="check circle icon"></i>
+							Account Confirmation
+						</div>
+						<div>Link sent. Please check your inbox</div>
+						<i class="close icon"></i>
 					</div>
-					<i class="close icon"></i>
-				</div>
 			}
 		</div>
 		@PageInit()

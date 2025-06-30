@@ -27,14 +27,12 @@ script LoginFormInit(formTagID string) {
             beforeSend: function(settings) {
                 let login = settings.data.Login;
 
-                if (login.includes("@")) {
-                    settings.data.Email = login;
-                } else {
-                    settings.data.Username = login;
-                }
+                login.includes("@")
+                	? (settings.data.Email = login)
+                    : (settings.data.Username = login);
 
                 settings.data = JSON.stringify(settings.data);
-        
+
                 return settings;
             },
             onSuccess: function(response, element, xhr) {
