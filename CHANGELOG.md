@@ -1,5 +1,71 @@
 # Changelog
 
+## [4.16.0](https://github.com/bastean/codexgo/compare/v4.15.3...v4.16.0) (2025-07-01)
+
+### Chores
+
+- **deps:** upgrade ([5a40e4a](https://github.com/bastean/codexgo/commit/5a40e4abe7bafd4a4b94770b88eee85c1656e34f))
+- **deps:** upgrade ([0bf668e](https://github.com/bastean/codexgo/commit/0bf668e86afab4121586c313fe0ae330923d1408))
+- **devcontainer:** update extensions ([0f1ec68](https://github.com/bastean/codexgo/commit/0f1ec683634f2d7c2168e47022e6f359c28a93d2))
+- **git:** remove wildcards ([a8861fe](https://github.com/bastean/codexgo/commit/a8861fe39da7f0a944253a1f212053cd7183ba17))
+- **git:** update ignore ([b36f89d](https://github.com/bastean/codexgo/commit/b36f89da9704c33f3ef10f3511fab2cc9e3c235e))
+- **task:** detect flaky tests ([8148e2f](https://github.com/bastean/codexgo/commit/8148e2f4b09b503c400c1d02fa6075ebc7dcc419))
+- **task:** show current iteration in flaky tests ([9863541](https://github.com/bastean/codexgo/commit/986354124b15edb19ca553f47e2926263f5f616a))
+- **vscode:** update snippets ([5ebe567](https://github.com/bastean/codexgo/commit/5ebe567bd305b868afe2aaf72f7d32a5baea7c35))
+
+### Continuous Integration
+
+- **github:** cache node modules ([fc9085d](https://github.com/bastean/codexgo/commit/fc9085dc558ebf3c120b6d53b5b95998c739a071))
+
+### Documentation
+
+- **readme:** update description ([05e6aee](https://github.com/bastean/codexgo/commit/05e6aeef056347788fe295c42aa09cc8f04d5ae7))
+
+### New Features
+
+- **domain:** add function to unwrap bubble errors ([65a4304](https://github.com/bastean/codexgo/commit/65a4304353cfe4f50f6845a3ac7fcf4b64c6849f))
+- **domain:** add service to handle index out of range ([d9c0b01](https://github.com/bastean/codexgo/commit/d9c0b0105c65bbad83feb7ad1160156b47a03ed4))
+- **domain:** compose attempt behavior with token ([e86c2e2](https://github.com/bastean/codexgo/commit/e86c2e2a35290ec857feceef8576d15ef36980de))
+
+### Refactors
+
+- **application:** manage aggregate timestamps in use cases ([c00a112](https://github.com/bastean/codexgo/commit/c00a112b218df0dcac1bfa3482a49a0f3ae12806))
+- **application:** use type aliases for attributes and meta ([37f278b](https://github.com/bastean/codexgo/commit/37f278bf84d83cf0104d9e66c1ed6566b86fbbc6))
+- **domain:** add more details about where errors occur ([789e9c0](https://github.com/bastean/codexgo/commit/789e9c0661dbef02ca482d28bbafb909f664427f))
+- **domain:** add suffix at to timestamps of value object ([7889849](https://github.com/bastean/codexgo/commit/78898498a66353b06fdc3061ff07896caa9e4a79))
+- **domain:** create id package ([776043d](https://github.com/bastean/codexgo/commit/776043d9bed206012d196d46d5480a68cab43176))
+- **domain:** create primitive from value object ([c9aefda](https://github.com/bastean/codexgo/commit/c9aefda1dfd085ef9745a0a815225a9321f0387d))
+- **domain:** encapsulate value objects ([eb34487](https://github.com/bastean/codexgo/commit/eb34487a63b94f724aa8f7d143d8a883e050eb74))
+- **domain:** get function name via caller in error bubbles ([c446052](https://github.com/bastean/codexgo/commit/c4460525c5ed47f94c850bc93a99b4a0b331418c))
+- **domain:** move validation to values package ([5e9c853](https://github.com/bastean/codexgo/commit/5e9c853868ab3ce4e7faa4cd5ee0401c488f8949))
+- **domain:** use value objects in message fields ([fe8f5e0](https://github.com/bastean/codexgo/commit/fe8f5e08d771b74706456669e342830bf27afe53))
+- **domain:** wrap primitive values ([3fcd862](https://github.com/bastean/codexgo/commit/3fcd8628a780f34b1084a7367223c051ac5dcf6c))
+- **domain:** wrap time package ([c85e457](https://github.com/bastean/codexgo/commit/c85e45736e215a9fdfd6040c9d857bca9c43d217))
+- **errors:** use caller to know where ([a9f1311](https://github.com/bastean/codexgo/commit/a9f131154c2f68b6242ad1644a9088bc970282a0))
+- **notification:** create recipient aggregate ([399fa05](https://github.com/bastean/codexgo/commit/399fa0516d837189d714e8cb6d27d173ce58180f))
+- **server:** change conditional components ([eeee5d7](https://github.com/bastean/codexgo/commit/eeee5d7c4994cf5a2dd365d6e1f815384bd3e2b5))
+- **server:** change health method ([743be87](https://github.com/bastean/codexgo/commit/743be8796db2b179c102759d5901a840dd001d88))
+- **server:** remove lodash ([3fc88d2](https://github.com/bastean/codexgo/commit/3fc88d200741903551a1d1f2103c6d5ad1cbd5f5))
+- **server:** reply with all errors generated ([b3e9467](https://github.com/bastean/codexgo/commit/b3e94670a2d6a2bad3c3c514f823ac991a33cd11))
+- **server:** reuse form settings ([9182558](https://github.com/bastean/codexgo/commit/91825588d070bd2f5ba6f99d67a249e0ec9c0974))
+
+### Tests
+
+- add acceptance test to api ([ea94769](https://github.com/bastean/codexgo/commit/ea947692c24ea6dd91f50c09eaaceca46ac26232))
+- add default suite and mock ([a87180c](https://github.com/bastean/codexgo/commit/a87180c264989a05a22102a3648e26183ae7d999))
+- add sentinel for assertion of constant values ([a9e90fe](https://github.com/bastean/codexgo/commit/a9e90fe2b375d10f0f0ad1f1087f0904d63695d8))
+- change position of compared values in sentinel cases ([f425f86](https://github.com/bastean/codexgo/commit/f425f866bd8ad66bea3e2af662facddb27b616e7))
+- **errors:** generate random bubbles ([16cf0ac](https://github.com/bastean/codexgo/commit/16cf0acadeeceab82238e63f7ac4560bb2c667a3))
+- **messages:** use mother to wrap value creation ([4b94e1f](https://github.com/bastean/codexgo/commit/4b94e1f9f8743b76673a146d54bbbdaaaad5646d))
+- **messages:** use random values for key and recipient ([0f4d581](https://github.com/bastean/codexgo/commit/0f4d5813a53535c5dc21e95746959cd5f0e7deb9))
+- **mother:** change valid recipient components ([c9b8805](https://github.com/bastean/codexgo/commit/c9b8805e2899b729a79000567923c68f470ebefa))
+- **mother:** use a function to return a new instance ([443817d](https://github.com/bastean/codexgo/commit/443817d85a36c74c501ad9c79e1d20a46e9de94a))
+- **rabbitmq:** use random key and recipient ([6f4401d](https://github.com/bastean/codexgo/commit/6f4401d08ed9cfd331168e4255d414963b9cccdf))
+- rename error assertion cases ([53d03d8](https://github.com/bastean/codexgo/commit/53d03d87b78b7c05e5545e97fe505d4d31119f1e))
+- **unit:** add cases to from primitive ([f2f0445](https://github.com/bastean/codexgo/commit/f2f0445060163f8f498d773c889dc80c6d13c50e))
+- **unit:** add suite for assertion error ([86a597e](https://github.com/bastean/codexgo/commit/86a597e44514b3c25ad0318b7c7cd8ce8b7050f7))
+- use mother only in a test environment ([e1cb301](https://github.com/bastean/codexgo/commit/e1cb3018ae0abf5720e6c0364ee69bb0801de2cb))
+
 ## [4.15.3](https://github.com/bastean/codexgo/compare/v4.15.2...v4.15.3) (2025-04-11)
 
 ### Chores
