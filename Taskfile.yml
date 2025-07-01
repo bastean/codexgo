@@ -439,7 +439,7 @@ tasks:
     cmds:
       - task: prompt-"Iterations \"{{.RANDOM}}\""
       - for: { var: ITERATE }
-        cmd: task test-unit
+        cmd: echo "Iteration \"{{trimAll "[]" .ITEM | add1}}\"" && task test-unit
 
   tests-sync:
     cmds:
