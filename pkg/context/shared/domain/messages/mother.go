@@ -65,7 +65,7 @@ func (m *m) RecipientComponentsValid() *RecipientComponents {
 	return &RecipientComponents{
 		Service: m.LoremIpsumWord(),
 		Entity:  m.LoremIpsumWord(),
-		Trigger: m.WordsJoin(m.Words(m.IntRange(1, 3)), "_"),
+		Trigger: m.WordsJoin(m.Words(m.IntRange(1, 2)), "_"),
 		Action:  m.LoremIpsumWord(),
 		Status:  m.RandomString([]string{"queued", "succeeded", "failed", "done"}),
 	}
