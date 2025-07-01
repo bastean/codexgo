@@ -68,7 +68,7 @@ go run github.com/bastean/codexgo/v4/cmd/codexgo@latest -demo
 >
 > - Demo version does not require any configuration, because the required **ENV** values are already preset.
 >   - Here we can find the **ENV** preset values that are used in the [Demo](internal/pkg/service/env/demo.go).
-> - `In-Memory` implementation will be used for EventBus, CommandBus, QueryBus and Database (`SQLite`).
+> - `In-Memory` implementation will be used for EventBus, CommandBus, QueryBus and Database (`BadgerDB`).
 > - Links to confirm and recover the account are sent through the `Terminal` with the following messages:
 >   - _"Hi \<username\>, please confirm your account through this link: \<link\>"_.
 >   - _"Hi \<username\>, please reset your password through this link: \<link\>"_.
@@ -112,7 +112,7 @@ Usage: codexgo [flags]
 >     - We can define our own **SMTP** configuration by simply modifying the `CODEXGO_SMTP_*` variables, then we will be able to receive the links by mail.
 >     - If `CODEXGO_BROKER_*` is omitted, an in-memory EventBus will be used.
 >     - `In-Memory` implementation will be used for CommandBus and QueryBus.
->     - If `CODEXGO_DATABASE_*` is omitted, a `SQLite` in-memory database will be used.
+>     - If `CODEXGO_DATABASE_*` is omitted, a `BadgerDB` in-memory database will be used.
 >     - We can use a file as a database instead of memory by defining the file name in the `CODEXGO_DATABASE_BADGERDB_DSN` variable.
 
 ```bash
@@ -155,7 +155,7 @@ task demo
     - Scanning Repository for secrets using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog) and [Trivy](https://github.com/aquasecurity/trivy)
   - Pre-Commit: [lint-staged](https://github.com/lint-staged/lint-staged)
     - Scanning files for secrets using [TruffleHog CLI](https://github.com/trufflesecurity/trufflehog?tab=readme-ov-file#8-scan-individual-files-or-directories)
-    - Formatting files using [gofmt](https://pkg.go.dev/cmd/gofmt), [goimports](https://pkg.go.dev/golang.org/x/tools/cmd/goimports) and [Prettier](https://prettier.io/docs/en/install).
+    - Formatting files using [GolangCI-Lint](https://golangci-lint.run/welcome/quick-start/#formatting) and [Prettier](https://prettier.io/docs/install).
   - Commit-Msg: [commitlint](https://github.com/conventional-changelog/commitlint)
     - Check [Conventional Commits](https://www.conventionalcommits.org) rules
 - Commit message helper using [czg](https://github.com/Zhengqbbb/cz-git).
@@ -172,10 +172,10 @@ task demo
 
 ### Linters/Formatters
 
-- `*.go`: [GolangCI-Lint](.golangci.yml).
-- `*.templ`: [templ fmt](https://templ.guide/commands-and-tools/cli#formatting-templ-files).
+- `*.go`: [GolangCI-Lint](https://github.com/golangci/golangci-lint).
+- `*.templ`: [templ fmt](https://templ.guide/developer-tools/cli#formatting-templ-files).
 - `*.feature` (Gherkin): [Cucumber extension](https://cucumber.io/docs/tools/general).
-- `*.*`: [Prettier cli/extension](https://prettier.io/docs/en/install).
+- `*.*`: [Prettier cli/extension](https://prettier.io/docs/install).
 
 ### Debuggers
 
@@ -201,28 +201,28 @@ task demo
 ### GitHub
 
 - Actions for:
-  - Setup Languages and Dependencies
+  - Setup Languages and Dependencies ([setup](.github/actions/setup/action.yml))
 - Workflows running:
-  - Automatically (Triggered by **Push** or **Pull requests**):
+  - Automatically (Triggered by **Push** or **Pull requests**) ([ci](.github/workflows/ci.yml)):
     - Secrets
     - Vulnerabilities
     - Misconfigurations
     - Linting
     - Testing
   - Manually (Using the **Actions tab** on GitHub):
-    - Upgrade Dependencies
-    - Automate Release
+    - Upgrade Dependencies ([upgrade](.github/workflows/upgrade.yml))
+    - Automate Release ([release](.github/workflows/release.yml))
 - Issue Templates **(Defaults)**.
 
 ### Devcontainer
 
-- Multiple Features already pre-configured:
+- Multiple [Features](.devcontainer/devcontainer.json) already pre-configured:
   - Go
   - Task
   - Docker in Docker
   - Light-weight Desktop (Fluxbox)
   - SSH
-- Extensions and their respective settings to work with:
+- [Extensions](.devcontainer/devcontainer.json) and their respective [settings](.vscode/settings.json) to work with:
   - Go
   - Task
   - Docker
@@ -233,24 +233,25 @@ task demo
   - TOML
   - Prettier
   - Better Comments
+  - Comment Divider
   - Todo Tree
   - cSpell
+  - Fomantic Snippets
 
 ### Docker
 
-- Dockerfile
+- [Dockerfile](deployments/Dockerfile)
   - **Multi-stage builds**:
     - Development
     - Testing
     - Build
     - Production
-- Compose
+- [Compose](deployments/docker-compose.yml)
   - Switched by ENVs and Profiles.
 
 ### Broker
 
-- Message (Event/Command):
-  - Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
+- Message Routing Key based on [AsyncAPI Topic Definition](https://github.com/fmvilas/topic-definition).
 
 ### Server
 
@@ -266,6 +267,7 @@ task demo
 - Form validation at the client using [Fomantic - Form Validation](https://fomantic-ui.com/behaviors/form.html).
   - On the server, the validations are performed using the **Value Objects** defined in the **Context**.
 - Account confirmation and recovery via **Mail** or **Terminal**.
+  - Limited to a certain number of attempts in a given time interval.
 - Password hashing using [Bcrypt](https://pkg.go.dev/golang.org/x/crypto/bcrypt).
 
 ### Tools
@@ -289,7 +291,7 @@ task demo
   - Value Objects (Entities)
     - Mother Creators
     - Unit Tests
-  - Messages (Event/Command)
+  - Messages
     - Mother Creators
   - Aggregates (Sets of Entities)
     - Aggregate Root (Core Set)
@@ -338,12 +340,14 @@ task demo
       - Views
     - Features (Gherkin)
       - Acceptance Tests
+        - API
+        - Views
 
 ## Workflow
 
 ### Idea
 
-The system allows users to register a new account, log in and update their data or permanently delete their account, as well as verify it through a link sent to their email.
+The system allows users to register a new account, log in and update their data or permanently delete their account, as well as verify and reset their account through a link sent to their email.
 
 ### Functionality
 
@@ -475,13 +479,17 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
 5. SSH **(Optional)**
    - We can connect to our `Dev Container` via `SSH` in the following ways:
      - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository
+
        ```bash
        task connect-2222-vscode-localhost
        ```
+
      - Using the SSH Client of our host
+
        ```bash
        ssh -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null vscode@localhost
        ```
+
      - **Password:** `vscode`
 
 6. Desktop **(Optional)**
@@ -583,17 +591,20 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
   - Update `Logo`
   - Update `Description`
   - Add `Disclaimer`
+
     ```markdown
     > [!IMPORTANT]
     >
     > `<repository>` is still in the early stages of development.
     ```
+
   - Update `Tech Stack`
   - Remove all other sections, except:
     - `Logo`, `Description`, `Disclaimer`, `Badges`, `Tech Stack`, `Contributing` & `License`
   - Change `v*.*.*` > `v0.0.0`
 
 - Commit, Upgrade & Push
+
   ```bash
   git commit -m "chore: update codexgo to <repository>" \
   && task upgrade \
@@ -637,6 +648,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
     - New repository secret
       - `BOT_GPG_PASSPHRASE`
       - `BOT_GPG_PRIVATE_KEY`
+
         ```bash
         gpg --armor --export-secret-key [Pub_Key_ID (*-BOT)]
         ```
@@ -714,6 +726,10 @@ task compose-dev
 task test-unit
 ```
 
+```bash
+task test-flaky
+```
+
 ##### Integration ([.env.demo.test](deployments/.env.demo.test) | [.env.demo.test.integration](deployments/.env.demo.test.integration))
 
 ```bash
@@ -760,7 +776,7 @@ task compose-prod
   - [Fomantic-UI](https://fomantic-ui.com)
 - [RabbitMQ](https://www.rabbitmq.com/tutorials/tutorial-one-go)
 - [MongoDB](https://www.mongodb.com/docs/drivers/go)
-- [SQLite](https://gorm.io/docs/connecting_to_the_database.html#SQLite)
+- [BadgerDB](https://docs.hypermode.com/badger)
 
 #### Please see
 
