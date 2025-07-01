@@ -30,13 +30,13 @@ pnpm-debug.log*
 lerna-debug.log*
 
 #* ENV
-*env*
+*.env*
 !*.env.demo*
 !*.env.example*
-*npmrc*
+*.npmrc*
 
 #* Database
-*db*
+*.db*
 !*.db.demo*
 !*.db.example*
 
@@ -50,9 +50,9 @@ vite.config.ts.timestamp-*
 *_templ.txt
 
 #* Misc
-*ignore*
-*report*
-*temp*
-*tmp*
+ignore*
+report*
+temp*
+tmp*
 
 #* Repository
