@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.16.1](https://github.com/bastean/codexgo/compare/v4.16.0...v4.16.1) (2025-07-07)
+
+### Chores
+
+- **deps:** upgrade ([c4f1c21](https://github.com/bastean/codexgo/commit/c4f1c21d9a1c04b444e02656f49a599c244523ca))
+- **task:** show remaining iterations in flaky tests ([a3487fd](https://github.com/bastean/codexgo/commit/a3487fdd7e1f436d9a426b5c73fd6449429d9493))
+
 ## [4.16.0](https://github.com/bastean/codexgo/compare/v4.15.3...v4.16.0) (2025-07-01)
 
 ### Chores
