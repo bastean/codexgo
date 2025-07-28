@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.16.2](https://github.com/bastean/codexgo/compare/v4.16.1...v4.16.2) (2025-07-28)
+
+### Chores
+
+- **deps:** upgrade ([813d57f](https://github.com/bastean/codexgo/commit/813d57f0897e9e125de7504c915c672e070b8c2c))
+- **task:** remove redundant install of goimports ([ddb2467](https://github.com/bastean/codexgo/commit/ddb2467cc9839e22d5da66e00cb1f86eba18e189))
+
+### Refactors
+
+- **domain:** throw panic instead of replacing the why field of a bubble ([7a35281](https://github.com/bastean/codexgo/commit/7a352818e8765ec3aab2a1b0a824127f47b39045))
+
 ## [4.16.1](https://github.com/bastean/codexgo/compare/v4.16.0...v4.16.1) (2025-07-07)
 
 ### Chores
