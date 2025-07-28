@@ -20,6 +20,25 @@ func (m *m) BubbleValid() *Bubble {
 	}
 }
 
+func (m *m) BubbleValidWithoutWhere() error {
+	return func() error {
+		return New[Default](&Bubble{What: m.LoremIpsumWord()})
+	}()
+}
+
+func (m *m) BubbleInvalidWithoutWhat() {
+	_ = New[Default](&Bubble{Where: m.LoremIpsumWord()})
+}
+
+func (m *m) BubbleInvalidWhy() {
+	_ = New[Default](&Bubble{
+		What: m.LoremIpsumWord(),
+		Why: Meta{
+			m.Word(): func() {},
+		},
+	}).Error()
+}
+
 func (m *m) DefaultValid() *Default {
 	return New[Default](m.BubbleValid())
 }
@@ -42,16 +61,6 @@ func (m *m) AlreadyExistValid() *AlreadyExist {
 
 func (m *m) NotExistValid() *NotExist {
 	return New[NotExist](m.BubbleValid())
-}
-
-func (m *m) BubbleValidWithoutWhere() error {
-	return func() error {
-		return New[Default](&Bubble{What: m.LoremIpsumWord()})
-	}()
-}
-
-func (m *m) BubbleInvalidWithoutWhat() {
-	_ = New[Default](&Bubble{Where: m.LoremIpsumWord()})
 }
 
 func (m *m) BubbleUpValid() (error, error) {

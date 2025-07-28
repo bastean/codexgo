@@ -1,0 +1,5 @@
+package embed
+
+const (
+	RExEmbed = `\[.*]`
+)

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/embed"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/suite"
 )
 
@@ -56,6 +57,17 @@ func (s *BubbleTestSuite) TestWithoutWhere() {
 func (s *BubbleTestSuite) TestWithoutWhat() {
 	expected := "(errors/New): Cannot create a error Bubble if \"What\" is not defined"
 	s.PanicsWithValue(expected, func() { errors.Mother().BubbleInvalidWithoutWhat() })
+}
+
+func (s *BubbleTestSuite) TestWithInvalidWhy() {
+	defer func() {
+		if actual := recover(); s.NotNil(actual) {
+			expected := fmt.Sprintf("(errors/*Bubble/Error): Cannot format \"Why\" from error Bubble [%s]", embed.Extract(actual.(string)))
+			s.Equal(expected, actual)
+		}
+	}()
+
+	errors.Mother().BubbleInvalidWhy()
 }
 
 func TestUnitBubbleSuite(t *testing.T) {

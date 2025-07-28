@@ -35,7 +35,7 @@ func (b *Bubble) Error() string {
 		why, err := json.Marshal(b.Why)
 
 		if err != nil {
-			why = fmt.Appendf([]byte{}, "{\"Error\":\"Cannot JSON encoding \"Why\" from error Bubble: [%s]\"}", err)
+			Panic(Standard("Cannot format \"Why\" from error Bubble [%s]", err))
 		}
 
 		message = fmt.Sprintf("%s: %s", message, why)
