@@ -200,10 +200,6 @@ tasks:
         vars:
           URL: https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh
           PIPE: sudo sh -s -- -b $(go env GOPATH)/bin
-      - task: go-install
-        vars:
-          PACKAGES:
-            - golang.org/x/tools/cmd/goimports@latest
 
   install-debuggers:
     cmds:
