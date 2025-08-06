@@ -3,7 +3,7 @@
   "name": "server",
   "version": "4.16.2",
   "devDependencies": {
-    "fomantic-ui": "2.10.0-beta.40",
+    "fomantic-ui": "2.10.0-beta.41",
     "jquery": "3.7.1"
   }
 }
