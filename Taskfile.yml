@@ -1,13 +1,11 @@
 version: "3"
 
 includes:
+  devcontainer:
+    taskfile: ./configs/devcontainer
+    flatten: true
   upgrade:
     taskfile: ./configs/upgrade
-    optional: true
-    flatten: true
-  desktop:
-    taskfile: ./configs/desktop
-    optional: true
     flatten: true
 
 vars:
@@ -26,12 +24,22 @@ vars:
 
   # ---------------------------------- Prompt ---------------------------------- #
 
-  PROMPT_WARNING: This is a dangerous command... Do you want to continue?
+  PROMPT_CONFIRMATION: Do you want to continue?
+  PROMPT_WARNING: This is a dangerous command... {{.PROMPT_CONFIRMATION}}
 
 tasks:
   # ---------------------------------------------------------------------------- #
   #                                      Bin                                     #
   # ---------------------------------------------------------------------------- #
+
+  prompt-*:
+    internal: true
+    silent: true
+    requires:
+      vars: ["PROMPT"]
+    vars:
+      PROMPT: "{{index .MATCH 0}}"
+    cmd: echo {{.PROMPT}}
 
   bashrc:
     internal: true
@@ -44,8 +52,8 @@ tasks:
   bash:
     internal: true
     requires:
-      vars: ["CMD"]
-    cmd: bash -o pipefail -c '{{.CMD}}'
+      vars: ["RUN"]
+    cmd: bash -o pipefail -c '{{.RUN}}'
 
   curl:
     internal: true
@@ -53,91 +61,19 @@ tasks:
       vars: ["URL", "PIPE"]
     cmd: curl -sSfL {{.URL}} | {{.PIPE}}
 
-  prompt-*:
-    internal: true
-    silent: true
-    requires:
-      vars: ["PROMPT"]
-    vars:
-      PROMPT: "{{index .MATCH 0}}"
-    cmd: echo {{.PROMPT}}
-
   replace:
     internal: true
     requires:
       vars: ["OLD", "NEW", "FILE"]
     cmd: sed -i -E 's/{{.OLD}}/{{.NEW}}/g' {{.FILE}}
 
-  go-install:
-    internal: true
-    requires:
-      vars: ["PACKAGES"]
-    cmds:
-      - for: { var: PACKAGES, as: PACKAGE }
-        cmd: go install {{.PACKAGE}}
-
-  bun-ci:
-    internal: true
-    cmd: bun i --frozen-lockfile
-
-  prettier-*:
-    internal: true
-    requires:
-      vars: ["ACTION"]
-    vars:
-      ACTION: "{{index .MATCH 0}}"
-    cmd: bunx prettier --no-config --ignore-unknown --{{.ACTION}} .
+  # ---------------------------------------------------------------------------- #
+  #                                    Upgrade                                   #
+  # ---------------------------------------------------------------------------- #
 
   ncu:
     internal: true
     cmd: bunx ncu -ws -u {{.FILTERS}}
-
-  release-it:
-    internal: true
-    cmd: bunx release-it -V {{.OPTIONS}}
-
-  release-it-dry:
-    internal: true
-    cmd: bunx release-it -V -d --no-git.requireCleanWorkingDir {{.OPTIONS}}
-
-  compose-env:
-    internal: true
-    requires:
-      vars: ["OPTIONS"]
-    dir: deployments
-    cmd: docker compose --env-file {{.OPTIONS}}
-
-  docker-rm-vol:
-    internal: true
-    requires:
-      vars: ["VOLUME"]
-    cmd: docker volume rm -f {{.VOLUME}}
-
-  docker-rm-img:
-    internal: true
-    requires:
-      vars: ["IMAGE"]
-    cmd: docker rmi -f {{.IMAGE}}
-
-  trufflehog-git:
-    internal: true
-    requires:
-      vars: ["URI"]
-    cmd: sudo trufflehog git {{.URI}} --only-verified
-
-  trivy-repo:
-    internal: true
-    requires:
-      vars: ["SCANNERS"]
-    cmd: trivy repo --skip-dirs vendor --skip-dirs node_modules --skip-dirs dist --exit-code 1 --scanners {{.SCANNERS}}
-
-  git-reset-hard:
-    internal: true
-    cmd: git reset --hard HEAD
-
-  # ---------------------------------------------------------------------------- #
-  #                                    Upgrade                                   #
-  # ---------------------------------------------------------------------------- #
 
   upgrade-managers:
     cmds:
@@ -160,7 +96,7 @@ tasks:
 
   upgrade-go: go get -t -u ./cmd/... ./internal/... ./pkg/...
 
-  cdeps: cdeps -c ./configs/cdeps/cdeps.json
+  upgrade-copy: cdeps -c ./configs/cdeps/cdeps.json
 
   upgrade-bun:
     cmds:
@@ -169,16 +105,19 @@ tasks:
         vars:
           FILTERS: fomantic-ui -t @nightly
       - bun i
-      - task: cdeps
-
-  upgrade-reset:
-    cmds:
-      - task: git-reset-hard
-      - task: bun-ci
+      - task: upgrade-copy
 
   # ---------------------------------------------------------------------------- #
   #                                    Install                                   #
   # ---------------------------------------------------------------------------- #
+
+  go-install:
+    internal: true
+    requires:
+      vars: ["PACKAGES"]
+    cmds:
+      - for: { var: PACKAGES, as: PACKAGE }
+        cmd: go install {{.PACKAGE}}
 
   install-scanners:
     cmds:
@@ -245,7 +184,8 @@ tasks:
   download-dependencies:
     cmds:
       - go mod download
-      - task: bun-ci
+      - bun i --frozen-lockfile
+      - task: upgrade-copy
 
   # ---------------------------------------------------------------------------- #
   #                                   Generate                                   #
@@ -276,7 +216,6 @@ tasks:
       - task: upgrade-system
       - task: install-tooling
       - task: download-dependencies
-      - task: cdeps
       - task: generate-required
       - task: restore
 
@@ -295,14 +234,26 @@ tasks:
       - task: init
 
   # ---------------------------------------------------------------------------- #
-  #                                      ENV                                     #
+  #                                     Sync                                     #
   # ---------------------------------------------------------------------------- #
 
-  syncenv: syncenv -e ./deployments -t ./deployments/.env.example
+  sync-env: syncenv -e ./deployments -t ./deployments/.env.example
 
   # ---------------------------------------------------------------------------- #
   #                                     Scan                                     #
   # ---------------------------------------------------------------------------- #
+
+  trufflehog-git:
+    internal: true
+    requires:
+      vars: ["URI"]
+    cmd: sudo trufflehog git {{.URI}} --only-verified
+
+  trivy-repo:
+    internal: true
+    requires:
+      vars: ["SCANNERS"]
+    cmd: trivy repo --skip-dirs vendor --skip-dirs node_modules --skip-dirs dist --exit-code 1 --scanners {{.SCANNERS}}
 
   scan-secrets-local:
     cmds:
@@ -358,6 +309,14 @@ tasks:
   #                                  Lint/Format                                 #
   # ---------------------------------------------------------------------------- #
 
+  prettier-*:
+    internal: true
+    requires:
+      vars: ["ACTION"]
+    vars:
+      ACTION: "{{index .MATCH 0}}"
+    cmd: bunx prettier --no-config --ignore-unknown --{{.ACTION}} .
+
   lint:
     cmds:
       - go mod tidy
@@ -406,20 +365,20 @@ tasks:
       - task: test-clean
       - task: bash
         vars:
-          CMD: GOTEST=1 go test -count=1 -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log
+          RUN: GOTEST=1 go test -count=1 -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log
 
   test-integration:
     cmds:
       - task: test-clean
       - task: bash
         vars:
-          CMD: GOTEST=1 go test -count=1 -race -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log
+          RUN: GOTEST=1 go test -count=1 -race -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log
 
   test-acceptance-sync:
     cmds:
       - task: bash
         vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
+          RUN: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./internal/app/... -run TestAcceptance.* |& tee test/report/acceptance.report.log
 
   test-acceptance:
     cmds:
@@ -441,7 +400,7 @@ tasks:
     cmds:
       - task: bash
         vars:
-          CMD: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
+          RUN: SUT_URL="{{.URL_SERVER}}" SMTP_API="{{.API_SMTP}}" go test -count=1 -race -v -cover ./... |& tee test/report/report.log
 
   tests:
     cmds:
@@ -464,6 +423,14 @@ tasks:
   # ---------------------------------------------------------------------------- #
   #                                    Release                                   #
   # ---------------------------------------------------------------------------- #
+
+  release-it:
+    internal: true
+    cmd: bunx release-it -V {{.OPTIONS}}
+
+  release-it-dry:
+    internal: true
+    cmd: bunx release-it -V -d --no-git.requireCleanWorkingDir {{.OPTIONS}}
 
   release:
     cmds:
@@ -585,8 +552,8 @@ tasks:
 
   git-prune: git remote prune github
 
-  git-off-c-*-*:
-    prompt: "{{.PROMPT_WARNING}}"
+  git-off-c/*-*:
+    prompt: "{{.PROMPT_CONFIRMATION}}"
     requires:
       vars: ["TITLE", "DESCRIPTION"]
     vars:
@@ -594,14 +561,26 @@ tasks:
       DESCRIPTION: "{{index .MATCH 1}}"
     cmd: git commit -m "{{.TITLE}}" -m "{{.DESCRIPTION}}" --no-gpg-sign
 
-  git-off-t-*-*:
-    prompt: "{{.PROMPT_WARNING}}"
+  git-off-t/*-*:
+    prompt: "{{.PROMPT_CONFIRMATION}}"
     requires:
       vars: ["VERSION", "DESCRIPTION"]
     vars:
       VERSION: "{{index .MATCH 0}}"
       DESCRIPTION: "{{index .MATCH 1}}"
     cmd: git tag -a {{.VERSION}} -m "{{.DESCRIPTION}}" --no-sign
+
+  git-soft-*/*-*:
+    prompt: "{{.PROMPT_CONFIRMATION}}"
+    requires:
+      vars: ["HASH", "TITLE", "DESCRIPTION"]
+    vars:
+      HASH: "{{index .MATCH 0}}"
+      TITLE: "{{index .MATCH 1}}"
+      DESCRIPTION: "{{index .MATCH 2}}"
+    cmds:
+      - git reset --soft {{.HASH}}
+      - git commit -m "{{.TITLE}}" -m "{{.DESCRIPTION}}"
 
   WARNING-git-forget:
     prompt: "{{.PROMPT_WARNING}}"
@@ -613,7 +592,7 @@ tasks:
     prompt: "{{.PROMPT_WARNING}}"
     cmds:
       - git clean -e .env* -fdx
-      - task: git-reset-hard
+      - git reset --hard HEAD
       - task: init
 
   # ---------------------------------------------------------------------------- #
@@ -625,6 +604,25 @@ tasks:
   # ---------------------------------------------------------------------------- #
   #                                    Docker                                    #
   # ---------------------------------------------------------------------------- #
+
+  docker-rm-img:
+    internal: true
+    requires:
+      vars: ["IMAGE"]
+    cmd: docker rmi -f {{.IMAGE}}
+
+  docker-rm-vol:
+    internal: true
+    requires:
+      vars: ["VOLUME"]
+    cmd: docker volume rm -f {{.VOLUME}}
+
+  compose-env:
+    internal: true
+    requires:
+      vars: ["OPTIONS"]
+    dir: deployments
+    cmd: docker compose --env-file {{.OPTIONS}}
 
   docker-usage: docker system df
 
@@ -752,30 +750,27 @@ tasks:
       - task: docker-usage
 
   # ---------------------------------------------------------------------------- #
-  #                                 Devcontainer                                 #
+  #                                     Util                                     #
   # ---------------------------------------------------------------------------- #
 
-  devcontainer-*-*:
-    requires:
-      vars: ["USER", "PASSWORD"]
+  loop-*/*:
     vars:
-      USER: "{{index .MATCH 0}}"
-      PASSWORD: "{{index .MATCH 1}}"
+      TOTAL: "{{index .MATCH 0}}"
+      ITERATE: "{{.TOTAL | int | until}}"
+      RUN: "{{index .MATCH 1}}"
     cmds:
-      - task: bash
-        vars:
-          CMD: echo -e "{{.PASSWORD}}\n{{.PASSWORD}}" | sudo passwd {{.USER}}
-      - task: init
+      - for: { var: ITERATE }
+        cmd: echo "Iteration \"{{trimAll "[]" .ITEM | add1}}/{{.TOTAL}}\" - {{.RUN}}" && {{.RUN}}
 
-  connect-*-*-*:
+  log-*/*:
     requires:
-      vars: ["PORT", "USER", "HOST"]
+      vars: ["CMD", "FLAG"]
     vars:
-      PORT: "{{index .MATCH 0}}"
-      USER: "{{index .MATCH 1}}"
-      HOST: "{{index .MATCH 2}}"
+      CMD: "{{index .MATCH 0}}"
+      FLAG: "{{index .MATCH 1}}"
     cmds:
-      - ssh -p {{.PORT}} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null {{.USER}}@{{.HOST}}
+      - mkdir -p ignore/{{.CMD}}
+      - go run ./cmd/{{.CMD}} {{.FLAG}} |& tee ignore/{{.CMD}}/{{.FLAG}}.log
 
   # ---------------------------------------------------------------------------- #
   #                                      Fix                                     #

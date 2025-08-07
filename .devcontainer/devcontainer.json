@@ -16,7 +16,7 @@
     "2222": { "label": "ssh" },
     "6080": { "label": "desktop" }
   },
-  "postCreateCommand": "task devcontainer-vscode-vscode",
+  "postCreateCommand": "task devcontainer-vscode/vscode",
   "customizations": {
     "vscode": {
       "extensions": [
