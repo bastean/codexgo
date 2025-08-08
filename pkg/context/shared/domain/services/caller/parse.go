@@ -4,8 +4,14 @@ import (
 	"regexp"
 )
 
-const RExAvoid = `[^.()[\]]+`
+const (
+	RExAvoid = `[^.()[\]]+`
+)
+
+var (
+	RExAvoidDo = regexp.MustCompile(RExAvoid)
+)
 
 func Parse(caller string) []string {
-	return regexp.MustCompile(RExAvoid).FindAllString(caller, -1)
+	return RExAvoidDo.FindAllString(caller, -1)
 }

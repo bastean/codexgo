@@ -9,7 +9,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values"
 )
 
-var RExRecipient = fmt.Sprintf(`^%s\.%s\.%s_on_%s_%s$`, RExService, RExEntity, RExTrigger, RExAction, RExStatus)
+var (
+	RExRecipient = fmt.Sprintf(`^%s\.%s\.%s_on_%s_%s$`, RExService, RExEntity, RExTrigger, RExAction, RExStatus)
+)
+
+var (
+	RExRecipientDo = regexp.MustCompile(RExRecipient)
+)
 
 // Terminology:
 //   - Service = Module
@@ -27,7 +33,7 @@ type Recipient struct {
 }
 
 func (r *Recipient) Validate() error {
-	if !regexp.MustCompile(RExRecipient).MatchString(r.RawValue()) {
+	if !RExRecipientDo.MatchString(r.RawValue()) {
 		errors.Panic(errors.Standard("Recipient has an invalid nomenclature %q", r.RawValue()))
 	}
 

@@ -18,6 +18,14 @@ const (
 	ErrNoDocuments = "no documents"
 )
 
+const (
+	RExDuplicateValue = `[A-Za-z0-9]+\.value`
+)
+
+var (
+	RExDuplicateValueDo = regexp.MustCompile(RExDuplicateValue)
+)
+
 type Database struct {
 	*mongo.Client
 	*mongo.Database
@@ -66,9 +74,7 @@ func IsErrDuplicateValue(err error) bool {
 }
 
 func HandleErrDuplicateValue(err error) error {
-	re := regexp.MustCompile(`[A-Za-z0-9]+\.value`)
-
-	field, exists := array.Slice(strings.Split(re.FindString(err.Error()), "."), 0)
+	field, exists := array.Slice(strings.Split(RExDuplicateValueDo.FindString(err.Error()), "."), 0)
 
 	if !exists {
 		return errors.New[errors.Internal](&errors.Bubble{
