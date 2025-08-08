@@ -22,6 +22,7 @@ func (s *AssertionTestSuite) TestErrTypeAssertion() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "errors_test/*AssertionTestSuite/TestErrTypeAssertion",
 		What:  fmt.Sprintf("Failure in %s type assertion", what),

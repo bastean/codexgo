@@ -20,6 +20,7 @@ func (s *IDTestSuite) TestErrInvalidFormat() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values/*ID/Validate",
 		What:  "Invalid UUID4 format",

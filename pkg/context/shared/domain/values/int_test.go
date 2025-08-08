@@ -20,6 +20,7 @@ func (s *IntTestSuite) TestIntPositiveErrInvalidNumber() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values/*IntPositive/Validate",
 		What:  "Invalid positive number",
@@ -39,6 +40,7 @@ func (s *IntTestSuite) TestIntNegativeErrInvalidNumber() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values/*IntNegative/Validate",
 		What:  "Invalid negative number",

@@ -124,6 +124,7 @@ func (s *ObjectTestSuite) TestValidateErrValidationNotDefined() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values/*Object/Validate",
 		What:  "Value validation is not defined",
@@ -144,6 +145,7 @@ func (s *ObjectTestSuite) TestValidateWithCustomValidation() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values_test/*Custom/Validate",
 		What:  "Value can not be empty",
@@ -252,6 +254,7 @@ func (s *ObjectTestSuite) TestFromPrimitiveErrRequired() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values/FromPrimitive",
 		What:  "Primitive value is required",

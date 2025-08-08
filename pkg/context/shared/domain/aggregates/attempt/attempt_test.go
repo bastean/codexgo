@@ -47,6 +47,7 @@ func (s *AttemptTestSuite) TestIncreaseErrNoMore() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "attempt/*Attempt/Increase",
 		What:  fmt.Sprintf("No more attempts, please try again in %q", time.Now().Sub(time.Parse(aggregate.Until.Value())).Round(time.Second)),
@@ -69,6 +70,7 @@ func (s *AttemptTestSuite) TestIncreaseErrTryAgain() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "attempt/*Attempt/Increase",
 		What:  fmt.Sprintf("Please try again in %q", current.Sub(time.Parse(aggregate.Counter.UpdatedAt()).Add(time.Duration(aggregate.Every.Value()))).Round(time.Second)),

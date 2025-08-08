@@ -20,6 +20,7 @@ func (s *EmailTestSuite) TestErrInvalidFormat() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "values/*Email/Validate",
 		What:  "Invalid email format",

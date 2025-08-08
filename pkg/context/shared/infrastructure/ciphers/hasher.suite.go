@@ -47,6 +47,7 @@ func (s *HasherSuite) TestCompareErrDoNotMatch() {
 	s.Contains(actual.Where, "Compare")
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: actual.Where,
 		What:  "Password does not match",

@@ -20,6 +20,7 @@ func (s *PlainPasswordTestSuite) TestErrInvalidLength() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.InvalidValue{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "user/*PlainPassword/Validate",
 		What:  "Password must be between 8 to 64 characters",
@@ -47,6 +48,7 @@ func (s *PasswordTestSuite) TestErrRequired() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "user/*Password/Validate",
 		What:  "Password is required",

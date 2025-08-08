@@ -14,6 +14,10 @@ type BubbleTestSuite struct {
 	suite.Default
 }
 
+func (s *BubbleTestSuite) TestSentinel() {
+	s.Equal("|", errors.Separator)
+}
+
 func (s *BubbleTestSuite) TestWithValidValue() {
 	bubble := errors.Mother().BubbleValid()
 
@@ -21,19 +25,20 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 
 	s.NoError(err)
 
-	expected := fmt.Sprintf("%s (%s): %s: %s: [%s]",
+	err = errors.New[errors.Default](bubble)
+
+	var actual *errors.Default
+
+	s.ErrorAs(err, &actual)
+
+	expected := fmt.Sprintf("#%s | %s (%s): %s | %s | [%s]",
+		bubble.ID,
 		bubble.When.Format(),
 		bubble.Where,
 		bubble.What,
 		why,
 		bubble.Who,
 	)
-
-	err = errors.New[errors.Default](bubble)
-
-	var actual *errors.Default
-
-	s.ErrorAs(err, &actual)
 
 	s.Equal(expected, actual.Error())
 }
@@ -46,6 +51,7 @@ func (s *BubbleTestSuite) TestWithoutWhere() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Default{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "UNKNOWN",
 		What:  actual.What,

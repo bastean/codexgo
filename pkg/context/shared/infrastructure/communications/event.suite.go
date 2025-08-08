@@ -47,6 +47,7 @@ func (s *EventBusSuite) TestPublishErrMissingConsumer() {
 	s.Contains(actual.Where, "Publish")
 
 	expected := &errors.Internal{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: actual.Where,
 		What:  "Failure to execute a Event without a Consumer",

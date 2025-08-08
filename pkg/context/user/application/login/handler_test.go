@@ -96,6 +96,7 @@ func (s *LoginTestSuite) TestHandleErrMissingRequired() {
 	s.ErrorAs(err, &actual)
 
 	expected := &errors.Failure{Bubble: &errors.Bubble{
+		ID:    actual.ID,
 		When:  actual.When,
 		Where: "login/*Case/Run",
 		What:  "Email or Username required",

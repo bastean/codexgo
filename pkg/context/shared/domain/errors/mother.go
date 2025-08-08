@@ -10,7 +10,6 @@ type m struct {
 
 func (m *m) BubbleValid() *Bubble {
 	return &Bubble{
-		When:  m.TimeNow(),
 		Where: m.LoremIpsumWord(),
 		What:  m.LoremIpsumSentence(m.IntRange(1, 3)),
 		Why: Meta{
@@ -63,7 +62,7 @@ func (m *m) NotExistValid() *NotExist {
 	return New[NotExist](m.BubbleValid())
 }
 
-func (m *m) BubbleUpValid() (error, error) {
+func (m *m) BubbleUpValid() (bubble error, value error) {
 	err := m.Error()
 	return BubbleUp(err), err
 }

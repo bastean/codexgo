@@ -5,7 +5,12 @@ import (
 	"fmt"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/caller"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/id"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
+)
+
+const (
+	Separator = "|"
 )
 
 type (
@@ -13,6 +18,7 @@ type (
 )
 
 type Bubble struct {
+	ID          string
 	When        time.Time
 	Where, What string
 	Why         Meta
@@ -29,7 +35,7 @@ type (
 )
 
 func (b *Bubble) Error() string {
-	message := fmt.Sprintf("%s (%s): %s", b.When.Format(), b.Where, b.What)
+	message := fmt.Sprintf("#%s %s %s (%s): %s", b.ID, Separator, b.When.Format(), b.Where, b.What)
 
 	if b.Why != nil {
 		why, err := json.Marshal(b.Why)
@@ -38,20 +44,20 @@ func (b *Bubble) Error() string {
 			Panic(Standard("Cannot format \"Why\" from error Bubble [%s]", err))
 		}
 
-		message = fmt.Sprintf("%s: %s", message, why)
+		message = fmt.Sprintf("%s %s %s", message, Separator, why)
 	}
 
 	if b.Who != nil {
-		message = fmt.Sprintf("%s: [%s]", message, b.Who)
+		message = fmt.Sprintf("%s %s [%s]", message, Separator, b.Who)
 	}
 
 	return message
 }
 
 func New[Error ~struct{ *Bubble }](bubble *Bubble) *Error {
-	if bubble.When.IsZero() {
-		bubble.When = time.Now()
-	}
+	bubble.ID = id.New()
+
+	bubble.When = time.Now()
 
 	if bubble.Where == "" {
 		where, _, _, _ := caller.Received(caller.SkipCurrent)
