@@ -16,9 +16,9 @@ type LogTestSuite struct {
 func (s *LogTestSuite) SetupSuite() {
 	logger := log.New()
 
-	s.LoggerSuite.Buffer = new(bytes.Buffer)
+	s.LoggerSuite.Actual = new(bytes.Buffer)
 
-	logger.SetOutput(s.LoggerSuite.Buffer)
+	logger.SetOutput(s.LoggerSuite.Actual)
 
 	s.LoggerSuite.SUT = logger
 }

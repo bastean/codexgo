@@ -13,13 +13,13 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/time"
 )
 
-var (
-	err error
+const (
+	Services = "Services"
+	Apps     = "Apps"
 )
 
 var (
-	Services = "Services"
-	Apps     = "Apps"
+	err error
 )
 
 func main() {

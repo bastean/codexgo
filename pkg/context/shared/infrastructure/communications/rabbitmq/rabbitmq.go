@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 
 	"github.com/goccy/go-json"
@@ -102,7 +101,7 @@ func (r *RabbitMQ) AddQueue(queue *Queue, routingKey string) error {
 		})
 	}
 
-	r.Logger.Info(fmt.Sprintf("Binding Queue [%s] to Exchange [%s] with Binding Key [%s]", queue.Name.Value(), r.exchange, queue.BindingKey))
+	r.Logger.Info("Binding Queue [%s] to Exchange [%s] with Binding Key [%s]", queue.Name.Value(), r.exchange, queue.BindingKey)
 
 	r.queues[routingKey] = append(r.queues[routingKey], queue)
 
@@ -124,28 +123,28 @@ func (r *RabbitMQ) Consume(queue *Queue, deliveries <-chan amqp.Delivery, consum
 		err := json.Unmarshal(delivery.Body, primitive)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to decode an Event from Queue [%s]: [%s]", queue.Name.Value(), err))
+			r.Logger.Error("Failure to decode an Event from Queue [%s]: [%s]", queue.Name.Value(), err)
 			continue
 		}
 
 		event, err := messages.FromPrimitive(primitive)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to create a Event with ID [%s] from Queue [%s]: [%s]", primitive.ID.Value, queue.Name.Value(), err))
+			r.Logger.Error("Failure to create a Event with ID [%s] from Queue [%s]: [%s]", primitive.ID.Value, queue.Name.Value(), err)
 			continue
 		}
 
 		err = consumer.On(event)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to consume an Event with ID [%s] from Queue [%s]: [%s]", event.ID.Value(), queue.Name.Value(), err))
+			r.Logger.Error("Failure to consume an Event with ID [%s] from Queue [%s]: [%s]", event.ID.Value(), queue.Name.Value(), err)
 			continue
 		}
 
 		err = delivery.Ack(false)
 
 		if err != nil {
-			r.Logger.Error(fmt.Sprintf("Failure to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", event.ID.Value(), queue.Name.Value(), err))
+			r.Logger.Error("Failure to deliver an acknowledgement for Event with ID [%s] to Queue [%s]: [%s]", event.ID.Value(), queue.Name.Value(), err)
 		}
 	}
 }

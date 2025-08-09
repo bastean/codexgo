@@ -11,24 +11,24 @@ type Log struct {
 	Cyan, Red, Blue, Green *color.Color
 }
 
-func (l *Log) Debug(message string) {
-	l.Println(l.Cyan.Sprint(message))
+func (l *Log) Debug(format string, values ...any) {
+	l.Println(l.Cyan.Sprintf(format, values...))
 }
 
-func (l *Log) Error(message string) {
-	l.Println(l.Red.Sprint(message))
+func (l *Log) Error(format string, values ...any) {
+	l.Println(l.Red.Sprintf(format, values...))
 }
 
-func (l *Log) Fatal(message string) {
-	l.Fatalln(l.Red.Sprint(message))
+func (l *Log) Fatal(format string, values ...any) {
+	l.Fatalln(l.Red.Sprintf(format, values...))
 }
 
-func (l *Log) Info(message string) {
-	l.Println(l.Blue.Sprint(message))
+func (l *Log) Info(format string, values ...any) {
+	l.Println(l.Blue.Sprintf(format, values...))
 }
 
-func (l *Log) Success(message string) {
-	l.Println(l.Green.Sprint(message))
+func (l *Log) Success(format string, values ...any) {
+	l.Println(l.Green.Sprintf(format, values...))
 }
 
 func New() *Log {

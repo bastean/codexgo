@@ -10,37 +10,37 @@ import (
 type LoggerSuite struct {
 	suite.Default
 	SUT    roles.Logger
-	Buffer *bytes.Buffer
+	Actual *bytes.Buffer
 }
 
 func (s *LoggerSuite) TestDebug() {
-	message := Mother().Message()
+	format, values, expected := Mother().Message()
 
-	s.SUT.Debug(message)
+	s.SUT.Debug(format, values...)
 
-	s.Contains(s.Buffer.String(), message)
+	s.Contains(s.Actual.String(), expected)
 }
 
 func (s *LoggerSuite) TestError() {
-	message := Mother().Message()
+	format, values, expected := Mother().Message()
 
-	s.SUT.Error(message)
+	s.SUT.Error(format, values...)
 
-	s.Contains(s.Buffer.String(), message)
+	s.Contains(s.Actual.String(), expected)
 }
 
 func (s *LoggerSuite) TestInfo() {
-	message := Mother().Message()
+	format, values, expected := Mother().Message()
 
-	s.SUT.Info(message)
+	s.SUT.Info(format, values...)
 
-	s.Contains(s.Buffer.String(), message)
+	s.Contains(s.Actual.String(), expected)
 }
 
 func (s *LoggerSuite) TestSuccess() {
-	message := Mother().Message()
+	format, values, expected := Mother().Message()
 
-	s.SUT.Success(message)
+	s.SUT.Success(format, values...)
 
-	s.Contains(s.Buffer.String(), message)
+	s.Contains(s.Actual.String(), expected)
 }

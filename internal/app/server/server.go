@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"embed"
-	"fmt"
 	"net/http"
 
 	"github.com/bastean/codexgo/v4/internal/app/server/router"
@@ -38,7 +37,7 @@ func Up() error {
 
 	log.Started(Server.Gin)
 
-	log.Info(fmt.Sprintf("%s listening on %s", Server.Gin, env.ServerGinURL))
+	log.Info("%s listening on %s", Server.Gin, env.ServerGinURL)
 
 	if err := App.ListenAndServe(); errors.IsNot(err, http.ErrServerClosed) {
 		log.CannotBeStarted(Server.Gin)

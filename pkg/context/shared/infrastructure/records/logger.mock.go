@@ -8,22 +8,22 @@ type LoggerMock struct {
 	mock.Default
 }
 
-func (m *LoggerMock) Debug(message string) {
-	m.Called(message)
+func (m *LoggerMock) Debug(format string, values ...any) {
+	m.Called(append([]any{format}, values...)...)
 }
 
-func (m *LoggerMock) Error(message string) {
-	m.Called(message)
+func (m *LoggerMock) Error(format string, values ...any) {
+	m.Called(append([]any{format}, values...)...)
 }
 
-func (m *LoggerMock) Fatal(message string) {
-	m.Called(message)
+func (m *LoggerMock) Fatal(format string, values ...any) {
+	m.Called(append([]any{format}, values...)...)
 }
 
-func (m *LoggerMock) Info(message string) {
-	m.Called(message)
+func (m *LoggerMock) Info(format string, values ...any) {
+	m.Called(append([]any{format}, values...)...)
 }
 
-func (m *LoggerMock) Success(message string) {
-	m.Called(message)
+func (m *LoggerMock) Success(format string, values ...any) {
+	m.Called(append([]any{format}, values...)...)
 }
