@@ -2,16 +2,18 @@ package log
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/common-nighthawk/go-figure"
 	"github.com/fatih/color"
 
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/array"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records/ascii"
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records/log"
 )
 
 const (
-	Font = "speed"
+	FontName   = "speed"
+	FontHeight = 5
 )
 
 var (
@@ -26,30 +28,24 @@ var (
 var (
 	White = color.New(color.FgWhite, color.Bold).Sprint
 	Cyan  = color.New(color.FgCyan, color.Bold).Sprint
+	Black = color.New(color.FgBlack, color.Bold).Sprint
 )
 
-func Logo() {
-	figureCodex := figure.NewFigure("codex", Font, true).Slicify()
-	figureGo := figure.NewFigure("GO", Font, true).Slicify()
+func Logo(version ...string) {
+	figureCodex := figure.NewFigure("codex", FontName, true).Slicify()
+	figureGo := figure.NewFigure("GO", FontName, true).Slicify()
+	figureVersion := make([]string, FontHeight)
 
-	var width, fixedWidth int
+	latest, exists := array.Slice(version, 0)
 
-	for _, line := range figureCodex {
-		width = len(line)
-
-		if width > fixedWidth {
-			fixedWidth = width
-		}
+	if exists {
+		figureVersion[FontHeight-1] = "v" + latest
 	}
 
-	for i, line := range figureCodex {
-		width = len(line)
+	ascii.FixWidth(figureCodex, figureGo)
 
-		if width < fixedWidth {
-			line += strings.Repeat(" ", (fixedWidth - width))
-		}
-
-		fmt.Println(White(line), Cyan(figureGo[i]))
+	for i := range FontHeight {
+		fmt.Println(White(figureCodex[i]), Cyan(figureGo[i], Black(figureVersion[i])))
 	}
 
 	println()

@@ -27,7 +27,7 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	log.Logo()
+	log.Logo(cli.Version)
 
 	log.Starting(Services)
 

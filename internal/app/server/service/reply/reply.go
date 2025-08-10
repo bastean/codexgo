@@ -24,9 +24,9 @@ type Error struct {
 }
 
 func reply(c *gin.Context, status int, response *Response, payload ...any) {
-	data, ok := array.Slice(payload, 0)
+	data, exists := array.Slice(payload, 0)
 
-	if ok {
+	if exists {
 		response.Data = data
 	}
 

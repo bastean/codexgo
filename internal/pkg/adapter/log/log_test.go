@@ -12,7 +12,8 @@ type LogTestSuite struct {
 }
 
 func (s *LogTestSuite) TestSentinel() {
-	s.Equal("speed", log.Font)
+	s.Equal("speed", log.FontName)
+	s.Equal(5, log.FontHeight)
 }
 
 func TestUnitLogSuite(t *testing.T) {

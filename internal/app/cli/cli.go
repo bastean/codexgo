@@ -3,6 +3,7 @@ package cli
 import (
 	"flag"
 	"fmt"
+	"os"
 
 	"github.com/joho/godotenv"
 
@@ -12,26 +13,33 @@ import (
 )
 
 const (
-	cli = "codexgo"
+	App     = "codexgo"
+	Version = "4.16.2"
 )
 
 var (
-	err     error
-	isDemo  bool
-	envFile string
+	err error
+)
+
+var (
+	isVersion bool
+	isDemo    bool
+	envFile   string
 )
 
 func usage() {
-	log.Logo()
+	log.Logo(Version)
 
 	fmt.Print("Example CRUD project applying Hexagonal Architecture, DDD, EDA, CQRS, BDD, CI, and more... in Go.\n\n")
 
-	fmt.Printf("Usage: %s [flags]\n\n", cli)
+	fmt.Printf("Usage: %s [flags]\n\n", App)
 
 	flag.PrintDefaults()
 }
 
 func Up() error {
+	flag.BoolVar(&isVersion, "v", false, "Print version")
+
 	flag.BoolVar(&isDemo, "demo", false, "Use preset ENV values")
 
 	flag.StringVar(&envFile, "env", "", "Path to custom ENV file")
@@ -41,6 +49,9 @@ func Up() error {
 	flag.Parse()
 
 	switch {
+	case isVersion:
+		println(App, Version)
+		os.Exit(0)
 	case isDemo:
 		if err = env.InitDemo(); err != nil {
 			return errors.BubbleUp(err)

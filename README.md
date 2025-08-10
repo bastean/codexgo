@@ -88,16 +88,17 @@ codexgo -h
 _____________ ______  /_____ ____  __ __  ____/__  __ \
 _  ___/_  __ \_  __  / _  _ \__  |/_/ _  / __  _  / / /
 / /__  / /_/ // /_/ /  /  __/__>  <   / /_/ /  / /_/ /
-\___/  \____/ \__,_/   \___/ /_/|_|   \____/   \____/
+\___/  \____/ \__,_/   \___/ /_/|_|   \____/   \____/  v4.16.2
 
 Example CRUD project applying Hexagonal Architecture, DDD, EDA, CQRS, BDD, CI, and more... in Go.
 
 Usage: codexgo [flags]
 
   -demo
-        Use preset ENV values
+    	Use preset ENV values
   -env string
-        Path to custom ENV file
+    	Path to custom ENV file
+  -v	Print version
 ```
 
 ### Usage
@@ -481,7 +482,7 @@ git clone git@github.com:bastean/codexgo.git && cd codexgo
      - If we have [Task](https://taskfile.dev/installation) installed on our host, being in the root of the repository
 
        ```bash
-       task connect-2222-vscode-localhost
+       task connect-2222/vscode@localhost
        ```
 
      - Using the SSH Client of our host

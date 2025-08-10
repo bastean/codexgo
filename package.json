@@ -111,6 +111,8 @@
       },
       "@release-it/bumper": {
         "out": [
+          "README.md",
+          "internal/app/cli/cli*.go",
           "internal/**/package.json",
           "internal/**/manifest.json"
         ]
