@@ -50,11 +50,14 @@ func ErrorHandler() gin.HandlerFunc {
 
 		switch {
 		case len(bubbles.Internal) > 0:
+			ids := make([]string, 0, len(bubbles.Internal))
+
 			for _, internal := range bubbles.Internal {
 				log.Error(internal.Error())
+				ids = append(ids, internal.ID)
 			}
 
-			reply.FailureServer(c)
+			reply.FailureServer(c, ids...)
 		case bubbles.Amount > 0:
 			reply.FailureClient(c, reply.Errors(bubbles))
 		}

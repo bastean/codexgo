@@ -1,11 +1,14 @@
 package reply
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/array"
+	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/services/choose"
 )
 
 type Response struct {
@@ -47,6 +50,15 @@ func FailureClient(c *gin.Context, data ...any) {
 	failure(c, http.StatusBadRequest, data...)
 }
 
-func FailureServer(c *gin.Context) {
-	failure(c, http.StatusInternalServerError, []*Error{{Type: "Internal", Message: "Server error. Try again later."}})
+func FailureServer(c *gin.Context, ids ...string) {
+	failure(c, http.StatusInternalServerError, []*Error{
+		{
+			Type: "Internal",
+			Message: fmt.Sprintf(
+				"Server error. Try again later. (%s: %s)",
+				choose.One(len(ids) == 1, "ID", "IDs"),
+				strings.Join(ids, ", "),
+			),
+		},
+	})
 }

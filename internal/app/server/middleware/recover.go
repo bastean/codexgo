@@ -10,21 +10,17 @@ import (
 
 func Recover() gin.RecoveryFunc {
 	return func(c *gin.Context, err any) {
-		failure, ok := err.(error)
+		internal := errors.New[errors.Internal](&errors.Bubble{
+			What: "Recovery",
+			Why: errors.Meta{
+				"Error": err,
+			},
+		})
 
-		if !ok {
-			failure = errors.New[errors.Internal](&errors.Bubble{
-				What: "Unknown Error",
-				Why: errors.Meta{
-					"Error": err,
-				},
-			})
-		}
-
-		log.Error(failure.Error())
+		log.Error(internal.Error())
 
 		c.Abort()
 
-		reply.FailureServer(c)
+		reply.FailureServer(c, internal.ID)
 	}
 }
