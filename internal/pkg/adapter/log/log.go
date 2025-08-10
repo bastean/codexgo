@@ -10,6 +10,10 @@ import (
 	"github.com/bastean/codexgo/v4/pkg/context/shared/infrastructure/records/log"
 )
 
+const (
+	Font = "speed"
+)
+
 var (
 	Log     = log.New()
 	Debug   = Log.Debug
@@ -25,8 +29,8 @@ var (
 )
 
 func Logo() {
-	figureCodex := figure.NewFigure("codex", "speed", true).Slicify()
-	figureGo := figure.NewFigure("GO", "speed", true).Slicify()
+	figureCodex := figure.NewFigure("codex", Font, true).Slicify()
+	figureGo := figure.NewFigure("GO", Font, true).Slicify()
 
 	var width, fixedWidth int
 
@@ -48,7 +52,7 @@ func Logo() {
 		fmt.Println(White(line), Cyan(figureGo[i]))
 	}
 
-	fmt.Println()
+	println()
 }
 
 func Service(service string) string {

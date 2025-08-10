@@ -365,14 +365,14 @@ tasks:
       - task: test-clean
       - task: bash
         vars:
-          RUN: GOTEST=1 go test -count=1 -v -cover ./pkg/context/... -run TestUnit.* |& tee test/report/unit.report.log
+          RUN: GOTEST=1 go test -count=1 -v -cover ./pkg/... ./internal/pkg/... -run TestUnit.* |& tee test/report/unit.report.log
 
   test-integration:
     cmds:
       - task: test-clean
       - task: bash
         vars:
-          RUN: GOTEST=1 go test -count=1 -race -v -cover ./pkg/context/... -run TestIntegration.* |& tee test/report/integration.report.log
+          RUN: GOTEST=1 go test -count=1 -race -v -cover ./pkg/... ./internal/pkg/... -run TestIntegration.* |& tee test/report/integration.report.log
 
   test-acceptance-sync:
     cmds:
