@@ -16,7 +16,7 @@ func (s *KeyTestSuite) TestSentinel() {
 	s.Equal(`^([a-z0-9]{1,30})\.([a-z0-9]{1,30})\.(\d+)\.(event|command|query|response)\.([a-z]{1,30})\.([a-z]{1,30})\.(queued|succeeded|failed|done)$`, messages.RExKey)
 }
 
-func (s *KeyTestSuite) TestWithValidValue() {
+func (s *KeyTestSuite) TestNew() {
 	components := messages.Mother().KeyComponentsValid()
 
 	actual := messages.Mother().KeyValidWithComponents(components).Value()
@@ -34,7 +34,7 @@ func (s *KeyTestSuite) TestWithValidValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *KeyTestSuite) TestWithInvalidValue() {
+func (s *KeyTestSuite) TestNewErrInvalidNomenclature() {
 	components := messages.Mother().KeyComponentsInvalid()
 
 	expected := fmt.Sprintf("(messages/*Key/Validate): Key has an invalid nomenclature %q", messages.FormatKey(components))

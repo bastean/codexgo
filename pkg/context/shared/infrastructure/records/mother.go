@@ -13,7 +13,7 @@ type m struct {
 func (m *m) Message() (format string, values []any, message string) {
 	format = "%s %d %s"
 
-	values = []any{m.Word(), m.Int(), m.Word()}
+	values = []any{m.LoremIpsumWord(), m.Int(), m.LoremIpsumWord()}
 
 	return format, values, fmt.Sprintf(format, values...)
 }

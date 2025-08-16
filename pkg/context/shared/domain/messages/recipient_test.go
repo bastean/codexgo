@@ -16,7 +16,7 @@ func (s *RecipientTestSuite) TestSentinel() {
 	s.Equal(`^([a-z0-9]{1,30})\.([a-z]{1,30})\.([a-z_]{1,30})_on_([a-z]{1,30})_(queued|succeeded|failed|done)$`, messages.RExRecipient)
 }
 
-func (s *RecipientTestSuite) TestWithValidValue() {
+func (s *RecipientTestSuite) TestNew() {
 	components := messages.Mother().RecipientComponentsValid()
 
 	actual := messages.Mother().RecipientValidWithComponents(components).Value()
@@ -32,7 +32,7 @@ func (s *RecipientTestSuite) TestWithValidValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *RecipientTestSuite) TestWithInvalidValue() {
+func (s *RecipientTestSuite) TestNewErrInvalidNomenclature() {
 	components := messages.Mother().RecipientComponentsInvalid()
 
 	expected := fmt.Sprintf("(messages/*Recipient/Validate): Recipient has an invalid nomenclature %q", messages.FormatRecipient(components))

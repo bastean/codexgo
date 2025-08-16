@@ -12,8 +12,8 @@ type AssertionTestSuite struct {
 	suite.Default
 }
 
-func (s *AssertionTestSuite) TestErrTypeAssertion() {
-	what := errors.Mother().Word()
+func (s *AssertionTestSuite) TestAssertionErrTypeAssertion() {
+	what := errors.Mother().LoremIpsumWord()
 
 	err := errors.Assertion(what)
 
@@ -24,7 +24,7 @@ func (s *AssertionTestSuite) TestErrTypeAssertion() {
 	expected := &errors.Internal{Bubble: &errors.Bubble{
 		ID:    actual.ID,
 		When:  actual.When,
-		Where: "errors_test/*AssertionTestSuite/TestErrTypeAssertion",
+		Where: "errors_test/*AssertionTestSuite/TestAssertionErrTypeAssertion",
 		What:  fmt.Sprintf("Failure in %s type assertion", what),
 	}}
 

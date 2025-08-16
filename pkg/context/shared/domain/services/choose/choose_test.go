@@ -12,17 +12,17 @@ type ChooseTestSuite struct {
 }
 
 func (s *ChooseTestSuite) TestOneWithTrue() {
-	expected := choose.Mother().Word()
+	expected := choose.Mother().LoremIpsumWord()
 
-	actual := choose.One(true, expected, choose.Mother().Word())
+	actual := choose.One(true, expected, choose.Mother().LoremIpsumWord())
 
 	s.Equal(expected, actual)
 }
 
 func (s *ChooseTestSuite) TestOneWithFalse() {
-	expected := choose.Mother().Word()
+	expected := choose.Mother().LoremIpsumWord()
 
-	actual := choose.One(false, choose.Mother().Word(), expected)
+	actual := choose.One(false, choose.Mother().LoremIpsumWord(), expected)
 
 	s.Equal(expected, actual)
 }

@@ -17,9 +17,6 @@ func (s *IDTestSuite) TestSentinel() {
 
 func (s *IDTestSuite) TestNew() {
 	s.Regexp(id.RExID, id.New())
-}
-
-func (s *IDTestSuite) TestNewUnique() {
 	s.NotEqual(id.New(), id.New())
 }
 

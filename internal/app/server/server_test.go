@@ -113,32 +113,34 @@ func RefreshLinks() {
 		assert.NoError(response.JSON(message))
 
 		for _, raw := range message.Links {
-			if strings.Contains(raw.URL, sut) {
-				URL, err = url.Parse(raw.URL)
-
-				assert.NoError(err)
-
-				query, err = url.ParseQuery(URL.RawQuery)
-
-				assert.NoError(err)
-
-				data = &Data{
-					URL:   raw.URL,
-					Token: query["token"][0],
-					ID:    query["id"][0],
-				}
-
-				switch {
-				case strings.Contains(message.Snippet, "confirm"):
-					link.Verify = data
-				case strings.Contains(message.Snippet, "reset"):
-					link.Reset = data
-				default:
-					errors.Panic(errors.Standard("Unknown link %q with snippet %q", raw.URL, message.Snippet))
-				}
-
-				break
+			if !strings.Contains(raw.URL, sut) {
+				continue
 			}
+
+			URL, err = url.Parse(raw.URL)
+
+			assert.NoError(err)
+
+			query, err = url.ParseQuery(URL.RawQuery)
+
+			assert.NoError(err)
+
+			data = &Data{
+				URL:   raw.URL,
+				Token: query["token"][0],
+				ID:    query["id"][0],
+			}
+
+			switch {
+			case strings.Contains(message.Snippet, "confirm"):
+				link.Verify = data
+			case strings.Contains(message.Snippet, "reset"):
+				link.Reset = data
+			default:
+				errors.Panic(errors.Standard("Unknown link %q with snippet %q", raw.URL, message.Snippet))
+			}
+
+			break
 		}
 	}
 }

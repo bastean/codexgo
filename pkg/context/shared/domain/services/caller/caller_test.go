@@ -23,16 +23,16 @@ func (s *CallerTestSuite) TestSentinel() {
 	s.Equal("UNKNOWN", caller.DefaultMethod)
 }
 
-func (s *CallerTestSuite) TestCallerFromCurrent() {
+func (s *CallerTestSuite) TestCallerWithFromCurrent() {
 	where, pkg, receiver, method := caller.Received(caller.FromCurrent)
 
-	s.Equal(where, "caller_test/*CallerTestSuite/TestCallerFromCurrent")
+	s.Equal("caller_test/*CallerTestSuite/TestCallerWithFromCurrent", where)
 
-	s.Equal(pkg, "caller_test")
+	s.Equal("caller_test", pkg)
 
-	s.Equal(receiver, "*CallerTestSuite")
+	s.Equal("*CallerTestSuite", receiver)
 
-	s.Equal(method, "TestCallerFromCurrent")
+	s.Equal("TestCallerWithFromCurrent", method)
 }
 
 func (s *CallerTestSuite) TestCallerWithSkipCurrent() {
@@ -42,29 +42,29 @@ func (s *CallerTestSuite) TestCallerWithSkipCurrent() {
 		where, pkg, receiver, method = caller.Received(caller.SkipCurrent)
 	}()
 
-	s.Equal(where, "caller_test/*CallerTestSuite/TestCallerWithSkipCurrent")
+	s.Equal("caller_test/*CallerTestSuite/TestCallerWithSkipCurrent", where)
 
-	s.Equal(pkg, "caller_test")
+	s.Equal("caller_test", pkg)
 
-	s.Equal(receiver, "*CallerTestSuite")
+	s.Equal("*CallerTestSuite", receiver)
 
-	s.Equal(method, "TestCallerWithSkipCurrent")
+	s.Equal("TestCallerWithSkipCurrent", method)
 }
 
-func (s *CallerTestSuite) TestCallerWithAnonymous() {
+func (s *CallerTestSuite) TestCallerWithAnonymousFunction() {
 	var where, pkg, receiver, method string
 
 	func() {
 		where, pkg, receiver, method = caller.Received(caller.FromCurrent)
 	}()
 
-	s.Equal(where, "UNKNOWN")
+	s.Equal("UNKNOWN", where)
 
-	s.Equal(pkg, "UNKNOWN")
+	s.Equal("UNKNOWN", pkg)
 
-	s.Equal(receiver, "UNKNOWN")
+	s.Equal("UNKNOWN", receiver)
 
-	s.Equal(method, "UNKNOWN")
+	s.Equal("UNKNOWN", method)
 }
 
 func TestUnitCallerSuite(t *testing.T) {

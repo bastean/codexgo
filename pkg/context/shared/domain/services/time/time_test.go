@@ -12,7 +12,7 @@ type TimeTestSuite struct {
 	suite.Default
 }
 
-func (s *TimeTestSuite) TestParseWithValidValue() {
+func (s *TimeTestSuite) TestParse() {
 	actual := time.Now().Format()
 
 	s.NotPanics(func() { _ = time.Parse(actual) })
@@ -26,7 +26,7 @@ func (s *TimeTestSuite) TestParseWithValidValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *TimeTestSuite) TestParseWithInvalidValue() {
+func (s *TimeTestSuite) TestParsePanicFormatNotValid() {
 	expected := "Time format is not valid"
 	s.PanicsWithValue(expected, func() { _ = time.Parse(t.Now().Format(t.Layout)) })
 }

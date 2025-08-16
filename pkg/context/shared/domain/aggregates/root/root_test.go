@@ -12,7 +12,7 @@ type RootTestSuite struct {
 	suite.Default
 }
 
-func (s *RootTestSuite) TestCreationStampErrOverwriteExisting() {
+func (s *RootTestSuite) TestCreationStampErrCannotOverwriteExisting() {
 	aggregate := root.Mother().RootValid()
 
 	s.NoError(aggregate.CreationStamp())

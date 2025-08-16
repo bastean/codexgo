@@ -12,7 +12,7 @@ type IDTestSuite struct {
 	suite.Default
 }
 
-func (s *IDTestSuite) TestErrInvalidFormat() {
+func (s *IDTestSuite) TestNewErrInvalidFormat() {
 	value, err := values.Mother().IDInvalid()
 
 	var actual *errors.InvalidValue

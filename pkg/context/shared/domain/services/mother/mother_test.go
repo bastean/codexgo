@@ -17,9 +17,7 @@ func (s *MotherTestSuite) TestSentinel() {
 	if _, ok := os.LookupEnv("GOTEST"); !ok {
 		log.Panic("\"Test Environment (GOTEST)\" not defined")
 	}
-}
 
-func (s *MotherTestSuite) TestUnsetENV() {
 	s.NoError(os.Unsetenv("GOTEST"))
 
 	expected := "Use \"Mother\" only in a \"Test Environment\""

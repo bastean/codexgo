@@ -12,7 +12,7 @@ type IntTestSuite struct {
 	suite.Default
 }
 
-func (s *IntTestSuite) TestIntPositiveErrInvalidNumber() {
+func (s *IntTestSuite) TestNewIntPositiveErrInvalidNumber() {
 	value, err := values.Mother().IntPositiveInvalid()
 
 	var actual *errors.InvalidValue
@@ -32,7 +32,7 @@ func (s *IntTestSuite) TestIntPositiveErrInvalidNumber() {
 	s.Equal(expected, actual)
 }
 
-func (s *IntTestSuite) TestIntNegativeErrInvalidNumber() {
+func (s *IntTestSuite) TestNewIntNegativeErrInvalidNumber() {
 	value, err := values.Mother().IntNegativeInvalid()
 
 	var actual *errors.InvalidValue

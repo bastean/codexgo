@@ -33,7 +33,7 @@ func (m *m) BubbleInvalidWhy() {
 	_ = New[Default](&Bubble{
 		What: m.LoremIpsumWord(),
 		Why: Meta{
-			m.Word(): func() {},
+			m.LoremIpsumWord(): func() {},
 		},
 	}).Error()
 }

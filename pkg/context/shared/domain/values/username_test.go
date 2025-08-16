@@ -12,7 +12,7 @@ type UsernameTestSuite struct {
 	suite.Default
 }
 
-func (s *UsernameTestSuite) TestErrInvalidLength() {
+func (s *UsernameTestSuite) TestNewErrMustBeBetween2To20Characters() {
 	value, err := values.Mother().UsernameInvalidLength()
 
 	var actual *errors.InvalidValue
@@ -32,7 +32,7 @@ func (s *UsernameTestSuite) TestErrInvalidLength() {
 	s.Equal(expected, actual)
 }
 
-func (s *UsernameTestSuite) TestErrInvalidAlphanumeric() {
+func (s *UsernameTestSuite) TestNewErrMustBeAlphanumericOnly() {
 	value, err := values.Mother().UsernameInvalidAlphanumeric()
 
 	var actual *errors.InvalidValue

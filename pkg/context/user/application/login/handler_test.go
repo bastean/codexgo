@@ -80,7 +80,7 @@ func (s *LoginTestSuite) TestHandle() {
 	s.Equal(expected, actual)
 }
 
-func (s *LoginTestSuite) TestHandleErrMissingRequired() {
+func (s *LoginTestSuite) TestHandleErrEmailOrUsernameRequired() {
 	plainPassword := user.Mother().PlainPasswordValid()
 
 	attributes := &login.QueryAttributes{

@@ -18,7 +18,7 @@ func (s *BubbleTestSuite) TestSentinel() {
 	s.Equal("|", errors.Separator)
 }
 
-func (s *BubbleTestSuite) TestWithValidValue() {
+func (s *BubbleTestSuite) TestNew() {
 	bubble := errors.Mother().BubbleValid()
 
 	why, err := json.Marshal(bubble.Why)
@@ -43,7 +43,7 @@ func (s *BubbleTestSuite) TestWithValidValue() {
 	s.Equal(expected, actual.Error())
 }
 
-func (s *BubbleTestSuite) TestWithoutWhere() {
+func (s *BubbleTestSuite) TestNewWithoutWhere() {
 	err := errors.Mother().BubbleValidWithoutWhere()
 
 	var actual *errors.Default
@@ -60,12 +60,12 @@ func (s *BubbleTestSuite) TestWithoutWhere() {
 	s.Equal(expected, actual)
 }
 
-func (s *BubbleTestSuite) TestWithoutWhat() {
+func (s *BubbleTestSuite) TestNewPanicWhatNotDefined() {
 	expected := "(errors/New): Cannot create a error Bubble if \"What\" is not defined"
 	s.PanicsWithValue(expected, func() { errors.Mother().BubbleInvalidWithoutWhat() })
 }
 
-func (s *BubbleTestSuite) TestWithInvalidWhy() {
+func (s *BubbleTestSuite) TestErrorPanicCannotFormatWhy() {
 	defer func() {
 		if actual := recover(); s.NotNil(actual) {
 			expected := fmt.Sprintf("(errors/*Bubble/Error): Cannot format \"Why\" from error Bubble [%s]", embed.Extract(actual.(string)))

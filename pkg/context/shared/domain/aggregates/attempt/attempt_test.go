@@ -2,7 +2,6 @@ package attempt_test
 
 import (
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/bastean/codexgo/v4/pkg/context/shared/domain/aggregates/attempt"
@@ -23,13 +22,13 @@ func (s *AttemptTestSuite) TestIncrease() {
 		s.NoError(aggregate.Increase())
 	}
 
-	expected := strings.Split(time.Now().Add(time.Duration(aggregate.Next.Value())).Format(), ".")[0]
+	expected := time.Now().Add(time.Duration(aggregate.Next.Value())).Format()
 
-	actual := strings.Split(aggregate.Until.Value(), ".")[0]
+	actual := aggregate.Until.Value()
 
 	s.Equal(expected, actual)
 
-	s.Equal(aggregate.Counter.Value(), 0)
+	s.Equal(0, aggregate.Counter.Value())
 }
 
 func (s *AttemptTestSuite) TestIncreaseErrNoMore() {

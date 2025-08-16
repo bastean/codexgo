@@ -11,7 +11,7 @@ type m struct {
 }
 
 func (m *m) EmbedValid() (message, value string) {
-	value = m.Word()
+	value = m.LoremIpsumWord()
 	return fmt.Sprintf("%s [%s]", m.WordsJoin(m.Words(m.IntRange(1, 3)), " "), value), value
 }
 

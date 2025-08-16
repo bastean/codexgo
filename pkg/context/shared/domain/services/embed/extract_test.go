@@ -11,7 +11,7 @@ type ExtractTestSuite struct {
 	suite.Default
 }
 
-func (s *ExtractTestSuite) TestWithValidValue() {
+func (s *ExtractTestSuite) TestExtract() {
 	message, expected := embed.Mother().EmbedValid()
 
 	actual := embed.Extract(message)
@@ -19,7 +19,7 @@ func (s *ExtractTestSuite) TestWithValidValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *ExtractTestSuite) TestWithInvalidValue() {
+func (s *ExtractTestSuite) TestExtractErrMissingEmbed() {
 	message := embed.Mother().EmbedInvalid()
 
 	actual := embed.Extract(message)

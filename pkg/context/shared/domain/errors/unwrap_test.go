@@ -71,7 +71,7 @@ func (s *UnwrapTestSuite) TestFilterBubbles() {
 	s.Equal(expected, actual)
 }
 
-func (s *UnwrapTestSuite) TestFilterBubblesErrNotDefined() {
+func (s *UnwrapTestSuite) TestFilterBubblesErrBubblesNotDefined() {
 	expected := "(errors/FilterBubbles): Cannot filter if \"Bubbles\" are not defined"
 	s.PanicsWithValue(expected, func() { errors.FilterBubbles(make([]error, 0), nil) })
 }

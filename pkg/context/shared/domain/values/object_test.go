@@ -38,7 +38,7 @@ func (s *ObjectTestSuite) TestSetCreatedAt() {
 	s.NotPanics(func() { s.SUT.SetCreatedAt(values.Mother().TimeNow()) })
 }
 
-func (s *ObjectTestSuite) TestSetCreatedAtErrAlreadyDefined() {
+func (s *ObjectTestSuite) TestSetCreatedAtErrAlreadySet() {
 	s.NotPanics(func() { s.SUT.SetCreatedAt(values.Mother().TimeNow()) })
 
 	expected := "(values/*Object/SetCreatedAt): Created is already set"
@@ -54,13 +54,12 @@ func (s *ObjectTestSuite) TestSetUpdatedAt() {
 	s.NotPanics(func() { s.SUT.SetUpdatedAt(values.Mother().TimeRandomAfter(date)) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedAtErrCreatedUndefined() {
+func (s *ObjectTestSuite) TestSetUpdatedAtErrCreatedNotDefined() {
 	expected := "(values/*Object/SetUpdatedAt): Created is not defined"
-
 	s.PanicsWithValue(expected, func() { s.SUT.SetUpdatedAt(values.Mother().TimeNow()) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedAtErrBeforeCreated() {
+func (s *ObjectTestSuite) TestSetUpdatedAtErrCannotBeBeforeCreated() {
 	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
@@ -70,7 +69,7 @@ func (s *ObjectTestSuite) TestSetUpdatedAtErrBeforeCreated() {
 	s.PanicsWithValue(expected, func() { s.SUT.SetUpdatedAt(values.Mother().TimeRandomBefore(date)) })
 }
 
-func (s *ObjectTestSuite) TestSetUpdatedAtErrBeforeDefined() {
+func (s *ObjectTestSuite) TestSetUpdatedAtErrCannotBeBeforeExistingValue() {
 	date := values.Mother().TimeNow()
 
 	s.NotPanics(func() { s.SUT.SetCreatedAt(date) })
@@ -86,7 +85,7 @@ func (s *ObjectTestSuite) TestSet() {
 	s.NotPanics(func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 }
 
-func (s *ObjectTestSuite) TestSetErrAlreadyDefined() {
+func (s *ObjectTestSuite) TestSetErrAlreadySet() {
 	s.NotPanics(func() { s.SUT.Set(values.Mother().LoremIpsumWord()) })
 
 	expected := "(values/*Object/Set): Value is already set"
@@ -166,7 +165,7 @@ func (s *ObjectTestSuite) TestValue() {
 	s.Equal(expected, actual)
 }
 
-func (s *ObjectTestSuite) TestValueErrNotValidated() {
+func (s *ObjectTestSuite) TestValueErrNeedsToBeValidated() {
 	expected := "(values/*Object/Value): Value needs to be validated"
 	s.PanicsWithValue(expected, func() { _ = s.SUT.Value() })
 }
@@ -246,7 +245,7 @@ func (s *ObjectTestSuite) TestFromPrimitiveWithOptional() {
 	s.IsType(expected, actual)
 }
 
-func (s *ObjectTestSuite) TestFromPrimitiveErrRequired() {
+func (s *ObjectTestSuite) TestFromPrimitiveErrValueRequired() {
 	_, err := values.FromPrimitive[*Custom](nil)
 
 	var actual *errors.Internal

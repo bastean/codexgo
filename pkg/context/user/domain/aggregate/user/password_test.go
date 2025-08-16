@@ -12,7 +12,7 @@ type PlainPasswordTestSuite struct {
 	suite.Default
 }
 
-func (s *PlainPasswordTestSuite) TestErrInvalidLength() {
+func (s *PlainPasswordTestSuite) TestNewErrMustBeBetween8To64Characters() {
 	value, err := user.Mother().PlainPasswordInvalidLength()
 
 	var actual *errors.InvalidValue
@@ -40,7 +40,7 @@ type PasswordTestSuite struct {
 	suite.Default
 }
 
-func (s *PasswordTestSuite) TestErrRequired() {
+func (s *PasswordTestSuite) TestNewErrIsRequired() {
 	_, err := user.Mother().PasswordInvalid()
 
 	var actual *errors.Internal
