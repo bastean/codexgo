@@ -3,9 +3,11 @@ version: "3"
 includes:
   devcontainer:
     taskfile: ./configs/devcontainer
+    optional: true
     flatten: true
   upgrade:
     taskfile: ./configs/upgrade
+    optional: true
     flatten: true
 
 vars:
