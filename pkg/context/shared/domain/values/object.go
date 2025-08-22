@@ -112,7 +112,7 @@ func (o *Object[T]) ToPrimitive() *Primitive[T] {
 }
 
 func create[O valueObject[V], V any](value V) (O, error) {
-	object := reflect.New(reflect.TypeOf(*new(O)).Elem()).Interface().(O)
+	object, _ := reflect.TypeAssert[O](reflect.New(reflect.TypeOf(*new(O)).Elem()))
 
 	object.Set(value)
 
