@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.24-bookworm AS dev
+FROM golang:1.25-bookworm AS dev
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ COPY . .
 
 RUN task build
 
-FROM golang:1.24-bookworm AS prod
+FROM golang:1.25-bookworm AS prod
 
 WORKDIR /app
 
