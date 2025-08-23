@@ -3,8 +3,10 @@
   /*                                    Test                                    */
   /* -------------------------------------------------------------------------- */
 
-  "Unit/Integration Test": {
-    "prefix": ["go_unit", "go_integration"],
+  /* -------------------------------- Templates ------------------------------- */
+
+  "Test Unit/Integration": {
+    "prefix": ["go-test_unit", "go-test_integration"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
       "",
@@ -16,7 +18,7 @@
       "\t$1",
       ")",
       "",
-      "type ${2:_X_}TestSuite struct {",
+      "type ${2:_SUT_}TestSuite struct {",
       "\tsuite.Default",
       "\t${3:$LINE_COMMENT SUT}",
       "}",
@@ -58,8 +60,8 @@
     "scope": "go",
   },
 
-  "Acceptance Test": {
-    "prefix": ["go_acceptance"],
+  "Test Acceptance": {
+    "prefix": ["go-test_acceptance"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}_test",
       "",
@@ -81,7 +83,7 @@
       "\tassert = testify.New(t)",
       "}",
       "",
-      "func TestAcceptance${2:_X_}${3|Suite,Features|}(t *testing.T) {",
+      "func TestAcceptance${2:_SUT_}${3|Suite,Features|}(t *testing.T) {",
       "\tSetupAssert(t)",
       "}",
       "",
@@ -91,7 +93,7 @@
   },
 
   "Test Suite": {
-    "prefix": ["go_suite"],
+    "prefix": ["go-test_suite"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -101,7 +103,7 @@
       "\t$1",
       ")",
       "",
-      "type ${2:_X_}Suite struct {",
+      "type ${2:_SUT_}Suite struct {",
       "\tsuite.Default",
       "\t${3:$LINE_COMMENT SUT}",
       "}",
@@ -131,8 +133,8 @@
     "scope": "go",
   },
 
-  "Mock": {
-    "prefix": ["go_mock"],
+  "Test Mock": {
+    "prefix": ["go-test_mock"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -142,11 +144,11 @@
       "\t$1",
       ")",
       "",
-      "type ${2:_X_}Mock struct {",
+      "type ${2:_SUT_}Mock struct {",
       "\tmock.Default",
       "}",
       "",
-      "func (m *$2Mock) ${3:_X_}(${4:_X_} ${5:any}) ${6:(string, error)} {",
+      "func (m *$2Mock) ${3:_SUT_}(${4:_SUT_} ${5:any}) ${6:(string, error)} {",
       "\t${7:args := m.Called($4)\n\treturn args.Get(0).(string), nil}",
       "}",
       "",
@@ -155,8 +157,8 @@
     "scope": "go",
   },
 
-  "Mother": {
-    "prefix": ["go_mother"],
+  "Test Mother": {
+    "prefix": ["go-test_mother"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -168,12 +170,16 @@
       "\t*mother.Mother",
       "}",
       "",
-      "func (m *m) ${1:_X_}Valid() *$1 {",
-      "\t${2:return nil}",
+      "func (m *m) ${1:_SUT_}${2|New,Copy,Replace|}($3) ${4:any} {",
+      "\t${5:return nil}",
       "}",
       "",
-      "func (m *m) $1Invalid() (${3:any}, error) {",
-      "\t${4:return nil, nil}",
+      "func (m *m) $1Valid${6:With}$7($8) ${9:any} {",
+      "\t${10:return nil}",
+      "}",
+      "",
+      "func (m *m) $1Invalid${11:With}$12($13) ${14:(${15:any}, error)} {",
+      "\t${16:return nil, nil}",
       "}",
       "",
       "var Mother = mother.New[m]",
@@ -183,9 +189,41 @@
     "scope": "go",
   },
 
-  "Assert": {
-    "prefix": ["go_assert"],
-    "body": ["s.Equal(expected, actual)"],
+  /* ---------------------------------- Utils --------------------------------- */
+
+  "Test Happy Path": {
+    "prefix": ["go-test_happy_path"],
+    "body": [
+      "func (s *${1:_SUT_}TestSuite) Test${2:_SUT_}$3${4|With,Without|}$5() {",
+      "\t${6:$LINE_COMMENT Happy Path}",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  "Test Corner Case": {
+    "prefix": ["go-test_corner_case"],
+    "body": [
+      "func (s *${1:_SUT_}TestSuite) Test${2:_SUT_}$3${4|Err,Panic|}$5() {",
+      "\t${6:$LINE_COMMENT Corner Case}",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  "Test Mock Call": {
+    "prefix": ["go-test_mock_call"],
+    "body": [
+      "func (m *${1:_SUT_}Mock) ${2:_SUT_}(${3:_SUT_} ${4:any}) ${5:(string, error)} {",
+      "\t${6:args := m.Called($3)\n\treturn args.Get(0).(string), nil}",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  "Test Equal": {
+    "prefix": ["go-test_equal"],
+    "body": ["s.${1|Equal,EqualValues|}(expected, actual)"],
     "scope": "go",
   },
 
@@ -193,8 +231,10 @@
   /*                                    Error                                   */
   /* -------------------------------------------------------------------------- */
 
-  "Bubble": {
-    "prefix": ["go_bubble"],
+  /* ---------------------------------- Utils --------------------------------- */
+
+  "Error Bubble": {
+    "prefix": ["go-error_bubble"],
     "body": [
       "errors.New[errors.$1](&errors.Bubble{",
       "\tWhat: \"$2\",",
@@ -207,26 +247,26 @@
     "scope": "go",
   },
 
-  "Bubble Up": {
-    "prefix": ["go_up"],
+  "Error Bubble Up": {
+    "prefix": ["go-error_bubble_up"],
     "body": ["if err != nil {", "\treturn errors.BubbleUp(err)", "}"],
     "scope": "go",
   },
 
-  "Panic": {
-    "prefix": ["go_panic"],
+  "Error Panic": {
+    "prefix": ["go-error_panic"],
     "body": ["errors.Panic(${1:errors.Standard(\"$2\")})"],
     "scope": "go",
   },
 
-  "Assertion": {
-    "prefix": ["go_assertion"],
+  "Error Assert": {
+    "prefix": ["go-error_assert"],
     "body": ["$1, ok := $2.($3)", "", "if !ok {", "\treturn errors.$4", "}"],
     "scope": "go",
   },
 
-  "Join": {
-    "prefix": ["go_join"],
+  "Error Join": {
+    "prefix": ["go-error_join"],
     "body": [
       "if err := errors.Join($1); err != nil {",
       "\treturn ${2:nil,} errors.BubbleUp(err)",
@@ -236,101 +276,13 @@
   },
 
   /* -------------------------------------------------------------------------- */
-  /*                                   Object                                   */
+  /*                                    Value                                   */
   /* -------------------------------------------------------------------------- */
 
-  "Value Object": {
-    "prefix": ["go_object"],
-    "body": [
-      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
-      "",
-      "import (",
-      "\t\"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors\"",
-      "\t\"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values\"",
-      ")",
-      "",
-      "type ${1:_X_} struct {",
-      "\tvalues.$2",
-      "}",
-      "",
-      "func (${3:_X_} *$1) Validate() error {",
-      "\tif values.IsNotValid($3.RawValue(), \"$4\") {",
-      "\t\treturn errors.New[errors.$5](&errors.Bubble{",
-      "\t\t\tWhat: \"$6\",",
-      "\t\t})",
-      "\t}",
-      "",
-      "\t$3.Valid()",
-      "",
-      "\treturn nil",
-      "}",
-      "",
-    ],
-    "isFileTemplate": true,
-    "scope": "go",
-  },
+  /* -------------------------------- Templates ------------------------------- */
 
-  "New Value Object": {
-    "prefix": ["go_value"],
-    "body": ["$1, err$2 := values.New[$3]($4)"],
-    "scope": "go",
-  },
-
-  "Primitive Value Object": {
-    "prefix": ["go_primitive"],
-    "body": ["$1, err$2 := values.FromPrimitive[$3]($4${5:, true})"],
-    "scope": "go",
-  },
-
-  /* -------------------------------------------------------------------------- */
-  /*                                   Message                                  */
-  /* -------------------------------------------------------------------------- */
-
-  "Message Key": {
-    "prefix": ["go_key"],
-    "body": [
-      "var ${1|Event,Command,Query,Response|}Key, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyComponents{",
-      "\tService: \"$2\",",
-      "\tVersion: \"$3\",",
-      "\tType:    messages.Type.$4,",
-      "\tEntity:  \"$5\",",
-      "\tAction:  \"$6\",",
-      "\tStatus:  messages.Status.$7,",
-      "}))",
-    ],
-    "scope": "go",
-  },
-
-  "Message Recipient": {
-    "prefix": ["go_recipient"],
-    "body": [
-      "var ${1:_X_}Recipient, _ = values.New[*messages.Recipient](messages.FormatRecipient(&messages.RecipientComponents{",
-      "\tService: \"$2\",",
-      "\tEntity:  \"$3\",",
-      "\tTrigger: \"$4\",",
-      "\tAction:  \"$5\",",
-      "\tStatus:  messages.Status.$6,",
-      "}))",
-    ],
-    "scope": "go",
-  },
-
-  "Message Attributes/Meta": {
-    "prefix": ["go_attributes", "go_meta"],
-    "body": [
-      "type ${1|Event,Command,Query,Response|}${2|Attributes,Meta|} = struct {",
-      "\t$3",
-      "}",
-    ],
-    "scope": "go",
-  },
-
-  /* -------------------------------------------------------------------------- */
-  /*                                  Aggregate                                 */
-  /* -------------------------------------------------------------------------- */
-
-  "Aggregate Root": {
-    "prefix": ["go_aggregate"],
+  "Value Aggregate Root": {
+    "prefix": ["go-value_aggregate_root"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -340,7 +292,7 @@
       "\t$1",
       ")",
       "",
-      "type ${2:_X_} struct {",
+      "type ${2:_SUT_} struct {",
       "\t*root.Root",
       "\t$3",
       "}",
@@ -374,12 +326,104 @@
     "scope": "go",
   },
 
+  "Value Object": {
+    "prefix": ["go-value_object"],
+    "body": [
+      "package ${TM_DIRECTORY/.*[\\/]/$1/}",
+      "",
+      "import (",
+      "\t\"github.com/bastean/codexgo/v4/pkg/context/shared/domain/errors\"",
+      "\t\"github.com/bastean/codexgo/v4/pkg/context/shared/domain/values\"",
+      ")",
+      "",
+      "type ${1:_SUT_} struct {",
+      "\tvalues.$2",
+      "}",
+      "",
+      "func (${3:_SUT_} *$1) Validate() error {",
+      "\tif values.IsNotValid($3.RawValue(), \"$4\") {",
+      "\t\treturn errors.New[errors.$5](&errors.Bubble{",
+      "\t\t\tWhat: \"$6\",",
+      "\t\t})",
+      "\t}",
+      "",
+      "\t$3.Valid()",
+      "",
+      "\treturn nil",
+      "}",
+      "",
+    ],
+    "isFileTemplate": true,
+    "scope": "go",
+  },
+
+  /* ---------------------------------- Utils --------------------------------- */
+
+  "Value Object New": {
+    "prefix": ["go-value_object_new"],
+    "body": ["$1, err$2 := values.New[$3]($4)"],
+    "scope": "go",
+  },
+
+  "Value Object Primitive": {
+    "prefix": ["go-value_object_primitive"],
+    "body": ["$1, err$2 := values.FromPrimitive[$3]($4${5:, true})"],
+    "scope": "go",
+  },
+
   /* -------------------------------------------------------------------------- */
-  /*                                  Use Case                                  */
+  /*                                   Message                                  */
   /* -------------------------------------------------------------------------- */
 
-  "Use Case": {
-    "prefix": ["go_case"],
+  /* ---------------------------------- Utils --------------------------------- */
+
+  "Message Key": {
+    "prefix": ["go-message_key"],
+    "body": [
+      "var ${1|Event,Command,Query,Response|}Key, _ = values.New[*messages.Key](messages.FormatKey(&messages.KeyComponents{",
+      "\tService: \"$2\",",
+      "\tVersion: \"$3\",",
+      "\tType:    messages.Type.$4,",
+      "\tEntity:  \"$5\",",
+      "\tAction:  \"$6\",",
+      "\tStatus:  messages.Status.$7,",
+      "}))",
+    ],
+    "scope": "go",
+  },
+
+  "Message Recipient": {
+    "prefix": ["go-message_recipient"],
+    "body": [
+      "var ${1:_SUT_}Recipient, _ = values.New[*messages.Recipient](messages.FormatRecipient(&messages.RecipientComponents{",
+      "\tService: \"$2\",",
+      "\tEntity:  \"$3\",",
+      "\tTrigger: \"$4\",",
+      "\tAction:  \"$5\",",
+      "\tStatus:  messages.Status.$6,",
+      "}))",
+    ],
+    "scope": "go",
+  },
+
+  "Message Attributes/Meta": {
+    "prefix": ["go-message_attributes", "go-message_meta"],
+    "body": [
+      "type ${1|Event,Command,Query,Response|}${2|Attributes,Meta|} = struct {",
+      "\t$3",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  /* -------------------------------------------------------------------------- */
+  /*                                    Case                                    */
+  /* -------------------------------------------------------------------------- */
+
+  /* -------------------------------- Templates ------------------------------- */
+
+  "Case": {
+    "prefix": ["go-case"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -404,8 +448,10 @@
   /*                                     EDA                                    */
   /* -------------------------------------------------------------------------- */
 
-  "Event Consumer": {
-    "prefix": ["go_event"],
+  /* -------------------------------- Templates ------------------------------- */
+
+  "EDA Event Consumer": {
+    "prefix": ["go-eda_event_consumer"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -451,8 +497,10 @@
   /*                                    CQRS                                    */
   /* -------------------------------------------------------------------------- */
 
-  "Command Handler": {
-    "prefix": ["go_command"],
+  /* -------------------------------- Templates ------------------------------- */
+
+  "CQRS Command Handler": {
+    "prefix": ["go-cqrs_command_handler"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -504,8 +552,8 @@
     "scope": "go",
   },
 
-  "Query Handler": {
-    "prefix": ["go_query"],
+  "CQRS Query Handler": {
+    "prefix": ["go-cqrs_query_handler"],
     "body": [
       "package ${TM_DIRECTORY/.*[\\/]/$1/}",
       "",
@@ -560,7 +608,7 @@
       "\t\treturn nil, errors.QueryAssertion()",
       "\t}",
       "",
-      "\t${17:_X_}, err := h.Case.Run(attributes)",
+      "\t${17:_SUT_}, err := h.Case.Run(attributes)",
       "",
       "\tif err != nil {",
       "\t\treturn nil, errors.BubbleUp(err)",
@@ -584,22 +632,44 @@
   /*                                  Idiomatic                                 */
   /* -------------------------------------------------------------------------- */
 
-  "Idiomatic": {
-    "prefix": [
-      "go_idiomatic",
-      "go_infrastructure",
-      "go_application",
-      "go_module",
-      "go_service",
-      "go_app",
-    ],
+  /* ---------------------------------- Utils --------------------------------- */
+
+  "Idiomatic Infrastructure": {
+    "prefix": ["go-idiomatic_infrastructure"],
     "body": [
-      "func ${1|New,Open,Close,Run,Handle,On,Start,Stop,Init,Up,Down|}$2($3) ${4:($5, error)} {",
-      "\t${6|session|}, err := $7",
-      "",
-      "\tif err != nil {",
-      "\t\t${8:return $9, err}",
-      "\t}",
+      "func ${1|New,Open,Close|}$2($3) ${4:(${5:any}, error)} {",
+      "\t${6:$LINE_COMMENT [session]}",
+      "\t${7:return nil, nil}",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  "Idiomatic Application": {
+    "prefix": ["go-idiomatic_application"],
+    "body": [
+      "func ${1|Run,Handle,On|}$2($3) ${4:(${5:any}, error)} {",
+      "\t${6:return nil, nil}",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  "Idiomatic Module": {
+    "prefix": ["go-idiomatic_module"],
+    "body": [
+      "func ${1|Start,Stop|}$2($3) ${4:(${5:any}, error)} {",
+      "\t${6:return nil, nil}",
+      "}",
+    ],
+    "scope": "go",
+  },
+
+  "Idiomatic Service/App": {
+    "prefix": ["go-idiomatic_service", "go-idiomatic_app"],
+    "body": [
+      "func ${1|Init,Up,Down|}$2($3) ${4:(${5:any}, error)} {",
+      "\t${6:return nil, nil}",
       "}",
     ],
     "scope": "go",
