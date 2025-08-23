@@ -10,7 +10,7 @@ type m struct {
 	*mother.Mother
 }
 
-func (m *m) Message() (format string, values []any, message string) {
+func (m *m) MessageValid() (format string, values []any, message string) {
 	format = "%s %d %s"
 
 	values = []any{m.LoremIpsumWord(), m.Int(), m.LoremIpsumWord()}

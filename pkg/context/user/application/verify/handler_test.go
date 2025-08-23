@@ -46,7 +46,7 @@ func (s *VerifyTestSuite) TestHandle() {
 
 	aggregate.VerifyToken = token.Mother().TokenNew(attributes.VerifyToken)
 
-	aggregate.Verified = user.Mother().VerifiedFalse()
+	aggregate.Verified = user.Mother().VerifiedValidFalse()
 
 	criteria := &user.Criteria{
 		ID: aggregate.ID,

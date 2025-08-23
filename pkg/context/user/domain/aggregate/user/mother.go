@@ -77,7 +77,7 @@ func (m *m) VerifiedValid() *Verified {
 	return value
 }
 
-func (m *m) VerifiedTrue() *Verified {
+func (m *m) VerifiedValidTrue() *Verified {
 	value, err := values.New[*Verified](true)
 
 	if err != nil {
@@ -87,7 +87,7 @@ func (m *m) VerifiedTrue() *Verified {
 	return value
 }
 
-func (m *m) VerifiedFalse() *Verified {
+func (m *m) VerifiedValidFalse() *Verified {
 	value, err := values.New[*Verified](false)
 
 	if err != nil {
