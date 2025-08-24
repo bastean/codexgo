@@ -1,5 +1,40 @@
 # Changelog
 
+## [4.17.0](https://github.com/bastean/codexgo/compare/v4.16.2...v4.17.0) (2025-08-24)
+
+### Chores
+
+- **deps:** upgrade ([a056edf](https://github.com/bastean/codexgo/commit/a056edf794753dc8746c5f2f38400d5a0bf10c7e))
+- **deps:** upgrade ([4476821](https://github.com/bastean/codexgo/commit/4476821138e15b3b03be395a7d5f5b08f5fc70e7))
+- **devcontainer:** add mongodb and postman extensions ([32aa59f](https://github.com/bastean/codexgo/commit/32aa59faf8c5c6cc526a82a8449559638c334b41))
+- **go:** upgrade to go1.25.0 ([8028b69](https://github.com/bastean/codexgo/commit/8028b694cf2681a04c600371794e78889ac574c9))
+- **task:** reorder tasks ([ab3c6cc](https://github.com/bastean/codexgo/commit/ab3c6cc47fcdfeea30188d4b0f6dc0f754c17dc6))
+- **vscode:** rename snippets ([e1312fe](https://github.com/bastean/codexgo/commit/e1312fedf98325d33cd3825f5d21a82ca66555cc))
+- **vscode:** update snippets ([4fae53b](https://github.com/bastean/codexgo/commit/4fae53bf174f49ba49c5cbff3929c6c542d325e5))
+
+### Documentation
+
+- **readme:** add tests and mothers in idiomatic section ([fdbac75](https://github.com/bastean/codexgo/commit/fdbac75cd2341e3f7571ba3bf25a8222f38a647c))
+
+### New Features
+
+- **cli:** print current version ([143e355](https://github.com/bastean/codexgo/commit/143e35568aa9f5eb3198799ed6e2be18872b11d5))
+
+### Refactors
+
+- **domain:** add id to error bubble ([1042fdc](https://github.com/bastean/codexgo/commit/1042fdc1c3101cb6b45fc2a2367821152e340fa8))
+- **domain:** add message formatting to log ([e0019f7](https://github.com/bastean/codexgo/commit/e0019f7ba2a7163c5e9d39dca840a4952fcaf6bb))
+- **domain:** change type assertion in value objects ([63f5536](https://github.com/bastean/codexgo/commit/63f55366f601d07c117769d10aee476f42bb328e))
+- **domain:** define regular expressions globally ([56668ff](https://github.com/bastean/codexgo/commit/56668ff4c98afe16013cde13ecad1003aafbf859))
+- **env:** add comment sections ([c5f3c04](https://github.com/bastean/codexgo/commit/c5f3c040132ed796fe217539c3bf44f9b0eea079))
+- **server:** add id to internal error response ([16084e6](https://github.com/bastean/codexgo/commit/16084e660b9a2f2585eb6627aef31c5b05abe2c3))
+
+### Tests
+
+- rename cases ([2d273df](https://github.com/bastean/codexgo/commit/2d273df5b1cca4d59553efdd0368945f07d27433))
+- rename mother cases ([f2de8b6](https://github.com/bastean/codexgo/commit/f2de8b67ab045435690140578708080fcc755dcc))
+- **unit:** add suite for internal log ([21740c1](https://github.com/bastean/codexgo/commit/21740c1ce1f1bbb729629d66cc2af0c587cd053a))
+
 ## [4.16.2](https://github.com/bastean/codexgo/compare/v4.16.1...v4.16.2) (2025-07-28)
 
 ### Chores

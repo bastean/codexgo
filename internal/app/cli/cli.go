@@ -14,7 +14,7 @@ import (
 
 const (
 	App     = "codexgo"
-	Version = "4.16.2"
+	Version = "4.17.0"
 )
 
 var (
