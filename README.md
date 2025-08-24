@@ -367,16 +367,19 @@ It is a monolith where CRUD operations can be performed from different presentat
 
 ### Idiomatic
 
+> [!TIP]
+> [VSCode Snippets](.vscode/vs.code-snippets) available (We can see them in IntelliSense (`Ctrl+Space`) or simply by typing `go-`).
+
 - **Domain**
-  - `errors.New*()`, `errors.BubbleUp()` & `errors.Panic()`
+  - `errors.New[...]()`, `errors.BubbleUp()` & `errors.Panic()`
     - Only in the `Domain` layer and in the `*_test.go` files can we throw `errors.Panic()`.
 - **Infrastructure**
   - `New*()`, `Open()` & `Close()`
     - `session`
-  - `errors.New*()` & `errors.BubbleUp()`
+  - `errors.New[...]()` & `errors.BubbleUp()`
 - **Application**
   - `Run()`, `Handle()` & `On()`
-  - `errors.New*()` & `errors.BubbleUp()`
+  - `errors.New[...]()` & `errors.BubbleUp()`
 - **Presentation**
   - **Modules**
     - `Start()` & `Stop()`
@@ -384,7 +387,7 @@ It is a monolith where CRUD operations can be performed from different presentat
   - **Services / Apps**
     - `Init()`, `Up()` & `Down()`
       - `log.[Wrap]()`
-    - `errors.New*()` & `errors.BubbleUp()`
+    - `errors.New[...]()` & `errors.BubbleUp()`
       - In `Apps` we will handle `Bubble Errors`.
 - **Main**
   - `log.Fatal()` & `log.[Wrap]()`
@@ -399,6 +402,57 @@ It is a monolith where CRUD operations can be performed from different presentat
 - **Blocks**
   - `const`, `var`, & `type`
     - We will group only those that are declared on a single line.
+- **Tests**
+  - **Subject/System/State Under Test (SUT)**
+    - The `SUT` will only be explicitly defined within the "suite (in the `s.SUT` field)" in those tests that cover several entities, such as "handlers/consumers, use cases, roles...".
+      - When testing only "functions and/or methods", it is not necessary to define an explicit `SUT` within the "suite (in the `s.SUT` field)", since the name of the "test cases" will indicate which `SUT` that specific case belongs to.
+  - **Suite**
+    - `<SUT>TestSuite`
+      - The name of the `<SUT>` can be that of the package, function, or type.
+    - `<SUT>Suite`
+      - When shared to test different implementations of the same `interface`.
+  - **Cases**
+    - **Happy Path**
+      - `Test<Function/Method>()`
+      - `Test<Function/Method><With/Without>*()`
+    - **Corner Case**
+      - `Test<Function/Method><Err/Panic>*`
+      - The semantics of the message and/or the words used after `<Err/Panic>` should only come from the error that is checked in the "test case".
+      - We will only check for errors originating in the function or method being tested.
+    - With "Generic[...] Functions".
+      - `Test<Function>*()`
+      - `Test<Function>*<With/Without>*()`
+      - `Test<Function>*<Err/Panic>*()`
+  - **Sentinel**
+    - They are used to "compare" already defined values against "hardcoded" values to ensure their integrity.
+  - **Exceptions**
+    - In the "errors" package, there may be exceptions in the names of the "test cases" to avoid confusion.
+- **Mothers**
+  - **Subject Under Test (SUT)**
+    - The `SUT` always refers to the "value (subject)" used within the method, whether to return an instance or generate an error.
+  - **Factory**
+    - **Valid** (used in **"Happy paths"**)
+      - `<SUT>Valid*()`
+    - **Invalid** (used in **"Corner Cases"**)
+      - `<SUT>Invalid*()`
+    - When it is necessary to define parameters in the method we use `With` to describe them, but `With` is not necessary in methods with a single "...variadic parameter".
+      - `<SUT>ValidWith*()`
+      - `<SUT>InvalidWith*()`
+  - **Wrap**
+    - These methods are only used to avoid handling error comparisons in "test cases".
+      - `<SUT>New()`
+      - `<SUT>Copy()`
+      - `<SUT>Replace()`
+  - With the exception of `Invalid`, all other methods that generate an error must throw a `panic()` and should never be ignored using `_`.
+  - There will only be one `Mother (mother.go)` per package.
+
+### Snippets
+
+1. Check
+   1. Spelling
+   2. Format
+   3. Jumps
+2. Test
 
 ### ...`v0` > `dev0.1.0` > `ci/dev0.1.0` > `main` > `v0`...
 
@@ -655,7 +709,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
         ```
 
 - Social preview
-  - Upload an image…
+  - Upload an image...
 
 #### Actions
 
