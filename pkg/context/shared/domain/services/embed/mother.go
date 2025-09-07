@@ -12,7 +12,7 @@ type m struct {
 
 func (m *m) EmbedValid() (message, value string) {
 	value = m.LoremIpsumWord()
-	return fmt.Sprintf("%s [%s]", m.WordsJoin(m.Words(m.IntRange(1, 3)), " "), value), value
+	return fmt.Sprintf("%s [%s]", m.Join(m.Words(m.IntRange(1, 3)), " "), value), value
 }
 
 func (m *m) EmbedInvalid() string {

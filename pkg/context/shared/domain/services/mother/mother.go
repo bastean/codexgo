@@ -20,6 +20,16 @@ type Mother struct {
 	*gofakeit.Faker
 }
 
+func Generator[T any](amount int, value func() T) []T {
+	values := make([]T, amount)
+
+	for i := range amount {
+		values[i] = value()
+	}
+
+	return values
+}
+
 func (m *Mother) Email() string {
 	random := strings.Split(m.Faker.Email(), "@")[0]
 
@@ -40,22 +50,20 @@ func (m *Mother) Email() string {
 	}
 }
 
-func (m *Mother) Words(amount int) []string {
-	words := make([]string, amount)
-
-	for i := range amount {
-		words[i] = m.LoremIpsumWord()
-	}
-
-	return words
+func (m *Mother) Letters(amount int) []string {
+	return Generator(amount, m.Letter)
 }
 
-func (m *Mother) WordsJoin(words []string, sep string) string {
-	return strings.Join(words, sep)
+func (m *Mother) Words(amount int) []string {
+	return Generator(amount, m.LoremIpsumWord)
+}
+
+func (m *Mother) Join(values []string, separator string) string {
+	return strings.Join(values, separator)
 }
 
 func (m *Mother) Message() string {
-	return m.WordsJoin(m.Words(m.IntRange(1, 12)), " ")
+	return m.Join(m.Words(m.IntRange(1, 12)), " ")
 }
 
 func (m *Mother) TimeSetBefore(actual time.Time, min, max time.Duration) time.Time {
