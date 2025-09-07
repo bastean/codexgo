@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.17.1](https://github.com/bastean/codexgo/compare/v4.17.0...v4.17.1) (2025-09-07)
+
+### Chores
+
+- **deps:** upgrade ([d893e7c](https://github.com/bastean/codexgo/commit/d893e7c1ad335e1260a03b2d0c493fd31de7a884))
+
+### Documentation
+
+- **readme:** add missing extensions in devcontainer ([feee0db](https://github.com/bastean/codexgo/commit/feee0db161c55d23abdbe13a991d90690d8517e0))
+
+### Tests
+
+- **unit:** add suite for ascii ([2403019](https://github.com/bastean/codexgo/commit/2403019aaee414e25287192826292bb4bf4092ad))
+
 ## [4.17.0](https://github.com/bastean/codexgo/compare/v4.16.2...v4.17.0) (2025-08-24)
 
 ### Chores
