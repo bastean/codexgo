@@ -227,6 +227,8 @@ task demo
   - Go
   - Task
   - Docker
+  - MongoDB
+  - Postman
   - templ
   - Cucumber
     - Gherkin
