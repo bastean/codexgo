@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.17.2](https://github.com/bastean/codexgo/compare/v4.17.1...v4.17.2) (2025-09-21)
+
+### Chores
+
+- **deps:** upgrade ([250b980](https://github.com/bastean/codexgo/commit/250b9800db59c1258df2fe4fb5d6ac870aabfd44))
+
+### Documentation
+
+- **readme:** update repository initialization from zip ([1c9c14f](https://github.com/bastean/codexgo/commit/1c9c14f1049155df2f012d25379bdd9fb26b248c))
+
 ## [4.17.1](https://github.com/bastean/codexgo/compare/v4.17.0...v4.17.1) (2025-09-07)
 
 ### Chores
