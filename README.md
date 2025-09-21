@@ -628,23 +628,35 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
 
 ## Repository
 
+> We can use VSCode Search & Replace (`Ctrl+Shift+F`) with the following options enabled:
+>
+> - Match Case (`Alt+C`)
+> - Match Whole Word (`Atl+W`)
+
 #### Genesis
 
 - Run initialization from `ZIP` ([codexGO](https://github.com/bastean/codexgo#zip))
 
 - Cleanup
-  - `CHANGELOG`
-  - Everything not required
+  - Remove `CHANGELOG`
+  - Everything not required...
 
-- Add `<repository>` > `assets/`
-  - Compress `assets`
+- Assets
+  - Add `<repository>` > `assets/`
+    - Compress `assets`
 
-- Update `#colors` > `#<repository>`
+- Colors
+  - Update `#202224` > `#<repository>`
 
-- Update (`codexgo/v*`|`codexgo`|`codexGO`) > `<repository>`
-  - `Source Code`, `Files` & `Folders`
+- Mentions
+  - Update (`codexgo/v*`|`codexgo`|`codexGO`|`CODEXGO`|`codex`|`GO`) > `<repository>`
+    - `Source Code`, `Files` & `Folders`
 
-- Update `README`
+- ASCII Art
+  - Change `codexGO` > `<repository>`
+    - Update `FontName` & `FontHeight` (same in their `Sentinel` tests)
+
+- `README`
   - Update `Logo`
   - Update `Description`
   - Add `Disclaimer`
@@ -658,7 +670,9 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
   - Update `Tech Stack`
   - Remove all other sections, except:
     - `Logo`, `Description`, `Disclaimer`, `Badges`, `Tech Stack`, `Contributing` & `License`
-  - Change `v*.*.*` > `v0.0.0`
+
+- Versions
+  - Change `v*.*.*` > `v0.0.0` & `*.*.*` > `0.0.0`
 
 - Commit, Upgrade & Push
 
@@ -668,6 +682,8 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
   && git push \
   && git status
   ```
+
+  - Verify commit created
 
 ## GitHub
 
@@ -679,7 +695,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
       - Branches
     - Enforcement status
       - Active
-    - Target branches
+    - Target branches
       - Include by pattern
         - `main`
         - `v*`
@@ -692,7 +708,7 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
       - Tags
     - Enforcement status
       - Active
-    - Target tags
+    - Target tags
       - Include by pattern
         - `v*`
     - Tag rules
