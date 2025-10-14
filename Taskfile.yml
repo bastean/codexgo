@@ -106,7 +106,7 @@ tasks:
       - task: ncu
         vars:
           FILTERS: fomantic-ui -t @nightly
-      - bun i
+      - bun i --linker hoisted
       - task: upgrade-copy
 
   # ---------------------------------------------------------------------------- #
@@ -186,7 +186,7 @@ tasks:
   download-dependencies:
     cmds:
       - go mod download
-      - bun i --frozen-lockfile
+      - bun i --linker hoisted --frozen-lockfile
       - task: upgrade-copy
 
   # ---------------------------------------------------------------------------- #
