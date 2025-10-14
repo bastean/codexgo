@@ -667,6 +667,12 @@ curl -sSfLO https://github.com/bastean/codexgo/archive/refs/heads/main.zip \
     > `<repository>` is still in the early stages of development.
     ```
 
+    ```markdown
+    > [!WARNING]
+    >
+    > Until `v1.0.0` is released, some breaking changes may be introduced.
+    ```
+
   - Update `Tech Stack`
   - Remove all other sections, except:
     - `Logo`, `Description`, `Disclaimer`, `Badges`, `Tech Stack`, `Contributing` & `License`
