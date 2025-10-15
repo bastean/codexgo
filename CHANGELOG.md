@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.17.3](https://github.com/bastean/codexgo/compare/v4.17.2...v4.17.3) (2025-10-15)
+
+### Chores
+
+- **deps:** upgrade ([304fd9b](https://github.com/bastean/codexgo/commit/304fd9bb5210a5cdf40a817c4657532260f723fe))
+
+### Documentation
+
+- **readme:** add breaking changes disclaimer in initialization from zip ([f6e4372](https://github.com/bastean/codexgo/commit/f6e437249cbc3a0f6a386c35b08b3c040cb0a68f))
+
+### Bug Fixes
+
+- **bun:** use hoisted installation strategy ([034206f](https://github.com/bastean/codexgo/commit/034206f487fbc82bb7bb688b545e60bb4954c0ef))
+
 ## [4.17.2](https://github.com/bastean/codexgo/compare/v4.17.1...v4.17.2) (2025-09-21)
 
 ### Chores

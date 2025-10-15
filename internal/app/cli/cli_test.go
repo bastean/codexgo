@@ -19,7 +19,7 @@ func (s *CLITestSuite) SetupSuite() {
 
 func (s *CLITestSuite) TestSentinel() {
 	s.Equal("codexgo", cli.App)
-	s.Equal("4.17.2", cli.Version)
+	s.Equal("4.17.3", cli.Version)
 }
 
 func (s *CLITestSuite) TestHelp() {
@@ -27,7 +27,7 @@ func (s *CLITestSuite) TestHelp() {
 _____________ ______  /_____ ____  __ __  ____/__  __ \
 _  ___/_  __ \_  __  / _  _ \__  |/_/ _  / __  _  / / /
 / /__  / /_/ // /_/ /  /  __/__>  <   / /_/ /  / /_/ / 
-\___/  \____/ \__,_/   \___/ /_/|_|   \____/   \____/  v4.17.2
+\___/  \____/ \__,_/   \___/ /_/|_|   \____/   \____/  v4.17.3
 
 Example CRUD project applying Hexagonal Architecture, DDD, EDA, CQRS, BDD, CI, and more... in Go.
 
